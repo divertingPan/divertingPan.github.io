@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-17T10:10:11.312Z</updated>
+    <updated>2020-08-17T10:20:25.570Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -299,25 +299,6 @@ leaflet(shape) %&gt;% addTiles() %&gt;%
 <h3 id="参考资料">参考资料：</h3>
 <p>Data Sheet (PDF)：http://www.sensata.com/download/8ea.pdf</p>
 <p>电冰箱PTC启动继电器介绍：http://www.aitmy.com/news/201308/30/news_50747.html</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[关于]]></title>
-        <id>https://divertingPan.github.io/post/about/</id>
-        <link href="https://divertingPan.github.io/post/about/">
-        </link>
-        <updated>2017-09-22T11:09:48.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>厌倦了磕盐或者受够了甲方的无产阶级们，一起来这里摸鱼吧🦈🐬🐳🐋🐟🐠🐡🦐🦑🐙🦞🦀</p>
-<h2 id="老潘老潘">🐼 老潘老潘</h2>
-<p><img src="https://divertingPan.github.io/post-images/1597484837035.png" alt="" loading="lazy"><br>
-目前在读CV方向小学二年级水平</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<p>很多文章都发在微信公众号里面了，我考虑往这里慢慢搬运一下。可以先关注公众号“老潘家的潘老师”，一般有新文章会第一时间更在公众号里。可以在任意文章或公众号后台留言联系老潘。<br>
-<img src="https://divertingPan.github.io/post-images/1597484169570.jpg" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
