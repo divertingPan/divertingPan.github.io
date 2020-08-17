@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-17T08:36:06.342Z</updated>
+    <updated>2020-08-17T08:39:40.780Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -56,7 +56,7 @@ except:
 <p>实验3：相同图片不同饱和度（反正图片读进来都是要先转成灰度的，所以改变饱和度确实不会对改变aHash值有什么作用）<br>
 <img src="https://divertingPan.github.io/post-images/1597651191249.PNG" alt="" loading="lazy"></p>
 <h1 id="附录2">附录2</h1>
-<p>完整的开箱即用代码</p>
+<p>完整的开箱即用代码，也可以<a href="https://github.com/divertingPan/utility_room/blob/master/remove_duplicate.py">到github里面下载</a></p>
 <pre><code class="language-python">'''
 https://www.jianshu.com/p/5a7daa2123a8
 '''
