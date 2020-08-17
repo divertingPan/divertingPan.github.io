@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-17T08:06:27.943Z</updated>
+    <updated>2020-08-17T08:36:06.342Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -12,8 +12,8 @@
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
     <entry>
         <title type="html"><![CDATA[【5分钟实例】去除大量图片中重复的图片]]></title>
-        <id>https://divertingPan.github.io/post/5-fen-zhong-shi-li-qu-chu-da-liang-tu-pian-zhong-chong-fu-de-tu-pian/</id>
-        <link href="https://divertingPan.github.io/post/5-fen-zhong-shi-li-qu-chu-da-liang-tu-pian-zhong-chong-fu-de-tu-pian/">
+        <id>https://divertingPan.github.io/post/remove_duplicate/</id>
+        <link href="https://divertingPan.github.io/post/remove_duplicate/">
         </link>
         <updated>2020-08-17T07:47:20.000Z</updated>
         <content type="html"><![CDATA[<h1 id="需求假设">需求假设</h1>
@@ -104,11 +104,83 @@ if __name__ == '__main__':
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[【5分钟实例】按名字从大量简历中筛出需要的简历]]></title>
+        <id>https://divertingPan.github.io/post/pick_resume/</id>
+        <link href="https://divertingPan.github.io/post/pick_resume/">
+        </link>
+        <updated>2020-06-24T08:06:51.000Z</updated>
+        <content type="html"><![CDATA[<p><del>水一篇。</del>开个新坑，本系列重点打造能够在5分钟内完成的又简单又实用的实例。今天以办公场景比较常见的一个需求为例。具体场景如下。</p>
+<h1 id="需求假设">需求假设</h1>
+<p>你的老板给你<code>上万份</code>候选人交的简历，又给了你一个Excel表格，让你把表格里的人的简历挑出来，下班之前发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。</p>
+<p>这时候你定睛一看，所有的简历文件名里面都包含人名。</p>
+<h1 id="只需5分钟的操作">只需5分钟的操作</h1>
+<p>拿起键盘打开你最爱的IDE二话不说首先import以下必定要用到的库</p>
+<pre><code class="language-python">import pandas as pd
+import os
+from shutil import copyfile
+</code></pre>
+<p>打开Excel表格看一眼，找到“姓名”所在的列<br>
+<img src="https://divertingPan.github.io/post-images/1597652772497.webp" alt="" loading="lazy"></p>
+<p>是第一列，所以直接读第一列进来即可</p>
+<pre><code class="language-python">df = pd.read_excel(menu_path, usecols=[0])
+</code></pre>
+<p>之后去遍历存放简历的文件夹下的所有简历文件</p>
+<pre><code class="language-python">for maindir, subdir, filename in os.walk(resume_path):
+    for i, file in enumerate(filename):
+</code></pre>
+<p>对每个遍历到的文件，先去除文件名里面的空格，以免两个字的人名中间有空格，干扰识别。但是又不能直接把变量file给改变，否则后面复制文件时会找不到文件。</p>
+<pre><code class="language-python">file_no_space = ''.join(file.split())
+</code></pre>
+<p>这时候再遍历读进来的Excel的人名信息，逐条检查是否能和这个文件名匹配上人名。若可以匹配到，那就把这个文件复制走。</p>
+<pre><code class="language-python">for key in df['姓名']:
+    if key in file_no_space:
+        copyfile(os.path.join(maindir, file), os.path.join(destination_path, file))
+        print(file)
+</code></pre>
+<p>拓展功能，如果想要把顺序也排好，那就只需记录一下目前匹配到的情况下，这个人名在Excel表格里的序号。可以对上面这一块代码做以下改动。首先使用enumerate()迭代df['姓名']，这样可以启用循环时的索引计数（我不知道这到底叫什么，我就这样称呼了），之后输出文件时将这个索引加在文件名最开头，就能实现按照Excel里面的人名顺序排序简历。</p>
+<pre><code class="language-python">for i, key in enumerate(df['姓名']):
+    if key in file_no_space:
+        copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
+        print(file)
+</code></pre>
+<p>结束。看一下效果，证明我不是在胡扯，是真的可以用。文件标号1缺失了，顺便还能发现有人没交简历。看一眼时间离下班还剩5分01秒。<br>
+<img src="https://divertingPan.github.io/post-images/1597653189483.png" alt="" loading="lazy"></p>
+<p>对于重名的问题，可以按照“学号”，或者“身份证号”等其他不易重复的值作为匹配的键值。但前提是要让简历名字里包含这些信息。</p>
+<h1 id="附录">附录</h1>
+<p>全部代码如下。或者<a href="https://github.com/divertingPan/utility_room/blob/master/pick_resume.py">到github下载</a>。</p>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import pandas as pd
+import os
+from shutil import copyfile
+
+
+resume_path = './resume'
+menu_path = './1组分组名单.xlsx'
+destination_path = './sorted'
+
+
+if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+
+df = pd.read_excel(menu_path, usecols=[0]) # 以第1列（人名）作为检索key
+
+for maindir, subdir, filename in os.walk(resume_path):
+    for i, file in enumerate(filename):
+        file_no_space = ''.join(file.split())
+        for i, key in enumerate(df['姓名']):
+            if key in file_no_space:
+                copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
+                print(file)
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[关于]]></title>
         <id>https://divertingPan.github.io/post/about/</id>
         <link href="https://divertingPan.github.io/post/about/">
         </link>
-        <updated>2019-01-25T11:09:48.000Z</updated>
+        <updated>2017-09-22T11:09:48.000Z</updated>
         <content type="html"><![CDATA[<blockquote>
 <p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
 </blockquote>
@@ -120,38 +192,6 @@ if __name__ == '__main__':
 <h2 id="联系我呀">📬 联系我呀</h2>
 <p>很多文章都发在微信公众号里面了，我考虑往这里慢慢搬运一下。可以先关注公众号“老潘家的潘老师”，一般有新文章会第一时间更在公众号里。可以在任意文章或公众号后台留言联系老潘。<br>
 <img src="https://divertingPan.github.io/post-images/1597484169570.jpg" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://divertingPan.github.io/post/hello-gridea/</id>
-        <link href="https://divertingPan.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
 ]]></content>
     </entry>
 </feed>
