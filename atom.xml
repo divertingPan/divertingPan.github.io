@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-17T08:43:29.017Z</updated>
+    <updated>2020-08-17T08:59:59.672Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -17,7 +17,7 @@
         </link>
         <updated>2020-08-17T07:47:20.000Z</updated>
         <content type="html"><![CDATA[<h1 id="需求假设">需求假设</h1>
-<p>你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。<br>
+<p>你的老板给你<code>上万张</code>候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。<br>
 <img src="https://divertingPan.github.io/post-images/1597651150468.PNG" alt="" loading="lazy"><br>
 这时候你灵光一现，想起了python有图像处理模块</p>
 <h1 id="只需5分钟的操作">只需5分钟的操作</h1>
@@ -173,6 +173,50 @@ for maindir, subdir, filename in os.walk(resume_path):
                 print(file)
 
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[猎奇 | 教你怎样修复坏冰箱]]></title>
+        <id>https://divertingPan.github.io/post/broken_fridges/</id>
+        <link href="https://divertingPan.github.io/post/broken_fridges/">
+        </link>
+        <updated>2018-02-10T08:47:42.000Z</updated>
+        <content type="html"><![CDATA[<p>先放结论，再写分析过程：</p>
+<blockquote>
+<p>如果你家冰箱不转了，到冰箱后面找到启动器，拔下来，测量一下两脚之间的阻值，如果不是通路状态，就换一个新的试试。</p>
+</blockquote>
+<p>昨天清早，潘老师家的电冰箱待机之后，经过一整天的耐心等待，他都没有再启动，伴随的只有时不时的咔咔<del>仿佛吃了鱼刺一样</del>的声音。于是，动手能力一般<del>但是心很大</del>的潘老师决定自己修理修理他。</p>
+<p>首先是最常规的拍打修理法，据说此方法生效概率最大，能解决大多数电器故障。但是在这里，不行。<br>
+<img src="https://divertingPan.github.io/post-images/1597654169140.gif" alt="" loading="lazy"></p>
+<p>第二步，潘老师钻进了冰箱后面去寻找线索。在修理电器时我们最先应该参考的是厂家提供的接线图。<br>
+<img src="https://divertingPan.github.io/post-images/1597654197079.jpg" alt="" loading="lazy"></p>
+<p>仔细研究一番之后，潘老师觉得，还是上百度找一找答案更靠谱。</p>
+<p>潘老师发现家里的冰箱已经算是古董级别的了。不过直到现在才宕机，这质量还真是没得说（没有广告费因为这牌子已经<del>像这个标签一样</del>黄了）。<br>
+<img src="https://divertingPan.github.io/post-images/1597654261798.jpg" alt="" loading="lazy"></p>
+<p>到百度寻找一下思路之后，重新回到冰箱后面。在冰箱后面会看到如下场景。<br>
+<img src="https://divertingPan.github.io/post-images/1597654269345.jpg" alt="" loading="lazy"></p>
+<p>圆形的大缸是压缩机，相当于冰箱的心脏。在压缩机旁边有一个启动器，有时候冰箱故障就是因为启动器出了问题。启动器包在压缩机左边的罩子里，把罩子搞下来，就能看到插在上面的启动器。<br>
+<img src="https://divertingPan.github.io/post-images/1597654277403.jpg" alt="" loading="lazy"></p>
+<p><img src="https://divertingPan.github.io/post-images/1597654304127.PNG" alt="" loading="lazy"><br>
+上图是一般冰箱启动器的位置和连接方式。8EA Motor Starter就是本次坏掉的启动器。当时忘了实拍所以就借用一下示意图。</p>
+<p>潘老师拽下启动器并拔下上面的连线之后，得到了摇晃起来卡拉拉响并且往外掉渣渣的这么一个东西，潘老师根据多年经验猜测这应该不是正常的现象。所以基本锁定就是他出了问题。<br>
+<img src="https://divertingPan.github.io/post-images/1597654325622.jpg" alt="" loading="lazy"></p>
+<p>经过观察他上面写的字，我猜测KLIXON是他的品牌，8EA是型号，于是通过百度，得到了这个启动器的datasheet。<br>
+<img src="https://divertingPan.github.io/post-images/1597654341971.PNG" alt="" loading="lazy"></p>
+<p>拆开外壳之后发现里面的东西已经碎了所以摇晃起来才会响。与爆炸图（Exploded View）对比之后我觉得应该是PTC Pill碎了。（为什么PTC会碎，它工作时受力吗？）<br>
+<img src="https://divertingPan.github.io/post-images/1597654357742.jpg" alt="" loading="lazy"><br>
+<img src="https://divertingPan.github.io/post-images/1597654363260.PNG" alt="" loading="lazy"></p>
+<p>好奇的潘老师查了一下PTC，内容如下：</p>
+<blockquote>
+<p>PTC（Positive Temperature Coefficient）元件为正温度系数热敏电阻，它是掺入微量稀土元素，用特殊工艺制成的钛酸钡型半导体。PTC启动继电器又称为无触点启动继电器，实际上就是正温度系数热敏电阻启动继电器。当电冰箱的压缩机刚开始启动时，PTC启动继电器的温度较低，电阻值较小，在电路中呈通路状态。当启动电流增大到正常运行电流的4～6倍时，启动绕组中通过的电流很大，使压缩机产生很大的启动转矩。与此同时，大电流使元件温度迅速升高（一般为100～140℃），其阻值急剧上升，通过的电流又下降到很小的稳定值，断开启动绕组，使压缩机进入正常运转状态。</p>
+</blockquote>
+<p>反正大概意思就是，启动之前启动器两端是通的，冰箱运转之后启动器就相当于断路了。而碎裂的PTC是始终都处于断路所以冰箱没法启动。潘老师测量了一下那些碎块的电阻，的确是很小的，但没有测量加热状态下的电阻值。</p>
+<p>于是潘老师下楼到专卖制冷器件的地方，买了一个新的PTC启动器，接好线插回去。插上冰箱插销，通电正常运转，实验成功。</p>
+<p>最后给学有余力的同学提供一个官方给的启动器接线图。（潘老师也不清楚为什么电路图画的封装里带有电容，但是实际拆开并没有看到电容<del>难道是烧爆了？</del>）</p>
+<p>所以，如果前面那些对你来说太难理解的话，就记住一句话。如果你家冰箱不转了，到冰箱后面找到启动器，拔下来，测量一下两脚之间的阻值，如果不是通路状态，就换一个新的试试<del>找潘老师给你修就好了上门维修费用50元根本不用这么费劲。</del></p>
+<h3 id="参考资料">参考资料：</h3>
+<p>Data Sheet (PDF)：http://www.sensata.com/download/8ea.pdf</p>
+<p>电冰箱PTC启动继电器介绍：http://www.aitmy.com/news/201308/30/news_50747.html</p>
 ]]></content>
     </entry>
     <entry>
