@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1597655724098">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1597656178682">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1597655724098" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1597656178682" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -110,42 +110,42 @@
             <div class="post-content-wrapper">
               <div class="post-content">
                 <p>前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们<del>程序猿</del>想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。<br>
-<img src="https://divertingPan.github.io/post-images/1597654900968.webp" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597655999416.webp" alt="" loading="lazy"></p>
 <h1 id="前期准备">前期准备</h1>
 <p>首先说一说R里面最基本的知识。首先在电脑上要安装R语言的环境。<br>
-<img src="https://divertingPan.github.io/post-images/1597654933310.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656037584.PNG" alt="" loading="lazy"></p>
 <p>安装好环境之后，为了提高工作效率，我们一般选用RStudio进行创作。R环境和RStudio都是免费的工具，直接下载无需破解无需注册即可用。（土豪非要买专业版的RStudio请随意）<br>
-<img src="https://divertingPan.github.io/post-images/1597654948400.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656109234.PNG" alt="" loading="lazy"></p>
 <p>在R中，赋值运算符不是“=”，而是“&lt;-”，倒也很好理解，把右边的值给左边的变量。<br>
-<img src="https://divertingPan.github.io/post-images/1597654961163.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656118261.PNG" alt="" loading="lazy"></p>
 <p>在RStudio的脚本编辑窗口中，点击右上角的run，执行的是光标所在的这一行，如果想执行多行请用光标选中多行后再“run”。新建一个脚本，在窗口栏中“File”-“New File”-“R Script”即可。<br>
-<img src="https://divertingPan.github.io/post-images/1597654976039.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656122811.PNG" alt="" loading="lazy"></p>
 <h1 id="绘制地图">绘制地图</h1>
 <p>基本知识就这些，下面潘老师要开始绘制数据地图了。因为在地图上画点画柱状图什么的太低级了（用Excel自带的就能做），所以这次用R画一个分区按值填色的地图。</p>
 <h2 id="1">1</h2>
 <p>首先到网上找一个世界地图的shapefile文件，这个文件包含了所有国家的边界信息，在染色时可以根据国家数值来给不同国家的形状染色。下载之后把里面的文件全部解压出来，找一个文件夹放在里面。<br>
-<img src="https://divertingPan.github.io/post-images/1597655004499.png" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656131355.png" alt="" loading="lazy"></p>
 <h2 id="2">2</h2>
 <p>需要使用ArcGIS系列软件中的ArcCatalog打开后缀名为.shp的文件，进行一些准备工作。首先点击Connect To Folder的图标（图中位置），选择存放.shp文件的文件夹。<br>
-<img src="https://divertingPan.github.io/post-images/1597655030088.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656135669.PNG" alt="" loading="lazy"></p>
 <h2 id="3">3</h2>
 <p>在左边选中shp文件，在右边选项卡选择“Preview”，在下面的选项栏中选择“Table”，在表格信息中，找到国家名字和他的列名，在这个文件里面国家名称存储在NAME_LONG列中。<br>
-<img src="https://divertingPan.github.io/post-images/1597655047256.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656143762.PNG" alt="" loading="lazy"></p>
 <h2 id="4">4</h2>
 <p>将我们手里的数据表修改修改。国家名和NAME_LONG中的国家名保持一致，列名也改成NAME_LONG。<br>
-<img src="https://divertingPan.github.io/post-images/1597655065845.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656148941.PNG" alt="" loading="lazy"></p>
 <h2 id="5">5</h2>
 <p>把数据存储成.csv文件。<br>
-<img src="https://divertingPan.github.io/post-images/1597655080368.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656153275.PNG" alt="" loading="lazy"></p>
 <h2 id="6">6</h2>
 <p>运行R代码，在右边可以预览结果，可以点击国家查看数值，可以选择导出为HTML文件或者是图片，完成。（代码附在后面）<br>
-<img src="https://divertingPan.github.io/post-images/1597655097330.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656157491.PNG" alt="" loading="lazy"></p>
 <h2 id="7">7</h2>
 <p>如果报错“pandoc.exe: Out of memory”，手动进入缓存文件夹去拿HTML文件即可。<br>
-<img src="https://divertingPan.github.io/post-images/1597655113161.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656161358.PNG" alt="" loading="lazy"></p>
 <h2 id="8">8</h2>
 <p>HTML文件保留有不失真缩放和交互功能。<br>
-<img src="https://divertingPan.github.io/post-images/1597655129937.PNG" alt="" loading="lazy"></p>
+<img src="https://divertingPan.github.io/post-images/1597656166375.PNG" alt="" loading="lazy"></p>
 <h1 id="相关链接">相关链接</h1>
 <p>世界地图shapefile下载：http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/</p>
 <p>arcgis10.2如何导出属性表：https://jingyan.baidu.com/article/14bd256e6e3a4cbb6d261205.html</p>
