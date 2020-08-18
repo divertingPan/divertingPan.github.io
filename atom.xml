@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-18T15:00:49.828Z</updated>
+    <updated>2020-08-18T15:01:29.716Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -646,7 +646,7 @@ Image8BitM3 = uint8(OuputM3);
 <figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597663343206.jfif" alt="" loading="lazy"></figure>
 <center style="font-size:14px;color:#AAAAAA">实际图像应用抖动算法的效果（已重新缩放）</center>
 <h1 id="多折腾折腾">多折腾折腾</h1>
-<p>以上是图像中只含有黑白点（二值）的情况，接下来考虑多值的（以4个值为例——白，浅灰，深灰，黑）规则抖动。潘老师没有查找到相关的资料，干脆直接用了最简单粗暴的方法，就是，将Bayer抖动表通过运算处理成3个取值域）(0<sub>21，22</sub>43，44~63)，将图形色彩也划分为对应的4个取值域，分别在各自域内做规则抖动。经过测试证明这个方法还是可以接受的。</p>
+<p>以上是图像中只含有黑白点（二值）的情况，接下来考虑多值的（以4个值为例——白，浅灰，深灰，黑）规则抖动。潘老师没有查找到相关的资料，干脆直接用了最简单粗暴的方法，就是，将Bayer抖动表通过运算处理成3个取值域）(0-21，22-43，44-63)，将图形色彩也划分为对应的4个取值域，分别在各自域内做规则抖动。经过测试证明这个方法还是可以接受的。</p>
 <figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597663932594.png" alt="" loading="lazy"></figure>
 <center style="font-size:14px;color:#AAAAAA">二值规则抖动和4值规则抖动的对比，在使用同样的Bayer抖动表的基础上，4值过渡更加平缓</center>
 <figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597663984180.jfif" alt="" loading="lazy"></figure>
