@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-18T14:36:55.790Z</updated>
+    <updated>2020-08-18T15:00:49.828Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -610,7 +610,7 @@ while 1:
 <img src="https://divertingPan.github.io/post-images/1597663002331.png" alt="" loading="lazy"></p>
 <figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597663011546.png" alt="" loading="lazy"></figure>
 <center style="font-size:14px;color:#AAAAAA">灰阶图以及其规则抖动图，一个方格代表一个像素点。为了观察方便，图片被放大了</center>
-<p>还有一点，因为实际图像灰度范围是0<sub>255，然而Bayer抖动表里的数字范围是0</sub>63，所以对源图像还要进行范围的压缩。以下是使用MATLAB进行抖动表的生成和抖动的算法，供学有余力想要研究技术细节的同学参考。需要完整代码的请<a href="https://github.com/divertingPan/Bayer_Dither">前往github</a></p>
+<p>还有一点，因为实际图像灰度范围是0-255，然而Bayer抖动表里的数字范围是0-63，所以对源图像还要进行范围的压缩。以下是使用MATLAB进行抖动表的生成和抖动的算法，供学有余力想要研究技术细节的同学参考。需要完整代码的请<a href="https://github.com/divertingPan/Bayer_Dither">前往github</a></p>
 <pre><code class="language-python">m1 = [[ 0 2 ];
       [ 3 1 ]];
 
