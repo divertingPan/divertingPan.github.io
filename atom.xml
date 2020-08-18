@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-18T15:57:33.293Z</updated>
+    <updated>2020-08-18T16:07:31.661Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -316,6 +316,41 @@ for maindir, subdir, filename in os.walk(resume_path):
                 print(file)
 
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[续前文 | 百度贴吧清贴事件、屏蔽广告的解决方案]]></title>
+        <id>https://divertingPan.github.io/post/ban_baidu_ads/</id>
+        <link href="https://divertingPan.github.io/post/ban_baidu_ads/">
+        </link>
+        <updated>2019-05-29T15:58:19.000Z</updated>
+        <content type="html"><![CDATA[<p><a href="https://divertingpan.github.io/post/google_using/">之前那篇</a>关于用百度的推文着重讲如何检索信息，而且面向初级用户。现在补充一些和百度老狗有关的东西，并不局限于信息检索。</p>
+<h1 id="一-关于贴吧清2017年以前帖子的解决方案">一、关于贴吧清2017年以前帖子的解决方案。</h1>
+<p>2019年5月13日，百度贴吧发了这么个公告：</p>
+<blockquote>
+<p>由于数据系统升级，程序猿gg们将2017年1月1日以前的贴子们都藏起来咯——所以可能会导致你遇到以下现象：<br>
+1、【吧内贴子列表页】被隐藏的贴子，显示数据加载失败或加载中；<br>
+2、【我的收藏】贴数量无故减少；<br>
+3、【消息通知页】，17年1月1日以前的@及回复内容，无法进入查看原帖；<br>
+遇到以上情况的吧友们请稍安勿躁——问题进展可随时关注意见反馈吧的相关公告，感谢大家的理解与支持——</p>
+</blockquote>
+<p>大量用户不禁<del>口出粗鄙之语，</del>纷纷逃离。潘老师也不禁开始考虑要把自己的推文多备几份。<br>
+不过今天潘老师摸索出一个解决方法来暂时应对。首先在百度搜索你想看的已经没了的帖子标题，可以看到这篇帖子发帖时间是2017年前的，确实打不开了。这时只需<strong>点击“百度快照”</strong>：</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597766507343.webp" alt="" loading="lazy"></figure>
+<p>就可以进入类似网页备份的东西里，页面加载出来了，可以看出最后一次的备份正是灾难发生前的那一刻。所以各位想看的精华帖攻略贴<del>同人（H）</del>文应该大概率是还可以打开一些的。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597766564855.webp" alt="" loading="lazy"></figure>
+<p>但是这个做法有一个bug，如果你翻页的话，就不好用了，如何找到第二页，第三页，……，第n页的快照？一个想法是，搜索到帖子第二页的内容的关键词，用快照直接打开第二页。但问题在于谁能记得哪页有哪些内容呢？所以这个方法还有待完善。<br>
+（图的加载也有问题，都是图的帖子可能就比较惨了）</p>
+<h1 id="二-消除百度广告等乱七八糟反正就是广告的解决方案">二、消除百度广告等乱七八糟反正就是广告的解决方案。</h1>
+<p>感谢@李朝阳 同学的提醒，潘老师忘记了万能的油猴（Tampermonkey），这个实在是太牛逼了，而且相关信息也很多，潘老师直接引用别人做好的调查工作即可：<br>
+TamperMonkey | 一款过滤百度广告推广的神器：<br>
+https://blog.csdn.net/qq_35976320/article/details/80985699<br>
+这个帖子不仅给了<strong>消除广告</strong>的方法，还有<del>破解视频网站VIP视频的方法，百度网盘不限速的方法。牛逼。</del></p>
+<p>实际测试一下百度消广告的功能，另外两种功能就悄悄自己尝试吧反正大家都懂。<br>
+不开插件，这一屏都是广告：</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597766678898.webp" alt="" loading="lazy"></figure>
+<p>开了插件之后，除了携程（牛逼？）没屏蔽，其他乱七八糟都被折叠了。妈妈再也不用担心我治疗脱发被莆田系医院骗了。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597766698696.jfif" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
@@ -999,51 +1034,6 @@ leaflet(shape) %&gt;% addTiles() %&gt;%
 #显示图例
   addLegend(pal = pal, values = shape$VALUE, position = &quot;bottomright&quot;, title = &quot;Data Map&quot;)
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[猎奇 | 教你怎样修复坏冰箱]]></title>
-        <id>https://divertingPan.github.io/post/broken_fridges/</id>
-        <link href="https://divertingPan.github.io/post/broken_fridges/">
-        </link>
-        <updated>2018-02-10T08:47:42.000Z</updated>
-        <content type="html"><![CDATA[<p>先放结论，再写分析过程：</p>
-<blockquote>
-<p>如果你家冰箱不转了，到冰箱后面找到启动器，拔下来，测量一下两脚之间的阻值，如果不是通路状态，就换一个新的试试。</p>
-</blockquote>
-<p>昨天清早，潘老师家的电冰箱待机之后，经过一整天的耐心等待，他都没有再启动，伴随的只有时不时的咔咔<del>仿佛吃了鱼刺一样</del>的声音。于是，动手能力一般<del>但是心很大</del>的潘老师决定自己修理修理他。</p>
-<p>首先是最常规的拍打修理法，据说此方法生效概率最大，能解决大多数电器故障。但是在这里，不行。<br>
-<img src="https://divertingPan.github.io/post-images/1597656239480.gif" alt="" loading="lazy"></p>
-<p>第二步，潘老师钻进了冰箱后面去寻找线索。在修理电器时我们最先应该参考的是厂家提供的接线图。<br>
-<img src="https://divertingPan.github.io/post-images/1597656256483.jpg" alt="" loading="lazy"></p>
-<p>仔细研究一番之后，潘老师觉得，还是上百度找一找答案更靠谱。</p>
-<p>潘老师发现家里的冰箱已经算是古董级别的了。不过直到现在才宕机，这质量还真是没得说（没有广告费因为这牌子已经<del>像这个标签一样</del>黄了）。<br>
-<img src="https://divertingPan.github.io/post-images/1597656263603.jpg" alt="" loading="lazy"></p>
-<p>到百度寻找一下思路之后，重新回到冰箱后面。在冰箱后面会看到如下场景。<br>
-<img src="https://divertingPan.github.io/post-images/1597656270291.jpg" alt="" loading="lazy"></p>
-<p>圆形的大缸是压缩机，相当于冰箱的心脏。在压缩机旁边有一个启动器，有时候冰箱故障就是因为启动器出了问题。启动器包在压缩机左边的罩子里，把罩子搞下来，就能看到插在上面的启动器。<br>
-<img src="https://divertingPan.github.io/post-images/1597656277865.jpg" alt="" loading="lazy"></p>
-<p><img src="https://divertingPan.github.io/post-images/1597656284219.PNG" alt="" loading="lazy"><br>
-上图是一般冰箱启动器的位置和连接方式。8EA Motor Starter就是本次坏掉的启动器。当时忘了实拍所以就借用一下示意图。</p>
-<p>潘老师拽下启动器并拔下上面的连线之后，得到了摇晃起来卡拉拉响并且往外掉渣渣的这么一个东西，潘老师根据多年经验猜测这应该不是正常的现象。所以基本锁定就是他出了问题。<br>
-<img src="https://divertingPan.github.io/post-images/1597656292950.jpg" alt="" loading="lazy"></p>
-<p>经过观察他上面写的字，我猜测KLIXON是他的品牌，8EA是型号，于是通过百度，得到了这个启动器的datasheet。<br>
-<img src="https://divertingPan.github.io/post-images/1597656303385.PNG" alt="" loading="lazy"></p>
-<p>拆开外壳之后发现里面的东西已经碎了所以摇晃起来才会响。与爆炸图（Exploded View）对比之后我觉得应该是PTC Pill碎了。（为什么PTC会碎，它工作时受力吗？）<br>
-<img src="https://divertingPan.github.io/post-images/1597656310128.jpg" alt="" loading="lazy"><br>
-<img src="https://divertingPan.github.io/post-images/1597656314173.PNG" alt="" loading="lazy"></p>
-<p>好奇的潘老师查了一下PTC，内容如下：</p>
-<blockquote>
-<p>PTC（Positive Temperature Coefficient）元件为正温度系数热敏电阻，它是掺入微量稀土元素，用特殊工艺制成的钛酸钡型半导体。PTC启动继电器又称为无触点启动继电器，实际上就是正温度系数热敏电阻启动继电器。当电冰箱的压缩机刚开始启动时，PTC启动继电器的温度较低，电阻值较小，在电路中呈通路状态。当启动电流增大到正常运行电流的4～6倍时，启动绕组中通过的电流很大，使压缩机产生很大的启动转矩。与此同时，大电流使元件温度迅速升高（一般为100～140℃），其阻值急剧上升，通过的电流又下降到很小的稳定值，断开启动绕组，使压缩机进入正常运转状态。</p>
-</blockquote>
-<p>反正大概意思就是，启动之前启动器两端是通的，冰箱运转之后启动器就相当于断路了。而碎裂的PTC是始终都处于断路所以冰箱没法启动。潘老师测量了一下那些碎块的电阻，的确是很小的，但没有测量加热状态下的电阻值。</p>
-<p>于是潘老师下楼到专卖制冷器件的地方，买了一个新的PTC启动器，接好线插回去。插上冰箱插销，通电正常运转，实验成功。</p>
-<p>最后给学有余力的同学提供一个官方给的启动器接线图。（潘老师也不清楚为什么电路图画的封装里带有电容，但是实际拆开并没有看到电容<del>难道是烧爆了？</del>）<br>
-<img src="https://divertingPan.github.io/post-images/1597656332187.PNG" alt="" loading="lazy"></p>
-<p>所以，如果前面那些对你来说太难理解的话，就记住一句话。如果你家冰箱不转了，到冰箱后面找到启动器，拔下来，测量一下两脚之间的阻值，如果不是通路状态，就换一个新的试试<del>找潘老师给你修就好了上门维修费用50元根本不用这么费劲。</del></p>
-<h3 id="参考资料">参考资料：</h3>
-<p>Data Sheet (PDF)：http://www.sensata.com/download/8ea.pdf</p>
-<p>电冰箱PTC启动继电器介绍：http://www.aitmy.com/news/201308/30/news_50747.html</p>
 ]]></content>
     </entry>
 </feed>
