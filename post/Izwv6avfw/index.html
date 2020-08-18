@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【转载】pytorch里面的天坑 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1597759375394">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1597761410179">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【转载】pytorch里面的天坑 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -26,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1597759375394" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1597761410179" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -200,7 +200,7 @@ test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, downlo
 <p>报错如下：</p>
 <pre><code>RuntimeError: Dataset not found or corrupted. You can use download=True to download it
 </code></pre>
-<p>几经折腾才发现问题在那，自己提前下载了，<strong>参数要给全。。。</strong></p>
+<p>几经折腾才发现问题在那，自己提前下载了，**参数要给全。。。**路径给全，也就是绝对路径</p>
 <pre><code class="language-python">train_set = datasets.CIFAR10(root=data, train=True, transform=train_transforms, download=False)  
 test_set = datasets.CIFAR10(root=data, train=False, transform=test_transforms, download=False)
 </code></pre>
