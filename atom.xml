@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-18T07:52:41.009Z</updated>
+    <updated>2020-08-18T14:03:08.760Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,149 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[【转载】pytorch里面的天坑]]></title>
+        <id>https://divertingPan.github.io/post/Izwv6avfw/</id>
+        <link href="https://divertingPan.github.io/post/Izwv6avfw/">
+        </link>
+        <updated>2020-08-18T13:17:09.000Z</updated>
+        <content type="html"><![CDATA[<p>今天随便炼丹取暖，结果卡了一个坑，在网上找到一个解决方案，顺便把其他的部分也粘贴过来存个档吧</p>
+<blockquote>
+<p>作者：八戒<br>
+链接：https://zhuanlan.zhihu.com/p/95883048<br>
+来源：知乎<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h1 id="pytorch-数据读取模块windows和linux不同">Pytorch 数据读取模块windows和linux不同</h1>
+<p>报错如下：</p>
+<pre><code>AttributeError: Can't pickle local object 'get_loader.&lt;locals&gt;.&lt;lambda&gt;'
+</code></pre>
+<p>问题如上所示，但是Google全是<a href="https://blog.csdn.net/javali1995/article/details/78475108">这种</a>，或者<a href="https://blog.csdn.net/qq_39314099/article/details/83822593">这种</a>。它还有一个报错是</p>
+<pre><code>EOFError: Ran out of input
+</code></pre>
+<p>又或者<a href="https://blog.51cto.com/itbases/2087664">这种</a>。无解啊，报错的是数据读取模块，但是我的程序在Linux系统下是没有问题的，但是到了Windows系统下就有问题了，不知道为什么。</p>
+<pre><code class="language-python">data.DataLoader(dataset=dataset, batch_size=1, shuffle=False, num_workers=num_thread)
+</code></pre>
+<p>就是把num_workers指定为0，或者直接不写。</p>
+<hr>
+<h1 id="pytorch-gpu问题">Pytorch GPU问题</h1>
+<p>Pytorch在GPU并行方面还算很方便。在定义好model之后只需要使用一行：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model)
+#默认调用所有GPU
+</code></pre>
+<p>即可实现在所有GPU上并行运算。</p>
+<p>但是有时候直接占用所有的GPU是没有必要的，如果要指定GPU，可以在DataParallel中增加一个参数：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
+</code></pre>
+<p>在运行时会报出如下错误：</p>
+<pre><code>RuntimeError: all tensors must be on devices[0]
+</code></pre>
+<p>该错误的解决方式有很多，这里推荐使用一种最简单的，在运行代码的时候，调整程序可见的GPU即可，具体而言就是将原先的运行指令：</p>
+<pre><code>python train.py
+</code></pre>
+<p>改为</p>
+<pre><code>CUDA_VISIBLE_DEVICES=2,3  python train.py
+</code></pre>
+<p>而程序中还是写为：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
+</code></pre>
+<h1 id="pytorch-权重和数据不对">Pytorch 权重和数据不对</h1>
+<p>报错如下：</p>
+<pre><code>Input type (CUDAFloatTensor) and weight type (FloatTensor) should be the same
+</code></pre>
+<p>仔细看错误信息，CUDA和CPU，输入数据x和模型中的权重值类型不一样，一般来说是因为模型的参数不在GPU中，而输入数据在GPU中，通过添加model.cuda()将模型转移到GPU上以解决这个问题。但是我的模型中已经有model.cuda了。</p>
+<p>问题在模型中，不能把卷积定义到forward中，像下面这样是不行的</p>
+<pre><code class="language-python">def forward(self, x):
+    fin_x = nn.Conv2d(128,1,1,1)(x)
+</code></pre>
+<p>这就会导致这个问题，必须把</p>
+<pre><code class="language-python">fin_x = nn.Conv2d(128,1,1,1)(x)
+</code></pre>
+<p>这个定义到上面的模型中</p>
+<h1 id="pytorch-cpu加载多gpu训练模型">Pytorch cpu加载多GPU训练模型</h1>
+<p>多GPU训练保存的模型会多一个module</p>
+<pre><code>Missing key(s) in state_dict: &quot;layer1.0.0.weight&quot;, &quot;layer1.0.2.weight&quot;, 
+Unexpected key(s) in state_dict: &quot;module.layer1.0.0.weight&quot;,
+</code></pre>
+<p>怎么解决呢？</p>
+<pre><code class="language-python">    state_dict = torch.load(model_path,map_location='cpu')
+    from collections import OrderedDict
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        name = k[7:]                  # remove module.
+        new_state_dict[name] = v
+    net.load_state_dict(new_state_dict)
+</code></pre>
+<h1 id="torchvision中datasets加载cifar10cifar100问题">torchvision中datasets加载CIFAR10,CIFAR100问题</h1>
+<p>因为网络的问题，自己就提前下载了数据集，但是网络一加载就报错，找不到数据，我就奇了怪了。。。。明明有就是找不到</p>
+<pre><code class="language-python">train_set = datasets.CIFAR10(data, train=True, transform=train_transforms, download=False) 
+test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, download=False)
+</code></pre>
+<p>报错如下：</p>
+<pre><code>RuntimeError: Dataset not found or corrupted. You can use download=True to download it
+</code></pre>
+<p>几经折腾才发现问题在那，自己提前下载了，<strong>参数要给全。。。</strong></p>
+<pre><code class="language-python">train_set = datasets.CIFAR10(root=data, train=True, transform=train_transforms, download=False)  
+test_set = datasets.CIFAR10(root=data, train=False, transform=test_transforms, download=False)
+</code></pre>
+<h1 id="pytorch中cudnn错误">Pytorch中cudnn错误</h1>
+<pre><code>RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED. This error may appear if you passed in a non-contiguous input.
+</code></pre>
+<p>看官方说法是矩阵太大了，然后把批量换小点，我换小了也不行，只有换到1才行。。。。</p>
+<p>还有就是禁用cudnn的加速</p>
+<pre><code class="language-python">torch.backends.cudnn.enabled = False
+</code></pre>
+<p><strong>这个方法是可行的，但是慢的一批</strong></p>
+<h1 id="pycharm-数据显示不全">Pycharm 数据显示不全</h1>
+<p>在Anaconda中notebook可以显示全部的数据，但是在pycharm中，使用print(dataframe)，不能显示dataframe的全部数据，中间的数据用省略号表示。</p>
+<p>在pycharm中显示全部数据解决方法，输入下面代码：</p>
+<pre><code class="language-python">import pandas as pd 
+#显示所有列
+pd.set_option('display.max_columns', None)
+#显示所有行
+pd.set_options('display.max_rows', None)
+</code></pre>
+<p>类似的，对于numpy array print后不能完全显示输入下面代码：</p>
+<pre><code class="language-python">numpy.set_printoptions(threshold = np.inf)
+
+#若想不以科学计数显示:
+numpy.set_printoptions(suppress = True)
+</code></pre>
+<h1 id="numpy问题">numpy问题</h1>
+<p>报错如下：</p>
+<pre><code>in numpy.import_array
+ImportError: numpy.core.multiarray failed to import
+</code></pre>
+<p>这个问题可能有两个原因</p>
+<ol>
+<li>你用conda装了一个numpy,又用pip装了一个numpy。导致冲突，你卸载一个就行了；比如：</li>
+</ol>
+<pre><code>conda uninstall numpy
+</code></pre>
+<ol start="2">
+<li>numpy 版本太低，导致不兼容，更新一下</li>
+</ol>
+<pre><code>pip install -U numpy
+conda update numpy
+</code></pre>
+<h1 id="pip问题">pip问题</h1>
+<p>装sklean的时候发现如下错误</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn) (from versions: 1.0.0, 1.1.0)
+ERROR: No matching distribution found for threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn)
+</code></pre>
+<p>然后上网找了下解决方案，更新pip</p>
+<pre><code>python -m pip install --upgrade pip
+</code></pre>
+<p>然后 然后 然后就悲剧了！！！我的pip就崩了</p>
+<pre><code>Script file 'D:\Anaconda3\Scripts\pip-script.py' is not present
+</code></pre>
+<p><strong>大家更新的时候一定要在管理员的情况下更新你的pip</strong></p>
+<p><strong>然后管理员运行</strong></p>
+<pre><code>easy_install pip
+</code></pre>
+<p>解决上面的问题</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[【5分钟实例】去除大量图片中重复的图片]]></title>
         <id>https://divertingPan.github.io/post/remove_duplicate/</id>
