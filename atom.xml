@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-19T09:04:59.269Z</updated>
+    <updated>2020-08-19T11:14:50.085Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -247,6 +247,121 @@ if __name__ == '__main__':
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[硬币系列二 | 从照片中自动检测硬币]]></title>
+        <id>https://divertingPan.github.io/post/coin_detect/</id>
+        <link href="https://divertingPan.github.io/post/coin_detect/">
+        </link>
+        <updated>2020-07-11T10:56:28.000Z</updated>
+        <content type="html"><![CDATA[<p>最近搞了一些稀奇硬币，老潘把他们都用手机拍了下来。但是由于手机镜头焦距所限，并不能让硬币充满整个画面。所以很自然的想法就是，把硬币从图片中裁剪出来。一个正常人的做法是，把需要拍摄特写的物品放在纯净颜色的背景上，这种做法其实也有利于后期的抠图。</p>
+<p>但是，我们希望将图片的外围裁剪到刚好框住硬币，不多余也不遗漏。或者说，做出硬币轮廓的外接矩形。我们可以选择用手一个一个的裁剪。</p>
+<p>但是老潘是很懒的人，能躺着办绝不坐着办。<strong>打开电脑，拿起键盘，启动你最爱的IDE。</strong></p>
+<p>首先，小学美术课上应该有教过图像的边缘提取方法。目前比较主流且效果比较好的方法是Canny算子法，这种方法主要通过以下步骤得到一幅图片的边缘线条：</p>
+<ol>
+<li>
+<p>将图片高斯模糊，消除噪声影响，一般用3x3或者5x5即可。</p>
+</li>
+<li>
+<p>计算上下左右方向的图像梯度信息（理解为计算当前点和周围点的明暗高低关系即可），这时候，如果这个点左右两边都和该点亮度差异很大，这就证明这个点在图形边缘上，反之，没什么差异证明这个点在一马平川上。</p>
+</li>
+<li>
+<p>再进行非极大值抑制（把不是最大值的点抑制下去）。对步骤2得到的梯度信息，再观察一个点和周围点的高低关系，对于最大值点保留其值，比他小的点赋予0。</p>
+</li>
+<li>
+<p>通过双阈值得到最终的边界图像。对上面步骤得到的图像，再次进行判断：给定一个上下界，高于上界的值作为强边缘，低于下界的值为弱边缘，夹在上下界中间的，如果这个点附近一圈存在强边缘，也把这个点作为强边缘。最终只保留强边缘作为最终的边缘图像。</p>
+</li>
+</ol>
+<p>关于canny边缘检测的理论结合实践部分，这篇博客很好：https://www.cnblogs.com/mmmmc/p/10524640.html</p>
+<p>通过openCV可以使用以下方法快速得到一幅图片的<strong>轮廓信息</strong></p>
+<pre><code class="language-python">
+img = cv2.imread(apath)
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+gray = cv2.GaussianBlur(gray, (3, 3), 0)
+thresh = cv2.Canny(gray, 10, 100)
+</code></pre>
+<p>这里的例子如图所示，一个硬币和利用这种方法提取出的硬币边缘线条。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597834774020.png" alt="" loading="lazy"></figure>
+<p>这时候，我们可以选择直接作出图中颜色为白色区域的外接矩形，如果一切正常，那么面积最大的那个矩形就会是硬币的外轮廓。（背景如果不是纯色就可能会导致轮廓混杂粘连），图中将这些外接矩形用蓝色标记到了原图上。</p>
+<p>通过以下方法可以获得一个<strong>0-1二值图中的白色区域边界信息</strong></p>
+<pre><code class="language-python">_, contours, hierarchy =cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+</code></pre>
+<p>之后对这个边界信息做外接矩形并且保留面积最大的矩形。为了防止出现其他面积更大但是奇奇怪怪的轮廓，需要限制这个区域的<strong>长宽比不可以差太多</strong>，这样选出的框基本就是硬币主体了。</p>
+<pre><code class="language-python">max_area = 0
+for cnt in contours:
+x, y, w, h =cv2.boundingRect(cnt)
+cv2.rectangle(img,(x, y), (x + w, y + h), (255, 0, 0), 2)
+   if w*h &gt; max_area and 0.8 &lt; w/h &lt; 1.25:
+       max_area = w*h
+       rec_x = x
+       rec_y = y
+       rec_w = w
+       rec_h = h
+img = img[rec_y:rec_y+rec_h,rec_x:rec_x+rec_w]
+</code></pre>
+<p>可以看到由于我的背景有其他的杂物和纹理，所以被标记了很多其他的区域。但是能够符合<strong>面积最大并且长宽比不差太多</strong>的只有中间这个硬币。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597834848139.png" alt="" loading="lazy"></figure>
+<p>但是实际这么做的话会有一个问题，硬币的最外圈边缘有可能断裂开。这样，图片中白色区域的外接矩形就会出现问题。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597834860546.png" alt="" loading="lazy"></figure>
+<p>事实上经过测试，由于这个问题造成的裁剪错误有不少，所以应该在提取边缘之后再搞点什么动作。</p>
+<p>众所周知，形态学处理可以对图像的这种残缺进行处理，比如说人尽皆知的开闭操作，可以对这种提取了边缘的边缘图像进一步对缺口进行连接，或者对噪点进行消除。而开闭操作又是由腐蚀和膨胀组合形成的操作，腐蚀是利用一个小的形状（术语叫结构元）对图像一点点扫描下去，只要结构元和图像白色区域没有完全重合，就把这个结构元的判别点（一般是结构元中心）下面的颜色变成黑色。膨胀相反，只要结构元和图像的白色区域有一点点重合，就把判别点下面的颜色变白。</p>
+<p>图像中的白色小杂点不可能和结构元完全重合，腐蚀可以让杂点被抹去。膨胀可以让图像白色区域胖起来，缝隙就会渐渐挤在一起连起来了。这里老潘闲的做了个动图，展示了一个图像提取了轮廓之后<code>膨胀了5次，腐蚀了10次，又膨胀了5次</code>的过程。图中可以看到，膨胀5次<code>使硬币的轮廓完全清晰可见</code>了，腐蚀则是<code>将由于膨胀造成的轮廓变大再缩回去</code>。另外再腐蚀<code>将背景的杂点去掉</code>，由于腐蚀又<code>造成了轮廓缩水所以还要再膨胀回来</code>。最后的图中仅剩的圆形刚好就是硬币的外轮廓。这时候，先膨胀5次又腐蚀5次就对应了<strong>闭操作</strong>，后又腐蚀5次再膨胀5次对应了<strong>开操作</strong>。图中也可以看到，使用的结构元的形状是方形。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597834974414.gif" alt="" loading="lazy"></figure>
+<p>通过这样一顿操作，可以获得非常可靠的硬币外轮廓信息了，对这时候的图再提取白色区域的外接矩形就不会出现硬币断开的情况。对图像进行腐蚀膨胀<strong>开闭操作</strong>的方法如下：</p>
+<pre><code class="language-python">kernel =cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
+thresh = cv2.dilate(thresh, kernel)
+thresh = cv2.erode(thresh, kernel)
+closed = cv2.morphologyEx(thresh,cv2.MORPH_CLOSE, kernel, iterations=5)
+opened = cv2.morphologyEx(closed,cv2.MORPH_OPEN, kernel, iterations=5)
+</code></pre>
+<p>对比一下只用canny边缘提取做外接矩形和进行闭操作以后的外接矩形差异，优化前对应着前面提到的边缘断开造成的外围最大的外接矩形错误，可以看到优化前的轮廓非常混乱，因为每一个白色的边缘线条都会被当做一个独立连通区域去框定他的外接矩形。优化后硬币主体对应的连通区域一般就是一个圆了，边界也非常干净简单。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597835020803.png" alt="" loading="lazy"></figure>
+<p>如果看一下优化后，用来做外接矩形的白色区域长什么样子，如下图所示是几个硬币的canny边缘图像闭操作以后的结果。虽然硬币范围内有孔洞，但是不会影响整个区域的外轮廓，外接矩形仍然可以死死卡在圆周上。在边缘上的孔洞看似可能会导致区域有缺口，但是由于闭运算的特性，实际上仍然会有<strong>1像素</strong>宽度的线包裹着他，而且最外围的细外轮廓线不太可能再有断裂了。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597835037941.png" alt="" loading="lazy"></figure>
+<p>通过以上操作已经可以完美的将硬币裁切出来了。<del>这就是关于硬币图像裁剪边缘检测的方法了，你学废了吗？欢迎在评论区告诉小编一起讨论哦！</del></p>
+<p>后来在查阅论文和各路资料的时候发现，有一种叫做<strong>霍夫变换</strong>的方法可以直接检测图中的圆形区域，我没有试验这个算法的效果，而且老潘偏偏有几个不是圆形的硬币，我不知道霍夫变换面对这种方形和花花形硬币效果如何。<br>
+后记：既然都提到了那就试一下，我发现霍夫变换速度好慢，还会把CPU全部占满。（图太大的话就会很慢）</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597835091600.png" alt="" loading="lazy"></figure>
+<p>做这个事情并不仅仅是想要把图像剪出来这么简单。如果想要查询每个硬币对应的来历、材质、等等信息，简直让人一头雾水，尤其某些硬币上面完全没有英文，查都不知道怎么查。那么能不能让电脑帮帮我，直接给他图让他帮我查呢？</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597835132507.webp" alt="" loading="lazy"></figure>
+<p>经过一番折腾，老潘发现一个网站可以直接传图，以图识图，给你这个硬币的信息。当然这都是后话，我折腾了一圈，尝试了多种图案比对方法均无果以后，发现自己走了个远路，原来这有网站可以直接用啊，准确率也还可以。不过由于上传图片需要将图裁到只包含硬币，那其实还是要用到我前半部分做的图片裁剪。</p>
+<p><a href="https://colnect.cn/zh/coins/identify">这个网站上有各种神奇收藏品图鉴</a></p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597835171085.png" alt="" loading="lazy"></figure>
+<p>反正折腾也折腾了，留下一些折腾的成果吧，指不定什么时候还能再用上。</p>
+<p>首先是爬虫<del>这个一上来就爬废了</del>，我初步的设计是，到一个<a href="https://zh-cn.ucoin.net/catalog">硬币图鉴网站</a>上（网址：https://zh-cn.ucoin.net/catalog）按照他清晰良好的层层结构，把所有有图为证的硬币图片全部抓下来，抓的同时，记录下这个硬币的文件名，以及这个图所在的硬币详情页链接地址，存进一个表里。在做比对的时候可以让程序自动找到和待测硬币最相似的标准硬币，照着标准图片的名字找到对应页面再去打开这个页面，完成自动化硬币信息查询。</p>
+<p>实验设计无比巧妙，刚开始第一次requests.get的时候发现返回来的HTML里面没内容，解析一下文本发现403，于是想到可能是这种直连会被挡。加一个伪装，设置一个header即可，这样可以把发出来的请求<strong>伪装</strong>成是普通浏览器发出的请求。设置方法如下</p>
+<pre><code class="language-python"># reference:https://blog.csdn.net/jamesaonier/article/details/89003053
+agentPools = [
+   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML,like Gecko) Version/5.1.7 Safari/534.57.2&quot;,
+   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/39.0.2171.71 Safari/537.36&quot;,
+   &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, likeGecko) Chrome/23.0.1271.64 Safari/537.11&quot;,
+   &quot;Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16(KHTML, like Gecko) Chrome/10.0.648.133 Safari/534.16&quot;,
+   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101Firefox/34.0&quot;,
+   &quot;Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10)Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10&quot;,
+   &quot;Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208Firefox/2.0.0 Opera 9.50&quot;
+    ]
+headers = {'User-Agent':random.choice(agentPools)}
+res = requests.get(index_url,headers=headers)
+</code></pre>
+<p>之后就能连上了，前期小规模爬测的时候毫无问题，眼看着一级目录已经建好（一级目录是所有的国家地区分类链接），二级目录也捋顺了（二级是每个国家地区下面的年份和硬币币别），三级目录就是每个硬币对应的详细页面和图片，这也都没有问题。于是火力全开去挂机。</p>
+<p>挂到一半发现没图了，测试发现返回来的HTML里没有对应的链接了，输出一下文本一看是我IP被ban了。好，看来这个网站比百度老狗要严密一些。那我就用<strong>IP池</strong>吧。结果自此开始掉入深坑。用国内的各种IP去连，速度都巨慢而且容易断线。用科学上网连接很快，但是无法自动化更换IP，而且爬不超过半小时就会把IP再次ban掉，我甚至已经设置了每次请求sleep5秒，无济于事，可以说这个反爬让老潘有点下不去手。</p>
+<p><strong>设置代理IP</strong>的方法如下</p>
+<pre><code class="language-python">
+with open('./ip.txt', 'r') as f:
+   ip_pool = f.readlines()
+def get_proxy():
+    #获取IP文本的方法很多，可上网自查
+    #或去看我的完整工程文件里有一些说明注释
+    r= random.choice(ip_pool).strip('\n')
+   proxy = {'https': r}
+   return proxy
+res = requests.get(index_url,proxies=get_proxy(), headers=headers)
+</code></pre>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597835331405.webp" alt="" loading="lazy"></figure>
+<p>爬虫到此为止，只爬到了几百个硬币就弄不下去了<del>心态崩了</del>。如果有经验丰富大佬指点我爬完全站，老潘给你投币三连这次一定。</p>
+<p>下一篇讲解如何检测相似的硬币。这篇有点长了，分开成两篇发<del>又可以多水一篇推送美吱吱</del></p>
+<p>源码和下一篇合在一起了，都在<a href="https://github.com/divertingPan/coin_machine">GitHub</a></p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[【5分钟实例】按名字从大量简历中筛出需要的简历]]></title>
         <id>https://divertingPan.github.io/post/pick_resume/</id>
         <link href="https://divertingPan.github.io/post/pick_resume/">
@@ -314,6 +429,405 @@ for maindir, subdir, filename in os.walk(resume_path):
             if key in file_no_space:
                 copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
                 print(file)
+
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[复习Pytorch的使用方法，在套路的基础上灵活应变]]></title>
+        <id>https://divertingPan.github.io/post/pytorch_autoencoder/</id>
+        <link href="https://divertingPan.github.io/post/pytorch_autoencoder/">
+        </link>
+        <updated>2020-04-29T10:19:42.000Z</updated>
+        <content type="html"><![CDATA[<p>本节的大部分代码参考了：<a href="https://morvanzhou.github.io/tutorials/machine-learning/torch/4-04-autoencoder/">莫烦python</a></p>
+<p>这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。</p>
+<p>首先试着写一个很简单的AutoEncoder的结构出来。根据快速理解，这个网络的结构应该是类似这样的</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597832485482.png" alt="" loading="lazy"></figure>
+<p>我稀薄的记忆告诉我，有两种方法构建网络，一种是直接写在Sequential里，一种是先定义层再定义连接。那这次两个方法都试试，用Sequential写一下前半部分的Encoder，用另一种方法写Decoder。而且以前甚至都没仔细看过具体class，init那块都长啥样，只管复制粘贴。这次仔细看看写写。</p>
+<p>首先得写 <code>class Net(nn.Module):</code>，这里就有坑了，Module的M是大写。在这之后写一个<code>def__init__(self):</code>和一个<code>def forward(self, x):</code>，<code>__init__</code>里面定义层的信息，<code>forward</code>里面写网络的连接情况。另外，在<code>def __init__(self):</code>里面第一句要写<code>super(Net,self).__init__()</code>。剩下的部分就都是熟悉的味道了。</p>
+<p>所以整个网络这个class就写成了这样</p>
+<pre><code class="language-python">class Net(nn.Module):
+   def __init__(self):
+       super(Net, self).__init__()
+
+       # encoder
+       self.encoder = nn.Sequential(
+           nn.Flatten(start_dim=1),
+           nn.Linear(28 * 28, 128),
+           nn.LeakyReLU(inplace=True),
+           nn.Linear(128, 64),
+           nn.LeakyReLU(inplace=True),
+           nn.Linear(64, 32),
+           nn.LeakyReLU(inplace=True),
+           nn.Linear(32, 16),
+           nn.LeakyReLU(inplace=True),
+           nn.Linear(16, 8),
+           nn.LeakyReLU(inplace=True),
+           nn.Linear(8, 4),
+       )
+
+       # decoder
+       self.LeakyReLU = nn.LeakyReLU(inplace=True)
+       self.Linear_0 = nn.Linear(4, 8)
+       self.Linear_1 = nn.Linear(8, 16)
+       self.Linear_2 = nn.Linear(16, 32)
+       self.Linear_3 = nn.Linear(32, 64)
+       self.Linear_4 = nn.Linear(64, 128)
+       self.Linear_5 = nn.Linear(128, 28 * 28)
+       self.Sigmoid = nn.Sigmoid()
+
+   def forward(self, x):
+       # x = x.view(-1, 28*28)
+       x_encoded = self.encoder(x)
+       x_decoded = self.Linear_0(x_encoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Linear_1(x_decoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Linear_2(x_decoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Linear_3(x_decoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Linear_4(x_decoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Linear_5(x_decoded)
+       x_decoded = self.LeakyReLU(x_decoded)
+       x_decoded = self.Sigmoid(x_decoded)
+       x_decoded = x_decoded.view(-1, 28, 28)
+       return x_encoded, x_decoded
+</code></pre>
+<p>写的时候也遇到了一些问题，首先是一开始指定了输入数据先进入<code>nn.Flatten()</code>，这步是打算把图片展成一维，结果发现输入尺寸不匹配，经过检查之后发现<code>nn.Flatten()</code>如果不指定任何参数，会直接把输入的整个[batch_size, channel, weight, height]尺寸的tensor直接展平成一维数组[1, batch_size * channel * weight * height]，但是我们期望的展平是展成[batch_size, channel * weight * height]的。故这里的<code>nn.Flatten()</code>需要指定一个参数<code>nn.Flatten(start_dim=1)</code>，也可以用另一种方案，对于输入x，使<code>x = x.view(-1, channel * weight * height)</code>。</p>
+<p>关于输入tensor的尺寸形状问题，可见：<a href="https://www.jianshu.com/p/41c15d301542">Pytorch的参数“batch_first”的理解</a></p>
+<p>这里示范一下flatten的两个参数的情况，<code>torch.flatten()</code>和<code>nn.Flatten()</code>的参数效果是一样的</p>
+<p><code>start_dim=1</code>表示展平的开始维度，例如这个tensor的第一个28这一维以及往后的维度都压在一起：</p>
+<pre><code class="language-python">view_data = train_data.train_data[idx]
+print(view_data.shape)
+view_data = torch.flatten(view_data,start_dim=1)
+print(view_data.shape)
+</code></pre>
+<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
+&gt;&gt;&gt;torch.Size([6, 784])
+</code></pre>
+<p><code>start_dim=0</code>自然就是从最开始的一个维度压缩，看来不指定参数的话默认就是这个情景：</p>
+<pre><code class="language-python">view_data = train_data.train_data[idx]
+print(view_data.shape)
+view_data = torch.flatten(view_data,start_dim=0)
+print(view_data.shape)
+</code></pre>
+<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
+&gt;&gt;&gt;torch.Size([4704])
+</code></pre>
+<p><code>end_dim=1</code>表示展平的停止维度，例如这个tensor的第一个28这一维以及之前的维度都压在一起：</p>
+<pre><code class="language-python">view_data = train_data.train_data[idx]
+print(view_data.shape)
+view_data = torch.flatten(view_data,end_dim=1)
+print(view_data.shape)
+</code></pre>
+<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
+&gt;&gt;&gt;torch.Size([168, 28])
+</code></pre>
+<p>第二是无意间看到的关于优化性能的一些建议。对于relu尽量设置<code>inplace=True</code>可以节省一些显存，那我们就把<code>__init__</code>里面的<code>relu层</code>都加一下这个参数吧。</p>
+<p>对于输出，重新resize成图片的尺寸即可，因为用的是灰度图片，所以resize可以省略通道那个维度，直接做成[batch_size, width, height]</p>
+<p>接着加载数据使用以下方法，需要数据增广的话就把以前做过的复制粘贴过来即可，这里没什么要注意的。</p>
+<pre><code class="language-python">train_data = torchvision.datasets.MNIST(root='./dataset/', train=True,
+                                       transform=torchvision.transforms.ToTensor(),
+                                       download=DOWNLOAD_MNIST,
+                                        )
+trainloader = torch.utils.data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE,shuffle=True)
+</code></pre>
+<p>指定设备，直接用倒背如流的</p>
+<pre><code class="language-python">device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+</code></pre>
+<p>之后给网络和tensor都to(device)即可。</p>
+<pre><code class="language-python">Net = Net().to(device)
+</code></pre>
+<p>接着是optimizer和loss function</p>
+<pre><code class="language-python">optimizer = torch.optim.Adam(Net.parameters(), lr=LR)
+loss_func = nn.MSELoss()
+</code></pre>
+<p>接着写一个for循环，一个循环是一个epoch，这里面，先<code>for step, (data, label) in enumerate(trainloader):</code>，在往里套数据的加载，计算，误差，老三套，大体结构是固定的。补充一点关于<code>model.train()</code>，<code>model.eval()</code>和<code>with torch.no_grad():</code>的关系，train和eval指定模型状态，如果模型存在BN和dropout，测试时不指定状态为eval()的话最后计算结果会不对劲。with torch.no_grad():是不计算存储梯度状态，是为了节约显存。详细信息参考：<a href="https://blog.csdn.net/songyu0120/article/details/103884586">pytorch中model eval和torchno grad()的区别</a></p>
+<pre><code class="language-python">for epoch in range(EPOCH):
+   for step, (data, label) in enumerate(trainloader):
+       Net.train()
+       data = data.squeeze().to(device)
+       encoded, decoded = Net(data)
+       loss = loss_func(decoded, data)
+       optimizer.zero_grad()
+       loss.backward()
+       optimizer.step()
+</code></pre>
+<p>每个epoch里面放一个步数检测，一定步数以后输出一个记录出来，这里建议把验证、测试等等不需要计算梯度的过程套一个with torch.no_grad():，这样不需要在输出loss和网络生成的结果时指定detach()了，否则要指定。同时注意网络输出如果运行在GPU上的，要取回CPU才能输出观察。</p>
+<pre><code class="language-python">       if step % 100 == 0:
+           Net.eval()
+           with torch.no_grad():
+                print('Epoch: %d | train loss:%.4f' % (epoch, loss.item()))
+                _, decoded = Net(view_data)
+                if decoded.device != 'cpu':
+                    decoded = decoded.to('cpu')
+                # 这里对view_data可视化
+</code></pre>
+<p>这里出现了预览用的数据view_data我前面还没讲，我不想让可视化的步骤打乱整体思路，可视化具体操作太灵活了，具体的就<a href="https://github.com/divertingPan/AutoEncoder_pytorch">看代码</a>吧。只写一下view_data的选择过程：选择train_data的targets等于0~9的对应位置，在train_data的data里取出这些位置的东西，就是对应0-9的数字的图片了。我总觉得这个可以再写简练一点，但是水平有限，不会再简化了。</p>
+<pre><code class="language-python">idx = []
+for i in range(N_TEST):
+   idx.append((train_data.targets == i).nonzero()[0].item())
+view_data = train_data.data[idx]
+</code></pre>
+<p>继续堆功能，实际训练可能会出现突然死机或者断电或者训练时想要暂停一下，这就需要保存一下网络的状态，回头再加载进来继续用，但是同时还应该保存optimizer的状态，如果有学习率计划的话还得存一下epoch，有的网络可能还得存一下loss，等等，这些信息可以直接用<code>torch.save()</code>存下来。具体保存的方法如下：</p>
+<pre><code class="language-python">    #每个epoch结束后保存一个checkpoint
+    torch.save({'epoch': epoch,
+                'model_state_dict':Net.state_dict(),
+                'optimizer_state_dict':optimizer.state_dict(),
+                }, 'checkpoint/ckpt.pth')
+</code></pre>
+<p>执行这个之前首先要保证checkpoint这个路径是存在的，这里就去前面加一个创建路径的代码即可，可以和检测加载checkpoint的代码放在一起。这段代码需要在进行训练的循环之前，在初始化模型与优化器之后。具体加载的代码如下，主要的操作就是将存着的数据赋给一些变量里。</p>
+<pre><code class="language-python">
+# 读一个checkpoint，如果存在的话
+start_epoch = 0
+if os.path.exists('checkpoint'):
+   if os.path.exists('checkpoint/ckpt.pth'):
+       print('Checkpoint exists, reading weights from checkpoint...')
+       checkpoint = torch.load('checkpoint/ckpt.pth')
+       Net.load_state_dict(checkpoint['model_state_dict'])
+       optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+       start_epoch = checkpoint['epoch'] + 1
+else:
+   os.makedirs('checkpoint')
+</code></pre>
+<p>这里读了起始的epoch，在训练时那个for循环就要从这个start_epoch开始计数了，</p>
+<pre><code class="language-python">for epoch in range(start_epoch, EPOCH):
+    # ……
+</code></pre>
+<p>可以看一下效果，我在epoch执行完第2次的时候点停止，这时存下的状态就是第2轮结束时的整个状态，然后再运行，可以看到目前运行的是第3个epoch，是接着第2轮的后面继续的。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597833498892.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597833504254.PNG" alt="" loading="lazy"></figure>
+<p>再之后我突然想加一个统计loss并且画出图的功能，可视化的地方略过，主要说一下统计loss的思考。首先我想统计每一次的loss输出，但是因为在每个step拿出loss的值，往后还得涉及到存取，一系列操作会很麻烦，这里先考虑以每个epoch作为统计时间单位。我选择用每个epoch内每100步的loss的均值作为输出值。没有选择从头开始的所有均值是考虑到，如果后面loss不再降低，但是均值还会随着步数增大而降低。使用每个epoch的均值就不会出现这个问题，可以看出在第几epoch收敛了。同时checkpoint文件也得加入loss情况的记录。</p>
+<p>首先在epoch循环的外面放一个<code>avg_losses= []</code>作为每轮的平均值的记录，在每轮epoch循环一开始就给一个<code>avg_loss = 0</code>和<code>flag = 0</code>，在进行每100步的输出日志时顺便记一下<code>avg_loss += loss.item()</code>，在epoch循环马上要结束的地方，在保存checkpoint文件之前，计算一下这一epoch的loss均值，想画图就画出来，懒得画就直接存进checkpoint</p>
+<pre><code class="language-python">
+   avg_loss = avg_loss / flag
+   print('Epoch %d average loss: %.4f' % (epoch, avg_loss))
+   avg_losses.append(avg_loss)
+   x1 = range(0, len(avg_losses))
+   y1 = avg_losses
+   plt.figure(2)
+   plt.plot(x1, y1, color='yellow', linestyle='-')
+   for text_x, text_y in zip(x1, y1): # epoch多了之后会挤成一团，实际用的时候可以不显示
+       plt.text(text_x, text_y, '%.4f' % text_y, ha='center', va='bottom',fontsize=7)
+   plt.xlabel('epoch')   plt.ylabel('average loss')
+   plt.draw()
+   plt.pause(0.05)
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597833585185.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597833596475.png" alt="" loading="lazy"></figure>
+<p>我看到这才发现，忘记做训练完毕保存网络的步骤了，给他存一下，如果以后要做预测的话可以直接加载。</p>
+<pre><code class="language-python">if not (os.path.exists('model')):
+   os.makedirs('model')
+torch.save(Net.state_dict(), 'model/net.pth')
+print('model saved!')
+</code></pre>
+<p>既然都做到这了，不加一个lr_scheduler总感觉不完整。观察了上面那个loss曲线，我决定在20epoch之后减小学习率，至于选30epoch或者加大epoch效果怎么样我不想尝试了，这块我就随意做一下先。</p>
+<pre><code class="language-python">scheduler =torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[20], gamma=0.2)
+</code></pre>
+<p>最初我写的scheduler.step(epoch)，这样保存checkpoint并且再加载的时候能衔接上。但是这里面指定参数的话会报警告说这个参数不是必需的，可能在以后的版本会取消这种用法？不懂，但是我看源码的时候发现scheduler也有state_dict和load_state_dict，所以我就把这个状态的读写也用checkpoint文件记录一下，在开始训练之前先读一下scheduler的状态</p>
+<pre><code class="language-python">scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+</code></pre>
+<p>这应该是比较正统的做法。<br>
+（在这个任务上加不加lr_scheduler影响都不大）</p>
+<p>再尝试一下只构建后半段解码器，用保存的权重初始化，并且从编码器对一种数字图案的低维编码恢复出数字图片。先构建后半段的网络，<code>本来想写个Encoder在写个Decoder然后再Net里面拼起来</code>，但是好像有点问题。关于如何从保存的权重里只读取一部分，其实是个千层饼行为，先拿出这个网络的权重信息，再去对比加载的权重信息，再用重复的部分替换网络的权重，再让网络读取这个权重信息。具体操作可见：<a href="https://blog.csdn.net/xzy5210123/article/details/88598436">Pytorch迁移学习加载部分预训练权重</a></p>
+<pre><code class="language-python">decoder = Decoder().eval()
+model_dict = decoder.state_dict()
+pretrained_dict =torch.load('model/net.pth')
+pretrained_dict = {k: v for k, v inpretrained_dict.items() if k in model_dict}
+model_dict.update(pretrained_dict)
+decoder.load_state_dict(model_dict)
+with torch.no_grad():
+   output = decoder(input_data)
+   plt.imshow(output[0], cmap='gray')
+   plt.show()
+</code></pre>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597833849604.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597833856969.png" alt="" loading="lazy"></figure>
+<p>再用一用卷积网络试试，之前的网络都是用全连接层进行推理计算的，这里把里面的层改成卷积和反卷积试一试效果。使用卷积网络的话，需要考虑一下图片输入之后的尺寸变化情况。这里先毫不讲道理地随意设计一下卷积结构的自编码器。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597833887262.png" alt="" loading="lazy"></figure>
+<pre><code class="language-python">class DoubleConvNet(nn.Module):
+   def __init__(self):
+       super(DoubleConvNet, self).__init__()
+       self.encoder_1 = nn.Sequential(
+           nn.Conv2d(1, 5, 8, 4, 2),  # 7x7x5
+           nn.BatchNorm2d(5),
+           nn.LeakyReLU(True),
+           nn.Conv2d(5, 7, 5, 1, 0),  # 3x3x7
+           nn.BatchNorm2d(7),
+           nn.LeakyReLU(True),
+           nn.Conv2d(7, 9, 2, 1, 0),  #2x2x19
+           nn.BatchNorm2d(9),
+           nn.LeakyReLU(True),
+           nn.Conv2d(9, 10, 2, 1, 0),  #1x1x11
+           nn.Sigmoid(),
+       )
+
+       self.encoder_2 = nn.Sequential(
+           nn.Conv2d(1, 5, 14, 1, 0),  #15x15x5
+           nn.BatchNorm2d(5),
+           nn.LeakyReLU(True),
+            nn.Conv2d(5, 7, 8, 1, 0),  # 8x8x7
+           nn.BatchNorm2d(7),
+           nn.LeakyReLU(True),
+           nn.Conv2d(7, 9, 4, 4, 0),  # 2x2x9
+           nn.BatchNorm2d(9),
+           nn.LeakyReLU(True),
+           nn.Conv2d(9, 10, 2, 1, 0),  #1x1x11
+           nn.Sigmoid(),
+       )
+
+       self.decoder_1 = nn.Sequential(
+           nn.ConvTranspose2d(20, 9, 2, 1, 0),
+           nn.BatchNorm2d(9),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(9, 7, 2, 1, 0),
+           nn.BatchNorm2d(7),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(7, 5, 5, 1, 0),
+           nn.BatchNorm2d(5),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(5, 1, 8, 4, 2),
+           nn.Sigmoid()
+       )
+
+       self.decoder_2 = nn.Sequential(
+           nn.ConvTranspose2d(20, 9, 2, 1, 0),
+           nn.BatchNorm2d(9),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(9, 7, 4, 4, 0),
+           nn.BatchNorm2d(7),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(7, 5, 8, 1, 0),
+           nn.BatchNorm2d(5),
+           nn.ReLU(True),
+           nn.ConvTranspose2d(5, 1, 14, 1, 0),
+           nn.Sigmoid()
+       )
+
+   def forward(self, x):
+       encoded_1 = self.encoder_1(x)
+       encoded_2 = self.encoder_2(x)
+       encoded = torch.cat((encoded_1, encoded_2), 1)
+       decoded_1 = self.decoder_1(encoded)
+       decoded_2 = self.decoder_2(encoded)
+       decoded = decoded_1 + decoded_2
+       return encoded, decoded
+</code></pre>
+<p>对于卷积网络，可以设置一个参数<code>torch.backends.cudnn.benchmark= True</code>，这个参数可以在网络结构、输入尺寸不变的情况下预优化网络。详细信息参考：<a href="https://zhuanlan.zhihu.com/p/73711222">torch.backends.cudnn.benchmark ?!</a></p>
+<p>对于ConvTranspose2d和Conv2d的关系，根据实验和查找资料，这两个的操作是完全互逆的，参数设置都一样。详细信息参考：<a href="https://blog.csdn.net/qq_37879432/article/details/80297263">pytorch演示卷积和反卷积运算</a></p>
+<p>对比保存的全连接网络（879kb）和卷积网络（70kb），发现卷积网络占用空间更少。</p>
+<p>卷积网络的loss更低，生成的结果也更好。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597834168033.png" alt="" loading="lazy"></figure>
+<p>卷积网络：</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597834199676.png" alt="" loading="lazy"></figure>
+<p>全连接网络：</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597834209287.png" alt="" loading="lazy"></figure>
+<p>另附本次练习所用全部代码：<a href="https://github.com/divertingPan/AutoEncoder_pytorch">GitHub</a></p>
+<p>（最后再说一句，如果你运行报错的话，先看看是不是上一次的chechpoint记录文件没删，如果修改了代码或者重新运行代码，还是会读上次的ckpt文件，我没完善这里，学有余力的同学补充一下吧。）</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[基础 | 如何方便正确快速配置python编程环境（Anaconda+Python）]]></title>
+        <id>https://divertingPan.github.io/post/python_startup/</id>
+        <link href="https://divertingPan.github.io/post/python_startup/">
+        </link>
+        <updated>2020-03-04T09:08:57.000Z</updated>
+        <content type="html"><![CDATA[<p>由于涉及到复制粘贴操作，建议大家使用电脑端阅读此教程。</p>
+<p>鉴于很多同学都是刚接触python，起手式都不清楚，所以今天返璞归真一次。老潘给一个<strong>最简单的</strong>安装与卸载方法，秒杀网上那些看了会头大的教程，手把手招式分解。</p>
+<p>废话不多说了，直接开搞吧。</p>
+<p>第一步，开机</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597828842847.PNG" alt="" loading="lazy"></figure>
+<p>首先在这个网址下载安装器，根据你的电脑系统选择，一般直接点左边那个download即可下载。老潘直接拿了一个以前版本的来示范，不管版本新旧，安装过程都是一样的。</p>
+<p>https://www.anaconda.com/distribution/</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597828860995.PNG" alt="" loading="lazy"></figure>
+<p>建议安装前先关掉各种杀毒软件，免得乱拦截把重要步骤搞坏了。下载完成，双击打开，这里点Next</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597831014239.PNG" alt="" loading="lazy"></figure>
+<p>这一步点I Agree</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597831023513.PNG" alt="" loading="lazy"></figure>
+<p>这里点Next</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597831033981.PNG" alt="" loading="lazy"></figure>
+<p>这里选择安装路径，一般默认即可，可以换到其他空间足够的分区里，随意选择</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597831046656.PNG" alt="" loading="lazy"></figure>
+<p>这里直接Install</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597831079011.PNG" alt="" loading="lazy"></figure>
+<p>安装过程中间不要动，弹出什么窗口也别管他，直到变成下面这样，点Next</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597831090617.PNG" alt="" loading="lazy"></figure>
+<p>这里skip。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597831105305.PNG" alt="" loading="lazy"></figure>
+<p>这里取消选择两个对勾，然后Finish</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597831116192.PNG" alt="" loading="lazy"></figure>
+<p>打开开始菜单，点击这个程序打开</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597831127537.PNG" alt="" loading="lazy"></figure>
+<p>这里第一次打开会有一个欢迎词，点击ok, and don’t show again</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597831137549.PNG" alt="" loading="lazy"></figure>
+<p>关掉Anaconda，在电脑里打开这个路径：C:\Users\你的系统用户名字。在这里有一个文件叫.condarc，右键-属性-打开方式，选择用记事本打开它，之后修改成以下内容，保存，关闭。之后再打开Anaconda【注意横杠前面是两个空格，否则报错】文末放上了老潘在用的链接设置，留存备份，亲测用conda命令下载速度飞起。</p>
+<pre><code>channels:
+  -defaults
+show_channel_urls: true
+default_channels:
+  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+ssl_verify: true
+
+</code></pre>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597831180625.PNG" alt="" loading="lazy"></figure>
+<p>*下面这步为可选做步骤<br>
+点这个地方的齿轮，然后点击Remove application，在卸载时，有一些按钮变灰，等待他变回去即可以进行下一步。</p>
+<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1597831233783.PNG" alt="" loading="lazy"></figure>
+<p>*下面这步也是可选做步骤<br>
+点这个地方的齿轮，然后点击Remove application，同上</p>
+<figure data-type="image" tabindex="15"><img src="https://divertingPan.github.io/post-images/1597831275152.PNG" alt="" loading="lazy"></figure>
+<p>点左边的Environments，然后点击下面的加号图标create，在框中输入一个名字（比如说room101），建议这里选择使用3.6的python，因为老潘自己用高版本的时候遇到过一些迷之bug，3.6上却没有这个bug。</p>
+<figure data-type="image" tabindex="16"><img src="https://divertingPan.github.io/post-images/1597831331978.PNG" alt="" loading="lazy"></figure>
+<p>点击create并等待。等待的时候啰嗦两句：第一，这个进度条其实不科学，他只会在当前的子进度完毕之后突然变满，然后进行下一个子进度。所以不必担心死机。第二，这个过程需要联网，要连接网络下载所需的内容。刚刚用记事本改的那一堆链接的操作，其实是把下载地址换到了国内的服务器上，这样省却了科学上网的困扰。</p>
+<figure data-type="image" tabindex="17"><img src="https://divertingPan.github.io/post-images/1597831376845.PNG" alt="" loading="lazy"></figure>
+<p>这时候，回到前面的Home界面，这个Applications on注意选择刚刚创建的环境“room101”，找到最下面的这个spyder，点install</p>
+<figure data-type="image" tabindex="18"><img src="https://divertingPan.github.io/post-images/1597831400360.PNG" alt="" loading="lazy"></figure>
+<p>等待的时候继续啰嗦：刚刚我们创建的“room101”是个什么东西？Anaconda实际上是创建了虚拟的环境。可以类比为Anaconda是个酒店，当我们需要住的时候，他给我们开一个房“room101”，各位住客可能住在不同的房间里（可以创建更多的房间，“room102”，“room103”，“会议厅”等等），每个房间功能配置都有所不同，互相不会干扰。住户可以退房，这个房间被删除也不会影响其他房间。<strong>推荐使用Anaconda的原因就是，如果不慎把环境弄坏了（不能运行或者其他玄学bug），不需重装系统，只要把room101这个环境直接删掉，重新上面的操作一遍就好了。没有任何后遗症。</strong></p>
+<p>安装完之后再开始菜单会看到一个spyder (room101)的程序，（如果选做的那两步没做，还会有一个spyder (base)）。这里点开spyder (room101)。以后用的时候就可以直接点这个，开始编程的起手式了。相当于我们进入了room101使用这个房间里面的配套设施。</p>
+<figure data-type="image" tabindex="19"><img src="https://divertingPan.github.io/post-images/1597831463226.PNG" alt="" loading="lazy"></figure>
+<p>打开之后界面是这样的，页面提示的这个东西可装可不装，是一个代码补全工具，初学者可以先忽略他。</p>
+<figure data-type="image" tabindex="20"><img src="https://divertingPan.github.io/post-images/1597831477907.PNG" alt="" loading="lazy"></figure>
+<p>试验一下，看看输入输出是否正常，在左边输入</p>
+<pre><code class="language-python">print('随便输什么')
+i = 1+1
+</code></pre>
+<p>然后点击上面绿色三角。第一次运行时会弹出一个什么窗口，直接点击继续就可以（老潘卡了一下没截住那个图）</p>
+<p>如果页面是这样的，证明环境配置成功。</p>
+<figure data-type="image" tabindex="21"><img src="https://divertingPan.github.io/post-images/1597831515671.PNG" alt="" loading="lazy"></figure>
+<p><strong>此时就可以开始学习python的编程技巧了。</strong></p>
+<hr>
+<p>下面是一些附加的知识，可能会用到。</p>
+<p>字体太小可以在“工具”-“偏好设置”-“外观”里面进行修改</p>
+<figure data-type="image" tabindex="22"><img src="https://divertingPan.github.io/post-images/1597831552032.PNG" alt="" loading="lazy"></figure>
+<p>如果需要安装其他的包，在哪里输入“pip install XXX”这样的指令？打开下面的这个Anaconda prompt</p>
+<figure data-type="image" tabindex="23"><img src="https://divertingPan.github.io/post-images/1597831565311.PNG" alt="" loading="lazy"></figure>
+<p>先输入activate room101并回车，这样是先确认给哪个房间送去温暖（给指定的虚拟环境安装应用），再pip install XX即可。</p>
+<figure data-type="image" tabindex="24"><img src="https://divertingPan.github.io/post-images/1597831600846.PNG" alt="" loading="lazy"></figure>
+<p>Room101出了问题，鼓捣不好怎么办？把他卸掉重新装一边。删除环境很简单，选择这个环境，直接点击垃圾桶即可。你编写的代码不会消失，消失的只是基本环境，之后重新按照上文创建环境的方法再装一下即可恢复正常的生活。</p>
+<figure data-type="image" tabindex="25"><img src="https://divertingPan.github.io/post-images/1597831618948.PNG" alt="" loading="lazy"></figure>
+<p>可以创建好几个环境吗？可以，老潘自己就是这么干的，为不同的任务分配不同的环境，方便管理，出了问题也不会牵一发动全身。比如说我tensorflow整崩了，把这个环境直接重做，不会影响别的环境。</p>
+<figure data-type="image" tabindex="26"><img src="https://divertingPan.github.io/post-images/1597831631064.PNG" alt="" loading="lazy"></figure>
+<p>有疑问可以留言，老潘继续扩充。</p>
+<p>附：.condarc</p>
+<pre><code>channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+ssl_verify: true
 
 </code></pre>
 ]]></content>
@@ -1157,368 +1671,6 @@ https://blog.csdn.net/qq_35976320/article/details/80985699<br>
 <figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597766678898.webp" alt="" loading="lazy"></figure>
 <p>开了插件之后，除了携程（牛逼？）没屏蔽，其他乱七八糟都被折叠了。妈妈再也不用担心我治疗脱发被莆田系医院骗了。</p>
 <figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597766698696.jfif" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[教程 | 如何利用互联网高效检索信息——以百度搜索为例]]></title>
-        <id>https://divertingPan.github.io/post/google_using/</id>
-        <link href="https://divertingPan.github.io/post/google_using/">
-        </link>
-        <updated>2019-05-28T15:19:47.000Z</updated>
-        <content type="html"><![CDATA[<p>潘老师一度以为在简历里写“<strong>会熟练使用百度解决问题</strong>”是一个笑话。近期潘老师和身边的同学陆续提交毕业论文，这时候大家对写论文或者论文格式甚至Word怎么使用都充满了疑问，也是这时候潘老师才发现，原来高效使用百度确实是一个技术活。所以，今天就专门写一篇利用互联网资源解决问题的科普文，希望<del>不会科学上网去Google甚至根本没听说过Google的</del>同学们最大化利用百度带给人们的便捷功能。本篇不涉及什么专业知识，建议各位都<del>走马观花</del>阅读一下。</p>
-<h1 id="摘-要">摘  要</h1>
-<p>使用百度搜索资料也是当今时代所需的重要技能。本文从实际调查结果出发，通过结合实际案例，纠正了使用百度的误区，给出了利用百度高效检索信息的方法，列举了各类型信息的相关渠道。</p>
-<p><strong>关键词</strong>：百度; 信息检索; 怎么办</p>
-<h1 id="abstract">Abstract</h1>
-<p>In the 21st century, it's an important skill that using Google to search for information. After various fvck words from classmates, the misusing of Google is found and corrected. Some efficient methods of using Google are given. Some webs with every type of information are enumerated.</p>
-<p><strong>Keywords</strong>: Google; information retrieval; how to do</p>
-<h1 id="引-言">引  言</h1>
-<p>现在已经是21世纪了，连你做毕设写论文都可以轻易的从网上获取海量素材来完善你<del>那原本是一坨垃圾</del>的华丽项目。现在的年轻人基本有什么问题，第一个想到的并不是去问老师家长，而是去网上百度（例如困扰大家的“脱发怎么办”）。当然，比较时髦的同学可能会上Google搜索问题。但是，很多情况下，通过百度甚至是Google并不能直接得到我们想要的答案，更多时候都是广告广告广告广告广告（以至于你真的去了莆田系医院治疗脱发）。怎样得到真实有效的信息呢？百度搜索是不是真的那么不堪呢？</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597765271596.webp" alt="" loading="lazy"></figure>
-<p>其实并不是，潘老师<del>因为穷逼没有很多科学上网流量</del>也总是用百度，近期也实际和一些同学交流或者亲自看他们如何使用百度，这时候才发现问题。很多同学使用方法有很大<strong>误区</strong>，知道一些<strong>进阶</strong>功能的同学就更少了，下面就这些问题一一展开讨论。</p>
-<h1 id="如何在百度搜索问题以电脑死机为例">如何在百度搜索问题——以电脑死机为例</h1>
-<p>假设你有一台心爱的价值28888的集游戏影音设计于一体的工作站，明天就要答辩了，你现在正熬夜做答辩的PPT，突然电脑死机了，并且再也开不开机。来不及打电话给潘老师来修电脑的你决定，自己动手搞好他。这时候最好的办法是拿出手机，到百度搜索解决办法。例如：</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597765439640.PNG" alt="" loading="lazy"></figure>
-<p>暂且不说提问句里这个极富感情力的**“啊”**根本就没有参与到检索中，而且大家也会发现，检索结果对你的状况根本没有一点帮助。你明明着急的是死机之后再也开不开机，但是结果里大多都是死机的时候你要怎么办。然而，这种提问方法，的确是潘老师所见大多数同学采用的方式。</p>
-<p><strong>▶正确做法，关键词检索法：</strong></p>
-<p>首先请你不要带感情色彩什么“啊”“呀”“啊啊啊！”这些统统<strong>不要出现</strong>在你的搜索框好吗？更重要的是，请着重在你<strong>最关键的问题</strong>上，找出能概括你问题的<strong>关键词</strong>，例如“台式机”“按开机键”“没反应”，并且用空格分开。这样，你的搜索结果就更贴合你的实际情况了：</p>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597765613602.PNG" alt="" loading="lazy"></figure>
-<p>这时候根据列出的各条结果，可以看到，大多数人提到的是电源没插好、电源坏了、主板问题，甚至有的回答还说，能根据报警声进一步判断[1]：</p>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597765654935.PNG" alt="" loading="lazy"></figure>
-<p>于是你依次检查是不是停电了？是不是插座松了？是不是开机按钮坏了？拆了室友的电源试试是不是电源坏了？（当然电源怎么接线就又需要百度了）</p>
-<p>概括而言，关键词检索法的核心就是，<strong>在搜索框里输入能全面、准确形容问题的关键词</strong>。搜索电脑蓝屏时包含蓝屏上的错误代码，搜索旅游攻略时标明你的地点交通方式季节预算等等。</p>
-<p><strong>▶进阶玩法，运算符法：</strong></p>
-<p>百度搜索的关键词里可以使用一些符号，最常用的是“与或非”逻辑运算符，空格代表条件叠加，相当于“和”或者“与”；【|】（竖线）代表条件的并列，相当于“或”，【 -】（空格负号）代表排除后面这个条件，相当于“非”[2]。例如你想搜索关于“三体”的信息，却不想看到已经烂尾了的电影信息，你就可以搜索：</p>
-<p><img src="https://divertingPan.github.io/post-images/1597765697507.PNG" alt="" loading="lazy"><br>
-上图是直接搜索“三体”的结果</p>
-<p><img src="https://divertingPan.github.io/post-images/1597765703520.PNG" alt="" loading="lazy"><br>
-上图是搜索“三体 -电影”排除和电影有关信息的结果</p>
-<h1 id="如何找到最合适的信息以搜索图片素材为例">如何找到最合适的信息——以搜索图片素材为例</h1>
-<p>上一节解释了如何找到真正对自己有帮助的信息，其实很多同学是因为自己的提问方式不当才会觉得百度很笨，想要的都找不到，甚至还有一堆垃圾信息。那么进一步的，用简洁有效的关键词搜索到答案之后，如何在这么多链接中发现最靠谱的信息呢？例如你需要一个火箭图片作为你的答辩PPT素材，此时你在百度搜索：</p>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597765782887.PNG" alt="" loading="lazy"></figure>
-<p>很好，你已经学会了上面提到的关键词检索法，但是，潘老师在往期的一篇文章中提到过，搜索图片时，如果采用百度图片里这些图，不仅清晰度难以保证，而且前一阵关注度特别高的视觉中国案例也容易让大家栽坑。所以，具体信息需要具体网站才能胜任，毕竟术业有专攻。下面是一些关于常用信息的靠谱来源：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">信息类型</th>
-<th style="text-align:center">可信度较高的来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">旅游、美食攻略</td>
-<td style="text-align:center">知乎、微博</td>
-</tr>
-<tr>
-<td style="text-align:center">电子、计算机、编程</td>
-<td style="text-align:center">github、CSDN、博客园</td>
-</tr>
-<tr>
-<td style="text-align:center">图片</td>
-<td style="text-align:center">unsplash</td>
-</tr>
-<tr>
-<td style="text-align:center">游戏攻略</td>
-<td style="text-align:center">论坛</td>
-</tr>
-<tr>
-<td style="text-align:center">疾病</td>
-<td style="text-align:center">医院</td>
-</tr>
-<tr>
-<td style="text-align:center">Photoshop教程</td>
-<td style="text-align:center">老潘家的潘老师</td>
-</tr>
-</tbody>
-</table>
-<p>根据上表，可知，你这时候应该先百度搜索unsplash网站，再进入搜索火箭图片。或使用下节所述方法检索。</p>
-<p><img src="https://divertingPan.github.io/post-images/1597765979386.png" alt="" loading="lazy"><br>
-上图显示了在百度找到unsplash并且在该网站中找到火箭图片的过程，这甚至不需要科学上网</p>
-<p>所以说，检索信息的时候不要总把目光限制在使用百度。各种带搜索框的渠道都可以搜索。最骚的操作是，利用<strong>淘宝搜索宝贝详情</strong>获取到某个元件的外表和详细参数[3]：</p>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597766013151.png" alt="" loading="lazy"></figure>
-<h1 id="如何找指定渠道下的信息以搜索旅游攻略为例">如何找指定渠道下的信息——以搜索旅游攻略为例</h1>
-<p>上一节给出了找不同类型信息需要对应不同网站的思路。然而如何直接定位到指定网站下的相关信息？</p>
-<p>假设你顺利通过答辩，想去放飞一把自我，找一下北京故宫的具体游览路线，想看看知乎上各位dalao的旅游经验。你可以点击搜索栏右下角的“<strong>搜索工具</strong>”：</p>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597766036286.PNG" alt="" loading="lazy"></figure>
-<p>在“<strong>站点内检索</strong>”里输入zhihu.com，再搜索：</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597766053070.PNG" alt="" loading="lazy"></figure>
-<p>除去头几条的广告信息（百度特色），你就会得到下面这些从知乎搜索来的页面了。<del>所以为什么不直接去知乎APP上搜索？因为本文是以百度为例啊使用知乎的搜索框搜索不就跑题了吗？</del></p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597766071427.PNG" alt="" loading="lazy"></figure>
-<p>这一招对于某些不支持网站内搜索的网站，用处还是挺大的。</p>
-<h1 id="总-结">总  结</h1>
-<p>以上通过三个实际例子，对使用百度检索自己疑问的方法做了简单讨论。希望本文能抛砖引玉，帮助各位同学掌握互联网资源检索的高效方法，让互联网海量资源成为各位的知识宝库。<del>以后再有同学问潘老师能够百度解决的问题潘老师就要罚站这位同学了。但是如果你问潘老师这个问题该怎么百度，潘老师还能勉强原谅你一次。</del></p>
-<h1 id="致-谢">致  谢</h1>
-<p>感谢各位不会用百度、用不好百度的同学为潘老师提供了写作灵感。感谢百度提供的检索平台<del>让我利用百度找Google。</del></p>
-<h1 id="参考文献">参考文献</h1>
-<p>[1] 台式机按开机键后没反应怎么处理.http://ask.zol.com.cn/x/3393473.html.</p>
-<p>[2] 百度的检索运算符.https://wenku.baidu.com/view/71bbcd6e4431b90d6d85c724.html.</p>
-<p>[3] 潘老师.教你怎样修复坏冰箱[C].老潘家的潘老师,2018.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[记录 | 一个Debug经历&&一个跳出双层循环的方法]]></title>
-        <id>https://divertingPan.github.io/post/debug_exp/</id>
-        <link href="https://divertingPan.github.io/post/debug_exp/">
-        </link>
-        <updated>2019-05-09T14:14:12.000Z</updated>
-        <content type="html"><![CDATA[<p>首先声明：为了保持严谨的求学态度，各位程序员面对bug时还是尽量搞懂问题的根源，否则后期这个bug可能会造成很大的影响（其实很多情况下也不会再造成什么影响）。</p>
-<p>第二条声明：这篇记录只是写了一个解决问题的路子，里面具体技术细节老潘也没太搞懂，也没有必要搞懂，反正快速得到需要的结果就够了。所以有问题不要问老潘，老潘也不懂，请百度或Google。</p>
-<hr>
-<p>一个风和日丽的劳动节假期。</p>
-<p>某个技术团队需要解决一个<strong>小问题</strong>，他们想让<strong>用Unity3D开发的工程读取串口数据</strong>。<del>作为物联网领域非常会吹牛逼的</del>潘老师闻之欣然规往。在飚到四轮离地的公交车上，老潘已经在网上找到了<strong>C#读取串口数据</strong>的现成轮子，可以直接使用，所以这确实是一个小问题。</p>
-<p>然而，由于Unity3D的软弱性，C#的一些标准库函数不能使用。在Windows系统上运行毫无问题的代码放进U3D工程中就完全没法用。例如，以下语句大致作用是捕获每次串口数据并触发括号里那个事情，这个事情是判断目前这个命令下该干什么，这条是程序不断读取串口并且根据命令执行不同动作的<strong>关键</strong>一步：</p>
-<pre><code class="language-C">my_port.DataReceived += newSerialDataReceivedEventHandler(DoSomething)
-</code></pre>
-<p>然而很巧地，U3D不支持这种做法，如果想让程序接到串口命令后，根据命令执行不同的U3D动作，使用这条代码是行不通的。</p>
-<p>潘老师看到甲方团队已经写好的程序结构是类似这样的。</p>
-<pre><code class="language-C">void Start() {
-    // 写了点什么代码在这里
-}
-void Update() {
-    // 写了点什么代码在这里
-}
-</code></pre>
-<p>那好，潘老师猜测这个工程运行后<strong>从Start()开始</strong>，从网上找到了U3D下能够使用的读串口的代码后，潘老师使用线程启动串口读取的动作，启动的线程放在Start()里面。</p>
-<pre><code class="language-C">my_thread = new Thread(receive_thread);
-my_thread.Start();
-</code></pre>
-<p>再创建一个receive_thread()的函数，这里面放一个while循环，while里不断循环重复尝试从串口数据中读出来命令。这样一旦串口数据更新，字符串receive_str也会立刻跟进（但愿）。</p>
-<pre><code class="language-C">void receive_thread() {
-    while(true) {
-        Stringreceive_str = my_port.ReadLine();
-    }
-}
-</code></pre>
-<p>还是不行，发现进度会卡在while循环里面，没有任何反应，用log输出一下（C#里的相当于print的办法）也不出任何结果。后来查证了一下才发现：循环里用的**ReadLine()**虽然可以在U3D里面使用，但是这个函数是接收一串字符串，在开始执行接收数据后，<strong>只有遇到换行标识才会结束接收并形成一个串</strong>。然而很巧地，串口来的数据是从一个开发板来的，这串口数据源源不断根本不给换行标识。于是整个while循环其实并没有在循环，只是卡在了ReadLine()一直在等一个根本等不到的换行符。</p>
-<p>好，那就用个原始的办法吧，那就让串口的原生数据给程序，通过程序来解码字符串。好在网上有使用List等复杂方法接受数据并且形成字符串的现成轮子，拿来借用一下。所需的只是每条串口数据的<strong>起始标志和结束标志</strong>，即可不用换行符也能得到一条完整正确的串口数据。</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597760278799.png" alt="" loading="lazy"></figure>
-<p>然而很巧地，潘老师居然找不到什么明显的起始标志和结束标志，这就导致不能清晰的判断出一条数据什么时候开始什么时候结束。</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597761262982.png" alt="" loading="lazy"></figure>
-<p>探究了半天，发现大多数命令的起始标志还是一致的，那就以起始标志作为分割语句的标志吧</p>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597761269267.png" alt="" loading="lazy"></figure>
-<p>分割完之后，拿着一条得到的原生数据，做一下转码。好在这些码只是字符串对应的ASCII码值，还是很容易转一下的。</p>
-<pre><code class="language-c">string ascii_to_str(byte[] com_data) {
-    return System.Text.Encoding.ASCII.GetString(com_data);
-}
-</code></pre>
-<p>再从转好的字符串里提取出关键信息。甲方需要得到串口返回的命令对应ID号，串口传回来的数据类似这样：</p>
-<pre><code class="language-c">Result:ID(5),Text[&quot;老潘家的潘老师&quot;]
-</code></pre>
-<p>这里括号中的数字5就是关键信息，使用<strong>正则表达式</strong>给他拿出来：</p>
-<pre><code class="language-c">Regex rgx = newRegex(@&quot;Result:ID(([\s\S]*?)),Text&quot;);
-Match match = rgx.Match(indata);  // indata是需要识别的字符串
-string result_id = match.Groups[1].Value;
-</code></pre>
-<p>但是预想他只拿出括号里的数字，结果得到的是一个带括号的（5），但是没有时间纠结这个，至少有关键信息可以进行下一步了。这里可能是正则的括号问题，是不是应该转义一下？</p>
-<p>在使用这个命令号进行判断的时候，使用了会被人嘲笑的最简陋的if列表：</p>
-<pre><code class="language-c">if (result_id == &quot;(0)&quot;) {
-    // 0号命令需要执行的代码
-}
-if (result_id == &quot;(1)&quot;) {
-    // 1号命令需要执行的代码
-}
-if (result_id == &quot;(2)&quot;) {
-    // 2号命令需要执行的代码
-}
-</code></pre>
-<p>在if列表里面填具体的U3D动画时，运行报错<strong>动画必须放在主线程</strong>，就是Update()中。不能放在这个另扯出来的自定义线程里。经过尝试动画需要<strong>放在Update()里面</strong>。</p>
-<p>（以下是猜测，如果错误请指出）这时候潘老师突然想到，U3D的机制可能是，在Update()里面进行工程运行的大循环，这个大循环的大概作用机制是不断刷新屏幕来更新屏幕上的像素信息。但凡编写程序涉及到动画，目前见到的解决方法基本都是通过循环刷新来做的。刷新的速度单位是帧，或者fps。刷新不仅可以对屏幕刷新，还可以对键盘鼠标等设备刷新，提高接受信号的灵敏度**（所以玩游戏的还是fps越高越好）**。</p>
-<p>这时候就陷入了一个问题，接收串口信息的这个线程本身其实就是一个死循环，如果进入到这个线程就势必没法往下进行，不能往下进行就没办法循环起来刷新动画的这个事情了。</p>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597761281223.png" alt="" loading="lazy"></figure>
-<p>那看来需要改一下，不在Start()里运行读串口的死循环线程，而改为在Update()里，随着整体的刷新来不停执行这个线程，而线程自己不循环，只执行一次。整体上看，还是相当于一直在循环这个线程的功能。而且还可以直接把判断写在Update()里面，当识别到不同的数字，执行不同的动作。再者，线程返回值好像做起来挺麻烦，那干脆就把存数字的字符串弄成public变量，每次循环，这个变量就更新，if列表也接受这个值进行判断。潘老师的智慧闪闪发光。</p>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597761287879.png" alt="" loading="lazy"></figure>
-<p>这么做当然是不可以的了。虽然想法没什么问题，但是U3D在某种玄学力量的作用下，导致这个<strong>Update()的循环速度</strong>根本不够。串口偶尔会一下子给很多条数据，但Update()循环一次只能读一条数据，就会导致堵车。结果就是，一条命令已经发出了很久，屏幕上的动画才开始播放。</p>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597761295259.png" alt="" loading="lazy"></figure>
-<p>while循环读取串口数据的速度倒是很快，基本和串口发送数据的速度一致，但是因为跳不出来循环导致没法往下进行，也是没办法用的。</p>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597761302136.png" alt="" loading="lazy"></figure>
-<p>一筹莫展，潘老师掉了半斤头发，这时候甲方有人提醒我，给while加一个判断条件，判断到那个括号里的命令号被识别出来之后，<strong>跳出快的while循环</strong>，进入慢循环播动画，不就搞定了吗。是的，潘老师果然还是头发多太年轻。</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597761311695.png" alt="" loading="lazy"></figure>
-<p>最后一步还是没能平稳的走完。虽然进入大循环里的小循环里成功的判断出了命令号到来，也跳出了小循环进行下一轮的大循环，但是动画突然开始鬼畜，不停地很快地播放动画的前一秒的瞬间。</p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597761318152.png" alt="" loading="lazy"></figure>
-<p>因为用的List存储了串口来的原生数据，小循环识别命令号成功并且结束循环的时候没有把List里的这条数据清空，结果导致下一轮大循环来到，进入小循环后直接这条信息就又被识别出命令号并且结束了小循环，触发了动画。懂了吗？</p>
-<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597761327026.webp" alt="" loading="lazy"></figure>
-<p>反正最终，潘老师<strong>用了一天，为甲方解决了一个小问题</strong>。坐在飞翔的公交车上，潘老师给甲方发了一条消息：</p>
-<blockquote>
-<p>“今天那程序，即使你觉得哪里写的不好，也不要轻易改。不然”</p>
-</blockquote>
-<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597761332917.gif" alt="" loading="lazy"></figure>
-<hr>
-<p>附：一个非常简易的不用goto的跳出双层循环的python示例。如果不加最后三行else，continue，break每次就只能跳出里面那层while。while和for都可以这样用甚至两个循环混着也能用。</p>
-<pre><code class="language-python">i = 0
-while True:
-    while True:
-        i += 1
-        print(i)
-        if i == 4:
-            break
-    else:
-        continue
-    break
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[猎奇 | Python+ADB实现自动点赞和抽奖检测]]></title>
-        <id>https://divertingPan.github.io/post/auto_lottery/</id>
-        <link href="https://divertingPan.github.io/post/auto_lottery/">
-        </link>
-        <updated>2018-08-10T12:39:21.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="为什么要做这个呢">为什么要做这个呢？</h1>
-<p>在各类直播平台，都有对主播点赞的功能，有一些直播平台（例如淘宝直播）的点赞按钮是可以无限点击的（为什么要双击666，明明可以无限击）。在淘宝直播中，主播看到自己收获很多赞之后，有概率放一些粉丝福利，某些福利是以抽奖为形式的，粉丝们在互动区疯狂发送关键字，主播随机截图，并给在截图中的粉丝送出福利。这个过程需要粉丝疯狂的点赞，以及实时盯着屏幕以防什么时候开始刷屏抽奖。如果全程亲自操作，依靠自己手动点击的话，不能解放双手，是非常拉底做事效率的。如果依靠自己盯着屏幕看，也是非常原始的做法。</p>
-<p>所以，如果能有一个自动点赞+自动窥屏的外挂将会让我们在薅羊毛的路上满载而归。</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597668269074.png" alt="" loading="lazy"></figure>
-<p>鉴于之前已经有同学实现了自动挖掘抖音美女的案例，所以这个想法终于有了一丝付诸实践的曙光，潘老师和这位同学一样使用了Python+ADB的方式来实现。</p>
-<p>Python大家都很熟悉，人生苦短，我用Python。</p>
-<p>ADB（Android Debug Bridge）则是一种通过电脑调试控制安卓设备的技术，我可以在电脑上输入指令，达到和手工操作一样的效果（比如说我可以用电脑控制安卓手机点开某个应用，点击某个按钮等等）。仿佛开了外挂一样舒爽。</p>
-<p>（前期准备工作需要安装：Python环境，opencv，pillow，ADB并配置好环境变量，免费注册一个百度文本识别的账号）</p>
-<h1 id="自动点赞">自动点赞</h1>
-<h2 id="获取点击的位置">获取点击的位置</h2>
-<p>我想知道点击了屏幕之后，这个点的位置是多少，该如何操作？</p>
-<p>首先连接电脑与手机，手机打开USB调试，接着在电脑上打开cmd输入</p>
-<pre><code>adb shell getevent
-</code></pre>
-<p>这时cmd会等待点击。</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597668366988.PNG" alt="" loading="lazy"></figure>
-<p>我点击了键盘上a字母的位置，cmd给出了以下信息。找到下面的信息，最后括号位置的十六进制数就是坐标，换算成十进制即可。</p>
-<pre><code>/dev/input/event4: 0003 0035 (X坐标)
-/dev/input/event4: 0003 0036 (Y坐标)
-</code></pre>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597668416399.PNG" alt="" loading="lazy"></figure>
-<h2 id="自动点赞-2">自动点赞</h2>
-<p>首先，ADB语句控制点击屏幕上某一点的指令是：</p>
-<pre><code>adb shell input tap 123 456
-</code></pre>
-<p>其中的123 456是点击位置的坐标，这个坐标可以通过上一节方式获取。经过测试，淘宝直播的右下角点赞按钮坐标大概是(1015, 1730)。</p>
-<p>为了避免让淘宝觉得这个操作太机器人，所以不让他每次都点击到这个固定点，让他随机出现一个偏移（虽然仔细想想好像这样做也没什么意义）。</p>
-<p>为了一直点下去，加一个循环进去，使用for循环，可以指定给主播点多少个赞。同样地，为了不让淘宝觉得点击速度太均匀，加入一个随机的延迟。点赞主要的部分就是如下代码了：</p>
-<pre><code class="language-python">import os
-import time
-import random
-
-def click_hearts(i):
-    delay = random.uniform(0.1, 0.5)
-    time.sleep(delay)
-    randomX = str(random.randint(-15, 15) + 1015)
-    randomY = str(random.randint(-20, 20) + 1730)
-    cmd = 'adb shell input tap ' + randomX + ' ' + randomY
-    os.popen(cmd)
-    print('%s%d, %s%f%s, %s(%s,%s)'%('已点赞 X', i, '延迟', delay, 's',
-          '点击坐标：', randomX, randomY))
-          
-for i in range(1,21): # 自动点赞20次
-    click_hearts(i)
-</code></pre>
-<p>实际测试一下，我们先使用这个方法点一点键盘上的a字母看看：</p>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597668597318.PNG" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597668625878.png" alt="" loading="lazy"></figure>
-<p>嗯还是可以的。</p>
-<h1 id="检测有没有抽奖">检测有没有抽奖</h1>
-<h2 id="获取屏幕">获取屏幕</h2>
-<p>ADB截取屏幕的指令是：</p>
-<pre><code>adb shell screencap -p /sdcard/autolottery.png
-</code></pre>
-<p>其中-p后面接的是存放的路径和文件名。</p>
-<p>ADB把文件从手机中拷贝出来的指令是：</p>
-<pre><code>adb pull /sdcard/autolottery.png ./img
-</code></pre>
-<p>第一个路径是手机中文件的路径和文件名，后一个路径是存放在电脑中的路径，./img表示存在当前py文件目录下的img文件夹里。</p>
-<p>在python中给Android发送ADB指令则通过调用系统cmd实现，让python帮你把引号里面的句子输进cmd并且执行：</p>
-<pre><code class="language-python">def get_screen():
-    os.system('adb shell screencap -p /sdcard/autolottery.png')
-    os.system('adb pull /sdcard/autolottery.png ./img')
-</code></pre>
-<h2 id="截图预处理">截图预处理</h2>
-<p>由于直接拿来截图进行文本识别，正确率较低（经过测试实际是非常低了），所以需要对源图像处理一下。这里需要安装opencv和pillow。</p>
-<p>首先裁剪出文本区域，尽量去除干扰。</p>
-<pre><code class="language-python">import cv2
-from PIL import Image
-
-def cut_image():
-    # 裁出文字识别区
-    image = Image.open('img/autolottery.png')
-    box1 = (0, 1100, 800, 1700) #设置图像裁剪区域(left, upper, right, lower)
-    image1 = image.crop(box1)
-    image1.save('img/textarea.png')
-</code></pre>
-<p>然后将该区域二值化，提升识别率，由于要识别的文字部分颜色是纯白，所以阈值可以设的大一些：</p>
-<pre><code class="language-python">def extract_text():
-    # 图像分割
-    image = cv2.imread(&quot;img/textarea.png&quot;)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # 转灰度图
-    (T, threshInv) = cv2.threshold(image, 230, 255, cv2.THRESH_BINARY_INV) # 反阈值化，阈值为215
-    cv2.imwrite('img/textextract.png', threshInv)
-</code></pre>
-<p>原图：</p>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597668738119.png" alt="" loading="lazy"></figure>
-<p>处理后：</p>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597668750764.png" alt="" loading="lazy"></figure>
-<h2 id="文本识别">文本识别</h2>
-<p>二话不说，直接怼百度的文本识别。百度毕竟是汉语起家，识别汉语的准确度还是很高的。</p>
-<pre><code class="language-python">from aip import AipOcr
-# 配置百度AipOcr
-APP_ID = '自己去注册'
-API_KEY = '自己去注册'
-SECRET_KEY = '自己去注册'
-
-client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
-
-def baidu_ocr_text():
-    # 百度文本识别AipOcr
-    image = open('img/textextract.png', 'rb').read()
-    msg = client.basicGeneral(image)
-    text = 'result:\n'
-    for i in msg.get('words_result'):
-        text += (i.get('words') + '\n')
-    print(text)
-    return text
-</code></pre>
-<p>看一下识别上面图片的结果：</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597668788329.PNG" alt="" loading="lazy"></figure>
-<p>在识别简体中文的同时，不耽误识别数字，实际上识别中文的同时英文字母也可以识别但是准确率低一些。</p>
-<h2 id="字符串与子串">字符串与子串</h2>
-<p>这种基本算法<del>（虽说潘老师算法很渣）</del>就不需要解释很多了，送分题。</p>
-<pre><code class="language-python">def string_lottery(m_str, sub_str):
-    count = 0
-    # 第一层循环，从主字符串的第0个元素开始
-    # 第二层循环，通过切片获取下标从i开始与子字符串长度一致的字符串，并与字符串比较，如果等于子字符串则count+1
-    for i in range(len(m_str)-1):
-        if m_str[i:i+len(sub_str)] == sub_str:
-            count += 1
-    return count
-</code></pre>
-<h2 id="组装">组装</h2>
-<p>当我们有了获取屏幕，并且识别其中文本的能力，那就让他自动为我们检测有没有出现抽奖契机，根据经验，如果屏幕中有4条以上抽奖关键字，证明抽奖要开始了，大家已经躁动起来了，所以要让刚刚识别出的那串文本里出现“指定关键字”这个子字符串数量大于等于4即可。</p>
-<p>直接怼，不解释：</p>
-<pre><code class="language-python">import ctypes
-
-while 1:
-    get_screen()
-    cut_image()
-    extract_text()
-    text = baidu_ocr_text()
-    string_count = string_lottery(text, &quot;抽奖&quot;)
-    if string_count &gt;= 4:
-        ctypes.windll.user32.MessageBoxW(0, '要抽奖了，关键词出现次数：'
-             + str(string_count), '抽奖了', 0)
-        break
-</code></pre>
-<p>因为目前时间主播还没有开播，所以先自己拿备忘录打几个字试试。</p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597668850996.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597668857900.PNG" alt="" loading="lazy"></figure>
-<h1 id="实际测试">实际测试</h1>
-<p>可悲的事情发生了，测试的时候发现主播已经调整了抽奖方式，多数奖品用随机放出的“狂戳福利按钮”送出了，晚上只出了一次刷屏抽奖的方法。所以，这件事情告诉我们，<strong>产品研发就是在和时间赛跑。</strong></p>
-<p>所以，下次开发自动检测“狂戳福利按钮”并自动狂戳的外挂？</p>
-<p>实际测试效果（关键字：“有草”）：</p>
-<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597668904469.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597668909990.PNG" alt="" loading="lazy"></figure>
-<p>在这个外挂的辅助下，潘老师还是没有抽到奖，也许这就是，非命不改。</p>
-<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597668943560.jfif" alt="" loading="lazy"></figure>
-<h1 id="总结">总结</h1>
-<p><del>运气差这种事，用python都拯救不了。</del></p>
-<p>其实单看这个外挂还是有很多成长空间的，例如：</p>
-<p>【点赞】可以先检测用户点击的坐标，接受并传递给代码里的坐标。节省事先查坐标的时间和精力。</p>
-<p>【抽奖】可以改造关键字的部分，不需要手动指定关键字，智能识别刷屏的字符串。再者还可以添加自动打字参与刷屏，以及自动检测抽奖结果，实现全自动无人值守式抽奖。</p>
-<p>项目完整版的地址：<a href="https://github.com/divertingPan/Auto_Lottery">GitHub</a></p>
 ]]></content>
     </entry>
 </feed>
