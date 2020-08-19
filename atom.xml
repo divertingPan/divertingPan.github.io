@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-19T07:58:10.695Z</updated>
+    <updated>2020-08-19T08:20:41.948Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -316,6 +316,266 @@ for maindir, subdir, filename in os.walk(resume_path):
                 print(file)
 
 </code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例]]></title>
+        <id>https://divertingPan.github.io/post/cnn_classifier/</id>
+        <link href="https://divertingPan.github.io/post/cnn_classifier/">
+        </link>
+        <updated>2019-09-28T07:52:59.000Z</updated>
+        <content type="html"><![CDATA[<p>本来这一篇应该在两个月之前就写完的，但是众所周知<code>在家=生产力0</code>这样一条定律限制了老潘。所以在大量粉丝取关之际，赶紧把这篇推送搞上来，<del>诚挚为已经取关的同学没法看完本系列作而深感遗憾。</del></p>
+<p>本篇继承“高效获取互联网资源”这一主题，并引进目前非常时髦的神经网络技术，实现前文<a href="https://divertingpan.github.io/post/python_tieba/">进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例</a>的后续功能开发，为广大<del>挂逼</del>网友创造自动分类校花与水图表情包的自动分拣机。</p>
+<h1 id="摘要">摘要</h1>
+<p>本项目以百度贴吧众多图片作为待分类数据，通过最少的操作步骤，实现了在Keras环境下使用以ImageNet为预训练权重的ResNet50网络进行图片分类。分类效果比较好甚至不需要对模型进行什么改动，最终实现了从杂乱图片中筛选包含目标主体的图片。针对包含人体人像这类图片，调用了Face++进行识别，做到了识别图片中是否包含人像和人像的性别<del>颜值打分（并没有）</del>评判。项目整体准确度一般，只能作为娱乐项目玩一玩。</p>
+<h1 id="绪论">绪论</h1>
+<p>当某同学阅读完本系列前一作，兴致勃勃的把程序<strong>复制-粘贴</strong>下来之后，准备上贴吧去抓取校花，却不料被现实绊倒，迷茫在表情包的海洋中。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597824112149.PNG" alt="" loading="lazy"></figure>
+<p>虽然可以<del>像一个痴汉</del>去手动地一个一个检查哪个图片是美女哪个图片是表情包，但是一来会让同学们身体被掏空，二来也丧失了高效获取信息的初心。所以为了使各位同学身体健康心情愉悦，一个自动分拣照片的设备是非常必要的。</p>
+<p>众所周知，近年关于图像分类的技术已经非常成熟，我们可以<del>易如反掌的</del>做一个自动分类机出来，但是里面涉及若干技术细节，了解这些细节既有助于各位同学<del>保持健康</del>了解一些神经网络的科普知识，又有助于大家学习一些Python的奇技淫巧。</p>
+<h1 id="一-神经网络是啥">一、神经网络是啥</h1>
+<p>之前老潘和一个同学针对神经网络进行过一些探讨，趁着这个时候回忆了一下当时我们探讨得出的一些看法。</p>
+<p>众所周知，平时使用计算器的时候，需要在键盘上输入待计算的数字和算符，之后显示器会显示计算结果。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597824176011.png" alt="" loading="lazy"></figure>
+<p>计算器算数的过程无非就是（1）：拿来要算的东西（2）：放进某种程序或者电路中（3）：把算完的结果再拿给你。这其中我们只能看到算前的式子和算后的结果。</p>
+<p>那么神经网络运作类似，（1）：拿来要算的东西（2）：放进某种神经网络中（3）：把算完的结果再拿给你。这其中我们只能看到算前的东西和算后的结果。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597824249108.png" alt="" loading="lazy"></figure>
+<p>但是神经网络和普通计算器的区别在于，计算器输入只限数字和计算符号，输出一般就是一个数字或者其他化简后的算式。神经网络输入的东西形式多种多样，图片/声音/人脸/你的购买记录……输出的结果多种多样，例如算一下你的脸像猫的概率，算一下把你的声音变成老潘的声音是什么样的，算一下你双十一最可能买的东西……</p>
+<p>计算器可以设计各种按钮接受一二三四五加减乘除号，神经网络也可以设计各种“类似按钮”接受图片声音购买记录。计算器用屏幕或者数码管显示计算完的结果，神经网络用列表显示这个输入的结果算完之后更像哪一个类别。那么具体这个网络怎么计算，怎么分类，分几类，就是各位<del>调参</del>工程师的工作了。</p>
+<p>所以当时讨论的结果是，<strong>神经网络实质上是一个超大型的计算器</strong>。</p>
+<p>有一个图片来描述人工智能，机器学习，深度学习，神经网络这些名词之间的关系：</p>
+<p><img src="https://divertingPan.github.io/post-images/1597824306080.jpg" alt="" loading="lazy"><br>
+人工智能，机器学习，神经网络，深度学习的关系：https://blog.csdn.net/lemonade_117/article/details/82668084</p>
+<h1 id="二-怎么用神经网络计算">二、怎么用神经网络“计算”</h1>
+<p>如果自己从头仿照主流的神经网络搭建并且用数据集训练，耗时巨大而且需要超强劲的设备。即使自己勉强训练出来，得到的结果一般也比不上Google等一票大团队使用超大数据集超强劲显卡超贵的电费训练好给大家用的预训练模型。直接拿这些模型来简单用一用已经足够，如果有特殊需求或者特殊的数据，还可以使用微调来做迁移学习。（名词：训练，科普解释为：通过设定好的一种算法，给一批题目和答案，让神经网络自己配置内部权重）</p>
+<h2 id="21-resnet">2.1 ResNet</h2>
+<p>这里使用ResNet50，加载ImageNet的预训练权重来试一下图片分类。（名词：权重，科普解释为：类比于计算器内部的接线和电路）</p>
+<p>首先导入需要的库：</p>
+<pre><code class="language-python">from keras.applications.resnet50 import ResNet50
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input, decode_predictions
+import numpy as np
+</code></pre>
+<p>加载模型，参数weights是加载预训练权重，否则使用随机化权重，include_top是指定是否包含顶部全连接层，全连接层最终输出这个图片属于每个类别下的概率，这个参数可能用于迁移学习。</p>
+<pre><code class="language-python">model = ResNet50(weights='imagenet', include_top=True);
+</code></pre>
+<p>接下来把结果预处理一下，输进去，获取到结果：</p>
+<pre><code class="language-python">img_path = 'test/4.jpg'; #加载图片
+img = image.load_img(img_path, target_size=(224, 224)); #由于包含全连接层所以需要固定图片尺寸
+x = image.img_to_array(img); #图片转成数组
+x = np.expand_dims(x,axis=0); #增加一维
+x = preprocess_input(x);
+preds = model.predict(x);
+</code></pre>
+<p>通过matplotlib把结果统计并显示出来：</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt #加载绘图库
+
+print('Path:',img_path, '\nPredicted:', decode_predictions(preds, top=8)[0]); #decode_predictions如果不指定top参数默认显示概率最高的前5个，指定几个显示几个
+plt.figure(figsize=(8,8)); #默认plot图太小了
+plt.subplot(2,1,1); #类似MATLAB画子图
+plt.axis('off'); #关掉这里的坐标轴
+plt.imshow(plt.imread(img_path)); #显示原图像
+name_list = [decode_predictions(preds)[0][i][1] for i in range (0, 5)]; #关于列表推导式的使用见参考文献
+num_list = [decode_predictions(preds)[0][i][2] for i in range (0, 5)]; #decode_predictions(preds)出的是一个嵌套结构的list
+plt.subplot(2,1,2);
+plt.barh(range(len(num_list)),num_list, tick_label = name_list); #把各类概率画个条状图
+plt.show();
+</code></pre>
+<p>实际测试一下看看效果</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597824441196.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597824447464.PNG" alt="" loading="lazy"></figure>
+<h2 id="22-vgg">2.2 VGG</h2>
+<p>使用VGG16，基本步骤和上一节几乎一模一样，只是需要修改一下调用的库和加载的模型即可：</p>
+<pre><code class="language-python">from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input, decode_predictions
+ 
+model = VGG16(weights='imagenet', include_top=True)
+</code></pre>
+<p>实际测试效果与ResNet差别在于最高概率之外的识别结果稍有不同，但是对主体都能比较清晰的分出来。至于表情包水图，结果更杂乱了。有一个想法是，可以用两个网络对结果分两次类，即使真的有水图被误分进目标类别，也能够再被检出来？这个留作课堂作业，下课交给各班学委。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597824482922.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597824488434.PNG" alt="" loading="lazy"></figure>
+<p>（ImageNet全1000分类见参考文献）</p>
+<p>这里有一个坑是，直接在代码里调网络模型，下载速度可能会很慢（尤其VGG实在是太大了），所以可以手动下载好然后放在存储目录中：Linux路径~/.keras/models，Win路径C:\Users\老潘.keras\models，下载链接在参考文献中。</p>
+<h1 id="三-自动分类">三、自动分类</h1>
+<p>到这里其实就已经成送分题了，直接把对应图片按照最高的类别概率放进不同的文件夹就行了。重点是关注一下准确度，由于没有标注好的数据直接做测试集，所以就自己用眼睛看来判断吧。</p>
+<p>Python实现拷贝文件操作，将img_path指定的文件移动到done文件夹下，命名为13.jpg：</p>
+<pre><code class="language-python">import shutil
+new_path = 'done/13.jpg';
+path = shutil.copy(img_path, new_path)；
+</code></pre>
+<p>用Python遍历目录下的文件：</p>
+<pre><code class="language-python">import os
+ 
+result = []; #所有的文件的路径
+for maindir, subdir, file_name_list in os.walk('test/'):
+    print(&quot;1:&quot;, maindir); #当前目录
+    print(&quot;2:&quot;, subdir); #当前目录下的所有目录
+    print(&quot;3:&quot;, file_name_list);  #当前目录下的所有文件名
+    for filename in file_name_list:
+        apath = os.path.join(maindir, filename);#合并成一个完整路径
+        result.append(apath);
+</code></pre>
+<p>到这里基本所有需要的模块都准备完毕了，交给实习生去整合一下代码就可以使用了。</p>
+<pre><code class="language-python">#-*- coding: utf-8 -*-
+from keras.applications.resnet50 import ResNet50
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input, decode_predictions
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import shutil
+ 
+model = ResNet50(weights='imagenet', include_top=True);
+testing_dir = '火车/'; #存放待分类图片的路径
+done_dir = 'done/'; #分类完毕的图片存放路径
+temp_dir = 'temp/'; #未进入指定分类的图片，以免漏选
+target_list = ['steam_locomotive', 'passenger_car', 'freight_car', 'electric_locomotive','bullet_train']; #指定挑出来的分类名称
+ 
+for maindir, subdir, file_name_list in os.walk(testing_dir):
+    print(&quot;testing directory:&quot;, maindir); #当前目录
+    print(&quot;file list:&quot;, file_name_list);  #当前目录下的所有文件名
+ 
+for file in file_name_list:
+    img_path = maindir + file;
+    img = image.load_img(img_path, target_size=(224, 224));
+    x = image.img_to_array(img);
+    x = np.expand_dims(x, axis=0);
+    x = preprocess_input(x);
+    preds = model.predict(x);
+    if decode_predictions(preds)[0][0][1] in target_list:
+        new_path = done_dir + file;
+        path = shutil.copy(img_path, new_path);
+        print('select: ' + path);
+    else:
+        new_path = temp_dir + file;
+        path = shutil.copy(img_path, new_path);
+        print('out: ' + path);
+</code></pre>
+<p>准确度不是特别高，因为老潘发现这个图片竟然被分类成了货车，图片里明明是空铁道</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597824646827.PNG" alt="" loading="lazy"></figure>
+<p>表情包和灌水图倒是都剔出去了，不过也有一两个由于特征确实不明显于是被遗漏没有被识别的：</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597824661237.PNG" alt="" loading="lazy"></figure>
+<h1 id="四-校花识别">四、校花识别</h1>
+<p>之所以这次真的讲了校花识别，是因为<del>老潘良心发现不能当标题党</del>ImageNet对识别人脸来说是无力的，上面那种方法只限于识别除人脸之外的物品，想分出人类/身体/美女的脸是不行的。所以针对识别照片中有没有人的需求，要用别的方法来操作。</p>
+<p>Face++上面有现成的API可以调用，注册一个账号可以获得使用一个免费试用的API接口，在官网上有很多应用场景，打开页面就可以直接体验一下，感觉效果好的话就可以用API接口在自己程序里直接调用，例如下面的在线测颜值打分：</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597824694904.PNG" alt="" loading="lazy"></figure>
+<p>关于API的应用，老潘在<a href="https://divertingpan.github.io/post/auto_lottery/">猎奇 | Python+ADB实现自动点赞和抽奖检测</a>里面用到了百度的文本识别。</p>
+<p>在Python中调用Face++的API方法如下：</p>
+<pre><code class="language-python">import requests
+from json import JSONDecoder
+from PIL import Image
+ 
+#HumanBodyDetect API（V1）
+http_url = &quot;https://api-cn.faceplusplus.com/humanbodypp/v1/detect&quot;
+file_path = &quot;test/901.jpg&quot;
+temp_path = &quot;temp/&quot;
+data = {&quot;api_key&quot;: &quot;老潘家的潘老师&quot;,
+        &quot;api_secret&quot;: &quot;Diverting_Pan&quot;,
+        &quot;return_attributes&quot;: &quot;gender&quot;}
+ 
+img = Image.open(file_path).convert('RGB').resize((512, 512), Image.BILINEAR) #API要求图片&lt;2M或&lt;1024*1024，而且色彩模式需要RGB
+img.save(temp_path + &quot;human_temp.jpg&quot;) #压缩后的图片缓存一下
+files = {&quot;image_file&quot;: open(temp_path + &quot;human_temp.jpg&quot;, &quot;rb&quot;)} #以二进制读入图像
+response = requests.post(http_url, data=data, files=files) #POST上传
+</code></pre>
+<p>data里各个参数的作用可以在https://console.faceplusplus.com.cn/documents/4888383找到。这个API会返回图片中人物的性别的概率，所以可以根据有无此参数和此参数的值来筛选需要的图片。</p>
+<p>若识别成功照片中有人，则将这个人的范围坐标、性别、穿衣颜色等信息包含在返回的信息里，如果没识别到有人则没有这些信息。通过读取返回的值，提取关键字段筛选有用的照片，以挑出有女性的照片为例：</p>
+<pre><code class="language-python">req_con = response.content.decode('utf-8')
+req_dict = JSONDecoder().decode(req_con) #解码成字典格式
+if len(req_dict['humanbodies']): #如果图片中没有识别到人体则['attributes']['gender']['female']都不存在
+    ifreq_dict['humanbodies'][0]['attributes']['gender']['female'] &gt; req_dict['humanbodies'][0]['attributes']['gender']['male']:
+        print(&quot;Female&quot;)
+    else:
+        print(&quot;Not Female&quot;)
+else:
+    print(&quot;Not Female&quot;)
+</code></pre>
+<p>基本部件都准备完毕了，实习生可以再来加一下班了：（完整代码<a href="https://github.com/divertingPan/Get_Beauty_Image">见GitHub</a>）</p>
+<pre><code class="language-python">#-*- coding: utf-8 -*-
+import requests
+from json import JSONDecoder
+from PIL import Image
+import os
+import shutil
+import time
+ 
+http_url = &quot;https://api-cn.faceplusplus.com/humanbodypp/v1/detect&quot;
+data = {&quot;api_key&quot;: &quot;_xdd7OMPd5rsHSsqwNaFTi-j-U_4T2HG&quot;,
+        &quot;api_secret&quot;: &quot;fnGuZLo26p2vn0MWh6MCRgIdg5p_sESp&quot;,
+        &quot;return_attributes&quot;: &quot;gender&quot;}
+#HumanBodyDetect API（V1）
+ 
+testing_dir = '校花/';
+done_path = 'done/';
+temp_path = 'temp/';
+ 
+for maindir, subdir, file_name_list in os.walk(testing_dir):
+    print(&quot;testing directory:&quot;, maindir); #当前目录
+    print(&quot;file list:&quot;, file_name_list);  #当前目录下的所有文件名
+ 
+for file in file_name_list:
+    file_path = maindir + file;
+    img = Image.open(file_path).convert('RGB').resize((512,512), Image.BILINEAR)
+    img.save(temp_path + &quot;human_temp.jpg&quot;)
+    files = {&quot;image_file&quot;:open(temp_path + &quot;human_temp.jpg&quot;, &quot;rb&quot;)}
+ 
+    response = requests.post(http_url,data=data, files=files)
+    req_con = response.content.decode('utf-8')
+    req_dict = JSONDecoder().decode(req_con)
+ 
+    if len(req_dict['humanbodies']):
+        if req_dict['humanbodies'][0]['attributes']['gender']['female'] &gt;req_dict['humanbodies'][0]['attributes']['gender']['male']:
+            new_path = done_path + file;
+            path = shutil.copy(file_path, new_path);
+            print('select: ' + path);
+        else:
+            new_path = temp_path + file;
+            path = shutil.copy(file_path, new_path);
+            print('out: ' + path);
+    else:
+        new_path = temp_path + file;
+        path = shutil.copy(file_path, new_path);
+        print('out: ' + path);
+ 
+    time.sleep(1) #如果循环速度太快会被服务器断掉链接
+</code></pre>
+<p>有一个改进策略是记录下最近一次成功操作的文件，如果发现网络连接发生错误或者被服务器断掉连接就自动断点续传，&lt;del不过老潘懒得做了</del>可以留作课后作业交给各位想试着做的同学。</p>
+<p>分类结果准确度不是特别高，不过也分出了大部分的水图，个别图片由于人体特征不明显或者性别特征不明显导致了分类失败</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597824850811.PNG" alt="" loading="lazy"></figure>
+<h1 id="五-总结">五、总结</h1>
+<p>统计一下本次实验分类的情况</p>
+<p>火车图片（ResNet50）总数 589</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597824870269.png" alt="" loading="lazy"></figure>
+<p>美女图片（Face++）总数 573</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597824886513.png" alt="" loading="lazy"></figure>
+<p>由于都是未加工的从网上抓的原生图片，所以只能依靠自己手动分类。而且很多图确实含混不清，比如在图片上只有一个火车车门，我把这类图也归结为有火车的类别了，依此标准来进行准确度的判别。不过从这个准确度看来，本次项目的两类自动分拣机，都有很大**调校（jiao）**的潜力。</p>
+<p>从网上通过爬虫获取图片有一定几率导致图片结尾异常，从而导致程序读取图片出错</p>
+<pre><code>（OSError: image file is truncated (0 bytes not processed)）
+</code></pre>
+<p>若遇到这种错误，删掉出错图像即可。可以添加一个检测图片读取成功的代码，不成功读取直接跳过（后记：可以用try/except）。<del>老潘懒得做了</del>留给大家作为课后作业。</p>
+<h1 id="六-参考文献">六、参考文献</h1>
+<p>[1] keras中使用预训练模型进行图片分类：https://www.cnblogs.com/vactor/p/9813108.html</p>
+<p>[2] Keras中模型 《th与tf的区别》、《notop的含义》：https://blog.csdn.net/elvirangel/article/details/88854612</p>
+<p>[3] keras的基本用法(四)——Fine Tuning神经网络：https://blog.csdn.net/quincuntial/article/details/72896690</p>
+<p>[4] 全连接层有何作用？https://www.cnblogs.com/Terrypython/p/11147665.html</p>
+<p>[5] 实战 迁移学习 VGG19、ResNet50、InceptionV3 实践 猫狗大战 问题：https://blog.csdn.net/pengdali/article/details/79050662</p>
+<p>[6] keras离线下载模型的存储位置：https://www.jianshu.com/p/0a4ba12df520</p>
+<p>[7] keras提供的所有模型下载地址：https://github.com/fchollet/deep-learning-models/releases</p>
+<p>[8] 使用keras加载vgg16等模型权重文件失败的解决办法和模型.h5文件网盘下载地址：https://blog.csdn.net/icurious/article/details/80077035</p>
+<p>[9] VGG16学习笔记：https://blog.csdn.net/dta0502/article/details/79654931</p>
+<p>[10] VGG16学习笔记：https://www.cnblogs.com/lfri/p/10493408.html</p>
+<p>[11] ResNet解析：https://blog.csdn.net/lanran2/article/details/79057994</p>
+<p>[12] Python 列表推导式：https://www.runoob.com/note/15802</p>
+<p>[13] Python——使用matplotlib绘制柱状图：https://www.cnblogs.com/decode1234/p/8535638.html</p>
+<p>[14] ImageNet图像库1000个类别名称（中文注释不断更新）：https://blog.csdn.net/weixin_41770169/article/details/80482942</p>
+<p>[15] python3之shutil高级文件操作：https://www.cnblogs.com/zhangxinqi/p/8038479.html</p>
+<p>[16] Python遍历指定目录下的所有文件以及文件的过滤：https://blog.csdn.net/douyaoxin_126/article/details/88638359</p>
+<p>[17]人工智能，机器学习，神经网络，深度学习的关系：https://blog.csdn.net/lemonade_117/article/details/82668084</p>
+<p>[18] PYTHON 3 调用face++API代码（简单易懂）：https://blog.csdn.net/qq_41122796/article/details/79945873</p>
+<p>[19]文档中心/HumanBody Detect API（V1）：https://console.faceplusplus.com.cn/documents/10071565</p>
+<p>[20] Python3 字典：https://www.runoob.com/python3/python3-dictionary.html</p>
+<p>[21]利用python PIL库进行图像模式的转换：https://www.jianshu.com/p/2e9539bdc307</p>
+<p>[22] Python程序中PIL Image &quot;image file is truncated&quot;问题分析与解决：https://blog.csdn.net/scool_winter/article/details/89426509</p>
 ]]></content>
     </entry>
     <entry>
@@ -1125,132 +1385,6 @@ end
 <p>虽然放大来看图像上会有条块状纹理出现，但如果远观的话这幅图的细节已经还原出很多了。抖动算法最主要的应用价值在于他可以极大的压缩图像存储空间，主要是因为<strong>色彩空间被压缩了</strong>，原本需要256个数值表达的灰度图我甚至可以只用黑白两色表达。（在均采用PNG格式编码的条件下，测试用的原图798KB，RGB通道二值化后95.8KB，RGB通道4值化后148KB，压缩效果明显）当然如果合理看待这些条块的话，可以把他看作一种比较独特的滤镜（这样说的话，Bayer抖动表就是一种滤波器）。</p>
 <figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597664376195.png" alt="" loading="lazy"></figure>
 <p>【注】写推送使用的配图都是低分辨率然后放大过的，为的是各位观察方便。实际使用代码生成的图片中，上面那些图里的一个小方格就是一个图片像素点。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[用Altium Designer制作PCB过程总结]]></title>
-        <id>https://divertingPan.github.io/post/altium_pcb/</id>
-        <link href="https://divertingPan.github.io/post/altium_pcb/">
-        </link>
-        <updated>2018-04-14T10:29:01.000Z</updated>
-        <content type="html"><![CDATA[<p>潘老师很久没有更新了，最近在考虑往这里放一些学习笔记之类的东西。潘老师不打算写高数英语这种需要大量练习的东西，打算写一些可以用很短时间学会的软件或者什么技能，以备不时之需。主要的思路就是，把学到的东西，通过一个案例尽可能丰富的涵盖大部分重点，这样即使以后忘记了，回来查找对应的步骤也能很快解决。一方面给潘老师自己做一个知识备份，另一方面万一有人正好需要并且正好看到了，也能帮助到他。至于PS教程，其实严格来讲也属于软件工具应用的范畴。</p>
-<p>今天记录的是使用Altium Designer制作PCB工程文件的过程，之前因为使用ADS（AD和ADS不是一个东西）做大作业，但是当时苦于不知道如何画PCB，大作业做的虎头蛇尾。趁着这两天被图书馆欺负到不能学习于是就看了看如何操作AD。找了几本书，从画原理图到生成PCB都有详细步骤，潘老师将几本书的东西拼合了一下，并且对于一些细节也进行了查证，做了一个简单但涵盖内容比较全面的示例，以备之后参考。对于擅长使用AD的同学，请你们随时指出潘老师在下文中理解的偏差和操作的错误，非常感谢。关于ADS的使用，潘老师在之后有空的时间也会整理出来。<br>
-<img src="https://divertingPan.github.io/post-images/1597660267924.PNG" alt="" loading="lazy"></p>
-<p>封面那个图的来历是潘老师去年工程实践课做的一个原理图，可惜那个开发板做完被收走了<del>令潘老师对此耿耿于怀</del>，于是仅能依靠一幅照片来努力还原当时PCB的布局。后来因为自己又加了一个USB线路，所以一部分布局和之前工程实践给的不一样。如果有时间（和金钱）的话，把这个板打出来，搞不好还可以<del>做好之后卖给下届的在工程实践课电子训练模块选做单片机的同学直接交作业，</del>做成开发板套件，那也是极好的。</p>
-<h1 id="创建原理图">创建原理图</h1>
-<h2 id="1">1</h2>
-<p>新建一个PCB Project，在工程中新建一个Schematic（原理图）<br>
-<img src="https://divertingPan.github.io/post-images/1597660373964.PNG" alt="" loading="lazy"></p>
-<h2 id="2">2</h2>
-<p>右键-放置-器件，或者直接在右边库中找到需要的器件，放进原理图中。并连接起来。<br>
-<img src="https://divertingPan.github.io/post-images/1597660395313.PNG" alt="" loading="lazy"></p>
-<h2 id="3">3</h2>
-<p>点击“工具”-“标注”-“原理图标注”。（可在左上角更改自动标号的顺序方式。）点击“更新更改列表”之后点击“接受更改”，在弹出窗口中点击“执行变更”，若没有红叉出现则全部正确，之后关闭。元件会被自动标号。<br>
-<img src="https://divertingPan.github.io/post-images/1597660411987.PNG" alt="" loading="lazy"></p>
-<h2 id="4">4</h2>
-<p>修改元件的封装。以LED为例。双击LED，双击右下footprint。<br>
-<img src="https://divertingPan.github.io/post-images/1597660431351.PNG" alt="" loading="lazy"></p>
-<h2 id="5">5</h2>
-<p>弹出窗口后，PCB元件库选择“任意”，并点击封装模型中的“浏览”，从现有库中选择一种封装。<br>
-<img src="https://divertingPan.github.io/post-images/1597660454604.PNG" alt="" loading="lazy"><br>
-<img src="https://divertingPan.github.io/post-images/1597660460337.PNG" alt="" loading="lazy"></p>
-<h1 id="为元件创建自定义封装">为元件创建自定义封装</h1>
-<h2 id="6">6</h2>
-<p>若需要自制封装，则首先新建一个“库”-“PCB元件库”，若左边栏目没有自动更改则点击左下选择PCB Library的选项卡。<br>
-<img src="https://divertingPan.github.io/post-images/1597660485072.PNG" alt="" loading="lazy"></p>
-<h2 id="7">7</h2>
-<p>通过“工具”-“新的空元件”或者“工具”-“元器件向导”建立新的元件封装库。双击左侧元件表栏里的元件可以修改名称和描述。元器件向导方便快速建立与标准封装类似的封装。<br>
-<img src="https://divertingPan.github.io/post-images/1597660516173.PNG" alt="" loading="lazy"></p>
-<h2 id="8">8</h2>
-<p>为LED建立如下的封装。弄好后保存。<br>
-<img src="https://divertingPan.github.io/post-images/1597660531120.PNG" alt="" loading="lazy"></p>
-<h2 id="9">9</h2>
-<p>回到原理图，将LED的封装改为刚刚建立的封装。通过步骤4,5，在选择封装的窗口里选择刚刚建立的库和封装。<br>
-<img src="https://divertingPan.github.io/post-images/1597660547533.PNG" alt="" loading="lazy"></p>
-<h2 id="10">10</h2>
-<p>由于LED是有极性元件。必须保证原理图引脚和封装引脚顺序一样。双击LED，在左下角Edit Pin里将引脚号勾选上。<br>
-<img src="https://divertingPan.github.io/post-images/1597660566320.PNG" alt="" loading="lazy"></p>
-<h2 id="11">11</h2>
-<p>原理图中正极引脚号为1，但是在PCB封装图中我却在2脚上画了正极。所以要么在封装里换过来。要么在“管脚映射”里将元器件1号引脚映射到封装的2号脚。<br>
-<img src="https://divertingPan.github.io/post-images/1597660582933.PNG" alt="" loading="lazy"></p>
-<h1 id="创建自定义原理图符号">创建自定义原理图符号</h1>
-<h2 id="12">12</h2>
-<p>开脑洞时间。假设现在我们自主研发出了一个芯片。4个引脚。功能是12引脚产生电势差的5秒后断开34脚之间的通路，5秒后再自动恢复。那么我们需要画在原理图上。首先需要给一个电路符号。新建一个“库”-“原理图库”。类似建立PCB封装库的过程。新建一个有4个引脚的符号。放置矩形和引脚。注意带数字的对侧是管脚的对外接口。修改名字和引脚号如图。<br>
-<img src="https://divertingPan.github.io/post-images/1597660610035.PNG" alt="" loading="lazy"></p>
-<h2 id="13">13</h2>
-<p>双击左侧器件栏里的元件，修改信息。完成后点击左侧“器件”栏下方的放置。加入原理图中。<br>
-<img src="https://divertingPan.github.io/post-images/1597660629970.PNG" alt="" loading="lazy"></p>
-<h2 id="14">14</h2>
-<p>给这个新的芯片指定封装。点击右下的Add，选择footprint，之后的操作同之前，为其指定一个4脚的DIP封装。并且检查引脚顺序是否一致。<br>
-<img src="https://divertingPan.github.io/post-images/1597660646082.PNG" alt="" loading="lazy"></p>
-<h2 id="15">15</h2>
-<p>修改U?的编号，接好原理图。保存。<br>
-<img src="https://divertingPan.github.io/post-images/1597660664704.PNG" alt="" loading="lazy"></p>
-<h1 id="制作pcb">制作PCB</h1>
-<h2 id="16">16</h2>
-<p>新建一个PCB。点击“设计”-“规则”，修改一些尺寸的约束规则。这些尺寸的最大值和最小值要求与实际板厂加工能力有关，例如，布线通常不能比6mil还细，那么就约束线宽最小为6mil（不过10mil是默认的，所以可保持不改）。<br>
-<img src="https://divertingPan.github.io/post-images/1597660690039.PNG" alt="" loading="lazy"></p>
-<h2 id="17">17</h2>
-<p>将过孔尺寸改小（默认值太大，占用面积多），只要不小于板厂的最小加工能力即可（太小的过孔会导致加工费较贵）。之后点击确定，并且保存PCB。<br>
-<img src="https://divertingPan.github.io/post-images/1597660705132.PNG" alt="" loading="lazy"></p>
-<h2 id="18">18</h2>
-<p>点击“设计”-“Import Change From (工程名)”，在弹出的窗口中勾选这些选项，之后点击“执行变更”，若没有红叉出现则成功，关闭此窗口。<br>
-<img src="https://divertingPan.github.io/post-images/1597660720559.PNG" alt="" loading="lazy"></p>
-<h2 id="19">19</h2>
-<p>排布一下元件的位置。鼠标按住某个元件再按空格可以旋转他。由于示例非常简单所以用不了1分钟即可整理完毕。尽量让导线（白色连线）少有交叉的情况。<br>
-<img src="https://divertingPan.github.io/post-images/1597660738123.PNG" alt="" loading="lazy"></p>
-<h2 id="20">20</h2>
-<p>在窗口底部选项卡中切换到top layer，然后点击“放置”-“禁止布线”-“线径”，画出边界。并双击线条，设置限制层为all layer。<br>
-<img src="https://divertingPan.github.io/post-images/1597660775167.PNG" alt="" loading="lazy"></p>
-<h2 id="21">21</h2>
-<p>点击“布线”-“自动布线”-“全部”，使用默认的双层版布线策略。点击route all，软件会开始自动布置连线。由于示例非常简单所以瞬间完成了布线。<br>
-<img src="https://divertingPan.github.io/post-images/1597660791508.PNG" alt="" loading="lazy"><br>
-<img src="https://divertingPan.github.io/post-images/1597660810809.PNG" alt="" loading="lazy"></p>
-<h2 id="22">22</h2>
-<p>红色代表上层的线，蓝色代表下层的线。如果自动布线不好看可以手动拖移调节。之后给焊盘补泪滴。点击“工具”-“泪滴”，弹出如图窗口，确定即可。<br>
-<img src="https://divertingPan.github.io/post-images/1597660844271.PNG" alt="" loading="lazy"></p>
-<h2 id="23">23</h2>
-<p>给PCB空余的地方铺铜。点击“放置”-“铺铜”，选择层之后按确定，在绘图区域画出铺铜区域即可。分别给top layer和bottom layer铺铜。<br>
-<img src="https://divertingPan.github.io/post-images/1597660862393.PNG" alt="" loading="lazy"><br>
-<img src="https://divertingPan.github.io/post-images/1597660869648.PNG" alt="" loading="lazy"></p>
-<h1 id="添加自定义图案">添加自定义图案</h1>
-<h2 id="24">24</h2>
-<p>通常会把产品的品牌或者一些其他信息印在丝印上（也可以做在敷铜层上），用防静电图标为例，将图案导入之前，应在PS内将图片改为黑白的图片。先执行“图像”-“模式”-“灰度”，再进行“图像”-“模式”-“位图”，之后存储成BMP图像。事先改好图像的尺寸为实际尺寸，分辨率为500。<br>
-<img src="https://divertingPan.github.io/post-images/1597660896011.PNG" alt="" loading="lazy"></p>
-<h2 id="25">25</h2>
-<p>在AD的“DXP”-“运行脚本”中，找到PCB Logo Creator，打开。放置在Top Overlay层（想做到敷铜层上就选择Top layer），加载刚刚制作的图片。转换即可。<br>
-<img src="https://divertingPan.github.io/post-images/1597660914340.PNG" alt="" loading="lazy"></p>
-<h2 id="26">26</h2>
-<p>选中生成的图片（一条条线拼合成的），右键“联合”-“从选中的器件生成联合”，然后复制到需要的板上即可。（点击复制，点击一下图标，到目标板文件里点击粘贴，点击一个位置）。放好后还可以右键“联合”-“调整联合的大小”，之后点击图标，改大小。注意一下线宽，不要太细（不知道图形里的线太细了会不会导致印刷困难，还没有探究）。<br>
-<img src="https://divertingPan.github.io/post-images/1597660935777.PNG" alt="" loading="lazy"></p>
-<h2 id="27">27</h2>
-<p>至此PCB文件制作完毕，交由板厂生产即可。（某些元件带3D模型但是十分简陋）<br>
-<img src="https://divertingPan.github.io/post-images/1597660959081.PNG" alt="" loading="lazy"></p>
-<h1 id="附录">附录</h1>
-<ul>
-<li>
-<p>在原理图中查找器件：E-J-C</p>
-</li>
-<li>
-<p>修改板子大小：全选之后D-S-D</p>
-</li>
-<li>
-<p>AD中的各层功能：</p>
-<p>Top/Bottom layer：顶层/底层走线或铺铜区域</p>
-<p>Keep-Out layer：板中不准走线的范围（板边缘线）</p>
-<p>Top/Bottom solder：顶层/底层不被绿油盖住的区域</p>
-<p>Top/Bottom paste：开钢网上锡膏的区域</p>
-</li>
-</ul>
-<h1 id="后记">后记</h1>
-<ul>
-<li>
-<p>问：请问altium designer16生成gberber文件和钻孔文件后没有后缀名为drl的文件？只有一个txt文件，查资料说该文件和drl文件内容是一模一样的，但加工板的技术人员非要后缀名为drl的文件，大神有没有什么好的办法解决？</p>
-</li>
-<li>
-<p>答：在nc drill输出设置的窗口中勾选上生成二进制drl文件</p>
-</li>
-</ul>
 ]]></content>
     </entry>
 </feed>
