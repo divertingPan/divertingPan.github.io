@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-08-19T12:09:42.379Z</updated>
+    <updated>2020-08-19T12:27:46.824Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -286,7 +286,7 @@ if __name__ == '__main__':
 <p>另外对于评判两类模式之间的距离，作者用的方法是，计算两个组之间每组所有模式两两的汉明距离（Hamming Distance），取最小的为两类之间距离。</p>
 <p>思路已经捋清楚了，我们甚至可以当堂完成这个作业。这一次老潘用了MATLAB，没有用python（不知道为什么涉及到这种纯图像的问题我更习惯先打开MATLAB）。写程序很快，一晚上就可以写完<del>甚至不需要熬夜</del>，但是<strong>优化</strong>这个东西却耗了老潘一下午。</p>
 <p>先来简单的。第一步求图像的梯度图像，太简单了不解释。（我突然觉得这里也可以优化的）</p>
-<pre><code class="language-matlab">M = zeros(I_size - 2);
+<pre><code>M = zeros(I_size - 2);
 for x = 2:I_size - 1
     for y = 2:I_size - 1
         M(x-1, y-1) = sqrt((I(x+1, y) - I(x-1, y))^2 + (I(x, y+1) - I(x, y-1))^2);
@@ -295,7 +295,7 @@ end
 </code></pre>
 <p>然后做图像的扇区，求出每个扇区下的平均值。这里稍稍有点绕，我选择先计算环，再计算角度，再取交集，就像下图所示。</p>
 <figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597836862751.png" alt="" loading="lazy"></figure>
-<pre><code class="language-matlab">r = (I_size - 2) / 2;
+<pre><code>r = (I_size - 2) / 2;
 center_point = r;
 
 axis_x = zeros(I_size - 2);
@@ -321,7 +321,7 @@ for ring = 1:rings
 <p>注释掉的地方可以生成一个动态的GIF图片，展示了每圈每个扇区下的梯度图像情况。</p>
 <figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1597836947639.gif" alt="" loading="lazy"></figure>
 <p>之后计算每个区域下的均值，存下来即可。</p>
-<pre><code class="language-matlab">        area_need = area_r .* area_angle;
+<pre><code>        area_need = area_r .* area_angle;
         area_gradient = M .* area_need;
         
 %         % save a gif to observe
@@ -345,10 +345,10 @@ end
 <p><strong>1</strong><br>
 先说构造IND，这个表用来把一个010101这样的模式换成他所在类的号码。因为组比较多，所以用一次算一次比较慢，不如用空间换时间。于是第一天晚上挂机一宿，发现这个表还没罗列好。遂优化。一开始的想法是用一个表格当做查找表，行数就是类别号，每行存储这类的二值模式0101码。但是<strong>问题一</strong>，表里会有很多冗余数据，比如全0的这类，由于数组尺寸必须一样，需要把后面空缺的都填满。就存了20个全0的模式。<strong>问题二</strong>，时间很慢而且会越来越慢。因为每一个模式都要去表里查找是否出现过，表越大查的越慢。</p>
 <p>于是想了一招，采用Map格式存储，首先要声明一下变量</p>
-<pre><code class="language-matlab">IND = containers.Map;
+<pre><code>IND = containers.Map;
 </code></pre>
 <p>代表我们要用Map存储IND表格，之后，为了提高查找效率，不用类号做索引，用二值模式做索引，这样一来可以很快查到表里有没有出现过这个二值模式，二来在使用的时候，把图的二值模式转成类别号也会快。这时候遍历所有的二值模式，对于这一组二值模式，如果有一个没在之前出现过，那就把这一组全存下，并且给一个统一的组号（这一组是用某一个二值模式经过循环移位和翻转出来的）。如果在之前出现过，就代表这一组的二值模式都已经在这个表里有过了（通过旋转和移位终究会变成一样的）。判断和存储的方法为</p>
-<pre><code class="language-matlab">if ~isKey(IND, dec2bin(CP_FP_dec(1), sub_regions))
+<pre><code>if ~isKey(IND, dec2bin(CP_FP_dec(1), sub_regions))
     for index_map = 1:length    
         IND(dec2bin(CP_FP_dec(index_map), sub_regions)) = ind;
     end
@@ -360,12 +360,12 @@ end
 <p><strong>2</strong><br>
 下一个问题是计算两类之间的距离，原论文仍然是做了一个矩阵，可以直接在里面查两类的距离，但是我做的时候发现这个矩阵太大，内存会爆（计算一下这个矩阵只占729Mb，MATLAB居然放不下）。咱也不知道作者用了什么黑科技（也许是转了C语言），我想了想，干脆在判断图片的时候直接计算，也差不了多长时间。</p>
 <p>还是挺占时间的，实际用的时候发现只判断两个图片就要将近半分钟。这要是再一个一个比对过去，天荒地老。遂优化。最开始就是粗暴的两个for循环，然后一个一个的取两个类别号，然后计算。发现不行，有点慢，于是改用矩阵计算。先做两个类别号（其实是两组，一个图片会有一组类别号）的排列组合矩阵</p>
-<pre><code class="language-matlab">% reference: https://www.ilovematlab.cn/thread-321138-1-1.html
+<pre><code>% reference: https://www.ilovematlab.cn/thread-321138-1-1.html
 [m, n] = meshgrid(RFR_i_list_dec, RFR_j_list_dec');
 [res(:,1), res(:,2)] = deal(reshape(m, [], 1), reshape(n, [], 1));
 </code></pre>
 <p>然后计算这个矩阵按行的汉明距离，取这个矩阵的min就是两个类的距离。</p>
-<pre><code class="language-matlab">DH = dec2bin(bitxor(res(:,1), res(:,2)));
+<pre><code>DH = dec2bin(bitxor(res(:,1), res(:,2)));
 [length, ~] = size(DH);
 DH2 = uint8(zeros(length, 1));
 for i = 1:length
@@ -374,7 +374,7 @@ end
 min_Hamming = min(DH2);
 </code></pre>
 <p>之后发现还是很占时间，偶然瞥到，在每一轮循环里都有这么个操作</p>
-<pre><code class="language-matlab">key = keys(IND);
+<pre><code>key = keys(IND);
 value = uint32(cell2mat(values(IND)));
 </code></pre>
 <p>把类号和二值模式从Map格式里面拿出来，这个拿的动作很耗时。所以就一开始取出，直接作为参数传给后面的一系列函数。原本两个图片对比时间要大概半分钟，现在只需半秒。速度提升了60倍。</p>
