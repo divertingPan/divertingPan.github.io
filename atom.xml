@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-09-28T17:06:29.098Z</updated>
+    <updated>2020-09-29T01:04:53.635Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -19,9 +19,9 @@
         <content type="html"><![CDATA[<h1 id="1-pytorch也有cuda版本对应的问题">1. pytorch也有CUDA版本对应的问题</h1>
 <p>搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to('cuda')报错。<br>
 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA<br>
-尽管只需要torch和torchvision版本对应上即可，但是使用1.6的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br>
+尽管只需要torch和torchvision版本对应上即可，但是使用1.6和1.5的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br>
 这里是官网的参考版本搭配：https://pytorch.org/get-started/previous-versions/</p>
-<p>运行crnn的时候，1.3的版本会导致loss变nan，1.5往后的版本是正常的，不知是哪里有问题。</p>
+<p>运行crnn的时候，1.3的版本会导致loss变nan，1.4往后的版本是正常的，不知是哪里有问题。</p>
 <h1 id="2-opencv的api变化">2. OpenCV的API变化</h1>
 <p>cv2.findContours这个函数在某些版本里（比如4.2）返回三个值：</p>
 <pre><code class="language-python">thresh, cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
