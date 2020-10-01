@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>9月28日小结 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1601341478670">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1601571044228">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="9月28日小结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1601341478670" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1601571044228" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -123,6 +123,8 @@
               
             </div>
             
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/ZhFbDG2nF.jpg" alt="">
+            
             <div class="post-content-wrapper">
               <div class="post-content">
                 <h1 id="1-pytorch也有cuda版本对应的问题">1. pytorch也有CUDA版本对应的问题</h1>
@@ -147,6 +149,8 @@
 来源：http://www.eryi.org/blog/post/web-of-science-endnote-filter.html</p>
 <h1 id="5-快速插入endnote参考文献条目">5. 快速插入EndNote参考文献条目</h1>
 <p>直接在DOI栏输入，然后在线检索更新即可。</p>
+<h1 id="6-慎用tryexcept">6. 慎用try/except</h1>
+<p>在搞flyai测试的时候发现准确率低的离谱。基本可以确定是代码本身的问题。经过检查是因为读入的路径不对导致的cv读取图片失败，但是这个读取放在了一个try/except里面，一旦出现错误就返回一个'EMPTY'的label值。去掉这个try以后发现程序报错，锁定这个问题。至于为什么会有一丁点准确率，是因为测试程序会返回所有label都为EMPTY，这部分EMPTY可以对上。</p>
 
               </div>
               <div class="toc-container">
@@ -156,6 +160,7 @@
 <li><a href="#3-endnote%E5%AF%BC%E5%85%A5%E7%89%B9%E5%AE%9A%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%A0%BC%E5%BC%8F">3. EndNote导入特定参考文献格式</a></li>
 <li><a href="#4-endnote%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%96%B9%E6%B3%95">4. EndNote插入参考文献方法</a></li>
 <li><a href="#5-%E5%BF%AB%E9%80%9F%E6%8F%92%E5%85%A5endnote%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%9D%A1%E7%9B%AE">5. 快速插入EndNote参考文献条目</a></li>
+<li><a href="#6-%E6%85%8E%E7%94%A8tryexcept">6. 慎用try/except</a></li>
 </ul>
 
               </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-09-29T01:04:53.635Z</updated>
+    <updated>2020-10-01T16:51:23.689Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -38,6 +38,8 @@
 来源：http://www.eryi.org/blog/post/web-of-science-endnote-filter.html</p>
 <h1 id="5-快速插入endnote参考文献条目">5. 快速插入EndNote参考文献条目</h1>
 <p>直接在DOI栏输入，然后在线检索更新即可。</p>
+<h1 id="6-慎用tryexcept">6. 慎用try/except</h1>
+<p>在搞flyai测试的时候发现准确率低的离谱。基本可以确定是代码本身的问题。经过检查是因为读入的路径不对导致的cv读取图片失败，但是这个读取放在了一个try/except里面，一旦出现错误就返回一个'EMPTY'的label值。去掉这个try以后发现程序报错，锁定这个问题。至于为什么会有一丁点准确率，是因为测试程序会返回所有label都为EMPTY，这部分EMPTY可以对上。</p>
 ]]></content>
     </entry>
     <entry>
