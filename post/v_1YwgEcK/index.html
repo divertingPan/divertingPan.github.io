@@ -2,18 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>9月28日小结 | 老潘家的潘老师</title>
+<title>10月11日总结 | 老潘家的潘老师</title>
 <link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1602508975898">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="9月28日小结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="10月11日总结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="1. pytorch也有CUDA版本对应的问题
-搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行..." />
-    <meta name="keywords" content="opencv,pytorch,python,杂谈" />
+    <meta name="description" content="1. Net.parameters获取网络参数
+Net.parameters返回一个generator，根据官方的用法，通过for循环得出网络各层的参数，
+Example::
+&gt;&gt;&gt; for param in model...." />
+    <meta name="keywords" content="pytorch,python" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -95,19 +97,15 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              9月28日小结
+              10月11日总结
             </h2>
             <div class="post-info">
               <span>
-                2020-09-28
+                2020-10-11
               </span>
               <span>
                 3 min read
               </span>
-              
-                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
-                  # opencv
-                </a>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
                   # pytorch
@@ -117,50 +115,62 @@
                   # python
                 </a>
               
-                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
-                  # 杂谈
-                </a>
-              
             </div>
             
-              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/ZhFbDG2nF.jpg" alt="">
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/v_1YwgEcK.jpg" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="1-pytorch也有cuda版本对应的问题">1. pytorch也有CUDA版本对应的问题</h1>
-<p>搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to('cuda')报错。<br>
-较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA<br>
-尽管只需要torch和torchvision版本对应上即可，但是使用1.6和1.5的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br>
-这里是官网的参考版本搭配：https://pytorch.org/get-started/previous-versions/</p>
-<p>运行crnn的时候，1.3的版本会导致loss变nan，1.4往后的版本是正常的，不知是哪里有问题。</p>
-<h1 id="2-opencv的api变化">2. OpenCV的API变化</h1>
-<p>cv2.findContours这个函数在某些版本里（比如4.2）返回三个值：</p>
-<pre><code class="language-python">thresh, cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                <h1 id="1-netparameters获取网络参数">1. Net.parameters获取网络参数</h1>
+<p>Net.parameters返回一个generator，根据官方的用法，通过for循环得出网络各层的参数，</p>
+<pre><code class="language-python">Example::
+&gt;&gt;&gt; for param in model.parameters():
+&gt;&gt;&gt;     print(type(param), param.size())
+&lt;class 'torch.Tensor'&gt; (20L,)
+&lt;class 'torch.Tensor'&gt; (20L, 1L, 5L, 5L)
 </code></pre>
-<p>而某些版本（比如4.4）不再返回原图，只返回后面两个参数①轮廓的点集(contours)②各层轮廓的索引(hierarchy)。参考这个博客https://www.cnblogs.com/guobin-/p/10842486.html，他降到3.几也是可以的。</p>
-<pre><code class="language-python">cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+<p>但param的类型仍然是一个封装过的parameter类型，需要通过param.data来取出里面的tensor数据<br>
+PS. 补充两个链接，这个作为Todo</p>
+<ol>
+<li>直接在网络中定义feature，直接导出：https://www.jianshu.com/p/0a23db1df55a</li>
+</ol>
+<blockquote>
+<p>比如，在这个例子中我想获得fc前面的特征，那么我就在前面加一句self.feature=x，然后再需要的地方调用model.feature即可得到。</p>
+</blockquote>
+<ol start="2">
+<li>获取Pytorch中间某一层权重或者特征：https://blog.csdn.net/happyday_d/article/details/88974361</li>
+</ol>
+<h1 id="2-嵌套列表以及列表包含tensor的展开">2. 嵌套列表以及列表包含Tensor的展开</h1>
+<p>python的list里面如果嵌套的是tensor，需要先将tensor转成list，然后再通过嵌套列表展开的方法。由于tensor维数一般比较多，所以解list以后，这个list的嵌套层数会比较深，需要用递归的方法解套，才能把这个list转成一维list，最终化为tensor<br>
+例：把一个(2, 3, 4)形状的tensor转成list：</p>
+<pre><code class="language-python">x = torch.zeros(2, 3, 4)
+x_list = x.numpy().tolist()
 </code></pre>
-<h1 id="3-endnote导入特定参考文献格式">3. EndNote导入特定参考文献格式</h1>
-<p>最近碰到一个问题，想投一个杂志，但endnote中所列的杂志是以前的版本，参考文献格式不对，于是经过一番努力，终于成功更新了该杂志的文献格式。现发此贴，以供碰到类似问题的虫友参考。Endnote添加或更新杂志格式方法:<br>
-打开endnote------点击help--------点击web styles finder--------进入endnote主页---------在style or journal name 中输入杂志名（关键词就行）----------点击apply---------找到相应杂志，点击download---------打开下载文件，点击file菜单---------点击save as--------确定对话框中的杂志名后点save--------然后点击file中的close.  这样你就能获得你想投杂志的最新参考文献格式。<br>
-来源：http://muchong.com/html/201305/5871337.html</p>
-<h1 id="4-endnote插入参考文献方法">4. EndNote插入参考文献方法</h1>
-<p>下载的Web of Science的参考文献文件，*.ciw导入EndNote：在Endnote——File菜单——Import——File，然后在import optioni中选择“other filter”，从众多filter 库中选择ISI-CE即可。<br>
-来源：http://www.eryi.org/blog/post/web-of-science-endnote-filter.html</p>
-<h1 id="5-快速插入endnote参考文献条目">5. 快速插入EndNote参考文献条目</h1>
-<p>直接在DOI栏输入，然后在线检索更新即可。</p>
-<h1 id="6-慎用tryexcept">6. 慎用try/except</h1>
-<p>在搞flyai测试的时候发现准确率低的离谱。基本可以确定是代码本身的问题。经过检查是因为读入的路径不对导致的cv读取图片失败，但是这个读取放在了一个try/except里面，一旦出现错误就返回一个'EMPTY'的label值。去掉这个try以后发现程序报错，锁定这个问题。至于为什么会有一丁点准确率，是因为测试程序会返回所有label都为EMPTY，总有在真值表里的EMPTY能对上。</p>
+<p>这个x_list长2，每个list元素长3，最内层的list有4个数字。<br>
+通过以下方法解开嵌套层数很大的list：</p>
+<pre><code class="language-python">def flat(nums):
+    res = []
+    for i in nums:
+        if isinstance(i, list):
+            res.extend(flat(i))
+        else:
+            res.append(i)
+    return res
+</code></pre>
+<p>最终使用torch.Tensor(x_list)把一个list化成tensor</p>
+<h1 id="3-python的工作路径关系">3. python的工作路径关系</h1>
+<p>使用pycharm或者spyder的时候，当前目录<code>os.getcwd()</code>都是脚本所在的目录。而<code>sys.path</code>模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。</p>
+<h1 id="4-再谈torchvisiontransforms">4. 再谈torchvision.transforms</h1>
+<p>早在上个月我就已经思考明白了关于视频图像序列的图像增广的细节。即每次调用一下<code>img=transforms(img)</code>，就会触发一次各种随机翻转旋转等的随机数设置。如果针对序列里的图片，在每次读进来的时候或者用for循环，对每个图片做transforms，会导致一系列图片明暗色彩角度各不相同。对于序列图片，如果涉及到这种增广操作，我只能想到一种办法，即重写所用的transforms操作，每次调用的时候传进整个图片序列，这样就只调用了一次，也就只初始化了一个随机数，这样再去做<code>ColorJitter()</code>或者<code>RandomHorizontalFlip()</code>等随机操作里面对张量切片，对每个切片做变换，这样一系列图片可以有相同随机数下的变换操作。如果只是要做<code>Resize()</code>或者<code>ToTensor()</code>之类的那就无所谓了，调用多少次都是一样的结果。<br>
+之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。</p>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#1-pytorch%E4%B9%9F%E6%9C%89cuda%E7%89%88%E6%9C%AC%E5%AF%B9%E5%BA%94%E7%9A%84%E9%97%AE%E9%A2%98">1. pytorch也有CUDA版本对应的问题</a></li>
-<li><a href="#2-opencv%E7%9A%84api%E5%8F%98%E5%8C%96">2. OpenCV的API变化</a></li>
-<li><a href="#3-endnote%E5%AF%BC%E5%85%A5%E7%89%B9%E5%AE%9A%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%A0%BC%E5%BC%8F">3. EndNote导入特定参考文献格式</a></li>
-<li><a href="#4-endnote%E6%8F%92%E5%85%A5%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%96%B9%E6%B3%95">4. EndNote插入参考文献方法</a></li>
-<li><a href="#5-%E5%BF%AB%E9%80%9F%E6%8F%92%E5%85%A5endnote%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E6%9D%A1%E7%9B%AE">5. 快速插入EndNote参考文献条目</a></li>
-<li><a href="#6-%E6%85%8E%E7%94%A8tryexcept">6. 慎用try/except</a></li>
+<li><a href="#1-netparameters%E8%8E%B7%E5%8F%96%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0">1. Net.parameters获取网络参数</a></li>
+<li><a href="#2-%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E4%BB%A5%E5%8F%8A%E5%88%97%E8%A1%A8%E5%8C%85%E5%90%ABtensor%E7%9A%84%E5%B1%95%E5%BC%80">2. 嵌套列表以及列表包含Tensor的展开</a></li>
+<li><a href="#3-python%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84%E5%85%B3%E7%B3%BB">3. python的工作路径关系</a></li>
+<li><a href="#4-%E5%86%8D%E8%B0%88torchvisiontransforms">4. 再谈torchvision.transforms</a></li>
 </ul>
 
               </div>
@@ -171,9 +181,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://divertingPan.github.io/post/Izwv6avfw/">
+            <a href="https://divertingPan.github.io/post/ZhFbDG2nF/">
               <h3 class="post-title">
-                【转载】pytorch里面的天坑
+                9月28日小结
               </h3>
             </a>
           </div>
