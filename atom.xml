@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-10-12T13:35:01.164Z</updated>
+    <updated>2020-10-18T09:23:45.976Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,159 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[绕过需要认证的网络（校园网）直接联网的方法]]></title>
+        <id>https://divertingPan.github.io/post/lCfwQ3hC0/</id>
+        <link href="https://divertingPan.github.io/post/lCfwQ3hC0/">
+        </link>
+        <updated>2020-10-18T08:31:31.000Z</updated>
+        <content type="html"><![CDATA[<p>目前（2020.10.18）测试可用的办法是这个链接里面的方法：http://note.cfyqy.com/posts/390158a6.html<br>
+为了防和谐，以及蹚坑经历记录，我将他精简一下<br>
+工作环境：Ubuntu18.04+Win10<br>
+该工程需要前期准备：一个服务器（最好大带宽），三个软件（Linux和Win下的SoftEther-vpnserver和Win下的softether-vpnclient）<br>
+软件下载地址：https://www.softether-download.com/cn.aspx?product=softether<br>
+或者GitHub个人备用链接（但是不能保证是最新版的，不过这俩版本自测可用）https://github.com/divertingPan/SEVPN</p>
+<p>以下操作尽量按照文中的先后顺序，否则可能出现各种玄学bug</p>
+<h1 id="服务器安装server端">服务器安装server端</h1>
+<p>先用xftp把Ubuntu的server端传进服务器，之后在xshell里的所有操作指令如下，按顺序来</p>
+<pre><code>tar -zxvf XXXX.tar.gz
+cd vpnserver
+make
+然后3次全输入1
+./vpnserver start
+./vpncmd
+依次1，回车，回车
+ServerPasswordSet
+设置VPN服务器密码
+</code></pre>
+<p>关机以后需要再开启VPN服务就输入<code>./vpnserver start</code>即可</p>
+<h1 id="随便一台win电脑对linux服务器进行配置管理">随便一台Win电脑，对Linux服务器进行配置管理</h1>
+<p>安装win版本的softether server，选择红框里的，其他都一路默认安装下去<br>
+<img src="https://divertingPan.github.io/post-images/1603010961185.png" alt="" loading="lazy"></p>
+<p>运行该软件后，新设置一个连接，主机名为Ubuntu那台服务器的公网IP，端口默认，密码是刚刚设置的“VPN服务器密码”<br>
+<img src="https://divertingPan.github.io/post-images/1603011067411.png" alt="" loading="lazy"></p>
+<p>之后点击“管理虚拟HUB”，再找到“管理用户”，新建一个用户，填写用户名和密码，这个作为以后用client登vpn的用户（随便设一个简单的就行）<br>
+<img src="https://divertingPan.github.io/post-images/1603011216824.png" alt="" loading="lazy"></p>
+<p>在虚拟NAT和DHCP服务器中启动secureNAT，启动就行，不用查看配置了反正也不去改<br>
+<img src="https://divertingPan.github.io/post-images/1603011326200.png" alt="" loading="lazy"></p>
+<p><strong>勾选VPN over ICMP/DNS的配置</strong>。到加密与网络中，点击VPN over ICMP/DNS，勾上那两个功能，校园防断网的实现就靠这个了。（前面如果不老老实实按步骤做，瞎搞的话有可能会导致53端口无法打开）<br>
+<img src="https://divertingPan.github.io/post-images/1603011399522.png" alt="" loading="lazy"></p>
+<h1 id="免费上网">免费上网</h1>
+<p>给需要免费上网的电脑安装softether client，选择红框的这个。其他默认<br>
+<img src="https://divertingPan.github.io/post-images/1603011496405.png" alt="" loading="lazy"></p>
+<p>新建一个vpn连接，如下图填写相应的配置，主机名是Ubuntu服务器的公网IP，虚拟HUB名会自动出来，用户名和密码就是“登vpn的用户（随便设一个简单的就行）”的那个<br>
+<img src="https://divertingPan.github.io/post-images/1603011544986.png" alt="" loading="lazy"></p>
+<p>之后在菜单里双击或者右键可以打开链接或者关闭链接。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[10月17日总结]]></title>
+        <id>https://divertingPan.github.io/post/oXF7jp9e6/</id>
+        <link href="https://divertingPan.github.io/post/oXF7jp9e6/">
+        </link>
+        <updated>2020-10-17T03:25:39.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
+<p>实际上有两种思路加载预训练权重。<br>
+先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
+<pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
+pretrained_dict = torch.load('pretrainedXXXX.pth')
+model = MyNetXXXX()
+model_dict = model.state_dict()
+pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+model_dict.update(pretrained_dict)
+model.load_state_dict(model_dict)
+</code></pre>
+<p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
+<pre><code class="language-pyhton"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
+net = SameWithPretrainingNetXXXX()
+net.load_state_dict(torch.load('pretrainedXXXX.pth')
+fc_features = model.fc.in_features
+net.fc = nn.Linear(fc_features, 9)
+net = net.to(DEVICE)
+</code></pre>
+<p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[10月14日总结（爬虫为主）]]></title>
+        <id>https://divertingPan.github.io/post/AhyNsrQwN/</id>
+        <link href="https://divertingPan.github.io/post/AhyNsrQwN/">
+        </link>
+        <updated>2020-10-14T13:13:35.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-html页面table存储成本地csv">1. HTML页面table存储成本地csv</h1>
+<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果单个表格，直接存
+https://www.jianshu.com/p/01c550e5341b
+&quot;&quot;&quot;
+index_url = 'https://www.postcrossing.com/explore/countries'
+df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
+df.to_csv('./country_list.csv', index=False)
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果多个表格，用for循环全部存下
+https://blog.csdn.net/qq_36663202/article/details/89159878
+&quot;&quot;&quot;
+for table in pd.read_html(index_url, encoding='utf-8', header=0):
+    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
+</code></pre>
+<h1 id="2-df数据的读取">2. df数据的读取</h1>
+<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
+<pre><code class="language-python"># 获取df长度
+len(df)
+
+# 获取第0行，属性为Code的值
+df.loc[0]['Code']
+</code></pre>
+<h1 id="3-检测路径存在与否并且建立路径">3. 检测路径存在与否并且建立路径</h1>
+<pre><code class="language-python">if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+</code></pre>
+<h1 id="4-判断list为空">4. 判断list为空</h1>
+<p>直接利用bool判断，list为空返回False，不为空返回True</p>
+<h1 id="5-python多线程运行">5. python多线程运行</h1>
+<p>python运行for循环比较慢，但是for循环必须每次循环是相互独立的时候用多线程才行。我需要for循环从一个列表里逐次获取链接并下载链接的内容，每次是相互独立的，所以可以使用多线程来优化速度。<br>
+我需要爬取postcrossing的所有图片。首先，我需要遍历一个国家列表，对于每个国家，我要遍历这个国家的所有已发送postcard列表，下载图片链接。这里存在一个问题：每个国家的postcard列表是不一样长的。对于多线程优化，我认为较好的方法是针对每个国家下的postcard列表做优化，而非对整个国家列表做多线程优化。<br>
+具体而言，首先我利用for循环来遍历这个国家列表，其中df为所有国家的列表，code是国家代码，Postcards  (sent)是已发送的明信片数量。所有存在的图片的id一定不大于已发送明信片数量，这个作为后面postcard列表的长度。</p>
+<pre><code class="language-python">    for idx in range(len(df)):
+        country_code = df.loc[idx]['Code']
+        postcards_sent = df.loc[idx]['Postcards  (sent)']
+</code></pre>
+<p>之后的多线程办法参考了一个来源不详的nsfw数据集多线程下载的代码。首先做一个遍历明信片的数量上限</p>
+<pre><code class="language-python">img_count = postcards_sent + 1
+</code></pre>
+<p>之后为每个线程分配需要遍历的子列表长度。相当于把总列表切成n份，分给n个线程各自去执行。</p>
+<pre><code class="language-python">pre_thread_img_count = int(np.floor(img_count / worker_count))
+if img_count % worker_count == 0:
+    last_thread_img_count = pre_thread_img_count
+else:
+    last_thread_img_count = pre_thread_img_count + (img_count % worker_count)
+</code></pre>
+<p>再之后获取各个线程相对于总表的起止执行位置（就是每个子列表对于总列表的起止位置），target就是并行执行的函数，args是传给函数的参数。具体而言，相当于在worker_count次循环里，每次都触发了一下以args为参数的multi_downloader，这几个被触发的函数是齐头并进执行的。</p>
+<pre><code class="language-python">thread_list = []
+for i in range(1, worker_count + 1):
+    if i != worker_count:
+        start = pre_thread_img_count * (i - 1)
+        end = pre_thread_img_count * i - 1
+    else:
+        start = pre_thread_img_count * (i - 1)
+        end = start + last_thread_img_count - 1
+
+    thread = threading.Thread(target=multi_downloader, args=(i, country_code, start, end))
+    thread.start()
+    thread_list.append(thread)
+</code></pre>
+<p>为什么在这里面要放个线程列表做记录？因为在之后需要执行一步检测线程终止的操作</p>
+<pre><code class="language-python">for thread in thread_list:
+    thread.join()
+</code></pre>
+<p>这的作用是使得在这个国家里的这几个下载线程都结束之后，再触发对下一个国家的for循环。不然的话，for循环所在的这个主线程会一股脑把所有的国家列表全部遍历，并且每个国家下都建立了n个下载子进程，与我们的设想不符。</p>
+<blockquote>
+<p>join所完成的工作就是线程同步，即主线程任务结束之后，进入阻塞状态，一直等待其他的子线程执行结束之后，主线程再终止<br>
+关于join的作用，以及多线程之间的时间关系：https://www.cnblogs.com/cnkai/p/7504980.html</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[10月11日总结]]></title>
         <id>https://divertingPan.github.io/post/v_1YwgEcK/</id>
@@ -602,477 +755,6 @@ res = requests.get(index_url,proxies=get_proxy(), headers=headers)
 <p>爬虫到此为止，只爬到了几百个硬币就弄不下去了<del>心态崩了</del>。如果有经验丰富大佬指点我爬完全站，老潘给你投币三连这次一定。</p>
 <p>下一篇讲解如何检测相似的硬币。这篇有点长了，分开成两篇发<del>又可以多水一篇推送美吱吱</del></p>
 <p>源码和下一篇合在一起了，都在<a href="https://github.com/divertingPan/coin_machine">GitHub</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[【5分钟实例】按名字从大量简历中筛出需要的简历]]></title>
-        <id>https://divertingPan.github.io/post/pick_resume/</id>
-        <link href="https://divertingPan.github.io/post/pick_resume/">
-        </link>
-        <updated>2020-06-24T08:06:51.000Z</updated>
-        <content type="html"><![CDATA[<p><del>水一篇。</del>开个新坑，本系列重点打造能够在5分钟内完成的又简单又实用的实例。今天以办公场景比较常见的一个需求为例。具体场景如下。</p>
-<h1 id="需求假设">需求假设</h1>
-<p>你的老板给你<code>上万份</code>候选人交的简历，又给了你一个Excel表格，让你把表格里的人的简历挑出来，下班之前发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。</p>
-<p>这时候你定睛一看，所有的简历文件名里面都包含人名。</p>
-<h1 id="只需5分钟的操作">只需5分钟的操作</h1>
-<p>拿起键盘打开你最爱的IDE二话不说首先import以下必定要用到的库</p>
-<pre><code class="language-python">import pandas as pd
-import os
-from shutil import copyfile
-</code></pre>
-<p>打开Excel表格看一眼，找到“姓名”所在的列<br>
-<img src="https://divertingPan.github.io/post-images/1597652772497.webp" alt="" loading="lazy"></p>
-<p>是第一列，所以直接读第一列进来即可</p>
-<pre><code class="language-python">df = pd.read_excel(menu_path, usecols=[0])
-</code></pre>
-<p>之后去遍历存放简历的文件夹下的所有简历文件</p>
-<pre><code class="language-python">for maindir, subdir, filename in os.walk(resume_path):
-    for i, file in enumerate(filename):
-</code></pre>
-<p>对每个遍历到的文件，先去除文件名里面的空格，以免两个字的人名中间有空格，干扰识别。但是又不能直接把变量file给改变，否则后面复制文件时会找不到文件。</p>
-<pre><code class="language-python">file_no_space = ''.join(file.split())
-</code></pre>
-<p>这时候再遍历读进来的Excel的人名信息，逐条检查是否能和这个文件名匹配上人名。若可以匹配到，那就把这个文件复制走。</p>
-<pre><code class="language-python">for key in df['姓名']:
-    if key in file_no_space:
-        copyfile(os.path.join(maindir, file), os.path.join(destination_path, file))
-        print(file)
-</code></pre>
-<p>拓展功能，如果想要把顺序也排好，那就只需记录一下目前匹配到的情况下，这个人名在Excel表格里的序号。可以对上面这一块代码做以下改动。首先使用enumerate()迭代df['姓名']，这样可以启用循环时的索引计数（我不知道这到底叫什么，我就这样称呼了），之后输出文件时将这个索引加在文件名最开头，就能实现按照Excel里面的人名顺序排序简历。</p>
-<pre><code class="language-python">for i, key in enumerate(df['姓名']):
-    if key in file_no_space:
-        copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
-        print(file)
-</code></pre>
-<p>结束。看一下效果，证明我不是在胡扯，是真的可以用。文件标号1缺失了，顺便还能发现有人没交简历。看一眼时间离下班还剩5分01秒。<br>
-<img src="https://divertingPan.github.io/post-images/1597653189483.png" alt="" loading="lazy"></p>
-<p>对于重名的问题，可以按照“学号”，或者“身份证号”等其他不易重复的值作为匹配的键值。但前提是要让简历名字里包含这些信息。</p>
-<h1 id="附录">附录</h1>
-<p>全部代码如下。或者<a href="https://github.com/divertingPan/utility_room/blob/master/pick_resume.py">到github下载</a>。</p>
-<pre><code class="language-python"># -*- coding: utf-8 -*-
-import pandas as pd
-import os
-from shutil import copyfile
-
-
-resume_path = './resume'
-menu_path = './1组分组名单.xlsx'
-destination_path = './sorted'
-
-
-if not os.path.exists(destination_path):
-    os.makedirs(destination_path)
-
-df = pd.read_excel(menu_path, usecols=[0]) # 以第1列（人名）作为检索key
-
-for maindir, subdir, filename in os.walk(resume_path):
-    for i, file in enumerate(filename):
-        file_no_space = ''.join(file.split())
-        for i, key in enumerate(df['姓名']):
-            if key in file_no_space:
-                copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
-                print(file)
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[复习Pytorch的使用方法，在套路的基础上灵活应变]]></title>
-        <id>https://divertingPan.github.io/post/pytorch_autoencoder/</id>
-        <link href="https://divertingPan.github.io/post/pytorch_autoencoder/">
-        </link>
-        <updated>2020-04-29T10:19:42.000Z</updated>
-        <content type="html"><![CDATA[<p>本节的大部分代码参考了：<a href="https://morvanzhou.github.io/tutorials/machine-learning/torch/4-04-autoencoder/">莫烦python</a></p>
-<p>这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。</p>
-<p>首先试着写一个很简单的AutoEncoder的结构出来。根据快速理解，这个网络的结构应该是类似这样的</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597832485482.png" alt="" loading="lazy"></figure>
-<p>我稀薄的记忆告诉我，有两种方法构建网络，一种是直接写在Sequential里，一种是先定义层再定义连接。那这次两个方法都试试，用Sequential写一下前半部分的Encoder，用另一种方法写Decoder。而且以前甚至都没仔细看过具体class，init那块都长啥样，只管复制粘贴。这次仔细看看写写。</p>
-<p>首先得写 <code>class Net(nn.Module):</code>，这里就有坑了，Module的M是大写。在这之后写一个<code>def__init__(self):</code>和一个<code>def forward(self, x):</code>，<code>__init__</code>里面定义层的信息，<code>forward</code>里面写网络的连接情况。另外，在<code>def __init__(self):</code>里面第一句要写<code>super(Net,self).__init__()</code>。剩下的部分就都是熟悉的味道了。</p>
-<p>所以整个网络这个class就写成了这样</p>
-<pre><code class="language-python">class Net(nn.Module):
-   def __init__(self):
-       super(Net, self).__init__()
-
-       # encoder
-       self.encoder = nn.Sequential(
-           nn.Flatten(start_dim=1),
-           nn.Linear(28 * 28, 128),
-           nn.LeakyReLU(inplace=True),
-           nn.Linear(128, 64),
-           nn.LeakyReLU(inplace=True),
-           nn.Linear(64, 32),
-           nn.LeakyReLU(inplace=True),
-           nn.Linear(32, 16),
-           nn.LeakyReLU(inplace=True),
-           nn.Linear(16, 8),
-           nn.LeakyReLU(inplace=True),
-           nn.Linear(8, 4),
-       )
-
-       # decoder
-       self.LeakyReLU = nn.LeakyReLU(inplace=True)
-       self.Linear_0 = nn.Linear(4, 8)
-       self.Linear_1 = nn.Linear(8, 16)
-       self.Linear_2 = nn.Linear(16, 32)
-       self.Linear_3 = nn.Linear(32, 64)
-       self.Linear_4 = nn.Linear(64, 128)
-       self.Linear_5 = nn.Linear(128, 28 * 28)
-       self.Sigmoid = nn.Sigmoid()
-
-   def forward(self, x):
-       # x = x.view(-1, 28*28)
-       x_encoded = self.encoder(x)
-       x_decoded = self.Linear_0(x_encoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Linear_1(x_decoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Linear_2(x_decoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Linear_3(x_decoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Linear_4(x_decoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Linear_5(x_decoded)
-       x_decoded = self.LeakyReLU(x_decoded)
-       x_decoded = self.Sigmoid(x_decoded)
-       x_decoded = x_decoded.view(-1, 28, 28)
-       return x_encoded, x_decoded
-</code></pre>
-<p>写的时候也遇到了一些问题，首先是一开始指定了输入数据先进入<code>nn.Flatten()</code>，这步是打算把图片展成一维，结果发现输入尺寸不匹配，经过检查之后发现<code>nn.Flatten()</code>如果不指定任何参数，会直接把输入的整个[batch_size, channel, weight, height]尺寸的tensor直接展平成一维数组[1, batch_size * channel * weight * height]，但是我们期望的展平是展成[batch_size, channel * weight * height]的。故这里的<code>nn.Flatten()</code>需要指定一个参数<code>nn.Flatten(start_dim=1)</code>，也可以用另一种方案，对于输入x，使<code>x = x.view(-1, channel * weight * height)</code>。</p>
-<p>关于输入tensor的尺寸形状问题，可见：<a href="https://www.jianshu.com/p/41c15d301542">Pytorch的参数“batch_first”的理解</a></p>
-<p>这里示范一下flatten的两个参数的情况，<code>torch.flatten()</code>和<code>nn.Flatten()</code>的参数效果是一样的</p>
-<p><code>start_dim=1</code>表示展平的开始维度，例如这个tensor的第一个28这一维以及往后的维度都压在一起：</p>
-<pre><code class="language-python">view_data = train_data.train_data[idx]
-print(view_data.shape)
-view_data = torch.flatten(view_data,start_dim=1)
-print(view_data.shape)
-</code></pre>
-<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
-&gt;&gt;&gt;torch.Size([6, 784])
-</code></pre>
-<p><code>start_dim=0</code>自然就是从最开始的一个维度压缩，看来不指定参数的话默认就是这个情景：</p>
-<pre><code class="language-python">view_data = train_data.train_data[idx]
-print(view_data.shape)
-view_data = torch.flatten(view_data,start_dim=0)
-print(view_data.shape)
-</code></pre>
-<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
-&gt;&gt;&gt;torch.Size([4704])
-</code></pre>
-<p><code>end_dim=1</code>表示展平的停止维度，例如这个tensor的第一个28这一维以及之前的维度都压在一起：</p>
-<pre><code class="language-python">view_data = train_data.train_data[idx]
-print(view_data.shape)
-view_data = torch.flatten(view_data,end_dim=1)
-print(view_data.shape)
-</code></pre>
-<pre><code>&gt;&gt;&gt;torch.Size([6, 28, 28])
-&gt;&gt;&gt;torch.Size([168, 28])
-</code></pre>
-<p>第二是无意间看到的关于优化性能的一些建议。对于relu尽量设置<code>inplace=True</code>可以节省一些显存，那我们就把<code>__init__</code>里面的<code>relu层</code>都加一下这个参数吧。</p>
-<p>对于输出，重新resize成图片的尺寸即可，因为用的是灰度图片，所以resize可以省略通道那个维度，直接做成[batch_size, width, height]</p>
-<p>接着加载数据使用以下方法，需要数据增广的话就把以前做过的复制粘贴过来即可，这里没什么要注意的。</p>
-<pre><code class="language-python">train_data = torchvision.datasets.MNIST(root='./dataset/', train=True,
-                                       transform=torchvision.transforms.ToTensor(),
-                                       download=DOWNLOAD_MNIST,
-                                        )
-trainloader = torch.utils.data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE,shuffle=True)
-</code></pre>
-<p>指定设备，直接用倒背如流的</p>
-<pre><code class="language-python">device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-</code></pre>
-<p>之后给网络和tensor都to(device)即可。</p>
-<pre><code class="language-python">Net = Net().to(device)
-</code></pre>
-<p>接着是optimizer和loss function</p>
-<pre><code class="language-python">optimizer = torch.optim.Adam(Net.parameters(), lr=LR)
-loss_func = nn.MSELoss()
-</code></pre>
-<p>接着写一个for循环，一个循环是一个epoch，这里面，先<code>for step, (data, label) in enumerate(trainloader):</code>，在往里套数据的加载，计算，误差，老三套，大体结构是固定的。补充一点关于<code>model.train()</code>，<code>model.eval()</code>和<code>with torch.no_grad():</code>的关系，train和eval指定模型状态，如果模型存在BN和dropout，测试时不指定状态为eval()的话最后计算结果会不对劲。with torch.no_grad():是不计算存储梯度状态，是为了节约显存。详细信息参考：<a href="https://blog.csdn.net/songyu0120/article/details/103884586">pytorch中model eval和torchno grad()的区别</a></p>
-<pre><code class="language-python">for epoch in range(EPOCH):
-   for step, (data, label) in enumerate(trainloader):
-       Net.train()
-       data = data.squeeze().to(device)
-       encoded, decoded = Net(data)
-       loss = loss_func(decoded, data)
-       optimizer.zero_grad()
-       loss.backward()
-       optimizer.step()
-</code></pre>
-<p>每个epoch里面放一个步数检测，一定步数以后输出一个记录出来，这里建议把验证、测试等等不需要计算梯度的过程套一个with torch.no_grad():，这样不需要在输出loss和网络生成的结果时指定detach()了，否则要指定。同时注意网络输出如果运行在GPU上的，要取回CPU才能输出观察。</p>
-<pre><code class="language-python">       if step % 100 == 0:
-           Net.eval()
-           with torch.no_grad():
-                print('Epoch: %d | train loss:%.4f' % (epoch, loss.item()))
-                _, decoded = Net(view_data)
-                if decoded.device != 'cpu':
-                    decoded = decoded.to('cpu')
-                # 这里对view_data可视化
-</code></pre>
-<p>这里出现了预览用的数据view_data我前面还没讲，我不想让可视化的步骤打乱整体思路，可视化具体操作太灵活了，具体的就<a href="https://github.com/divertingPan/AutoEncoder_pytorch">看代码</a>吧。只写一下view_data的选择过程：选择train_data的targets等于0~9的对应位置，在train_data的data里取出这些位置的东西，就是对应0-9的数字的图片了。我总觉得这个可以再写简练一点，但是水平有限，不会再简化了。</p>
-<pre><code class="language-python">idx = []
-for i in range(N_TEST):
-   idx.append((train_data.targets == i).nonzero()[0].item())
-view_data = train_data.data[idx]
-</code></pre>
-<p>继续堆功能，实际训练可能会出现突然死机或者断电或者训练时想要暂停一下，这就需要保存一下网络的状态，回头再加载进来继续用，但是同时还应该保存optimizer的状态，如果有学习率计划的话还得存一下epoch，有的网络可能还得存一下loss，等等，这些信息可以直接用<code>torch.save()</code>存下来。具体保存的方法如下：</p>
-<pre><code class="language-python">    #每个epoch结束后保存一个checkpoint
-    torch.save({'epoch': epoch,
-                'model_state_dict':Net.state_dict(),
-                'optimizer_state_dict':optimizer.state_dict(),
-                }, 'checkpoint/ckpt.pth')
-</code></pre>
-<p>执行这个之前首先要保证checkpoint这个路径是存在的，这里就去前面加一个创建路径的代码即可，可以和检测加载checkpoint的代码放在一起。这段代码需要在进行训练的循环之前，在初始化模型与优化器之后。具体加载的代码如下，主要的操作就是将存着的数据赋给一些变量里。</p>
-<pre><code class="language-python">
-# 读一个checkpoint，如果存在的话
-start_epoch = 0
-if os.path.exists('checkpoint'):
-   if os.path.exists('checkpoint/ckpt.pth'):
-       print('Checkpoint exists, reading weights from checkpoint...')
-       checkpoint = torch.load('checkpoint/ckpt.pth')
-       Net.load_state_dict(checkpoint['model_state_dict'])
-       optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-       start_epoch = checkpoint['epoch'] + 1
-else:
-   os.makedirs('checkpoint')
-</code></pre>
-<p>这里读了起始的epoch，在训练时那个for循环就要从这个start_epoch开始计数了，</p>
-<pre><code class="language-python">for epoch in range(start_epoch, EPOCH):
-    # ……
-</code></pre>
-<p>可以看一下效果，我在epoch执行完第2次的时候点停止，这时存下的状态就是第2轮结束时的整个状态，然后再运行，可以看到目前运行的是第3个epoch，是接着第2轮的后面继续的。</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597833498892.PNG" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597833504254.PNG" alt="" loading="lazy"></figure>
-<p>再之后我突然想加一个统计loss并且画出图的功能，可视化的地方略过，主要说一下统计loss的思考。首先我想统计每一次的loss输出，但是因为在每个step拿出loss的值，往后还得涉及到存取，一系列操作会很麻烦，这里先考虑以每个epoch作为统计时间单位。我选择用每个epoch内每100步的loss的均值作为输出值。没有选择从头开始的所有均值是考虑到，如果后面loss不再降低，但是均值还会随着步数增大而降低。使用每个epoch的均值就不会出现这个问题，可以看出在第几epoch收敛了。同时checkpoint文件也得加入loss情况的记录。</p>
-<p>首先在epoch循环的外面放一个<code>avg_losses= []</code>作为每轮的平均值的记录，在每轮epoch循环一开始就给一个<code>avg_loss = 0</code>和<code>flag = 0</code>，在进行每100步的输出日志时顺便记一下<code>avg_loss += loss.item()</code>，在epoch循环马上要结束的地方，在保存checkpoint文件之前，计算一下这一epoch的loss均值，想画图就画出来，懒得画就直接存进checkpoint</p>
-<pre><code class="language-python">
-   avg_loss = avg_loss / flag
-   print('Epoch %d average loss: %.4f' % (epoch, avg_loss))
-   avg_losses.append(avg_loss)
-   x1 = range(0, len(avg_losses))
-   y1 = avg_losses
-   plt.figure(2)
-   plt.plot(x1, y1, color='yellow', linestyle='-')
-   for text_x, text_y in zip(x1, y1): # epoch多了之后会挤成一团，实际用的时候可以不显示
-       plt.text(text_x, text_y, '%.4f' % text_y, ha='center', va='bottom',fontsize=7)
-   plt.xlabel('epoch')   plt.ylabel('average loss')
-   plt.draw()
-   plt.pause(0.05)
-</code></pre>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597833585185.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597833596475.png" alt="" loading="lazy"></figure>
-<p>我看到这才发现，忘记做训练完毕保存网络的步骤了，给他存一下，如果以后要做预测的话可以直接加载。</p>
-<pre><code class="language-python">if not (os.path.exists('model')):
-   os.makedirs('model')
-torch.save(Net.state_dict(), 'model/net.pth')
-print('model saved!')
-</code></pre>
-<p>既然都做到这了，不加一个lr_scheduler总感觉不完整。观察了上面那个loss曲线，我决定在20epoch之后减小学习率，至于选30epoch或者加大epoch效果怎么样我不想尝试了，这块我就随意做一下先。</p>
-<pre><code class="language-python">scheduler =torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[20], gamma=0.2)
-</code></pre>
-<p>最初我写的scheduler.step(epoch)，这样保存checkpoint并且再加载的时候能衔接上。但是这里面指定参数的话会报警告说这个参数不是必需的，可能在以后的版本会取消这种用法？不懂，但是我看源码的时候发现scheduler也有state_dict和load_state_dict，所以我就把这个状态的读写也用checkpoint文件记录一下，在开始训练之前先读一下scheduler的状态</p>
-<pre><code class="language-python">scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
-</code></pre>
-<p>这应该是比较正统的做法。<br>
-（在这个任务上加不加lr_scheduler影响都不大）</p>
-<p>再尝试一下只构建后半段解码器，用保存的权重初始化，并且从编码器对一种数字图案的低维编码恢复出数字图片。先构建后半段的网络，<code>本来想写个Encoder在写个Decoder然后再Net里面拼起来</code>，但是好像有点问题。关于如何从保存的权重里只读取一部分，其实是个千层饼行为，先拿出这个网络的权重信息，再去对比加载的权重信息，再用重复的部分替换网络的权重，再让网络读取这个权重信息。具体操作可见：<a href="https://blog.csdn.net/xzy5210123/article/details/88598436">Pytorch迁移学习加载部分预训练权重</a></p>
-<pre><code class="language-python">decoder = Decoder().eval()
-model_dict = decoder.state_dict()
-pretrained_dict =torch.load('model/net.pth')
-pretrained_dict = {k: v for k, v inpretrained_dict.items() if k in model_dict}
-model_dict.update(pretrained_dict)
-decoder.load_state_dict(model_dict)
-with torch.no_grad():
-   output = decoder(input_data)
-   plt.imshow(output[0], cmap='gray')
-   plt.show()
-</code></pre>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597833849604.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597833856969.png" alt="" loading="lazy"></figure>
-<p>再用一用卷积网络试试，之前的网络都是用全连接层进行推理计算的，这里把里面的层改成卷积和反卷积试一试效果。使用卷积网络的话，需要考虑一下图片输入之后的尺寸变化情况。这里先毫不讲道理地随意设计一下卷积结构的自编码器。</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597833887262.png" alt="" loading="lazy"></figure>
-<pre><code class="language-python">class DoubleConvNet(nn.Module):
-   def __init__(self):
-       super(DoubleConvNet, self).__init__()
-       self.encoder_1 = nn.Sequential(
-           nn.Conv2d(1, 5, 8, 4, 2),  # 7x7x5
-           nn.BatchNorm2d(5),
-           nn.LeakyReLU(True),
-           nn.Conv2d(5, 7, 5, 1, 0),  # 3x3x7
-           nn.BatchNorm2d(7),
-           nn.LeakyReLU(True),
-           nn.Conv2d(7, 9, 2, 1, 0),  #2x2x19
-           nn.BatchNorm2d(9),
-           nn.LeakyReLU(True),
-           nn.Conv2d(9, 10, 2, 1, 0),  #1x1x11
-           nn.Sigmoid(),
-       )
-
-       self.encoder_2 = nn.Sequential(
-           nn.Conv2d(1, 5, 14, 1, 0),  #15x15x5
-           nn.BatchNorm2d(5),
-           nn.LeakyReLU(True),
-            nn.Conv2d(5, 7, 8, 1, 0),  # 8x8x7
-           nn.BatchNorm2d(7),
-           nn.LeakyReLU(True),
-           nn.Conv2d(7, 9, 4, 4, 0),  # 2x2x9
-           nn.BatchNorm2d(9),
-           nn.LeakyReLU(True),
-           nn.Conv2d(9, 10, 2, 1, 0),  #1x1x11
-           nn.Sigmoid(),
-       )
-
-       self.decoder_1 = nn.Sequential(
-           nn.ConvTranspose2d(20, 9, 2, 1, 0),
-           nn.BatchNorm2d(9),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(9, 7, 2, 1, 0),
-           nn.BatchNorm2d(7),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(7, 5, 5, 1, 0),
-           nn.BatchNorm2d(5),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(5, 1, 8, 4, 2),
-           nn.Sigmoid()
-       )
-
-       self.decoder_2 = nn.Sequential(
-           nn.ConvTranspose2d(20, 9, 2, 1, 0),
-           nn.BatchNorm2d(9),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(9, 7, 4, 4, 0),
-           nn.BatchNorm2d(7),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(7, 5, 8, 1, 0),
-           nn.BatchNorm2d(5),
-           nn.ReLU(True),
-           nn.ConvTranspose2d(5, 1, 14, 1, 0),
-           nn.Sigmoid()
-       )
-
-   def forward(self, x):
-       encoded_1 = self.encoder_1(x)
-       encoded_2 = self.encoder_2(x)
-       encoded = torch.cat((encoded_1, encoded_2), 1)
-       decoded_1 = self.decoder_1(encoded)
-       decoded_2 = self.decoder_2(encoded)
-       decoded = decoded_1 + decoded_2
-       return encoded, decoded
-</code></pre>
-<p>对于卷积网络，可以设置一个参数<code>torch.backends.cudnn.benchmark= True</code>，这个参数可以在网络结构、输入尺寸不变的情况下预优化网络。详细信息参考：<a href="https://zhuanlan.zhihu.com/p/73711222">torch.backends.cudnn.benchmark ?!</a></p>
-<p>对于ConvTranspose2d和Conv2d的关系，根据实验和查找资料，这两个的操作是完全互逆的，参数设置都一样。详细信息参考：<a href="https://blog.csdn.net/qq_37879432/article/details/80297263">pytorch演示卷积和反卷积运算</a></p>
-<p>对比保存的全连接网络（879kb）和卷积网络（70kb），发现卷积网络占用空间更少。</p>
-<p>卷积网络的loss更低，生成的结果也更好。</p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597834168033.png" alt="" loading="lazy"></figure>
-<p>卷积网络：</p>
-<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597834199676.png" alt="" loading="lazy"></figure>
-<p>全连接网络：</p>
-<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597834209287.png" alt="" loading="lazy"></figure>
-<p>另附本次练习所用全部代码：<a href="https://github.com/divertingPan/AutoEncoder_pytorch">GitHub</a></p>
-<p>（最后再说一句，如果你运行报错的话，先看看是不是上一次的chechpoint记录文件没删，如果修改了代码或者重新运行代码，还是会读上次的ckpt文件，我没完善这里，学有余力的同学补充一下吧。）</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[基础 | 如何方便正确快速配置python编程环境（Anaconda+Python）]]></title>
-        <id>https://divertingPan.github.io/post/python_startup/</id>
-        <link href="https://divertingPan.github.io/post/python_startup/">
-        </link>
-        <updated>2020-03-04T09:08:57.000Z</updated>
-        <content type="html"><![CDATA[<p>由于涉及到复制粘贴操作，建议大家使用电脑端阅读此教程。</p>
-<p>鉴于很多同学都是刚接触python，起手式都不清楚，所以今天返璞归真一次。老潘给一个<strong>最简单的</strong>安装与卸载方法，秒杀网上那些看了会头大的教程，手把手招式分解。</p>
-<p>废话不多说了，直接开搞吧。</p>
-<p>第一步，开机</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597828842847.PNG" alt="" loading="lazy"></figure>
-<p>首先在这个网址下载安装器，根据你的电脑系统选择，一般直接点左边那个download即可下载。老潘直接拿了一个以前版本的来示范，不管版本新旧，安装过程都是一样的。</p>
-<p>https://www.anaconda.com/distribution/</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597828860995.PNG" alt="" loading="lazy"></figure>
-<p>建议安装前先关掉各种杀毒软件，免得乱拦截把重要步骤搞坏了。下载完成，双击打开，这里点Next</p>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597831014239.PNG" alt="" loading="lazy"></figure>
-<p>这一步点I Agree</p>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597831023513.PNG" alt="" loading="lazy"></figure>
-<p>这里点Next</p>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597831033981.PNG" alt="" loading="lazy"></figure>
-<p>这里选择安装路径，一般默认即可，可以换到其他空间足够的分区里，随意选择</p>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597831046656.PNG" alt="" loading="lazy"></figure>
-<p>这里直接Install</p>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597831079011.PNG" alt="" loading="lazy"></figure>
-<p>安装过程中间不要动，弹出什么窗口也别管他，直到变成下面这样，点Next</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597831090617.PNG" alt="" loading="lazy"></figure>
-<p>这里skip。</p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597831105305.PNG" alt="" loading="lazy"></figure>
-<p>这里取消选择两个对勾，然后Finish</p>
-<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597831116192.PNG" alt="" loading="lazy"></figure>
-<p>打开开始菜单，点击这个程序打开</p>
-<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597831127537.PNG" alt="" loading="lazy"></figure>
-<p>这里第一次打开会有一个欢迎词，点击ok, and don’t show again</p>
-<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597831137549.PNG" alt="" loading="lazy"></figure>
-<p>关掉Anaconda，在电脑里打开这个路径：C:\Users\你的系统用户名字。在这里有一个文件叫.condarc，右键-属性-打开方式，选择用记事本打开它，之后修改成以下内容，保存，关闭。之后再打开Anaconda【注意横杠前面是两个空格，否则报错】文末放上了老潘在用的链接设置，留存备份，亲测用conda命令下载速度飞起。</p>
-<pre><code>channels:
-  -defaults
-show_channel_urls: true
-default_channels:
-  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
-  -https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
-ssl_verify: true
-
-</code></pre>
-<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597831180625.PNG" alt="" loading="lazy"></figure>
-<p>*下面这步为可选做步骤<br>
-点这个地方的齿轮，然后点击Remove application，在卸载时，有一些按钮变灰，等待他变回去即可以进行下一步。</p>
-<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1597831233783.PNG" alt="" loading="lazy"></figure>
-<p>*下面这步也是可选做步骤<br>
-点这个地方的齿轮，然后点击Remove application，同上</p>
-<figure data-type="image" tabindex="15"><img src="https://divertingPan.github.io/post-images/1597831275152.PNG" alt="" loading="lazy"></figure>
-<p>点左边的Environments，然后点击下面的加号图标create，在框中输入一个名字（比如说room101），建议这里选择使用3.6的python，因为老潘自己用高版本的时候遇到过一些迷之bug，3.6上却没有这个bug。</p>
-<figure data-type="image" tabindex="16"><img src="https://divertingPan.github.io/post-images/1597831331978.PNG" alt="" loading="lazy"></figure>
-<p>点击create并等待。等待的时候啰嗦两句：第一，这个进度条其实不科学，他只会在当前的子进度完毕之后突然变满，然后进行下一个子进度。所以不必担心死机。第二，这个过程需要联网，要连接网络下载所需的内容。刚刚用记事本改的那一堆链接的操作，其实是把下载地址换到了国内的服务器上，这样省却了科学上网的困扰。</p>
-<figure data-type="image" tabindex="17"><img src="https://divertingPan.github.io/post-images/1597831376845.PNG" alt="" loading="lazy"></figure>
-<p>这时候，回到前面的Home界面，这个Applications on注意选择刚刚创建的环境“room101”，找到最下面的这个spyder，点install</p>
-<figure data-type="image" tabindex="18"><img src="https://divertingPan.github.io/post-images/1597831400360.PNG" alt="" loading="lazy"></figure>
-<p>等待的时候继续啰嗦：刚刚我们创建的“room101”是个什么东西？Anaconda实际上是创建了虚拟的环境。可以类比为Anaconda是个酒店，当我们需要住的时候，他给我们开一个房“room101”，各位住客可能住在不同的房间里（可以创建更多的房间，“room102”，“room103”，“会议厅”等等），每个房间功能配置都有所不同，互相不会干扰。住户可以退房，这个房间被删除也不会影响其他房间。<strong>推荐使用Anaconda的原因就是，如果不慎把环境弄坏了（不能运行或者其他玄学bug），不需重装系统，只要把room101这个环境直接删掉，重新上面的操作一遍就好了。没有任何后遗症。</strong></p>
-<p>安装完之后再开始菜单会看到一个spyder (room101)的程序，（如果选做的那两步没做，还会有一个spyder (base)）。这里点开spyder (room101)。以后用的时候就可以直接点这个，开始编程的起手式了。相当于我们进入了room101使用这个房间里面的配套设施。</p>
-<figure data-type="image" tabindex="19"><img src="https://divertingPan.github.io/post-images/1597831463226.PNG" alt="" loading="lazy"></figure>
-<p>打开之后界面是这样的，页面提示的这个东西可装可不装，是一个代码补全工具，初学者可以先忽略他。</p>
-<figure data-type="image" tabindex="20"><img src="https://divertingPan.github.io/post-images/1597831477907.PNG" alt="" loading="lazy"></figure>
-<p>试验一下，看看输入输出是否正常，在左边输入</p>
-<pre><code class="language-python">print('随便输什么')
-i = 1+1
-</code></pre>
-<p>然后点击上面绿色三角。第一次运行时会弹出一个什么窗口，直接点击继续就可以（老潘卡了一下没截住那个图）</p>
-<p>如果页面是这样的，证明环境配置成功。</p>
-<figure data-type="image" tabindex="21"><img src="https://divertingPan.github.io/post-images/1597831515671.PNG" alt="" loading="lazy"></figure>
-<p><strong>此时就可以开始学习python的编程技巧了。</strong></p>
-<hr>
-<p>下面是一些附加的知识，可能会用到。</p>
-<p>字体太小可以在“工具”-“偏好设置”-“外观”里面进行修改</p>
-<figure data-type="image" tabindex="22"><img src="https://divertingPan.github.io/post-images/1597831552032.PNG" alt="" loading="lazy"></figure>
-<p>如果需要安装其他的包，在哪里输入“pip install XXX”这样的指令？打开下面的这个Anaconda prompt</p>
-<figure data-type="image" tabindex="23"><img src="https://divertingPan.github.io/post-images/1597831565311.PNG" alt="" loading="lazy"></figure>
-<p>先输入activate room101并回车，这样是先确认给哪个房间送去温暖（给指定的虚拟环境安装应用），再pip install XX即可。</p>
-<figure data-type="image" tabindex="24"><img src="https://divertingPan.github.io/post-images/1597831600846.PNG" alt="" loading="lazy"></figure>
-<p>Room101出了问题，鼓捣不好怎么办？把他卸掉重新装一边。删除环境很简单，选择这个环境，直接点击垃圾桶即可。你编写的代码不会消失，消失的只是基本环境，之后重新按照上文创建环境的方法再装一下即可恢复正常的生活。</p>
-<figure data-type="image" tabindex="25"><img src="https://divertingPan.github.io/post-images/1597831618948.PNG" alt="" loading="lazy"></figure>
-<p>可以创建好几个环境吗？可以，老潘自己就是这么干的，为不同的任务分配不同的环境，方便管理，出了问题也不会牵一发动全身。比如说我tensorflow整崩了，把这个环境直接重做，不会影响别的环境。</p>
-<figure data-type="image" tabindex="26"><img src="https://divertingPan.github.io/post-images/1597831631064.PNG" alt="" loading="lazy"></figure>
-<p>有疑问可以留言，老潘继续扩充。</p>
-<p>附：.condarc</p>
-<pre><code>channels:
-  - defaults
-show_channel_urls: true
-default_channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
-custom_channels:
-  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-ssl_verify: true
-
-</code></pre>
 ]]></content>
     </entry>
 </feed>
