@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>10月11日总结 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1603012852828">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1603558240909">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="10月11日总结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -24,7 +24,7 @@ Example::
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1603012852828" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1603558240909" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -104,7 +104,7 @@ Example::
                 2020-10-11
               </span>
               <span>
-                3 min read
+                4 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
@@ -162,7 +162,8 @@ x_list = x.numpy().tolist()
 <p>使用pycharm或者spyder的时候，当前目录<code>os.getcwd()</code>都是脚本所在的目录。而<code>sys.path</code>模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。</p>
 <h1 id="4-再谈torchvisiontransforms">4. 再谈torchvision.transforms</h1>
 <p>早在上个月我就已经思考明白了关于视频图像序列的图像增广的细节。即每次调用一下<code>img=transforms(img)</code>，就会触发一次各种随机翻转旋转等的随机数设置。如果针对序列里的图片，在每次读进来的时候或者用for循环，对每个图片做transforms，会导致一系列图片明暗色彩角度各不相同。对于序列图片，如果涉及到这种增广操作，我只能想到一种办法，即重写所用的transforms操作，每次调用的时候传进整个图片序列，这样就只调用了一次，也就只初始化了一个随机数，这样再去做<code>ColorJitter()</code>或者<code>RandomHorizontalFlip()</code>等随机操作里面对张量切片，对每个切片做变换，这样一系列图片可以有相同随机数下的变换操作。如果只是要做<code>Resize()</code>或者<code>ToTensor()</code>之类的那就无所谓了，调用多少次都是一样的结果。<br>
-之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。</p>
+之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。<br>
+还有，compose里面<strong>要用方括号</strong>括住各个操作，大括号会导致顺序和写的顺序不一致，导致玄学问题</p>
 
               </div>
               <div class="toc-container">

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-10-18T09:23:45.976Z</updated>
+    <updated>2020-10-24T16:50:55.175Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,72 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[10月20日（Scrapy爬虫为主）]]></title>
+        <id>https://divertingPan.github.io/post/PKRyQR_xc/</id>
+        <link href="https://divertingPan.github.io/post/PKRyQR_xc/">
+        </link>
+        <updated>2020-10-20T05:01:04.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-在chrome的console里面使用xpath定位元素">1. 在chrome的console里面使用xpath定位元素</h1>
+<p><code>$x('xpath表达式')</code><br>
+一个细节的地方是要注意有时候表达式里面有引号，要注意和最外层引号区分开，一般xpath里多见双引号，所以最好用单引号做外层的引号。<br>
+扩展：ccs表达式：<code>$(&quot;css表达式&quot;)</code>或者<code>$$(&quot;css表达式&quot;)</code></p>
+<blockquote>
+<p>ref: https://blog.csdn.net/jamieblue1/article/details/101075193</p>
+</blockquote>
+<h1 id="2-scrapy模拟登录">2. scrapy模拟登录</h1>
+<p>首先需要分析网站登录的时候发送了哪些信息，以postcrossing.com举例，在登录表单上检查信息，会看到这么些东西：<br>
+<img src="https://divertingPan.github.io/post-images/1603179821618.PNG" alt="" loading="lazy"><br>
+用户名和密码不用多说，另外还有一个hidden的东西，登录的时候这个也要传走，（但是我在实验的时候发现不带这个值直接用名字密码也能登）<br>
+对于在建立formdata的时候是用name还是id作为键值，我也不知道，经过试验用name是可以登上的，可能有其他的办法直接查看表单提交信息，不过也可以用尝试的办法做。</p>
+<p>具体而言，怎么登录？在Spider脚本里的class XXSpider里面写下面这个函数</p>
+<pre><code class="language-python">    def start_requests(self):
+        yield Request('https://www.postcrossing.com/login', meta={&quot;cookiejar&quot;: 1}, callback=self.post_login)
+</code></pre>
+<p>这样，程序一开始会Request这个login界面，紧接着在这个页面上进行callback即post_login所做的操作。<br>
+post_login的内容是：</p>
+<pre><code class="language-python">    def post_login(self, response):
+        token = response.xpath('//*[@id=&quot;signin__login_csrf_token&quot;]/@value').extract_first()
+        # print('login_csrf_token: ', token)
+        form_data = {
+            'signin[_login_csrf_token]': token,
+            'signin[username]': 'XXXXXX',
+            'signin[password]': 'YYYYYY'
+        }
+        yield FormRequest.from_response(response, formdata=form_data,
+                                        meta={&quot;cookiejar&quot;: response.meta['cookiejar']},
+                                        callback=self.country_gallery
+                                        )
+</code></pre>
+<p>其中，token获取了那个隐藏的会在登录时一同上传的神秘值，form_data构造了登录时需要的信息。通过FormRequest.from_response对response过来的内容（就是刚刚的登录页面）进行提交表单操作，用meta记下cookie信息。后续所有的Request都可以用这个cookie。</p>
+<blockquote>
+<p>ref:<br>
+https://scrapy-cookbook.readthedocs.io/zh_CN/latest/scrapy-11.html<br>
+https://www.jianshu.com/p/404e4ac156a6</p>
+</blockquote>
+<h1 id="3-xpath解析内容为空">3. xpath解析内容为空</h1>
+<p>第一种情况是解析的页面不对，造成页面不对的原因是调用这个函数的上一级函数传过来的页面不对（其实就是上一级函数的Request里面那个url写的并不是自己要解析的那个）。一般就是字母拼错，页面层级搞混了，需要自己仔细检查。又或者是这个页面需要登录才能正常显示，不登陆的话进的是登录页面而不是内容页面，这就又回到了上一条需要做的事情。<br>
+第二种情况是user-agent的问题，在settings.py里加入</p>
+<pre><code class="language-python">USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'
+</code></pre>
+<p>再尝试即可。</p>
+<h1 id="4-pandas获取某个值所在的行号">4. pandas获取某个值所在的行号</h1>
+<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
+</code></pre>
+<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
+例如，对下图这样的df查询'Code'为'CN'的条目<br>
+<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
+执行以下操作</p>
+<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
+要取出某一个值，可以</p>
+<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
+print(string)
+&gt;&gt;&gt; China
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[绕过需要认证的网络（校园网）直接联网的方法]]></title>
         <id>https://divertingPan.github.io/post/lCfwQ3hC0/</id>
@@ -84,7 +150,7 @@ net = net.to(DEVICE)
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[10月14日总结（爬虫为主）]]></title>
+        <title type="html"><![CDATA[10月14日总结（bs4爬虫为主）]]></title>
         <id>https://divertingPan.github.io/post/AhyNsrQwN/</id>
         <link href="https://divertingPan.github.io/post/AhyNsrQwN/">
         </link>
@@ -106,7 +172,10 @@ https://blog.csdn.net/qq_36663202/article/details/89159878
 for table in pd.read_html(index_url, encoding='utf-8', header=0):
     table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
 </code></pre>
-<h1 id="2-df数据的读取">2. df数据的读取</h1>
+<h1 id="2-pandas把表格中的na字符串变成了nan">2. pandas把表格中的NA字符串变成了nan</h1>
+<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
+ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
+<h1 id="3-df数据的读取">3. df数据的读取</h1>
 <p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
 <pre><code class="language-python"># 获取df长度
 len(df)
@@ -114,13 +183,13 @@ len(df)
 # 获取第0行，属性为Code的值
 df.loc[0]['Code']
 </code></pre>
-<h1 id="3-检测路径存在与否并且建立路径">3. 检测路径存在与否并且建立路径</h1>
+<h1 id="4-检测路径存在与否并且建立路径">4. 检测路径存在与否并且建立路径</h1>
 <pre><code class="language-python">if not os.path.exists(destination_path):
     os.makedirs(destination_path)
 </code></pre>
-<h1 id="4-判断list为空">4. 判断list为空</h1>
+<h1 id="5-判断list为空">5. 判断list为空</h1>
 <p>直接利用bool判断，list为空返回False，不为空返回True</p>
-<h1 id="5-python多线程运行">5. python多线程运行</h1>
+<h1 id="6-python多线程运行">6. python多线程运行</h1>
 <p>python运行for循环比较慢，但是for循环必须每次循环是相互独立的时候用多线程才行。我需要for循环从一个列表里逐次获取链接并下载链接的内容，每次是相互独立的，所以可以使用多线程来优化速度。<br>
 我需要爬取postcrossing的所有图片。首先，我需要遍历一个国家列表，对于每个国家，我要遍历这个国家的所有已发送postcard列表，下载图片链接。这里存在一个问题：每个国家的postcard列表是不一样长的。对于多线程优化，我认为较好的方法是针对每个国家下的postcard列表做优化，而非对整个国家列表做多线程优化。<br>
 具体而言，首先我利用for循环来遍历这个国家列表，其中df为所有国家的列表，code是国家代码，Postcards  (sent)是已发送的明信片数量。所有存在的图片的id一定不大于已发送明信片数量，这个作为后面postcard列表的长度。</p>
@@ -210,7 +279,8 @@ x_list = x.numpy().tolist()
 <p>使用pycharm或者spyder的时候，当前目录<code>os.getcwd()</code>都是脚本所在的目录。而<code>sys.path</code>模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。</p>
 <h1 id="4-再谈torchvisiontransforms">4. 再谈torchvision.transforms</h1>
 <p>早在上个月我就已经思考明白了关于视频图像序列的图像增广的细节。即每次调用一下<code>img=transforms(img)</code>，就会触发一次各种随机翻转旋转等的随机数设置。如果针对序列里的图片，在每次读进来的时候或者用for循环，对每个图片做transforms，会导致一系列图片明暗色彩角度各不相同。对于序列图片，如果涉及到这种增广操作，我只能想到一种办法，即重写所用的transforms操作，每次调用的时候传进整个图片序列，这样就只调用了一次，也就只初始化了一个随机数，这样再去做<code>ColorJitter()</code>或者<code>RandomHorizontalFlip()</code>等随机操作里面对张量切片，对每个切片做变换，这样一系列图片可以有相同随机数下的变换操作。如果只是要做<code>Resize()</code>或者<code>ToTensor()</code>之类的那就无所谓了，调用多少次都是一样的结果。<br>
-之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。</p>
+之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。<br>
+还有，compose里面<strong>要用方括号</strong>括住各个操作，大括号会导致顺序和写的顺序不一致，导致玄学问题</p>
 ]]></content>
     </entry>
     <entry>
@@ -640,121 +710,6 @@ https://www.frontiersin.org/articles/10.3389/fict.2017.00009/full</p>
 <p>[3] Zaharieva M, Hubermoerk R, Noelle M, et al. On ancient coin classification[C]. ieee virtual reality conference, 2007: 55-62.</p>
 <p>[4] Pan X, Tougne L. A New Database of Digits Extracted from Coins with Hard-to-Segment Foreground for Optical Character Recognition Evaluation[J]. Frontiers in ICT, 2017.</p>
 <p>[5] Pan X, Puritat K, Tougne L, et al. A New Coin Segmentation and Graph-Based Identification Method for Numismatic Application[C]. international symposium on visual computing, 2014: 185-195.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[硬币系列二 | 从照片中自动检测硬币]]></title>
-        <id>https://divertingPan.github.io/post/coin_detect/</id>
-        <link href="https://divertingPan.github.io/post/coin_detect/">
-        </link>
-        <updated>2020-07-11T10:56:28.000Z</updated>
-        <content type="html"><![CDATA[<p>最近搞了一些稀奇硬币，老潘把他们都用手机拍了下来。但是由于手机镜头焦距所限，并不能让硬币充满整个画面。所以很自然的想法就是，把硬币从图片中裁剪出来。一个正常人的做法是，把需要拍摄特写的物品放在纯净颜色的背景上，这种做法其实也有利于后期的抠图。</p>
-<p>但是，我们希望将图片的外围裁剪到刚好框住硬币，不多余也不遗漏。或者说，做出硬币轮廓的外接矩形。我们可以选择用手一个一个的裁剪。</p>
-<p>但是老潘是很懒的人，能躺着办绝不坐着办。<strong>打开电脑，拿起键盘，启动你最爱的IDE。</strong></p>
-<p>首先，小学美术课上应该有教过图像的边缘提取方法。目前比较主流且效果比较好的方法是Canny算子法，这种方法主要通过以下步骤得到一幅图片的边缘线条：</p>
-<ol>
-<li>
-<p>将图片高斯模糊，消除噪声影响，一般用3x3或者5x5即可。</p>
-</li>
-<li>
-<p>计算上下左右方向的图像梯度信息（理解为计算当前点和周围点的明暗高低关系即可），这时候，如果这个点左右两边都和该点亮度差异很大，这就证明这个点在图形边缘上，反之，没什么差异证明这个点在一马平川上。</p>
-</li>
-<li>
-<p>再进行非极大值抑制（把不是最大值的点抑制下去）。对步骤2得到的梯度信息，再观察一个点和周围点的高低关系，对于最大值点保留其值，比他小的点赋予0。</p>
-</li>
-<li>
-<p>通过双阈值得到最终的边界图像。对上面步骤得到的图像，再次进行判断：给定一个上下界，高于上界的值作为强边缘，低于下界的值为弱边缘，夹在上下界中间的，如果这个点附近一圈存在强边缘，也把这个点作为强边缘。最终只保留强边缘作为最终的边缘图像。</p>
-</li>
-</ol>
-<p>关于canny边缘检测的理论结合实践部分，这篇博客很好：https://www.cnblogs.com/mmmmc/p/10524640.html</p>
-<p>通过openCV可以使用以下方法快速得到一幅图片的<strong>轮廓信息</strong></p>
-<pre><code class="language-python">
-img = cv2.imread(apath)
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-gray = cv2.GaussianBlur(gray, (3, 3), 0)
-thresh = cv2.Canny(gray, 10, 100)
-</code></pre>
-<p>这里的例子如图所示，一个硬币和利用这种方法提取出的硬币边缘线条。</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597834774020.png" alt="" loading="lazy"></figure>
-<p>这时候，我们可以选择直接作出图中颜色为白色区域的外接矩形，如果一切正常，那么面积最大的那个矩形就会是硬币的外轮廓。（背景如果不是纯色就可能会导致轮廓混杂粘连），图中将这些外接矩形用蓝色标记到了原图上。</p>
-<p>通过以下方法可以获得一个<strong>0-1二值图中的白色区域边界信息</strong></p>
-<pre><code class="language-python">_, contours, hierarchy =cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-</code></pre>
-<p>之后对这个边界信息做外接矩形并且保留面积最大的矩形。为了防止出现其他面积更大但是奇奇怪怪的轮廓，需要限制这个区域的<strong>长宽比不可以差太多</strong>，这样选出的框基本就是硬币主体了。</p>
-<pre><code class="language-python">max_area = 0
-for cnt in contours:
-x, y, w, h =cv2.boundingRect(cnt)
-cv2.rectangle(img,(x, y), (x + w, y + h), (255, 0, 0), 2)
-   if w*h &gt; max_area and 0.8 &lt; w/h &lt; 1.25:
-       max_area = w*h
-       rec_x = x
-       rec_y = y
-       rec_w = w
-       rec_h = h
-img = img[rec_y:rec_y+rec_h,rec_x:rec_x+rec_w]
-</code></pre>
-<p>可以看到由于我的背景有其他的杂物和纹理，所以被标记了很多其他的区域。但是能够符合<strong>面积最大并且长宽比不差太多</strong>的只有中间这个硬币。</p>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597834848139.png" alt="" loading="lazy"></figure>
-<p>但是实际这么做的话会有一个问题，硬币的最外圈边缘有可能断裂开。这样，图片中白色区域的外接矩形就会出现问题。</p>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597834860546.png" alt="" loading="lazy"></figure>
-<p>事实上经过测试，由于这个问题造成的裁剪错误有不少，所以应该在提取边缘之后再搞点什么动作。</p>
-<p>众所周知，形态学处理可以对图像的这种残缺进行处理，比如说人尽皆知的开闭操作，可以对这种提取了边缘的边缘图像进一步对缺口进行连接，或者对噪点进行消除。而开闭操作又是由腐蚀和膨胀组合形成的操作，腐蚀是利用一个小的形状（术语叫结构元）对图像一点点扫描下去，只要结构元和图像白色区域没有完全重合，就把这个结构元的判别点（一般是结构元中心）下面的颜色变成黑色。膨胀相反，只要结构元和图像的白色区域有一点点重合，就把判别点下面的颜色变白。</p>
-<p>图像中的白色小杂点不可能和结构元完全重合，腐蚀可以让杂点被抹去。膨胀可以让图像白色区域胖起来，缝隙就会渐渐挤在一起连起来了。这里老潘闲的做了个动图，展示了一个图像提取了轮廓之后<code>膨胀了5次，腐蚀了10次，又膨胀了5次</code>的过程。图中可以看到，膨胀5次<code>使硬币的轮廓完全清晰可见</code>了，腐蚀则是<code>将由于膨胀造成的轮廓变大再缩回去</code>。另外再腐蚀<code>将背景的杂点去掉</code>，由于腐蚀又<code>造成了轮廓缩水所以还要再膨胀回来</code>。最后的图中仅剩的圆形刚好就是硬币的外轮廓。这时候，先膨胀5次又腐蚀5次就对应了<strong>闭操作</strong>，后又腐蚀5次再膨胀5次对应了<strong>开操作</strong>。图中也可以看到，使用的结构元的形状是方形。</p>
-<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597834974414.gif" alt="" loading="lazy"></figure>
-<p>通过这样一顿操作，可以获得非常可靠的硬币外轮廓信息了，对这时候的图再提取白色区域的外接矩形就不会出现硬币断开的情况。对图像进行腐蚀膨胀<strong>开闭操作</strong>的方法如下：</p>
-<pre><code class="language-python">kernel =cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
-thresh = cv2.dilate(thresh, kernel)
-thresh = cv2.erode(thresh, kernel)
-closed = cv2.morphologyEx(thresh,cv2.MORPH_CLOSE, kernel, iterations=5)
-opened = cv2.morphologyEx(closed,cv2.MORPH_OPEN, kernel, iterations=5)
-</code></pre>
-<p>对比一下只用canny边缘提取做外接矩形和进行闭操作以后的外接矩形差异，优化前对应着前面提到的边缘断开造成的外围最大的外接矩形错误，可以看到优化前的轮廓非常混乱，因为每一个白色的边缘线条都会被当做一个独立连通区域去框定他的外接矩形。优化后硬币主体对应的连通区域一般就是一个圆了，边界也非常干净简单。</p>
-<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597835020803.png" alt="" loading="lazy"></figure>
-<p>如果看一下优化后，用来做外接矩形的白色区域长什么样子，如下图所示是几个硬币的canny边缘图像闭操作以后的结果。虽然硬币范围内有孔洞，但是不会影响整个区域的外轮廓，外接矩形仍然可以死死卡在圆周上。在边缘上的孔洞看似可能会导致区域有缺口，但是由于闭运算的特性，实际上仍然会有<strong>1像素</strong>宽度的线包裹着他，而且最外围的细外轮廓线不太可能再有断裂了。</p>
-<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597835037941.png" alt="" loading="lazy"></figure>
-<p>通过以上操作已经可以完美的将硬币裁切出来了。<del>这就是关于硬币图像裁剪边缘检测的方法了，你学废了吗？欢迎在评论区告诉小编一起讨论哦！</del></p>
-<p>后来在查阅论文和各路资料的时候发现，有一种叫做<strong>霍夫变换</strong>的方法可以直接检测图中的圆形区域，我没有试验这个算法的效果，而且老潘偏偏有几个不是圆形的硬币，我不知道霍夫变换面对这种方形和花花形硬币效果如何。<br>
-后记：既然都提到了那就试一下，我发现霍夫变换速度好慢，还会把CPU全部占满。（图太大的话就会很慢）</p>
-<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597835091600.png" alt="" loading="lazy"></figure>
-<p>做这个事情并不仅仅是想要把图像剪出来这么简单。如果想要查询每个硬币对应的来历、材质、等等信息，简直让人一头雾水，尤其某些硬币上面完全没有英文，查都不知道怎么查。那么能不能让电脑帮帮我，直接给他图让他帮我查呢？</p>
-<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597835132507.webp" alt="" loading="lazy"></figure>
-<p>经过一番折腾，老潘发现一个网站可以直接传图，以图识图，给你这个硬币的信息。当然这都是后话，我折腾了一圈，尝试了多种图案比对方法均无果以后，发现自己走了个远路，原来这有网站可以直接用啊，准确率也还可以。不过由于上传图片需要将图裁到只包含硬币，那其实还是要用到我前半部分做的图片裁剪。</p>
-<p><a href="https://colnect.cn/zh/coins/identify">这个网站上有各种神奇收藏品图鉴</a></p>
-<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597835171085.png" alt="" loading="lazy"></figure>
-<p>反正折腾也折腾了，留下一些折腾的成果吧，指不定什么时候还能再用上。</p>
-<p>首先是爬虫<del>这个一上来就爬废了</del>，我初步的设计是，到一个<a href="https://zh-cn.ucoin.net/catalog">硬币图鉴网站</a>上（网址：https://zh-cn.ucoin.net/catalog）按照他清晰良好的层层结构，把所有有图为证的硬币图片全部抓下来，抓的同时，记录下这个硬币的文件名，以及这个图所在的硬币详情页链接地址，存进一个表里。在做比对的时候可以让程序自动找到和待测硬币最相似的标准硬币，照着标准图片的名字找到对应页面再去打开这个页面，完成自动化硬币信息查询。</p>
-<p>实验设计无比巧妙，刚开始第一次requests.get的时候发现返回来的HTML里面没内容，解析一下文本发现403，于是想到可能是这种直连会被挡。加一个伪装，设置一个header即可，这样可以把发出来的请求<strong>伪装</strong>成是普通浏览器发出的请求。设置方法如下</p>
-<pre><code class="language-python"># reference:https://blog.csdn.net/jamesaonier/article/details/89003053
-agentPools = [
-   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML,like Gecko) Version/5.1.7 Safari/534.57.2&quot;,
-   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/39.0.2171.71 Safari/537.36&quot;,
-   &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, likeGecko) Chrome/23.0.1271.64 Safari/537.11&quot;,
-   &quot;Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16(KHTML, like Gecko) Chrome/10.0.648.133 Safari/534.16&quot;,
-   &quot;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101Firefox/34.0&quot;,
-   &quot;Mozilla/5.0 (X11; U; Linux x86_64; zh-CN; rv:1.9.2.10)Gecko/20100922 Ubuntu/10.10 (maverick) Firefox/3.6.10&quot;,
-   &quot;Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208Firefox/2.0.0 Opera 9.50&quot;
-    ]
-headers = {'User-Agent':random.choice(agentPools)}
-res = requests.get(index_url,headers=headers)
-</code></pre>
-<p>之后就能连上了，前期小规模爬测的时候毫无问题，眼看着一级目录已经建好（一级目录是所有的国家地区分类链接），二级目录也捋顺了（二级是每个国家地区下面的年份和硬币币别），三级目录就是每个硬币对应的详细页面和图片，这也都没有问题。于是火力全开去挂机。</p>
-<p>挂到一半发现没图了，测试发现返回来的HTML里没有对应的链接了，输出一下文本一看是我IP被ban了。好，看来这个网站比百度老狗要严密一些。那我就用<strong>IP池</strong>吧。结果自此开始掉入深坑。用国内的各种IP去连，速度都巨慢而且容易断线。用科学上网连接很快，但是无法自动化更换IP，而且爬不超过半小时就会把IP再次ban掉，我甚至已经设置了每次请求sleep5秒，无济于事，可以说这个反爬让老潘有点下不去手。</p>
-<p><strong>设置代理IP</strong>的方法如下</p>
-<pre><code class="language-python">
-with open('./ip.txt', 'r') as f:
-   ip_pool = f.readlines()
-def get_proxy():
-    #获取IP文本的方法很多，可上网自查
-    #或去看我的完整工程文件里有一些说明注释
-    r= random.choice(ip_pool).strip('\n')
-   proxy = {'https': r}
-   return proxy
-res = requests.get(index_url,proxies=get_proxy(), headers=headers)
-</code></pre>
-<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597835331405.webp" alt="" loading="lazy"></figure>
-<p>爬虫到此为止，只爬到了几百个硬币就弄不下去了<del>心态崩了</del>。如果有经验丰富大佬指点我爬完全站，老潘给你投币三连这次一定。</p>
-<p>下一篇讲解如何检测相似的硬币。这篇有点长了，分开成两篇发<del>又可以多水一篇推送美吱吱</del></p>
-<p>源码和下一篇合在一起了，都在<a href="https://github.com/divertingPan/coin_machine">GitHub</a></p>
 ]]></content>
     </entry>
 </feed>
