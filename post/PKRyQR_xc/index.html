@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>10月20日（Scrapy爬虫为主） | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1603558240909">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604074462767">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="10月20日（Scrapy爬虫为主） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -24,7 +24,7 @@ $x('xpath表达式')
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1603558240909" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604074462767" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -132,7 +132,12 @@ $x('xpath表达式')
 <p>首先需要分析网站登录的时候发送了哪些信息，以postcrossing.com举例，在登录表单上检查信息，会看到这么些东西：<br>
 <img src="https://divertingPan.github.io/post-images/1603179821618.PNG" alt="" loading="lazy"><br>
 用户名和密码不用多说，另外还有一个hidden的东西，登录的时候这个也要传走，（但是我在实验的时候发现不带这个值直接用名字密码也能登）<br>
-对于在建立formdata的时候是用name还是id作为键值，我也不知道，经过试验用name是可以登上的，可能有其他的办法直接查看表单提交信息，不过也可以用尝试的办法做。</p>
+对于在建立formdata的时候，用什么作为字典的键值？要查看页面提交信息，具体如何查看提交上去的信息，可以参考该链接：https://mofanpy.com/tutorials/data-manipulation/scraping/requests/</p>
+<blockquote>
+<p>这个<code>&lt;form&gt;</code>里面有一些<code>&lt;input&gt;</code>个 tag, 我们仔细看到<code>&lt;input&gt;</code>里面的这个值 name=&quot;firstname&quot; 和 name=&quot;lastname&quot;, 这两个就是我们要 post 提交上去的关键信息了. 我们填好姓名, 为了记录点击 submit 后, 浏览器究竟发生了什么翻天覆地的变化, 我们在 inspect 窗口, 选择<code>Network</code>, 勾选<code>Preserve log</code>, 再点击<code>submit</code>, 你就能看到服务器返回给你定制化后的页面时, 你使用的方法和数据.</p>
+</blockquote>
+<p>在本例中，上传的登录内容如图：<br>
+<img src="https://divertingPan.github.io/post-images/1603716950650.PNG" alt="" loading="lazy"></p>
 <p>具体而言，怎么登录？在Spider脚本里的class XXSpider里面写下面这个函数</p>
 <pre><code class="language-python">    def start_requests(self):
         yield Request('https://www.postcrossing.com/login', meta={&quot;cookiejar&quot;: 1}, callback=self.post_login)

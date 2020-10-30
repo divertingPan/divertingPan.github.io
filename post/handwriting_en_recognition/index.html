@@ -1,0 +1,371 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>手写签名识别杂记 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604074462767">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="手写签名识别杂记 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧，我只写一下在数据预处理上我做的一些操作。以备不时之需。
+..." />
+    <meta name="keywords" content="opencv,pytorch,python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604074462767" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    大型摸鱼现场
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              手写签名识别杂记
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-10-30
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/handwriting_en_recognition.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧，我只写一下在数据预处理上我做的一些操作。以备不时之需。</p>
+<h1 id="对数据的分析">对数据的分析</h1>
+<p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如<br>
+<img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"><br>
+<img src="https://divertingPan.github.io/post-images/1604054018444.jpg" alt="" loading="lazy"><br>
+这两种是这个数据集内比较典型的干扰，第一幅图的行干扰（就是说不仅有签名字的行，还有其他的字符又占了一行）和第二幅图的列干扰（就是紧挨着手写签名的前面有干扰字符），以及行列组合干扰（严格来讲第二幅图其实算是行列组合干扰）。</p>
+<p>首先就考虑对读入的图片进行预处理，尽可能消除干扰字符。</p>
+<h2 id="灰度化和二值化">灰度化和二值化</h2>
+<p>第一，这种图片没必要考虑RGB的问题，所以干脆点，进来先转灰度，也方便后面的形态学处理。更进一步地，我在后期形态学处理的时候甚至只关心非黑即白的像素点，所以干脆再做一个二值化的图出来。</p>
+<p><strong>这里需要说明一点的是，灰度图img和二值图gray应该分开两个变量存储。因为我仅仅使用二值图进行定界操作，定好界以后我还是希望能返回原本的灰度图，所以一开始读进来的灰度图要先给他存起来，后面只对他裁剪之后返回即可。</strong></p>
+<p><strong>为什么不直接返回二值图呢？这个操作返回的图片还是要传给CRNN去计算的，我想尽量减少预处理上对信息的损伤。二值化可能会导致灰度图的一部分信息丢失。</strong></p>
+<pre><code class="language-python">img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+_, gray = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
+gray = np.logical_xor(1, gray).astype('uint8')
+</code></pre>
+<h2 id="选择正确的行">选择正确的行</h2>
+<p>接下来考虑消除行干扰。我想裁掉签名行上下的干扰字符或者干扰像素。我可以直接对图片（二值化的图片）按行求和，这样有字符的行，和就会比较大，行间的空隙，求和之后值就很小。将相连区域长度最大的行取出来，基本就是手写签名对应的行了。</p>
+<pre><code class="language-python">sum_of_row = np.sum(gray, axis=1)
+</code></pre>
+<p>例：下图左边为每行的和，右边为手写字体<br>
+<img src="https://divertingPan.github.io/post-images/1604054901608.PNG" alt="" loading="lazy"></p>
+<p>如何找到一个数组的最长相连区域？这里我写了一个笨方法，在数组里面遍历，如果大于某个阈值就将行号和flag记下来，直到取到的数又小于阈值时检查flag：如果flag大于当前的最大值就记录这几个行号，如果flag小于最大值就不管。对于遍历结束的时候要特殊处理一下，万一数组最后一个值也是大于阈值的，需要执行类似‘取到的数又小于阈值时检查flag’的操作。具体的代码实现如下：</p>
+<pre><code class="language-python">index_row_valid = []
+max_index_row_valid = []
+len_row_valid = 0
+max_len_row_valid = 0
+for index, value in enumerate(sum_of_row):
+    if value &gt; 2:
+        index_row_valid.append(index)
+        len_row_valid += 1
+    else:
+        if len_row_valid &gt; max_len_row_valid:
+            max_len_row_valid = len_row_valid
+            max_index_row_valid = index_row_valid
+            len_row_valid = 0
+            index_row_valid = []
+        else:
+            len_row_valid = 0
+            index_row_valid = []
+    # if the slice end in the last row
+    if len_row_valid &gt; max_len_row_valid:
+        max_len_row_valid = len_row_valid
+        max_index_row_valid = index_row_valid
+</code></pre>
+<p>对cv读进来的图片，做裁切很简单，直接取数组对应的索引即可。</p>
+<pre><code class="language-python">gray = gray[max_index_row_valid]
+img = img[max_index_row_valid]
+</code></pre>
+<p>进行行裁剪的效果如下：<br>
+<img src="https://divertingPan.github.io/post-images/1604056454722.png" alt="" loading="lazy"></p>
+<h2 id="选择合适的列">选择合适的列</h2>
+<p>首先类似的操作，对列求和。这里多做一步，对于大多数数据，可以剪掉右边大部分的空白，这里可以逆序遍历这个数组，一般后面的都是0或者小于某个阈值的。一旦走到一个值大于了设置的阈值，那就从这里截断即可。range可以通过-1来实现逆序。</p>
+<pre><code class="language-python">sum_of_column = np.sum(gray, axis=0)
+for i in range(len(sum_of_column)-1, -1, -1):
+    if sum_of_column[i] &gt;= 2:
+        gray = gray[:, 0:i]
+        img = img[:, 0:i]
+        break
+</code></pre>
+<p>为了消掉那些印刷体，可以使用传统艺能，将这些印刷体先连到一起。之后再针对图中每个图形查看他的尺寸。一般而言手写的字符比印刷体要大一些，而且长宽也有一定的比例范围（l或者i后面再说）所以先用一下膨胀，给印刷体连起来。由于印刷体排列比较紧，用一个小结构元就可以不破坏手写体的连通性的基础上把印刷体连起来。</p>
+<pre><code class="language-python">kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 2))
+thresh = cv2.dilate(gray, kernel)
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
+<p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用高度排掉两个冒号部分，再可以利用长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
+<pre><code class="language-python"># get edges [with opencv 4.4 return 2 values, previous version return 3 values]
+cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# cut the correct image
+character_bbox_list = []
+
+for i, cnt in enumerate(cnts):
+    x, y, w, h = cv2.boundingRect(cnt)
+
+    if h &gt; 6 and 0.5 &lt; w / h &lt; 2:
+        character_bbox_list.append([x, y, w, h])
+
+character_bbox_list = np.array(character_bbox_list)
+</code></pre>
+<p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，也就对应了图里的8个字母<br>
+<img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"><br>
+把定界框画出来也确实是这8个字母：<br>
+<img src="https://divertingPan.github.io/post-images/1604057340827.PNG" alt="" loading="lazy"></p>
+<p>之后的操作就略微绕一点弯子了。</p>
+<h2 id="最终确定手写签名区域">最终确定手写签名区域</h2>
+<p>对于获得的这几个bbox，我选择取所有列表内bbox的<br>
+最上界（所有bbox的y值中，最小的值）<br>
+最下界（[所有bbox的y值+所有h值]的最大值）<br>
+最左顶点（所有bbox的x值的最小值）<br>
+最右顶点（所有bbox中x值最大的值+该bbox的w值）<br>
+构成整个手写签名裁剪区。<br>
+PS. 区域的横向长度（所有bbox中x值最大的值-最左顶点+该bbox的w值）或者说（最右顶点-最左顶点）</p>
+<p>代码写的比较杂乱，这里简单捋一下：<br>
+<code>left_x_index</code>和<code>right_x_index</code>对应着最左、最右顶点的bbox索引号，<br>
+<code>left_x_position</code>和<code>right_x_position</code>对应最左、最右顶点实际的坐标，（这里和上述的‘最右顶点’实际应该是最右bbox的左上点的坐标）<br>
+<code>length_character</code>是区域的横向长度，<br>
+<code>top_y_index</code>是最上界对应的bbox索引号，<br>
+<code>top_y_position</code>是最上界的坐标高度，<br>
+<code>max_height</code>是整个手写签名区域触及到的最底端，<br>
+<code>height_character</code>是能包住手写签名区域的最大的高度。</p>
+<p>对于这里涉及到的所有变量含义已经写出来了，具体的赋值和计算流程如下：</p>
+<pre><code class="language-python"># axis x need to be found in the range of [:,0] array
+# np.min[0] means that the min value of 0 column which stands for axis x
+left_x_index = np.where(character_bbox_list[:, 0] == np.min(character_bbox_list, axis=0)[0])[0][0]
+right_x_index = np.where(character_bbox_list[:, 0] == np.max(character_bbox_list, axis=0)[0])[0][0]
+left_x_position = character_bbox_list[left_x_index][0]
+right_x_position = character_bbox_list[right_x_index][0]
+right_bbox_width = character_bbox_list[right_x_index][2]
+length_character = right_x_position - left_x_position + right_bbox_width
+
+# axis y need to be found in the range of [:,1] array
+# np.min[1] means that the min value of 1 column which stands for axis y
+top_y_index = np.where(character_bbox_list[:, 1] == np.min(character_bbox_list, axis=0)[1])[0][0]
+top_y_position = character_bbox_list[top_y_index][1]
+max_height = 0
+
+for i, value in enumerate(character_bbox_list):
+    if character_bbox_list[i][1] + character_bbox_list[i][3] &gt; max_height:
+        max_height = character_bbox_list[i][1] + character_bbox_list[i][3]
+
+height_character = max_height - top_y_position
+
+# right boundary is set in the above step
+img = img[top_y_position:top_y_position + height_character, left_x_position:left_x_position + length_character]
+</code></pre>
+<p>最终剪出来的手写签名区域就是这样：<br>
+<img src="https://divertingPan.github.io/post-images/1604058610449.png" alt="" loading="lazy"></p>
+<h2 id="一些解释">一些解释</h2>
+<p>第一点，为什么在对行列求和之后的数组的操作里面总是有阈值呢？主要是考虑到以下情况：<br>
+<img src="https://divertingPan.github.io/post-images/1604058947300.jpg" alt="" loading="lazy"><br>
+他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值其实不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
+<img src="https://divertingPan.github.io/post-images/1604059122687.PNG" alt="" loading="lazy"></p>
+<h1 id="后记">后记</h1>
+<p>本以为这个比赛的第一名会给我露一手魔改attention的，结果并没有。flyAI的答辩链接：https://mp.weixin.qq.com/s/8RqoINhXH2Hnjr5Xe1QQOA，没太多亮点。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E6%9E%90">对数据的分析</a>
+<ul>
+<li><a href="#%E7%81%B0%E5%BA%A6%E5%8C%96%E5%92%8C%E4%BA%8C%E5%80%BC%E5%8C%96">灰度化和二值化</a></li>
+<li><a href="#%E9%80%89%E6%8B%A9%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%A1%8C">选择正确的行</a></li>
+<li><a href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%88%97">选择合适的列</a></li>
+<li><a href="#%E6%9C%80%E7%BB%88%E7%A1%AE%E5%AE%9A%E6%89%8B%E5%86%99%E7%AD%BE%E5%90%8D%E5%8C%BA%E5%9F%9F">最终确定手写签名区域</a></li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E8%A7%A3%E9%87%8A">一些解释</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%8E%E8%AE%B0">后记</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/PKRyQR_xc/">
+              <h3 class="post-title">
+                10月20日（Scrapy爬虫为主）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
