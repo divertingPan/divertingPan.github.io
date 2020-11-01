@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>手写签名识别-数据预处理部分 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604210124352">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604210529827">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="手写签名识别-数据预处理部分 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -11,7 +11,7 @@
 
 
 
-    <meta name="description" content="这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的 top 5 发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备..." />
+    <meta name="description" content="这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之..." />
     <meta name="keywords" content="opencv,pytorch,python" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -21,7 +21,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604210124352" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604210529827" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -122,7 +122,7 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的 top 5 发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
+                <p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
 <h1 id="对数据的分析">对数据的分析</h1>
 <p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>

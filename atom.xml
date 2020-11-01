@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-11-01T05:56:17.072Z</updated>
+    <updated>2020-11-01T06:02:17.420Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <link href="https://divertingPan.github.io/post/handwriting_en_recognition/">
         </link>
         <updated>2020-10-30T10:28:03.000Z</updated>
-        <content type="html"><![CDATA[<p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的 top 5 发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
+        <content type="html"><![CDATA[<p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
 <h1 id="对数据的分析">对数据的分析</h1>
 <p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>
