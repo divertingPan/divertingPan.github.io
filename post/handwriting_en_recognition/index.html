@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>手写签名识别-数据预处理部分 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604201571791">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604210124352">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="手写签名识别-数据预处理部分 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -11,8 +11,7 @@
 
 
 
-    <meta name="description" content="这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。
-..." />
+    <meta name="description" content="这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的 top 5 发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备..." />
     <meta name="keywords" content="opencv,pytorch,python" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +21,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604201571791" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604210124352" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -123,7 +122,7 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
+                <p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的 top 5 发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
 <h1 id="对数据的分析">对数据的分析</h1>
 <p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>
@@ -134,7 +133,7 @@
 <p>第一，这种图片没必要考虑RGB的问题，所以干脆点，进来先转灰度，也方便后面的形态学处理。更进一步地，我在后期形态学处理的时候甚至只关心非黑即白的像素点，所以干脆再做一个二值化的图出来。</p>
 <p><strong>这里需要说明一点的是，灰度图img和二值图gray应该分开两个变量存储。因为我仅仅使用二值图进行定界操作，定好界以后我还是希望能返回原本的灰度图，所以一开始读进来的灰度图要先给他存起来，后面只对他裁剪之后返回即可。</strong></p>
 <p><strong>为什么不直接返回二值图呢？这个操作返回的图片还是要传给CRNN去计算的，我想尽量减少预处理上对信息的损伤。二值化可能会导致灰度图的一部分信息丢失。</strong></p>
-<p>第二，后期操作的时候希望更关注写字的笔划部分，所以最好是让有笔划的部分是1，没有笔划的地方是0，这里就需要对原图做一个反向操作（原图有笔划的地方是黑色是0，白纸的地方是1）</p>
+<p>第二，后期操作的时候希望更关注写字的笔划部分，所以最好是让有笔划的部分是1，没有笔划的地方是0，这里就需要对原图做一个反相操作（原图有笔划的地方是黑色是0，白纸的地方是1）</p>
 <pre><code class="language-python">img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 _, gray = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
 gray = np.logical_xor(1, gray).astype('uint8')
@@ -188,7 +187,7 @@ for i in range(len(sum_of_column)-1, -1, -1):
 thresh = cv2.dilate(gray, kernel)
 </code></pre>
 <figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
-<p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用高度排掉两个冒号部分，再可以利用长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
+<p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用外接矩形的高度排掉两个冒号部分，再可以利用外接矩形长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
 <pre><code class="language-python"># get edges [with opencv 4.4 return 2 values, previous version return 3 values]
 cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -203,7 +202,7 @@ for i, cnt in enumerate(cnts):
 
 character_bbox_list = np.array(character_bbox_list)
 </code></pre>
-<p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，也就对应了图里的8个字母<br>
+<p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，每项有4个元素，分别对应外接矩形的左上角x，左上角y，宽度w和高度h。8项也就对应了图里的8个字母<br>
 <img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"></p>
 <p>把定界框画出来也确实是这8个字母：<br>
 <img src="https://divertingPan.github.io/post-images/1604057340827.PNG" alt="" loading="lazy"></p>
@@ -259,18 +258,18 @@ img = img[top_y_position:top_y_position + height_character, left_x_position:left
 <p>他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值给大一点也不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
 <img src="https://divertingPan.github.io/post-images/1604059122687.PNG" alt="" loading="lazy"></p>
 <p>也有一些少数例外情况，比如Emmmmm这样的字符串，E最上面那个横杠和下面连接处只依靠着E的左侧竖线链接，可能会把E最上头的横杠给裁掉。</p>
-<p>或者一些手写字体特别小，比印刷体还要小，用最大连通区域就识别不到了，这个暂时没有想到什么办法</p>
+<p>或者一些手写字体特别小，比印刷体还要小，用最大连通区域就识别不到了，这个暂时没有想到什么办法。</p>
 <h2 id="第二点">第二点</h2>
 <p>之前有一个地方提到“一部分”（这样可以获得一部分（后面解释“一部分”的含义）手写体字母），这里的“一部分”如何理解？</p>
 <p>首先，用我这个方法去框定字母，主要是根据长宽比确定的，但是对于l，j，i这样的字母，显然是不适用于这个比例的。“一部分”的含义是指用这种方法可能无法框定这种类型的字母。</p>
 <p>但是还有办法稍微补救一下的，即利用上面<strong>最终确定手写签名区域</strong>一章内的上下左右界弥补。利用这个上下左右界，即使字母中间出现了这种类型的字母，也可以被框选在裁剪区域内。但是如果对于开头或结尾出现这种字母的情景就还是会被遗漏掉。</p>
 <p>关于如何更好更精准地裁剪，在flyAI里面有一个人提到了用模板匹配，但他是匹配印刷体之后定位印刷体的，然后裁剪定位到“NOM”字符的右边裁剪或者定位到“PRENOM”的下边裁剪。这个倒是我没考虑到的一个点，但是个人感觉可能不太行，因为这样还是没法解决被剪裁一半的手写体干扰、以及其他可能的印刷体字符。而且有一些印刷体字符也是被剪裁了的，只有一半的能被模板匹配上吗？不太肯定。</p>
 <h1 id="加载数据">加载数据</h1>
-<p>加载数据的时候，在dataset里面读取图片的时候调用一下上面流程就行，将最后处理好的图片return即可。但是需要注意，一部分图片可能识别之后里面没有character_bbox，即<code>character_bbox_list</code>这个列表是空的，就会引发异常。所以可以采用一下try/except，对于所有识别为空的图，直接在训练阶段跳过该图，或者在验证的时候把原来的图不处理直接丢给网络，或者在测试的时候直接给一个‘EMPTY’标签。</p>
+<p>加载数据的时候，在dataset里面读取图片的时候调用一下上面流程就行，将最后处理好的图片return即可。但是需要注意，一部分图片可能识别之后里面没有character_bbox，即<code>character_bbox_list</code>这个列表是空的，就会引发异常。所以可以采用一下try/except，对于所有识别为空的图，直接在训练阶段跳过该图，或者在验证的时候把原来的图不处理直接丢给网络，或者在测试的时候直接给一个‘EMPTY’标签。在实验中，出现这种状况被跳过的图片大概占1~2%，而成功被处理但是处理结果不完善（如裁剪区域有多余或遗漏）的占比大约在10%。</p>
 <p>具体的写法可以这样：<br>
 训练阶段的dataset图像处理部分：</p>
 <pre><code class="language-python">try:
-    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]), self.transform)
+    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
     img = Image.fromarray(np.uint8(img))
 except:
     return self[(index + 1) % len(self.img_path)]
