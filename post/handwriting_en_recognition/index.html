@@ -2,16 +2,16 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>手写签名识别杂记 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604074462767">
+<title>手写签名识别-数据预处理部分 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604201571791">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="手写签名识别杂记 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="手写签名识别-数据预处理部分 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧，我只写一下在数据预处理上我做的一些操作。以备不时之需。
+    <meta name="description" content="这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。
 ..." />
     <meta name="keywords" content="opencv,pytorch,python" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604074462767" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604201571791" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -95,14 +95,14 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              手写签名识别杂记
+              手写签名识别-数据预处理部分
             </h2>
             <div class="post-info">
               <span>
                 2020-10-30
               </span>
               <span>
-                9 min read
+                13 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
@@ -123,28 +123,29 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧，我只写一下在数据预处理上我做的一些操作。以备不时之需。</p>
+                <p>这个东西早就做了，并且做完了之后没有仔细优化深入考虑。今天看flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
 <h1 id="对数据的分析">对数据的分析</h1>
-<p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如<br>
-<img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"><br>
-<img src="https://divertingPan.github.io/post-images/1604054018444.jpg" alt="" loading="lazy"><br>
-这两种是这个数据集内比较典型的干扰，第一幅图的行干扰（就是说不仅有签名字的行，还有其他的字符又占了一行）和第二幅图的列干扰（就是紧挨着手写签名的前面有干扰字符），以及行列组合干扰（严格来讲第二幅图其实算是行列组合干扰）。</p>
+<p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1604054018444.jpg" alt="" loading="lazy"></figure>
+<p>这两种是这个数据集内比较典型的干扰，第一幅图的行干扰（就是说不仅有签名字的行，还有其他的字符又占了一行）和第二幅图的列干扰（就是紧挨着手写签名的前面有干扰字符），以及行列组合干扰（严格来讲第二幅图其实算是行列组合干扰）。</p>
 <p>首先就考虑对读入的图片进行预处理，尽可能消除干扰字符。</p>
 <h2 id="灰度化和二值化">灰度化和二值化</h2>
 <p>第一，这种图片没必要考虑RGB的问题，所以干脆点，进来先转灰度，也方便后面的形态学处理。更进一步地，我在后期形态学处理的时候甚至只关心非黑即白的像素点，所以干脆再做一个二值化的图出来。</p>
 <p><strong>这里需要说明一点的是，灰度图img和二值图gray应该分开两个变量存储。因为我仅仅使用二值图进行定界操作，定好界以后我还是希望能返回原本的灰度图，所以一开始读进来的灰度图要先给他存起来，后面只对他裁剪之后返回即可。</strong></p>
 <p><strong>为什么不直接返回二值图呢？这个操作返回的图片还是要传给CRNN去计算的，我想尽量减少预处理上对信息的损伤。二值化可能会导致灰度图的一部分信息丢失。</strong></p>
+<p>第二，后期操作的时候希望更关注写字的笔划部分，所以最好是让有笔划的部分是1，没有笔划的地方是0，这里就需要对原图做一个反向操作（原图有笔划的地方是黑色是0，白纸的地方是1）</p>
 <pre><code class="language-python">img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 _, gray = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
 gray = np.logical_xor(1, gray).astype('uint8')
 </code></pre>
 <h2 id="选择正确的行">选择正确的行</h2>
-<p>接下来考虑消除行干扰。我想裁掉签名行上下的干扰字符或者干扰像素。我可以直接对图片（二值化的图片）按行求和，这样有字符的行，和就会比较大，行间的空隙，求和之后值就很小。将相连区域长度最大的行取出来，基本就是手写签名对应的行了。</p>
+<p>接下来考虑消除行干扰。我想裁掉签名行上下的干扰字符或者干扰像素。我可以直接对图片（二值化的图片）按行求和，这样有字符的行，和就会比较大；每行字符行间的空隙，求和之后值就很小。将相连区域长度最大的所在行取出来，基本就是手写签名对应的行了。</p>
 <pre><code class="language-python">sum_of_row = np.sum(gray, axis=1)
 </code></pre>
 <p>例：下图左边为每行的和，右边为手写字体<br>
 <img src="https://divertingPan.github.io/post-images/1604054901608.PNG" alt="" loading="lazy"></p>
-<p>如何找到一个数组的最长相连区域？这里我写了一个笨方法，在数组里面遍历，如果大于某个阈值就将行号和flag记下来，直到取到的数又小于阈值时检查flag：如果flag大于当前的最大值就记录这几个行号，如果flag小于最大值就不管。对于遍历结束的时候要特殊处理一下，万一数组最后一个值也是大于阈值的，需要执行类似‘取到的数又小于阈值时检查flag’的操作。具体的代码实现如下：</p>
+<p>如何找到一个数组的最长相连区域？这里我写了一个笨方法，在数组里面遍历，如果大于某个阈值就将行号和flag记下来，直到取到的数又小于阈值时检查flag：如果flag大于当前的最大值就记录这几个行号，如果flag小于最大值就不管。对于遍历结束的时候要特殊处理一下，万一数组最后一个值也是大于阈值的，需要执行类似“取到的数又小于阈值时检查flag”的操作。具体的代码实现如下：</p>
 <pre><code class="language-python">index_row_valid = []
 max_index_row_valid = []
 len_row_valid = 0
@@ -167,11 +168,11 @@ for index, value in enumerate(sum_of_row):
         max_len_row_valid = len_row_valid
         max_index_row_valid = index_row_valid
 </code></pre>
-<p>对cv读进来的图片，做裁切很简单，直接取数组对应的索引即可。</p>
+<p>对cv读进来的图片，做裁切很简单，直接取数组对应的索引即可。对二维数组，这样写就相当于只按行取索引：</p>
 <pre><code class="language-python">gray = gray[max_index_row_valid]
 img = img[max_index_row_valid]
 </code></pre>
-<p>进行行裁剪的效果如下：<br>
+<p>进行按行裁剪的效果如下：<br>
 <img src="https://divertingPan.github.io/post-images/1604056454722.png" alt="" loading="lazy"></p>
 <h2 id="选择合适的列">选择合适的列</h2>
 <p>首先类似的操作，对列求和。这里多做一步，对于大多数数据，可以剪掉右边大部分的空白，这里可以逆序遍历这个数组，一般后面的都是0或者小于某个阈值的。一旦走到一个值大于了设置的阈值，那就从这里截断即可。range可以通过-1来实现逆序。</p>
@@ -186,7 +187,7 @@ for i in range(len(sum_of_column)-1, -1, -1):
 <pre><code class="language-python">kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 2))
 thresh = cv2.dilate(gray, kernel)
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
 <p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用高度排掉两个冒号部分，再可以利用长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
 <pre><code class="language-python"># get edges [with opencv 4.4 return 2 values, previous version return 3 values]
 cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -203,17 +204,19 @@ for i, cnt in enumerate(cnts):
 character_bbox_list = np.array(character_bbox_list)
 </code></pre>
 <p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，也就对应了图里的8个字母<br>
-<img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"><br>
-把定界框画出来也确实是这8个字母：<br>
+<img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"></p>
+<p>把定界框画出来也确实是这8个字母：<br>
 <img src="https://divertingPan.github.io/post-images/1604057340827.PNG" alt="" loading="lazy"></p>
-<p>之后的操作就略微绕一点弯子了。</p>
+<p>再之后的操作就要略微绕一点弯子了。</p>
 <h2 id="最终确定手写签名区域">最终确定手写签名区域</h2>
-<p>对于获得的这几个bbox，我选择取所有列表内bbox的<br>
-最上界（所有bbox的y值中，最小的值）<br>
+<p>对于上面步骤获得的这几个bbox，我选择取所有列表内bbox的</p>
+<blockquote>
+<p>最上界（所有bbox的y值中，最小的值）<br>
 最下界（[所有bbox的y值+所有h值]的最大值）<br>
 最左顶点（所有bbox的x值的最小值）<br>
-最右顶点（所有bbox中x值最大的值+该bbox的w值）<br>
-构成整个手写签名裁剪区。<br>
+最右顶点（所有bbox中x值最大的值+该bbox的w值）</p>
+</blockquote>
+<p>构成整个手写签名裁剪区。<br>
 PS. 区域的横向长度（所有bbox中x值最大的值-最左顶点+该bbox的w值）或者说（最右顶点-最左顶点）</p>
 <p>代码写的比较杂乱，这里简单捋一下：<br>
 <code>left_x_index</code>和<code>right_x_index</code>对应着最左、最右顶点的bbox索引号，<br>
@@ -245,18 +248,56 @@ for i, value in enumerate(character_bbox_list):
 
 height_character = max_height - top_y_position
 
-# right boundary is set in the above step
 img = img[top_y_position:top_y_position + height_character, left_x_position:left_x_position + length_character]
 </code></pre>
 <p>最终剪出来的手写签名区域就是这样：<br>
 <img src="https://divertingPan.github.io/post-images/1604058610449.png" alt="" loading="lazy"></p>
-<h2 id="一些解释">一些解释</h2>
-<p>第一点，为什么在对行列求和之后的数组的操作里面总是有阈值呢？主要是考虑到以下情况：<br>
-<img src="https://divertingPan.github.io/post-images/1604058947300.jpg" alt="" loading="lazy"><br>
-他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值其实不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
+<h1 id="一些解释">一些解释</h1>
+<h2 id="第一点">第一点</h2>
+<p>为什么在对行列求和之后的数组的操作里面总是有阈值呢？主要是考虑到以下情况：<br>
+<img src="https://divertingPan.github.io/post-images/1604058947300.jpg" alt="" loading="lazy"></p>
+<p>他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值给大一点也不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
 <img src="https://divertingPan.github.io/post-images/1604059122687.PNG" alt="" loading="lazy"></p>
+<p>也有一些少数例外情况，比如Emmmmm这样的字符串，E最上面那个横杠和下面连接处只依靠着E的左侧竖线链接，可能会把E最上头的横杠给裁掉。</p>
+<p>或者一些手写字体特别小，比印刷体还要小，用最大连通区域就识别不到了，这个暂时没有想到什么办法</p>
+<h2 id="第二点">第二点</h2>
+<p>之前有一个地方提到“一部分”（这样可以获得一部分（后面解释“一部分”的含义）手写体字母），这里的“一部分”如何理解？</p>
+<p>首先，用我这个方法去框定字母，主要是根据长宽比确定的，但是对于l，j，i这样的字母，显然是不适用于这个比例的。“一部分”的含义是指用这种方法可能无法框定这种类型的字母。</p>
+<p>但是还有办法稍微补救一下的，即利用上面<strong>最终确定手写签名区域</strong>一章内的上下左右界弥补。利用这个上下左右界，即使字母中间出现了这种类型的字母，也可以被框选在裁剪区域内。但是如果对于开头或结尾出现这种字母的情景就还是会被遗漏掉。</p>
+<p>关于如何更好更精准地裁剪，在flyAI里面有一个人提到了用模板匹配，但他是匹配印刷体之后定位印刷体的，然后裁剪定位到“NOM”字符的右边裁剪或者定位到“PRENOM”的下边裁剪。这个倒是我没考虑到的一个点，但是个人感觉可能不太行，因为这样还是没法解决被剪裁一半的手写体干扰、以及其他可能的印刷体字符。而且有一些印刷体字符也是被剪裁了的，只有一半的能被模板匹配上吗？不太肯定。</p>
+<h1 id="加载数据">加载数据</h1>
+<p>加载数据的时候，在dataset里面读取图片的时候调用一下上面流程就行，将最后处理好的图片return即可。但是需要注意，一部分图片可能识别之后里面没有character_bbox，即<code>character_bbox_list</code>这个列表是空的，就会引发异常。所以可以采用一下try/except，对于所有识别为空的图，直接在训练阶段跳过该图，或者在验证的时候把原来的图不处理直接丢给网络，或者在测试的时候直接给一个‘EMPTY’标签。</p>
+<p>具体的写法可以这样：<br>
+训练阶段的dataset图像处理部分：</p>
+<pre><code class="language-python">try:
+    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]), self.transform)
+    img = Image.fromarray(np.uint8(img))
+except:
+    return self[(index + 1) % len(self.img_path)]
+</code></pre>
+<p>验证阶段：</p>
+<pre><code class="language-python">try:
+    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
+    img = Image.fromarray(np.uint8(img))
+except:
+    img = cv2.imread(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = Image.fromarray(np.uint8(img))
+</code></pre>
+<p>测试阶段：</p>
+<pre><code class="language-python">try:
+    img = cut_character(image_path)
+    img = Image.fromarray(np.uint8(img))
+except:
+    return {&quot;label&quot;: 'EMPTY'}
+</code></pre>
+<p>之前有提过要慎用try/except，就是这里，按照这个写法，在try里面随便发生什么错误都会走except里面的流程，如果是因为一些bug导致的异常，那就会使每次读数据都触发except的流程了。例如如果是因为图片路径写的不对，那在测试阶段每次都直接返回一个‘EMPTY’标签，就等同于程序将所有输入都给一个‘EMPTY’的输出，而这显然是不对的，却又无法第一时间通过错误信息看到错误是出现在读取图片这里。</p>
+<p>所以要么在except处显式指定错误类型<code>except (XXXError, XXXError): ...</code>，要么就先不要套try/except，测试好没有问题在套上。</p>
+<h1 id="神经网络部分">神经网络部分</h1>
+<p>这没啥好说的，反正大家都是无脑上CRNN，最多就是改了改里面CNN的结构，没有啥很花哨的操作。</p>
 <h1 id="后记">后记</h1>
-<p>本以为这个比赛的第一名会给我露一手魔改attention的，结果并没有。flyAI的答辩链接：https://mp.weixin.qq.com/s/8RqoINhXH2Hnjr5Xe1QQOA，没太多亮点。</p>
+<p>本以为这个比赛的第一名会给我露一手魔改attention的，结果并没有。flyAI的答辩链接：https://mp.weixin.qq.com/s/8RqoINhXH2Hnjr5Xe1QQOA，个人觉得没太多亮点。</p>
+<p>倒是有一个逐步喂入数据的trick值得挖一挖。大概流程是先给少量数据训练到loss下降到稳定然后再用更多的训练到稳定再用更多的……他那个loss可能是指训练集loss？喂入数据可以理解为数据集取不同大小的子集增量，然后在越来越大的子集上训练？这里还存疑。网上好像也没有太多参考资料。</p>
 
               </div>
               <div class="toc-container">
@@ -267,9 +308,16 @@ img = img[top_y_position:top_y_position + height_character, left_x_position:left
 <li><a href="#%E9%80%89%E6%8B%A9%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%A1%8C">选择正确的行</a></li>
 <li><a href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%88%97">选择合适的列</a></li>
 <li><a href="#%E6%9C%80%E7%BB%88%E7%A1%AE%E5%AE%9A%E6%89%8B%E5%86%99%E7%AD%BE%E5%90%8D%E5%8C%BA%E5%9F%9F">最终确定手写签名区域</a></li>
-<li><a href="#%E4%B8%80%E4%BA%9B%E8%A7%A3%E9%87%8A">一些解释</a></li>
 </ul>
 </li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E8%A7%A3%E9%87%8A">一些解释</a>
+<ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%82%B9">第一点</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%82%B9">第二点</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE">加载数据</a></li>
+<li><a href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E9%83%A8%E5%88%86">神经网络部分</a></li>
 <li><a href="#%E5%90%8E%E8%AE%B0">后记</a></li>
 </ul>
 
