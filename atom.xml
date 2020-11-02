@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-11-01T06:40:50.922Z</updated>
+    <updated>2020-11-02T15:44:14.078Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,60 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[11月2日]]></title>
+        <id>https://divertingPan.github.io/post/ACRHQMvIw/</id>
+        <link href="https://divertingPan.github.io/post/ACRHQMvIw/">
+        </link>
+        <updated>2020-11-02T06:30:32.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-pytorch的dataset和dataloader长度">1. pytorch的dataset和dataloader长度</h1>
+<p><code>len(dataset)</code>返回的是在dataset类里面的<code>def __len__(self):</code>返回的长度。<br>
+<code>len(dataloader)</code>返回的是在dataset长度除以batch_size，即实际一个epoch内执行的步数。</p>
+<h1 id="2-pytorch指定不同层数以不同的lr">2. pytorch指定不同层数以不同的LR</h1>
+<blockquote>
+<p>ref:<br>
+pytorch在不同的层使用不同的学习率<br>
+https://blog.csdn.net/wangbin12122224/article/details/79949824</p>
+</blockquote>
+<p>有时候我们希望某些层的学习率与整个网络有些差别，这里我简单介绍一下在pytorch里如何设置，方法略麻烦，如果有更好的方法，请务必教我：</p>
+<p>首先我们定义一个网络：</p>
+<pre><code class="language-python">class net(nn.Module):
+    def __init__(self):
+        super(net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, 1)
+        self.conv2 = nn.Conv2d(64, 64, 1)
+        self.conv3 = nn.Conv2d(64, 64, 1)
+        self.conv4 = nn.Conv2d(64, 64, 1)
+        self.conv5 = nn.Conv2d(64, 64, 1)
+    def forward(self, x):
+        out = conv5(conv4(conv3(conv2(conv1(x)))))
+        return out
+</code></pre>
+<p>我们希望conv5学习率是其他层的100倍，我们可以：</p>
+<pre><code class="language-python">net = net()
+lr = 0.001
+
+conv5_params = list(map(id, net.conv5.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+, lr=lr, momentum=0.9)
+</code></pre>
+<p>如果多层，则：</p>
+<pre><code class="language-python">conv5_params = list(map(id, net.conv5.parameters()))
+conv4_params = list(map(id, net.conv4.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params + conv4_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+            {'params': net.conv4.parameters(), 'lr': lr * 100},
+            , lr=lr, momentum=0.9)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[手写签名识别-数据预处理部分]]></title>
         <id>https://divertingPan.github.io/post/handwriting_en_recognition/</id>
@@ -657,99 +711,6 @@ ERROR: No matching distribution found for threadpoolctl&gt;=2.0.0 (from scikit-l
 <p>引申另外一个例子（就是我踏进这个坑的第一脚）：路边的彩票站挂出条幅“恭喜本站彩民喜中特等奖”，是否可以考虑这家彩票站更不可能开出特等奖了？实际上并不会有任何改变，特等奖仍然是原来的概率。道理同抛硬币一样，只不过这个二项分布并不是0.5:0.5了，而是一个很大的数比一个很小的数。（我们只考虑中特等奖和没中特等奖两种情况，故视为二项分布）</p>
 <p>再举第三个例子：我坚持买了50年彩票，是不是越往后，中特等奖的概率就会越高。实际并不是，中特等奖的概率只取决于最后那次买彩票的中奖概率，道理仍然同例子1，再重复一下思维过程：这一次买彩票的情况只可能是10000次没中+1没中和10000次没中+1中奖，前面的没中奖已经不会改变。这时候我们假设中奖率是0.01，直到今天也没中奖概率是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.9</mn><msup><mn>9</mn><mn>10000</mn></msup><mo>×</mo><mn>0.99</mn></mrow><annotation encoding="application/x-tex">0.99^{10000}\times0.99</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord"><span class="mord">9</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord">9</span></span></span></span>，今天中奖的概率是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.9</mn><msup><mn>9</mn><mn>10000</mn></msup><mo>×</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">0.99^{10000}\times0.01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord"><span class="mord">9</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span></span></span></span>，还是没中奖的概率大，仍然只取决于最后那一次买彩票。</p>
 <p>但是又会有人可能会有这个疑问：如果我连买100年的彩票，我中一次奖的概率肯定会比只买一天彩票要高啊？这个的确是这样的，但是问题在于，这句话的前提是你还没有开始买100年的彩票，这个假设中的100年时间里某年某天中奖都是有可能的。但是一旦你已经买了99年364天的彩票却都没有中奖之后，这些没中奖的日子已经不会改变了，对于最后一天买彩票而言不会有任何影响。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[【5分钟实例】去除大量图片中重复的图片]]></title>
-        <id>https://divertingPan.github.io/post/remove_duplicate/</id>
-        <link href="https://divertingPan.github.io/post/remove_duplicate/">
-        </link>
-        <updated>2020-08-17T07:47:20.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="需求假设">需求假设</h1>
-<p>你的老板给你<code>上万张</code>候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。<br>
-<img src="https://divertingPan.github.io/post-images/1597651150468.PNG" alt="" loading="lazy"><br>
-这时候你灵光一现，想起了python有图像处理模块</p>
-<h1 id="只需5分钟的操作">只需5分钟的操作</h1>
-<p>拿起键盘打开你最爱的IDE二话不说首先import以下必定要用到的库</p>
-<pre><code class="language-python">import cv2
-import numpy as np
-import os
-</code></pre>
-<p>别急，这种任务网上肯定是有现成轮子的，直接借鉴就好。对于图像去重，主要思路有，md5比较法和感知哈希法。其中md5比较法的鲁棒性稍微低了点，有时候图片因为多次压制或其他因素导致md5变化，从而图片看起来一样，但是会被判做不同图片。</p>
-<p>感知哈希算法是比较常用的方法，在硬币分类检测时老潘也尝试过，但是并不适用于那个场景。但是今天的场景是绝对适合的。其中感知哈希算法又可以细分出平均哈希（aHash），感知哈希（pHash），差异值哈希（dHash）三种。硬币分类里使用了pHash，对于这三种的对比，在一篇CSDN博文<a href="https://blog.csdn.net/qq_32799915/article/details/81000437">感知哈希 ，平均哈希，差异值哈希</a>里面有详细的讲解和对比实验。</p>
-<p>这里老潘在网上找到的一个现成的图片去重的脚本使用的是aHash</p>
-<pre><code class="language-python">img = cv2.resize(img,(8,8))
-avg_np = np.mean(img)
-img = np.where(img&gt;avg_np,1,0)
-hash_dic[img_name] = img
-</code></pre>
-<p>读取每个图片，计算出他的aHash值，如果记录表里没有这个值，就把他和他的值存进去，如果有，证明重复，删掉这个图即可。思路很简单。</p>
-<p>当然，这里并不是直接检测有没有一模一样的aHash值，而是检测有没有汉明距离小于某个值的，以防两个一样的图片因为微小的差异被漏检。</p>
-<p>顺手再添加一个功能，有些人的照片可能损坏了或者夹杂了奇奇怪怪的不是图片的文件。我们把这种也剔除掉。</p>
-<pre><code class="language-python">try:
-    img= cv2.imread(os.path.join(path, img_name))
-    img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-except:
-    os.remove(os.path.join(path, img_name))
-    print('wrong file')
-    continue
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597651168140.PNG" alt="" loading="lazy"></figure>
-<p>复制粘贴代码1秒钟，4分59秒钟用来运行代码。将筛选好的图片给正在加班的程序员，下班回家。</p>
-<h1 id="附录1">附录1</h1>
-<p>aHash到底可靠不可靠？会不会有误检和漏检？以这个现成脚本代码为例，做几个尝试性的实验看看。</p>
-<p>实验1：普通去重，实验前后的图片集合如图所示。<br>
-<img src="https://divertingPan.github.io/post-images/1597651178686.PNG" alt="" loading="lazy"></p>
-<p>实验2：相似图片（我真的觉得这几位差不多，如有冒犯，狗妹纳赛）<br>
-<img src="https://divertingPan.github.io/post-images/1597651185463.PNG" alt="" loading="lazy"></p>
-<p>实验3：相同图片不同饱和度（反正图片读进来都是要先转成灰度的，所以改变饱和度确实不会对改变aHash值有什么作用）<br>
-<img src="https://divertingPan.github.io/post-images/1597651191249.PNG" alt="" loading="lazy"></p>
-<h1 id="附录2">附录2</h1>
-<p>完整的开箱即用代码，也可以<a href="https://github.com/divertingPan/utility_room/blob/master/remove_duplicate.py">到github里面下载</a></p>
-<pre><code class="language-python">'''
-https://www.jianshu.com/p/5a7daa2123a8
-'''
- 
-import cv2
-import numpy as np
-import os
- 
- 
-if __name__ == '__main__':
-   path = './anim'
-   
-   img_list = os.listdir(path)
-   hash_list = []
-   for ind, img_name in enumerate(img_list):
-       print('checking:', ind+1, 'from total:', len(img_list))
-       try:
-           img = cv2.imread(os.path.join(path, img_name))
-           img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-       except:
-           os.remove(os.path.join(path, img_name))
-           print('wrong file')
-           continue
- 
-       img = cv2.resize(img,(8,8))
- 
-       avg_np = np.mean(img)
-       img = np.where(img&gt;avg_np,1,0)
-       if len(hash_list)&lt;1:
-           hash_list.append(img)
-       else:
-           for i in hash_list:
-                flag = True
-                dis = np.bitwise_xor(i,img)
- 
-                if np.sum(dis) &lt; 5:
-                    flag = False
-                   os.remove(os.path.join(path, img_name))
-                    print('remove')
-                    break
-           if flag:
-                hash_list.append(img)
-
-</code></pre>
 ]]></content>
     </entry>
 </feed>

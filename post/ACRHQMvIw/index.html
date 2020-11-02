@@ -2,20 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>10月17日总结 | 老潘家的潘老师</title>
+<title>11月2日 | 老潘家的潘老师</title>
 <link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604331837379">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="10月17日总结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="11月2日 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="1. pytorch加载预训练权重
-实际上有两种思路加载预训练权重。
-先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法
-# ref: https://blog.csdn.net/xzy5..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="1. pytorch的dataset和dataloader长度
+len(dataset)返回的是在dataset类里面的def __len__(self):返回的长度。
+len(dataloader)返回的是在dataset长度除以batc..." />
+    <meta name="keywords" content="pytorch" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -97,47 +96,76 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              10月17日总结
+              11月2日
             </h2>
             <div class="post-info">
               <span>
-                2020-10-17
+                2020-11-02
               </span>
               <span>
                 2 min read
               </span>
               
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
             </div>
-            
-              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/oXF7jp9e6.jpg" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
-<p>实际上有两种思路加载预训练权重。<br>
-先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
-<pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
-pretrained_dict = torch.load('pretrainedXXXX.pth')
-model = MyNetXXXX()
-model_dict = model.state_dict()
-pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-model_dict.update(pretrained_dict)
-model.load_state_dict(model_dict)
+                <h1 id="1-pytorch的dataset和dataloader长度">1. pytorch的dataset和dataloader长度</h1>
+<p><code>len(dataset)</code>返回的是在dataset类里面的<code>def __len__(self):</code>返回的长度。<br>
+<code>len(dataloader)</code>返回的是在dataset长度除以batch_size，即实际一个epoch内执行的步数。</p>
+<h1 id="2-pytorch指定不同层数以不同的lr">2. pytorch指定不同层数以不同的LR</h1>
+<blockquote>
+<p>ref:<br>
+pytorch在不同的层使用不同的学习率<br>
+https://blog.csdn.net/wangbin12122224/article/details/79949824</p>
+</blockquote>
+<p>有时候我们希望某些层的学习率与整个网络有些差别，这里我简单介绍一下在pytorch里如何设置，方法略麻烦，如果有更好的方法，请务必教我：</p>
+<p>首先我们定义一个网络：</p>
+<pre><code class="language-python">class net(nn.Module):
+    def __init__(self):
+        super(net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, 1)
+        self.conv2 = nn.Conv2d(64, 64, 1)
+        self.conv3 = nn.Conv2d(64, 64, 1)
+        self.conv4 = nn.Conv2d(64, 64, 1)
+        self.conv5 = nn.Conv2d(64, 64, 1)
+    def forward(self, x):
+        out = conv5(conv4(conv3(conv2(conv1(x)))))
+        return out
 </code></pre>
-<p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
-<pre><code class="language-pyhton"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
-net = SameWithPretrainingNetXXXX()
-net.load_state_dict(torch.load('pretrainedXXXX.pth')
-fc_features = model.fc.in_features
-net.fc = nn.Linear(fc_features, 9)
-net = net.to(DEVICE)
+<p>我们希望conv5学习率是其他层的100倍，我们可以：</p>
+<pre><code class="language-python">net = net()
+lr = 0.001
+
+conv5_params = list(map(id, net.conv5.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+, lr=lr, momentum=0.9)
 </code></pre>
-<p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+<p>如果多层，则：</p>
+<pre><code class="language-python">conv5_params = list(map(id, net.conv5.parameters()))
+conv4_params = list(map(id, net.conv4.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params + conv4_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+            {'params': net.conv4.parameters(), 'lr': lr * 100},
+            , lr=lr, momentum=0.9)
+</code></pre>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#1-pytorch%E5%8A%A0%E8%BD%BD%E9%A2%84%E8%AE%AD%E7%BB%83%E6%9D%83%E9%87%8D">1. pytorch加载预训练权重</a></li>
+<li><a href="#1-pytorch%E7%9A%84dataset%E5%92%8Cdataloader%E9%95%BF%E5%BA%A6">1. pytorch的dataset和dataloader长度</a></li>
+<li><a href="#2-pytorch%E6%8C%87%E5%AE%9A%E4%B8%8D%E5%90%8C%E5%B1%82%E6%95%B0%E4%BB%A5%E4%B8%8D%E5%90%8C%E7%9A%84lr">2. pytorch指定不同层数以不同的LR</a></li>
 </ul>
 
               </div>
@@ -148,9 +176,9 @@ net = net.to(DEVICE)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://divertingPan.github.io/post/AhyNsrQwN/">
+            <a href="https://divertingPan.github.io/post/handwriting_en_recognition/">
               <h3 class="post-title">
-                10月14日总结（bs4爬虫为主）
+                手写签名识别-数据预处理部分
               </h3>
             </a>
           </div>
