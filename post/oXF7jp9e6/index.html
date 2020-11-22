@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606045710600">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606046178452">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606045710600" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606046178452" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -129,7 +129,7 @@ model_dict.update(pretrained_dict)
 model.load_state_dict(model_dict)
 </code></pre>
 <p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
-<pre><code class="language-pyhton"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
+<pre><code class="language-python"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
 net = SameWithPretrainingNetXXXX()
 net.load_state_dict(torch.load('pretrainedXXXX.pth')
 fc_features = model.fc.in_features
@@ -144,8 +144,8 @@ https://www.jianshu.com/p/fcafcfb3d887</p>
 </blockquote>
 <p>想要只训练网络最后的全连接层，可先查看所有的<code>net.named_parameters()</code>找到对应的参数名称，然后使用锁定梯度的方法冻结权重训练。</p>
 <pre><code class="language-python">for k,v in model.named_parameters():
-     if k not in ['fc.weight', 'fc.bias']:
-         v.requires_grad=False
+    if k not in ['fc.weight', 'fc.bias']:
+        v.requires_grad=False
 </code></pre>
 <h1 id="3-不同参数设置不同学习率">3. 不同参数设置不同学习率</h1>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606045451447.webp" alt="" loading="lazy"></figure>
