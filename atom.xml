@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-11-02T15:44:14.078Z</updated>
+    <updated>2020-11-22T11:51:20.397Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,32 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[11月17]]></title>
+        <id>https://divertingPan.github.io/post/Vu450XcwM/</id>
+        <link href="https://divertingPan.github.io/post/Vu450XcwM/">
+        </link>
+        <updated>2020-11-17T14:01:00.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-几个常用的resize尺寸问题">1. 几个常用的resize尺寸问题</h1>
+<p>PIL的Image里面，resize的写法是先宽后高</p>
+<pre><code class="language-python">image.resize((width, height))
+</code></pre>
+<p>cv2也是</p>
+<pre><code class="language-python">image = cv2.resize(image, (width, height))
+</code></pre>
+<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
+<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+</code></pre>
+<h1 id="2-win和ubuntu的oslistdir有区别">2. Win和Ubuntu的os.listdir有区别</h1>
+<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+</code></pre>
+<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+image_name = sorted(image_name, key=str)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[11月2日]]></title>
         <id>https://divertingPan.github.io/post/ACRHQMvIw/</id>
@@ -62,6 +88,29 @@ optimizer = torch.optim.SGD([
             {'params': net.conv4.parameters(), 'lr': lr * 100},
             , lr=lr, momentum=0.9)
 </code></pre>
+<h1 id="3-pytorch卷积层的groups参数">3. pytorch卷积层的groups参数</h1>
+<p>下面是官方文档对于groups的解释。简单来说就是输入和输出都会被划成groups个组，groups个卷积层并列操作。输入和输出的维度还是总的维度数。</p>
+<blockquote>
+<p>groups controls the connections between inputs and outputs. in_channels and out_channels must both be divisible by groups. For example,<br>
+At groups=1, all inputs are convolved to all outputs.<br>
+At groups=2, the operation becomes equivalent to having two conv layers side by side, each seeing half the input channels, and producing half the output channels, and both subsequently concatenated.<br>
+At groups=in_channels, each input channel is convolved with its own set of filters, of size ⌊out_channels/in_channels⌋ .</p>
+</blockquote>
+<h1 id="4-一个常用的模块检测并建立工作路径">4. 一个常用的模块：检测并建立工作路径</h1>
+<pre><code class="language-python">if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+</code></pre>
+<h1 id="5-backward报错runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">5. backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</h1>
+<blockquote>
+<p>ref: https://blog.csdn.net/SY_qqq/article/details/107384161</p>
+</blockquote>
+<h1 id="6-pytorch-hook">6. pytorch hook</h1>
+<blockquote>
+<p>ref:<br>
+https://zhuanlan.zhihu.com/p/75054200<br>
+https://blog.csdn.net/winycg/article/details/100695373<br>
+https://oldpan.me/archives/pytorch-autograd-hook</p>
+</blockquote>
 ]]></content>
     </entry>
     <entry>
@@ -317,6 +366,10 @@ https://www.jianshu.com/p/404e4ac156a6</p>
 print(string)
 &gt;&gt;&gt; China
 </code></pre>
+<h1 id="5-注意安全">5. 注意安全</h1>
+<p>在做的时候，有可能涉及到需要登录的操作。这里尽量不要用自己常用的账号（这个应该是常识），但是同时还要注意也尽量避免用自己常用的IP。</p>
+<p>因为有时候操作不当会导致IP被封，与此同时在这个IP上活跃的其他账号也容易被一并误伤。</p>
+<p>当然，能被服务器ban掉，那证明操作有点过火，所以一定要控制访问间隔，不要太密集的连续发送请求。不着急的话5s一次，再快就有风险了。</p>
 ]]></content>
     </entry>
     <entry>
@@ -365,7 +418,7 @@ ServerPasswordSet
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[10月17日总结]]></title>
+        <title type="html"><![CDATA[pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型]]></title>
         <id>https://divertingPan.github.io/post/oXF7jp9e6/</id>
         <link href="https://divertingPan.github.io/post/oXF7jp9e6/">
         </link>
@@ -390,6 +443,20 @@ net.fc = nn.Linear(fc_features, 9)
 net = net.to(DEVICE)
 </code></pre>
 <p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+<h1 id="2-pytorch冻结部分层的权重">2. pytorch冻结部分层的权重</h1>
+<blockquote>
+<p>ref:<br>
+https://www.jianshu.com/p/fcafcfb3d887</p>
+</blockquote>
+<p>想要只训练网络最后的全连接层，可先查看所有的<code>net.named_parameters()</code>找到对应的参数名称，然后使用锁定梯度的方法冻结权重训练。</p>
+<pre><code class="language-python">for k,v in model.named_parameters():
+     if k not in ['fc.weight', 'fc.bias']:
+         v.requires_grad=False
+</code></pre>
+<h1 id="3-不同参数设置不同学习率">3. 不同参数设置不同学习率</h1>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606045451447.webp" alt="" loading="lazy"></figure>
+<h1 id="4-一个网络的输出是另一个的输入只训练后半个网络">4. 一个网络的输出是另一个的输入，只训练后半个网络</h1>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606045564441.webp" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
@@ -699,18 +766,6 @@ ERROR: No matching distribution found for threadpoolctl&gt;=2.0.0 (from scikit-l
 <pre><code>easy_install pip
 </code></pre>
 <p>解决上面的问题</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[抛掷100次硬币都是正面，下一次抛掷更可能是反面？]]></title>
-        <id>https://divertingPan.github.io/post/qLhtf_FV6/</id>
-        <link href="https://divertingPan.github.io/post/qLhtf_FV6/">
-        </link>
-        <updated>2020-08-17T09:47:17.000Z</updated>
-        <content type="html"><![CDATA[<p>我曾经也陷入过这个硬币正反面的问题的坑里过，但是昨天自己突然想通了。以抛硬币为例，前100次都是正面，看似下一次抛硬币应该更可能出反面了，因为全正的概率很低，而（1-全正）的概率很高。我的思维问题恰巧出在这个地方。如果按照（1-全正）来看待下一次抛硬币，那么其实就是认为下一次抛硬币之后，101次硬币结果可能会有各种非全正的情况出现（例如11110111，11101011等等），但是由于前100次硬币结果已经确定，那100次正面已经不会改变，那么下一次抛掷即使出现反面也是100正1反这么唯一一种可能（只能是11111110）。这时候就可以考虑100正1反，和100正1正两种情况的概率就只取决于最后那一次的抛掷结果。（每次抛硬币都是互不影响的独立实验，当然如果你要问“抛硬币实验真的是独立的吗？”这个我不知道如何回答）</p>
-<p>引申另外一个例子（就是我踏进这个坑的第一脚）：路边的彩票站挂出条幅“恭喜本站彩民喜中特等奖”，是否可以考虑这家彩票站更不可能开出特等奖了？实际上并不会有任何改变，特等奖仍然是原来的概率。道理同抛硬币一样，只不过这个二项分布并不是0.5:0.5了，而是一个很大的数比一个很小的数。（我们只考虑中特等奖和没中特等奖两种情况，故视为二项分布）</p>
-<p>再举第三个例子：我坚持买了50年彩票，是不是越往后，中特等奖的概率就会越高。实际并不是，中特等奖的概率只取决于最后那次买彩票的中奖概率，道理仍然同例子1，再重复一下思维过程：这一次买彩票的情况只可能是10000次没中+1没中和10000次没中+1中奖，前面的没中奖已经不会改变。这时候我们假设中奖率是0.01，直到今天也没中奖概率是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.9</mn><msup><mn>9</mn><mn>10000</mn></msup><mo>×</mo><mn>0.99</mn></mrow><annotation encoding="application/x-tex">0.99^{10000}\times0.99</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord"><span class="mord">9</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord">9</span></span></span></span>，今天中奖的概率是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.9</mn><msup><mn>9</mn><mn>10000</mn></msup><mo>×</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">0.99^{10000}\times0.01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord"><span class="mord">9</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span></span></span></span>，还是没中奖的概率大，仍然只取决于最后那一次买彩票。</p>
-<p>但是又会有人可能会有这个疑问：如果我连买100年的彩票，我中一次奖的概率肯定会比只买一天彩票要高啊？这个的确是这样的，但是问题在于，这句话的前提是你还没有开始买100年的彩票，这个假设中的100年时间里某年某天中奖都是有可能的。但是一旦你已经买了99年364天的彩票却都没有中奖之后，这些没中奖的日子已经不会改变了，对于最后一天买彩票而言不会有任何影响。</p>
 ]]></content>
     </entry>
 </feed>

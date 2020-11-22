@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>11月2日 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1604331837379">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606045710600">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="11月2日 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@ len(dataloader)返回的是在dataset长度除以batc..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1604331837379" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606045710600" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -103,7 +103,7 @@ len(dataloader)返回的是在dataset长度除以batc..." />
                 2020-11-02
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
@@ -160,12 +160,39 @@ optimizer = torch.optim.SGD([
             {'params': net.conv4.parameters(), 'lr': lr * 100},
             , lr=lr, momentum=0.9)
 </code></pre>
+<h1 id="3-pytorch卷积层的groups参数">3. pytorch卷积层的groups参数</h1>
+<p>下面是官方文档对于groups的解释。简单来说就是输入和输出都会被划成groups个组，groups个卷积层并列操作。输入和输出的维度还是总的维度数。</p>
+<blockquote>
+<p>groups controls the connections between inputs and outputs. in_channels and out_channels must both be divisible by groups. For example,<br>
+At groups=1, all inputs are convolved to all outputs.<br>
+At groups=2, the operation becomes equivalent to having two conv layers side by side, each seeing half the input channels, and producing half the output channels, and both subsequently concatenated.<br>
+At groups=in_channels, each input channel is convolved with its own set of filters, of size ⌊out_channels/in_channels⌋ .</p>
+</blockquote>
+<h1 id="4-一个常用的模块检测并建立工作路径">4. 一个常用的模块：检测并建立工作路径</h1>
+<pre><code class="language-python">if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+</code></pre>
+<h1 id="5-backward报错runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">5. backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</h1>
+<blockquote>
+<p>ref: https://blog.csdn.net/SY_qqq/article/details/107384161</p>
+</blockquote>
+<h1 id="6-pytorch-hook">6. pytorch hook</h1>
+<blockquote>
+<p>ref:<br>
+https://zhuanlan.zhihu.com/p/75054200<br>
+https://blog.csdn.net/winycg/article/details/100695373<br>
+https://oldpan.me/archives/pytorch-autograd-hook</p>
+</blockquote>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li><a href="#1-pytorch%E7%9A%84dataset%E5%92%8Cdataloader%E9%95%BF%E5%BA%A6">1. pytorch的dataset和dataloader长度</a></li>
 <li><a href="#2-pytorch%E6%8C%87%E5%AE%9A%E4%B8%8D%E5%90%8C%E5%B1%82%E6%95%B0%E4%BB%A5%E4%B8%8D%E5%90%8C%E7%9A%84lr">2. pytorch指定不同层数以不同的LR</a></li>
+<li><a href="#3-pytorch%E5%8D%B7%E7%A7%AF%E5%B1%82%E7%9A%84groups%E5%8F%82%E6%95%B0">3. pytorch卷积层的groups参数</a></li>
+<li><a href="#4-%E4%B8%80%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9D%97%E6%A3%80%E6%B5%8B%E5%B9%B6%E5%BB%BA%E7%AB%8B%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84">4. 一个常用的模块：检测并建立工作路径</a></li>
+<li><a href="#5-backward%E6%8A%A5%E9%94%99runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">5. backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</a></li>
+<li><a href="#6-pytorch-hook">6. pytorch hook</a></li>
 </ul>
 
               </div>

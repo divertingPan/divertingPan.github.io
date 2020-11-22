@@ -2,20 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>绕过需要认证的网络（校园网）直接联网的方法 | 老潘家的潘老师</title>
+<title>11月17 | 老潘家的潘老师</title>
 <link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606045710600">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="绕过需要认证的网络（校园网）直接联网的方法 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="11月17 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="目前（2020.10.18）测试可用的办法是这个链接里面的方法：http://note.cfyqy.com/posts/390158a6.html
-为了防和谐，以及蹚坑经历记录，我将他精简一下
-工作环境：Ubuntu18.04+Win10
-..." />
-    <meta name="keywords" content="杂谈" />
+    <meta name="description" content="1. 几个常用的resize尺寸问题
+PIL的Image里面，resize的写法是先宽后高
+image.resize((width, height))
+
+cv2也是
+image = cv2.resize(image, (width, hei..." />
+    <meta name="keywords" content="python" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -97,70 +99,48 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              绕过需要认证的网络（校园网）直接联网的方法
+              11月17
             </h2>
             <div class="post-info">
               <span>
-                2020-10-18
+                2020-11-17
               </span>
               <span>
-                3 min read
+                1 min read
               </span>
               
-                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
-                  # 杂谈
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
                 </a>
               
             </div>
             
-              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/lCfwQ3hC0.jpg" alt="">
-            
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>目前（2020.10.18）测试可用的办法是这个链接里面的方法：http://note.cfyqy.com/posts/390158a6.html<br>
-为了防和谐，以及蹚坑经历记录，我将他精简一下<br>
-工作环境：Ubuntu18.04+Win10<br>
-该工程需要前期准备：一个服务器（最好大带宽），三个软件（Linux和Win下的SoftEther-vpnserver和Win下的softether-vpnclient）<br>
-软件下载地址：https://www.softether-download.com/cn.aspx?product=softether<br>
-或者GitHub个人备用链接（但是不能保证是最新版的，不过这俩版本自测可用）https://github.com/divertingPan/SEVPN</p>
-<p>以下操作尽量按照文中的先后顺序，否则可能出现各种玄学bug</p>
-<h1 id="服务器安装server端">服务器安装server端</h1>
-<p>先用xftp把Ubuntu的server端传进服务器，之后在xshell里的所有操作指令如下，按顺序来</p>
-<pre><code>tar -zxvf XXXX.tar.gz
-cd vpnserver
-make
-然后3次全输入1
-./vpnserver start
-./vpncmd
-依次1，回车，回车
-ServerPasswordSet
-设置VPN服务器密码
+                <h1 id="1-几个常用的resize尺寸问题">1. 几个常用的resize尺寸问题</h1>
+<p>PIL的Image里面，resize的写法是先宽后高</p>
+<pre><code class="language-python">image.resize((width, height))
 </code></pre>
-<p>关机以后需要再开启VPN服务就输入<code>./vpnserver start</code>即可</p>
-<h1 id="随便一台win电脑对linux服务器进行配置管理">随便一台Win电脑，对Linux服务器进行配置管理</h1>
-<p>安装win版本的softether server，选择红框里的，其他都一路默认安装下去<br>
-<img src="https://divertingPan.github.io/post-images/1603010961185.png" alt="" loading="lazy"></p>
-<p>运行该软件后，新设置一个连接，主机名为Ubuntu那台服务器的公网IP，端口默认，密码是刚刚设置的“VPN服务器密码”<br>
-<img src="https://divertingPan.github.io/post-images/1603011067411.png" alt="" loading="lazy"></p>
-<p>之后点击“管理虚拟HUB”，再找到“管理用户”，新建一个用户，填写用户名和密码，这个作为以后用client登vpn的用户（随便设一个简单的就行）<br>
-<img src="https://divertingPan.github.io/post-images/1603011216824.png" alt="" loading="lazy"></p>
-<p>在虚拟NAT和DHCP服务器中启动secureNAT，启动就行，不用查看配置了反正也不去改<br>
-<img src="https://divertingPan.github.io/post-images/1603011326200.png" alt="" loading="lazy"></p>
-<p><strong>勾选VPN over ICMP/DNS的配置</strong>。到加密与网络中，点击VPN over ICMP/DNS，勾上那两个功能，校园防断网的实现就靠这个了。（前面如果不老老实实按步骤做，瞎搞的话有可能会导致53端口无法打开）<br>
-<img src="https://divertingPan.github.io/post-images/1603011399522.png" alt="" loading="lazy"></p>
-<h1 id="免费上网">免费上网</h1>
-<p>给需要免费上网的电脑安装softether client，选择红框的这个。其他默认<br>
-<img src="https://divertingPan.github.io/post-images/1603011496405.png" alt="" loading="lazy"></p>
-<p>新建一个vpn连接，如下图填写相应的配置，主机名是Ubuntu服务器的公网IP，虚拟HUB名会自动出来，用户名和密码就是“登vpn的用户（随便设一个简单的就行）”的那个<br>
-<img src="https://divertingPan.github.io/post-images/1603011544986.png" alt="" loading="lazy"></p>
-<p>之后在菜单里双击或者右键可以打开链接或者关闭链接。</p>
+<p>cv2也是</p>
+<pre><code class="language-python">image = cv2.resize(image, (width, height))
+</code></pre>
+<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
+<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+</code></pre>
+<h1 id="2-win和ubuntu的oslistdir有区别">2. Win和Ubuntu的os.listdir有区别</h1>
+<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+</code></pre>
+<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+image_name = sorted(image_name, key=str)
+</code></pre>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85server%E7%AB%AF">服务器安装server端</a></li>
-<li><a href="#%E9%9A%8F%E4%BE%BF%E4%B8%80%E5%8F%B0win%E7%94%B5%E8%84%91%E5%AF%B9linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86">随便一台Win电脑，对Linux服务器进行配置管理</a></li>
-<li><a href="#%E5%85%8D%E8%B4%B9%E4%B8%8A%E7%BD%91">免费上网</a></li>
+<li><a href="#1-%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84resize%E5%B0%BA%E5%AF%B8%E9%97%AE%E9%A2%98">1. 几个常用的resize尺寸问题</a></li>
+<li><a href="#2-win%E5%92%8Cubuntu%E7%9A%84oslistdir%E6%9C%89%E5%8C%BA%E5%88%AB">2. Win和Ubuntu的os.listdir有区别</a></li>
 </ul>
 
               </div>
@@ -171,9 +151,9 @@ ServerPasswordSet
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://divertingPan.github.io/post/oXF7jp9e6/">
+            <a href="https://divertingPan.github.io/post/ACRHQMvIw/">
               <h3 class="post-title">
-                pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型
+                11月2日
               </h3>
             </a>
           </div>
