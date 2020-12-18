@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>10月14日总结（bs4爬虫为主） | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606218981436">
+<title>10月14日总结（bs4爬虫，HTML数据处理为主） | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608271495026">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="10月14日总结（bs4爬虫为主） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="10月14日总结（bs4爬虫，HTML数据处理为主） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -25,7 +25,7 @@ https://www.jianshu.com/p/01c5..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606218981436" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608271495026" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -98,7 +98,7 @@ https://www.jianshu.com/p/01c5..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              10月14日总结（bs4爬虫为主）
+              10月14日总结（bs4爬虫，HTML数据处理为主）
             </h2>
             <div class="post-info">
               <span>
@@ -158,13 +158,18 @@ len(df)
 # 获取第0行，属性为Code的值
 df.loc[0]['Code']
 </code></pre>
-<h1 id="4-检测路径存在与否并且建立路径">4. 检测路径存在与否并且建立路径</h1>
+<h1 id="4-每行索引重置">4. 每行索引重置</h1>
+<p>有时候需要对dataframe做一些操作，使得行顺序变化，这会导致索引也变化。有时候就会导致一些奇怪的bug。这时候希望对操作完的dataframe重新排索引，可以简单的使用</p>
+<pre><code class="language-python">df = df.reset_index(drop=True)
+</code></pre>
+<p>来操作。drop的含义是，丢掉原来的错误的索引列。</p>
+<h1 id="5-检测路径存在与否并且建立路径">5. 检测路径存在与否并且建立路径</h1>
 <pre><code class="language-python">if not os.path.exists(destination_path):
     os.makedirs(destination_path)
 </code></pre>
-<h1 id="5-判断list为空">5. 判断list为空</h1>
+<h1 id="6-判断list为空">6. 判断list为空</h1>
 <p>直接利用bool判断，list为空返回False，不为空返回True</p>
-<h1 id="6-python多线程运行">6. python多线程运行</h1>
+<h1 id="7-python多线程运行">7. python多线程运行</h1>
 <p>python运行for循环比较慢，但是for循环必须每次循环是相互独立的时候用多线程才行。我需要for循环从一个列表里逐次获取链接并下载链接的内容，每次是相互独立的，所以可以使用多线程来优化速度。<br>
 我需要爬取postcrossing的所有图片。首先，我需要遍历一个国家列表，对于每个国家，我要遍历这个国家的所有已发送postcard列表，下载图片链接。这里存在一个问题：每个国家的postcard列表是不一样长的。对于多线程优化，我认为较好的方法是针对每个国家下的postcard列表做优化，而非对整个国家列表做多线程优化。<br>
 具体而言，首先我利用for循环来遍历这个国家列表，其中df为所有国家的列表，code是国家代码，Postcards  (sent)是已发送的明信片数量。所有存在的图片的id一定不大于已发送明信片数量，这个作为后面postcard列表的长度。</p>
@@ -212,9 +217,10 @@ for i in range(1, worker_count + 1):
 <li><a href="#1-html%E9%A1%B5%E9%9D%A2table%E5%AD%98%E5%82%A8%E6%88%90%E6%9C%AC%E5%9C%B0csv">1. HTML页面table存储成本地csv</a></li>
 <li><a href="#2-pandas%E6%8A%8A%E8%A1%A8%E6%A0%BC%E4%B8%AD%E7%9A%84na%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E6%88%90%E4%BA%86nan">2. pandas把表格中的NA字符串变成了nan</a></li>
 <li><a href="#3-df%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%8F%96">3. df数据的读取</a></li>
-<li><a href="#4-%E6%A3%80%E6%B5%8B%E8%B7%AF%E5%BE%84%E5%AD%98%E5%9C%A8%E4%B8%8E%E5%90%A6%E5%B9%B6%E4%B8%94%E5%BB%BA%E7%AB%8B%E8%B7%AF%E5%BE%84">4. 检测路径存在与否并且建立路径</a></li>
-<li><a href="#5-%E5%88%A4%E6%96%ADlist%E4%B8%BA%E7%A9%BA">5. 判断list为空</a></li>
-<li><a href="#6-python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C">6. python多线程运行</a></li>
+<li><a href="#4-%E6%AF%8F%E8%A1%8C%E7%B4%A2%E5%BC%95%E9%87%8D%E7%BD%AE">4. 每行索引重置</a></li>
+<li><a href="#5-%E6%A3%80%E6%B5%8B%E8%B7%AF%E5%BE%84%E5%AD%98%E5%9C%A8%E4%B8%8E%E5%90%A6%E5%B9%B6%E4%B8%94%E5%BB%BA%E7%AB%8B%E8%B7%AF%E5%BE%84">5. 检测路径存在与否并且建立路径</a></li>
+<li><a href="#6-%E5%88%A4%E6%96%ADlist%E4%B8%BA%E7%A9%BA">6. 判断list为空</a></li>
+<li><a href="#7-python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C">7. python多线程运行</a></li>
 </ul>
 
               </div>

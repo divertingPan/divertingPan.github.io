@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>11月2日 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606218981436">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608271495026">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="11月2日 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -14,7 +14,7 @@
     <meta name="description" content="1. pytorch的dataset和dataloader长度
 len(dataset)返回的是在dataset类里面的def __len__(self):返回的长度。
 len(dataloader)返回的是在dataset长度除以batc..." />
-    <meta name="keywords" content="pytorch" />
+    <meta name="keywords" content="Linux,Ubuntu,opencv,pytorch" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -23,7 +23,7 @@ len(dataloader)返回的是在dataset长度除以batc..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606218981436" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608271495026" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -103,14 +103,28 @@ len(dataloader)返回的是在dataset长度除以batc..." />
                 2020-11-02
               </span>
               <span>
-                3 min read
+                5 min read
               </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/1tPSLd7pII/" class="post-tag">
+                  # Ubuntu
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
                   # pytorch
                 </a>
               
             </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/ACRHQMvIw.jfif" alt="">
             
             <div class="post-content-wrapper">
               <div class="post-content">
@@ -183,6 +197,37 @@ https://zhuanlan.zhihu.com/p/75054200<br>
 https://blog.csdn.net/winycg/article/details/100695373<br>
 https://oldpan.me/archives/pytorch-autograd-hook</p>
 </blockquote>
+<h1 id="7-多gpu并行">7. 多GPU并行</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<h1 id="8-几个常用的resize尺寸问题">8. 几个常用的resize尺寸问题</h1>
+<p>PIL的Image里面，resize的写法是先宽后高</p>
+<pre><code class="language-python">image.resize((width, height))
+</code></pre>
+<p>cv2也是</p>
+<pre><code class="language-python">image = cv2.resize(image, (width, height))
+</code></pre>
+<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
+<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+</code></pre>
+<h1 id="9-win和ubuntu的oslistdir有区别">9. Win和Ubuntu的os.listdir有区别</h1>
+<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+</code></pre>
+<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+image_name = sorted(image_name, key=str)
+</code></pre>
+<p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
+<pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -193,6 +238,9 @@ https://oldpan.me/archives/pytorch-autograd-hook</p>
 <li><a href="#4-%E4%B8%80%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9D%97%E6%A3%80%E6%B5%8B%E5%B9%B6%E5%BB%BA%E7%AB%8B%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84">4. 一个常用的模块：检测并建立工作路径</a></li>
 <li><a href="#5-backward%E6%8A%A5%E9%94%99runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">5. backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</a></li>
 <li><a href="#6-pytorch-hook">6. pytorch hook</a></li>
+<li><a href="#7-%E5%A4%9Agpu%E5%B9%B6%E8%A1%8C">7. 多GPU并行</a></li>
+<li><a href="#8-%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84resize%E5%B0%BA%E5%AF%B8%E9%97%AE%E9%A2%98">8. 几个常用的resize尺寸问题</a></li>
+<li><a href="#9-win%E5%92%8Cubuntu%E7%9A%84oslistdir%E6%9C%89%E5%8C%BA%E5%88%AB">9. Win和Ubuntu的os.listdir有区别</a></li>
 </ul>
 
               </div>

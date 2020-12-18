@@ -1,0 +1,262 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608271495026">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前言
+之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据，分析结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的代码又良莠不齐风格各异。..." />
+    <meta name="keywords" content="pytorch,计算机视觉,自动化,python,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608271495026" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    大型摸鱼现场
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              【从头实战】基于pytorch的明信片检测任务
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-12-17
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Ng8pxYRJg/" class="post-tag">
+                  # 计算机视觉
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="前言">前言</h1>
+<p>之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据，分析结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的代码又良莠不齐风格各异。如果能有一个比较成熟的流程化代码，这时有一个新任务，我们可以直接拿祖传代码改里面的dataloader，或者改net.py，而训练预测结果分析等等流程都可以直接用，或者很少的改动即可用。既然都说这么多了，那就自己搞一个吧，既方便自己也方便别人。</p>
+<h1 id="摘要">摘要</h1>
+<p>本次所用代码其实大部分也都是以前自己攒的乱七八糟的小模块堆起来的，只是一直没有一个系统的优化整理。借着这次机会，本文将从一个图像识别的任务入手，从<strong>数据的收集、清洗、预处理、读取、神经网络识别、结果分析、可视化分析、自动超参数搜索</strong>这几个方面一步一步介绍，最终完成一套整体的项目流程。由于这个工程量并不是一天能搞完的，所以采用日记体的方式记录。也可以记一下自己实操一个完整实际的项目到底是怎样的速度。</p>
+<h1 id="数据收集">数据收集</h1>
+<p>炼丹最重要的事情是什么？是要有丹啊！</p>
+<p>首先要有原料，拿空气是炼不出来什么东西的。通常而言一个新算法搞出来，都是要在大家公认的标准数据集上做测试的，但是在实战中，总是要面对一些实际问题，这些问题的数据可能需要自己想办法获得，而炼丹所需要的数据量又挺大，所以收集数据（尤其是带标注的数据）就是一个大工程。</p>
+<p>好在有一种技术叫爬虫，通过这种方法可以获得很多高质量的数据，前提是需要找到一个有你感兴趣数据的网站，并且这个网站的反爬机制又不是那么强，以及需要会爬虫。</p>
+<p>这次项目用到的图片来自一个明信片网站，鉴于可能的版权或其他纠纷风险，这里不再对数据收集的详细过程做介绍。<strong>但是这个内容我写过</strong>，如果有实在非常感兴趣的同学，我相信他有能力找到我写的内容。</p>
+<p>这里做一些通用的额外补充说明：爬虫最好挂在一个云服务器上，这样不用担心断电断网的风险（比起放在自己家电脑上），更重要的是，即使服务器IP被网站封了，也不影响你自己在家的正常使用（爬虫的另一个值得注意的点在于封号或者封IP的风险），而且如果需要模拟登录，请使用一个小号，不要傻乎乎拿自己的账号做。</p>
+<h1 id="数据清洗">数据清洗</h1>
+<p>（去除重复图片）</p>
+<h1 id="数据预处理">数据预处理</h1>
+<p>（transforms.conpose([...])</p>
+<h1 id="数据读取">数据读取</h1>
+<p>（dataloader的杂谈，num_worker在win平台上不好用？folder_loader能不能自动划分训练验证测试集？）</p>
+<h1 id="神经网络识别">神经网络识别</h1>
+<p>（迁移学习，SENet+预训练模型。数据不均衡怎么办？）</p>
+<h1 id="结果分析">结果分析</h1>
+<p>需要把分类矩阵画出来，看是否集中在对角线。</p>
+<h1 id="可视化分析">可视化分析</h1>
+<p>（浅析Grad CAM以及guided backprop）</p>
+<h1 id="结论">结论</h1>
+<h1 id="附录">附录</h1>
+<p>消融实验（梅开二度，介绍optuna，使用不同层数的resnet和学习率从头训练，自动搜索最优超参数组合）<br>
+更多grad cam图和guided backprop图（尽量每个国家都涵盖）<br>
+自动生成requierments.txt的方法</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E6%91%98%E8%A6%81">摘要</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86">数据收集</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97">数据清洗</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86">数据预处理</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96">数据读取</a></li>
+<li><a href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AF%86%E5%88%AB">神经网络识别</a></li>
+<li><a href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90">结果分析</a></li>
+<li><a href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%88%86%E6%9E%90">可视化分析</a></li>
+<li><a href="#%E7%BB%93%E8%AE%BA">结论</a></li>
+<li><a href="#%E9%99%84%E5%BD%95">附录</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1606218981436">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608271495026">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -12,9 +12,10 @@
 
 
     <meta name="description" content="1. pytorch加载预训练权重
+1.1 加载一部分权重
 实际上有两种思路加载预训练权重。
 先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法
-# ref: https://blog.csdn.net/xzy5..." />
+# ref: https://blog.c..." />
     <meta name="keywords" content="pytorch" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1606218981436" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608271495026" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -104,7 +105,7 @@
                 2020-10-17
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
@@ -118,6 +119,7 @@
             <div class="post-content-wrapper">
               <div class="post-content">
                 <h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
+<h2 id="11-加载一部分权重">1.1 加载一部分权重</h2>
 <p>实际上有两种思路加载预训练权重。<br>
 先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
 <pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
@@ -128,6 +130,7 @@ pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
 model_dict.update(pretrained_dict)
 model.load_state_dict(model_dict)
 </code></pre>
+<h2 id="12-只改最后一层">1.2 只改最后一层</h2>
 <p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
 <pre><code class="language-python"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
 net = SameWithPretrainingNetXXXX()
@@ -137,6 +140,27 @@ net.fc = nn.Linear(fc_features, 9)
 net = net.to(DEVICE)
 </code></pre>
 <p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+<h2 id="13-模型涉及到nndataparallel的话">1.3 模型涉及到nn.DataParallel的话</h2>
+<p>还有一个坑是，如果在多GPU上训练时，保存模型权重要使用<code>torch.save(model.module.state_dict(), model_out_path)</code>的方法，否则会报一种错误：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>如果想要抢救一下的话，可以看到错误信息提示key中多了‘.module’，那么，只要把‘.module’移除即可：</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
 <h1 id="2-pytorch冻结部分层的权重">2. pytorch冻结部分层的权重</h1>
 <blockquote>
 <p>ref:<br>
@@ -155,7 +179,13 @@ https://www.jianshu.com/p/fcafcfb3d887</p>
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
-<li><a href="#1-pytorch%E5%8A%A0%E8%BD%BD%E9%A2%84%E8%AE%AD%E7%BB%83%E6%9D%83%E9%87%8D">1. pytorch加载预训练权重</a></li>
+<li><a href="#1-pytorch%E5%8A%A0%E8%BD%BD%E9%A2%84%E8%AE%AD%E7%BB%83%E6%9D%83%E9%87%8D">1. pytorch加载预训练权重</a>
+<ul>
+<li><a href="#11-%E5%8A%A0%E8%BD%BD%E4%B8%80%E9%83%A8%E5%88%86%E6%9D%83%E9%87%8D">1.1 加载一部分权重</a></li>
+<li><a href="#12-%E5%8F%AA%E6%94%B9%E6%9C%80%E5%90%8E%E4%B8%80%E5%B1%82">1.2 只改最后一层</a></li>
+<li><a href="#13-%E6%A8%A1%E5%9E%8B%E6%B6%89%E5%8F%8A%E5%88%B0nndataparallel%E7%9A%84%E8%AF%9D">1.3 模型涉及到nn.DataParallel的话</a></li>
+</ul>
+</li>
 <li><a href="#2-pytorch%E5%86%BB%E7%BB%93%E9%83%A8%E5%88%86%E5%B1%82%E7%9A%84%E6%9D%83%E9%87%8D">2. pytorch冻结部分层的权重</a></li>
 <li><a href="#3-%E4%B8%8D%E5%90%8C%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE%E4%B8%8D%E5%90%8C%E5%AD%A6%E4%B9%A0%E7%8E%87">3. 不同参数设置不同学习率</a></li>
 <li><a href="#4-%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E7%9A%84%E8%BE%93%E5%87%BA%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%AA%E8%AE%AD%E7%BB%83%E5%90%8E%E5%8D%8A%E4%B8%AA%E7%BD%91%E7%BB%9C">4. 一个网络的输出是另一个的输入，只训练后半个网络</a></li>
@@ -171,7 +201,7 @@ https://www.jianshu.com/p/fcafcfb3d887</p>
             <div class="next">下一篇</div>
             <a href="https://divertingPan.github.io/post/AhyNsrQwN/">
               <h3 class="post-title">
-                10月14日总结（bs4爬虫为主）
+                10月14日总结（bs4爬虫，HTML数据处理为主）
               </h3>
             </a>
           </div>

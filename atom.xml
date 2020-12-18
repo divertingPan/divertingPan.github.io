@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-11-24T11:57:29.871Z</updated>
+    <updated>2020-12-18T06:05:42.100Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -11,30 +11,210 @@
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 老潘家的潘老师</rights>
     <entry>
-        <title type="html"><![CDATA[11月17]]></title>
+        <title type="html"><![CDATA[pytorch的奇怪报错坑]]></title>
+        <id>https://divertingPan.github.io/post/wh-_qBYkG/</id>
+        <link href="https://divertingPan.github.io/post/wh-_qBYkG/">
+        </link>
+        <updated>2020-12-09T07:59:07.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="runtimeerror-received-0-items-of-ancdata">RuntimeError: received 0 items of ancdata</h1>
+<p>https://github.com/pytorch/pytorch/issues/973<br>
+If you are having this problem, try running <code>torch.multiprocessing.set_sharing_strategy('file_system')</code> right after your import of torch<br>
+自己试的时候发现只要放在代码的开头部分就行</p>
+<h1 id="多gpu并行情况下missing-keys-in-state_dict-conv_1weight-bn1weight-bn1bias">多GPU并行情况下：Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;,</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<hr>
+<p>之前如果存权重的时候没在意这一点，就会报错：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>解决方法是</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
+<h1 id="进程退出了但是显存没释放">进程退出了但是显存没释放</h1>
+<p>ref: https://blog.csdn.net/heiheiya/article/details/81454212<br>
+显存被占满了，但是并没有进程显示占用。</p>
+<p>使用命令</p>
+<pre><code>fuser -v /dev/nvidia*
+</code></pre>
+<p>之后<code>kill -9 xxxxx</code>把/dev/nvidia0等几个进程kill掉就可以了</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pytorch训练加速方案整理]]></title>
+        <id>https://divertingPan.github.io/post/pY2wg6lTe/</id>
+        <link href="https://divertingPan.github.io/post/pY2wg6lTe/">
+        </link>
+        <updated>2020-12-05T12:03:26.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="1-把数据放内存里降低-io-延迟">1. 把数据放内存里，降低 io 延迟。</h1>
+<p>使用：</p>
+<pre><code>sudo mount tmpfs /path/to/your/data -t tmpfs -o size=30G
+</code></pre>
+<p>然后把数据放挂载的目录下，即可。</p>
+<p>使用时发现应该用一个空目录先挂载内存分区，再把数据拷贝进去。如果直接把数据文件夹挂上去，底下的数据就不可见了。</p>
+<h1 id="2-多gpu并行">2. 多GPU并行</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<hr>
+<p>之前如果存权重的时候没在意这一点，就会报错：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>解决方法是</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
+<h1 id="3-使用numba">3. 使用numba</h1>
+<p>对于嵌套for循环，尽量将涉及到的变量都转换为numpy的数组（只接受numpy，不能有tensor），将循环放入一个函数里，然后使用numba下面的jit装饰器。例如</p>
+<pre><code class="language-python">from numba import jit
+
+@jit(nopython=True)
+def insertion_sort(arr):
+    pass
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ubuntu挂载硬盘方法]]></title>
+        <id>https://divertingPan.github.io/post/mjw29qAq0/</id>
+        <link href="https://divertingPan.github.io/post/mjw29qAq0/">
+        </link>
+        <updated>2020-11-30T02:56:49.000Z</updated>
+        <content type="html"><![CDATA[<ol>
+<li>找到准备存内容的硬盘</li>
+</ol>
+<pre><code>sudo fdisk -lu
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606705184275.PNG" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>准备将D盘挂载到disk目录上面</li>
+</ol>
+<pre><code>cd / 
+mkdir disk
+</code></pre>
+<ol start="3">
+<li>执行后disk就是D盘的入口，只是临时挂载，重启后消失，'ntfs'可以使用<code>blkid</code>返回的TYPE=xx查看</li>
+</ol>
+<pre><code>mount -vl -t ntfs /dev/sda4 /disk
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606705295046.PNG" alt="" loading="lazy"></figure>
+<ol start="4">
+<li>把home路径下的内容拷贝进disk</li>
+</ol>
+<pre><code>cp -r /home/ /disk/
+</code></pre>
+<ol start="5">
+<li>成功拷贝进另一硬盘</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1606705334879.PNG" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用xshell连接远程服务器的tensorboard]]></title>
+        <id>https://divertingPan.github.io/post/ooDGpcsHZ/</id>
+        <link href="https://divertingPan.github.io/post/ooDGpcsHZ/">
+        </link>
+        <updated>2020-11-29T06:38:18.000Z</updated>
+        <content type="html"><![CDATA[<p>在会话上右键-属性，在‘SSH-隧道’下面新建这样一条规则【网上有些用的本地端口也是6006，我试了半天发现我只有用其他端口才能连上，可能是本地的系统6006端口被占了或者其他问题】</p>
+<p>设置好之后访问本地的<a href="http://127.0.0.1:16006/">http://127.0.0.1:16006/</a>即可</p>
+<p>需要注意的一点是，当每次想要访问这个页面的时候，需要先建立xshell的会话连接</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606632031362.PNG" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[pandas的一些杂技（记）]]></title>
         <id>https://divertingPan.github.io/post/Vu450XcwM/</id>
         <link href="https://divertingPan.github.io/post/Vu450XcwM/">
         </link>
         <updated>2020-11-17T14:01:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-几个常用的resize尺寸问题">1. 几个常用的resize尺寸问题</h1>
-<p>PIL的Image里面，resize的写法是先宽后高</p>
-<pre><code class="language-python">image.resize((width, height))
+        <content type="html"><![CDATA[<h1 id="html页面table存储成本地csv">HTML页面table存储成本地csv</h1>
+<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果单个表格，直接存
+https://www.jianshu.com/p/01c550e5341b
+&quot;&quot;&quot;
+index_url = 'https://www.postcrossing.com/explore/countries'
+df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
+df.to_csv('./country_list.csv', index=False)
 </code></pre>
-<p>cv2也是</p>
-<pre><code class="language-python">image = cv2.resize(image, (width, height))
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果多个表格，用for循环全部存下
+https://blog.csdn.net/qq_36663202/article/details/89159878
+&quot;&quot;&quot;
+for table in pd.read_html(index_url, encoding='utf-8', header=0):
+    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
 </code></pre>
-<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
-<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+<h1 id="表格中的na字符串变成了nan">表格中的NA字符串变成了nan？</h1>
+<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
+ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
+<h1 id="df数据的读取">df数据的读取</h1>
+<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
+<pre><code class="language-python"># 获取df长度
+len(df)
+
+# 获取第0行，属性为Code的值
+df.loc[0]['Code']
 </code></pre>
-<h1 id="2-win和ubuntu的oslistdir有区别">2. Win和Ubuntu的os.listdir有区别</h1>
-<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
-<pre><code class="language-python">image_name = os.listdir(image_path)
+<h1 id="每行索引重置">每行索引重置</h1>
+<p>有时候需要对dataframe做一些操作，使得行顺序变化，这会导致索引也变化。有时候就会导致一些奇怪的bug。这时候希望对操作完的dataframe重新排索引，可以简单的使用</p>
+<pre><code class="language-python">df = df.reset_index(drop=True)
 </code></pre>
-<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
-<pre><code class="language-python">image_name = os.listdir(image_path)
-image_name = sorted(image_name, key=str)
+<p>来操作。drop的含义是，丢掉原来的错误的索引列。</p>
+<h1 id="获取某个值所在的行号">获取某个值所在的行号</h1>
+<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
 </code></pre>
-<h1 id="3-pandas打乱数据顺序">3. pandas打乱数据顺序</h1>
+<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
+例如，对下图这样的df查询'Code'为'CN'的条目<br>
+<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
+执行以下操作</p>
+<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
+要取出某一个值，可以</p>
+<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
+print(string)
+&gt;&gt;&gt; China
+</code></pre>
+<h1 id="打乱数据顺序">打乱数据顺序</h1>
 <pre><code class="language-python">df = df.sample(frac=1.0)
 </code></pre>
 ]]></content>
@@ -114,6 +294,37 @@ https://zhuanlan.zhihu.com/p/75054200<br>
 https://blog.csdn.net/winycg/article/details/100695373<br>
 https://oldpan.me/archives/pytorch-autograd-hook</p>
 </blockquote>
+<h1 id="7-多gpu并行">7. 多GPU并行</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<h1 id="8-几个常用的resize尺寸问题">8. 几个常用的resize尺寸问题</h1>
+<p>PIL的Image里面，resize的写法是先宽后高</p>
+<pre><code class="language-python">image.resize((width, height))
+</code></pre>
+<p>cv2也是</p>
+<pre><code class="language-python">image = cv2.resize(image, (width, height))
+</code></pre>
+<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
+<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+</code></pre>
+<h1 id="9-win和ubuntu的oslistdir有区别">9. Win和Ubuntu的os.listdir有区别</h1>
+<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+</code></pre>
+<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+image_name = sorted(image_name, key=str)
+</code></pre>
+<p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
+<pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -427,6 +638,7 @@ ServerPasswordSet
         </link>
         <updated>2020-10-17T03:25:39.000Z</updated>
         <content type="html"><![CDATA[<h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
+<h2 id="11-加载一部分权重">1.1 加载一部分权重</h2>
 <p>实际上有两种思路加载预训练权重。<br>
 先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
 <pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
@@ -437,6 +649,7 @@ pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
 model_dict.update(pretrained_dict)
 model.load_state_dict(model_dict)
 </code></pre>
+<h2 id="12-只改最后一层">1.2 只改最后一层</h2>
 <p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
 <pre><code class="language-python"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
 net = SameWithPretrainingNetXXXX()
@@ -446,6 +659,27 @@ net.fc = nn.Linear(fc_features, 9)
 net = net.to(DEVICE)
 </code></pre>
 <p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+<h2 id="13-模型涉及到nndataparallel的话">1.3 模型涉及到nn.DataParallel的话</h2>
+<p>还有一个坑是，如果在多GPU上训练时，保存模型权重要使用<code>torch.save(model.module.state_dict(), model_out_path)</code>的方法，否则会报一种错误：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>如果想要抢救一下的话，可以看到错误信息提示key中多了‘.module’，那么，只要把‘.module’移除即可：</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
 <h1 id="2-pytorch冻结部分层的权重">2. pytorch冻结部分层的权重</h1>
 <blockquote>
 <p>ref:<br>
@@ -460,315 +694,6 @@ https://www.jianshu.com/p/fcafcfb3d887</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606045451447.webp" alt="" loading="lazy"></figure>
 <h1 id="4-一个网络的输出是另一个的输入只训练后半个网络">4. 一个网络的输出是另一个的输入，只训练后半个网络</h1>
 <figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606045564441.webp" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[10月14日总结（bs4爬虫为主）]]></title>
-        <id>https://divertingPan.github.io/post/AhyNsrQwN/</id>
-        <link href="https://divertingPan.github.io/post/AhyNsrQwN/">
-        </link>
-        <updated>2020-10-14T13:13:35.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-html页面table存储成本地csv">1. HTML页面table存储成本地csv</h1>
-<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
-<pre><code class="language-python">&quot;&quot;&quot;
-reference: 如果单个表格，直接存
-https://www.jianshu.com/p/01c550e5341b
-&quot;&quot;&quot;
-index_url = 'https://www.postcrossing.com/explore/countries'
-df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
-df.to_csv('./country_list.csv', index=False)
-</code></pre>
-<pre><code class="language-python">&quot;&quot;&quot;
-reference: 如果多个表格，用for循环全部存下
-https://blog.csdn.net/qq_36663202/article/details/89159878
-&quot;&quot;&quot;
-for table in pd.read_html(index_url, encoding='utf-8', header=0):
-    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
-</code></pre>
-<h1 id="2-pandas把表格中的na字符串变成了nan">2. pandas把表格中的NA字符串变成了nan</h1>
-<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
-ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
-<h1 id="3-df数据的读取">3. df数据的读取</h1>
-<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
-<pre><code class="language-python"># 获取df长度
-len(df)
-
-# 获取第0行，属性为Code的值
-df.loc[0]['Code']
-</code></pre>
-<h1 id="4-检测路径存在与否并且建立路径">4. 检测路径存在与否并且建立路径</h1>
-<pre><code class="language-python">if not os.path.exists(destination_path):
-    os.makedirs(destination_path)
-</code></pre>
-<h1 id="5-判断list为空">5. 判断list为空</h1>
-<p>直接利用bool判断，list为空返回False，不为空返回True</p>
-<h1 id="6-python多线程运行">6. python多线程运行</h1>
-<p>python运行for循环比较慢，但是for循环必须每次循环是相互独立的时候用多线程才行。我需要for循环从一个列表里逐次获取链接并下载链接的内容，每次是相互独立的，所以可以使用多线程来优化速度。<br>
-我需要爬取postcrossing的所有图片。首先，我需要遍历一个国家列表，对于每个国家，我要遍历这个国家的所有已发送postcard列表，下载图片链接。这里存在一个问题：每个国家的postcard列表是不一样长的。对于多线程优化，我认为较好的方法是针对每个国家下的postcard列表做优化，而非对整个国家列表做多线程优化。<br>
-具体而言，首先我利用for循环来遍历这个国家列表，其中df为所有国家的列表，code是国家代码，Postcards  (sent)是已发送的明信片数量。所有存在的图片的id一定不大于已发送明信片数量，这个作为后面postcard列表的长度。</p>
-<pre><code class="language-python">    for idx in range(len(df)):
-        country_code = df.loc[idx]['Code']
-        postcards_sent = df.loc[idx]['Postcards  (sent)']
-</code></pre>
-<p>之后的多线程办法参考了一个来源不详的nsfw数据集多线程下载的代码。首先做一个遍历明信片的数量上限</p>
-<pre><code class="language-python">img_count = postcards_sent + 1
-</code></pre>
-<p>之后为每个线程分配需要遍历的子列表长度。相当于把总列表切成n份，分给n个线程各自去执行。</p>
-<pre><code class="language-python">pre_thread_img_count = int(np.floor(img_count / worker_count))
-if img_count % worker_count == 0:
-    last_thread_img_count = pre_thread_img_count
-else:
-    last_thread_img_count = pre_thread_img_count + (img_count % worker_count)
-</code></pre>
-<p>再之后获取各个线程相对于总表的起止执行位置（就是每个子列表对于总列表的起止位置），target就是并行执行的函数，args是传给函数的参数。具体而言，相当于在worker_count次循环里，每次都触发了一下以args为参数的multi_downloader，这几个被触发的函数是齐头并进执行的。</p>
-<pre><code class="language-python">thread_list = []
-for i in range(1, worker_count + 1):
-    if i != worker_count:
-        start = pre_thread_img_count * (i - 1)
-        end = pre_thread_img_count * i - 1
-    else:
-        start = pre_thread_img_count * (i - 1)
-        end = start + last_thread_img_count - 1
-
-    thread = threading.Thread(target=multi_downloader, args=(i, country_code, start, end))
-    thread.start()
-    thread_list.append(thread)
-</code></pre>
-<p>为什么在这里面要放个线程列表做记录？因为在之后需要执行一步检测线程终止的操作</p>
-<pre><code class="language-python">for thread in thread_list:
-    thread.join()
-</code></pre>
-<p>这的作用是使得在这个国家里的这几个下载线程都结束之后，再触发对下一个国家的for循环。不然的话，for循环所在的这个主线程会一股脑把所有的国家列表全部遍历，并且每个国家下都建立了n个下载子进程，与我们的设想不符。</p>
-<blockquote>
-<p>join所完成的工作就是线程同步，即主线程任务结束之后，进入阻塞状态，一直等待其他的子线程执行结束之后，主线程再终止<br>
-关于join的作用，以及多线程之间的时间关系：https://www.cnblogs.com/cnkai/p/7504980.html</p>
-</blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[10月11日总结]]></title>
-        <id>https://divertingPan.github.io/post/v_1YwgEcK/</id>
-        <link href="https://divertingPan.github.io/post/v_1YwgEcK/">
-        </link>
-        <updated>2020-10-11T13:42:18.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-netparameters获取网络参数">1. Net.parameters获取网络参数</h1>
-<p>Net.parameters返回一个generator，根据官方的用法，通过for循环得出网络各层的参数，</p>
-<pre><code class="language-python">Example::
-&gt;&gt;&gt; for param in model.parameters():
-&gt;&gt;&gt;     print(type(param), param.size())
-&lt;class 'torch.Tensor'&gt; (20L,)
-&lt;class 'torch.Tensor'&gt; (20L, 1L, 5L, 5L)
-</code></pre>
-<p>但param的类型仍然是一个封装过的parameter类型，需要通过param.data来取出里面的tensor数据<br>
-PS. 补充两个链接，这个作为Todo</p>
-<ol>
-<li>直接在网络中定义feature，直接导出：https://www.jianshu.com/p/0a23db1df55a</li>
-</ol>
-<blockquote>
-<p>比如，在这个例子中我想获得fc前面的特征，那么我就在前面加一句self.feature=x，然后再需要的地方调用model.feature即可得到。</p>
-</blockquote>
-<ol start="2">
-<li>获取Pytorch中间某一层权重或者特征：https://blog.csdn.net/happyday_d/article/details/88974361</li>
-</ol>
-<h1 id="2-嵌套列表以及列表包含tensor的展开">2. 嵌套列表以及列表包含Tensor的展开</h1>
-<p>python的list里面如果嵌套的是tensor，需要先将tensor转成list，然后再通过嵌套列表展开的方法。由于tensor维数一般比较多，所以解list以后，这个list的嵌套层数会比较深，需要用递归的方法解套，才能把这个list转成一维list，最终化为tensor<br>
-例：把一个(2, 3, 4)形状的tensor转成list：</p>
-<pre><code class="language-python">x = torch.zeros(2, 3, 4)
-x_list = x.numpy().tolist()
-</code></pre>
-<p>这个x_list长2，每个list元素长3，最内层的list有4个数字。<br>
-通过以下方法解开嵌套层数很大的list：</p>
-<pre><code class="language-python">def flat(nums):
-    res = []
-    for i in nums:
-        if isinstance(i, list):
-            res.extend(flat(i))
-        else:
-            res.append(i)
-    return res
-</code></pre>
-<p>最终使用torch.Tensor(x_list)把一个list化成tensor</p>
-<h1 id="3-python的工作路径关系">3. python的工作路径关系</h1>
-<p>使用pycharm或者spyder的时候，当前目录<code>os.getcwd()</code>都是脚本所在的目录。而<code>sys.path</code>模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。</p>
-<h1 id="4-再谈torchvisiontransforms">4. 再谈torchvision.transforms</h1>
-<p>早在上个月我就已经思考明白了关于视频图像序列的图像增广的细节。即每次调用一下<code>img=transforms(img)</code>，就会触发一次各种随机翻转旋转等的随机数设置。如果针对序列里的图片，在每次读进来的时候或者用for循环，对每个图片做transforms，会导致一系列图片明暗色彩角度各不相同。对于序列图片，如果涉及到这种增广操作，我只能想到一种办法，即重写所用的transforms操作，每次调用的时候传进整个图片序列，这样就只调用了一次，也就只初始化了一个随机数，这样再去做<code>ColorJitter()</code>或者<code>RandomHorizontalFlip()</code>等随机操作里面对张量切片，对每个切片做变换，这样一系列图片可以有相同随机数下的变换操作。如果只是要做<code>Resize()</code>或者<code>ToTensor()</code>之类的那就无所谓了，调用多少次都是一样的结果。<br>
-之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。<br>
-还有，compose里面<strong>要用方括号</strong>括住各个操作，大括号会导致顺序和写的顺序不一致，导致玄学问题</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[9月28日小结]]></title>
-        <id>https://divertingPan.github.io/post/ZhFbDG2nF/</id>
-        <link href="https://divertingPan.github.io/post/ZhFbDG2nF/">
-        </link>
-        <updated>2020-09-28T12:29:55.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-pytorch也有cuda版本对应的问题">1. pytorch也有CUDA版本对应的问题</h1>
-<p>搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to('cuda')报错。<br>
-较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA<br>
-尽管只需要torch和torchvision版本对应上即可，但是使用1.6和1.5的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br>
-这里是官网的参考版本搭配：https://pytorch.org/get-started/previous-versions/</p>
-<p>运行crnn的时候，1.3的版本会导致loss变nan，1.4往后的版本是正常的，不知是哪里有问题。</p>
-<h1 id="2-opencv的api变化">2. OpenCV的API变化</h1>
-<p>cv2.findContours这个函数在某些版本里（比如4.2）返回三个值：</p>
-<pre><code class="language-python">thresh, cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-</code></pre>
-<p>而某些版本（比如4.4）不再返回原图，只返回后面两个参数①轮廓的点集(contours)②各层轮廓的索引(hierarchy)。参考这个博客https://www.cnblogs.com/guobin-/p/10842486.html，他降到3.几也是可以的。</p>
-<pre><code class="language-python">cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-</code></pre>
-<h1 id="3-endnote导入特定参考文献格式">3. EndNote导入特定参考文献格式</h1>
-<p>最近碰到一个问题，想投一个杂志，但endnote中所列的杂志是以前的版本，参考文献格式不对，于是经过一番努力，终于成功更新了该杂志的文献格式。现发此贴，以供碰到类似问题的虫友参考。Endnote添加或更新杂志格式方法:<br>
-打开endnote------点击help--------点击web styles finder--------进入endnote主页---------在style or journal name 中输入杂志名（关键词就行）----------点击apply---------找到相应杂志，点击download---------打开下载文件，点击file菜单---------点击save as--------确定对话框中的杂志名后点save--------然后点击file中的close.  这样你就能获得你想投杂志的最新参考文献格式。<br>
-来源：http://muchong.com/html/201305/5871337.html</p>
-<h1 id="4-endnote插入参考文献方法">4. EndNote插入参考文献方法</h1>
-<p>下载的Web of Science的参考文献文件，*.ciw导入EndNote：在Endnote——File菜单——Import——File，然后在import optioni中选择“other filter”，从众多filter 库中选择ISI-CE即可。<br>
-来源：http://www.eryi.org/blog/post/web-of-science-endnote-filter.html</p>
-<h1 id="5-快速插入endnote参考文献条目">5. 快速插入EndNote参考文献条目</h1>
-<p>直接在DOI栏输入，然后在线检索更新即可。</p>
-<h1 id="6-慎用tryexcept">6. 慎用try/except</h1>
-<p>在搞flyai测试的时候发现准确率低的离谱。基本可以确定是代码本身的问题。经过检查是因为读入的路径不对导致的cv读取图片失败，但是这个读取放在了一个try/except里面，一旦出现错误就返回一个'EMPTY'的label值。去掉这个try以后发现程序报错，锁定这个问题。至于为什么会有一丁点准确率，是因为测试程序会返回所有label都为EMPTY，总有在真值表里的EMPTY能对上。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[【转载】pytorch里面的天坑]]></title>
-        <id>https://divertingPan.github.io/post/Izwv6avfw/</id>
-        <link href="https://divertingPan.github.io/post/Izwv6avfw/">
-        </link>
-        <updated>2020-08-18T13:17:09.000Z</updated>
-        <content type="html"><![CDATA[<p>今天随便炼丹取暖，结果卡了一个坑，在网上找到一个解决方案，顺便把其他的部分也粘贴过来存个档吧</p>
-<blockquote>
-<p>作者：八戒<br>
-链接：https://zhuanlan.zhihu.com/p/95883048<br>
-来源：知乎<br>
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-</blockquote>
-<h1 id="pytorch-数据读取模块windows和linux不同">Pytorch 数据读取模块windows和linux不同</h1>
-<p>报错如下：</p>
-<pre><code>AttributeError: Can't pickle local object 'get_loader.&lt;locals&gt;.&lt;lambda&gt;'
-</code></pre>
-<p>问题如上所示，但是Google全是<a href="https://blog.csdn.net/javali1995/article/details/78475108">这种</a>，或者<a href="https://blog.csdn.net/qq_39314099/article/details/83822593">这种</a>。它还有一个报错是</p>
-<pre><code>EOFError: Ran out of input
-</code></pre>
-<p>又或者<a href="https://blog.51cto.com/itbases/2087664">这种</a>。无解啊，报错的是数据读取模块，但是我的程序在Linux系统下是没有问题的，但是到了Windows系统下就有问题了，不知道为什么。</p>
-<pre><code class="language-python">data.DataLoader(dataset=dataset, batch_size=1, shuffle=False, num_workers=num_thread)
-</code></pre>
-<p>就是把num_workers指定为0，或者直接不写。</p>
-<hr>
-<h1 id="pytorch-gpu问题">Pytorch GPU问题</h1>
-<p>Pytorch在GPU并行方面还算很方便。在定义好model之后只需要使用一行：</p>
-<pre><code class="language-python">model = torch.nn.DataParallel(model)
-#默认调用所有GPU
-</code></pre>
-<p>即可实现在所有GPU上并行运算。</p>
-<p>但是有时候直接占用所有的GPU是没有必要的，如果要指定GPU，可以在DataParallel中增加一个参数：</p>
-<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
-</code></pre>
-<p>在运行时会报出如下错误：</p>
-<pre><code>RuntimeError: all tensors must be on devices[0]
-</code></pre>
-<p>该错误的解决方式有很多，这里推荐使用一种最简单的，在运行代码的时候，调整程序可见的GPU即可，具体而言就是将原先的运行指令：</p>
-<pre><code>python train.py
-</code></pre>
-<p>改为</p>
-<pre><code>CUDA_VISIBLE_DEVICES=2,3  python train.py
-</code></pre>
-<p>而程序中还是写为：</p>
-<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
-</code></pre>
-<h1 id="pytorch-权重和数据不对">Pytorch 权重和数据不对</h1>
-<p>报错如下：</p>
-<pre><code>Input type (CUDAFloatTensor) and weight type (FloatTensor) should be the same
-</code></pre>
-<p>仔细看错误信息，CUDA和CPU，输入数据x和模型中的权重值类型不一样，一般来说是因为模型的参数不在GPU中，而输入数据在GPU中，通过添加model.cuda()将模型转移到GPU上以解决这个问题。但是我的模型中已经有model.cuda了。</p>
-<p>问题在模型中，不能把卷积定义到forward中，像下面这样是不行的</p>
-<pre><code class="language-python">def forward(self, x):
-    fin_x = nn.Conv2d(128,1,1,1)(x)
-</code></pre>
-<p>这就会导致这个问题，必须把</p>
-<pre><code class="language-python">fin_x = nn.Conv2d(128,1,1,1)(x)
-</code></pre>
-<p>这个定义到上面的模型中</p>
-<h1 id="pytorch-cpu加载多gpu训练模型">Pytorch cpu加载多GPU训练模型</h1>
-<p>多GPU训练保存的模型会多一个module</p>
-<pre><code>Missing key(s) in state_dict: &quot;layer1.0.0.weight&quot;, &quot;layer1.0.2.weight&quot;, 
-Unexpected key(s) in state_dict: &quot;module.layer1.0.0.weight&quot;,
-</code></pre>
-<p>怎么解决呢？</p>
-<pre><code class="language-python">    state_dict = torch.load(model_path,map_location='cpu')
-    from collections import OrderedDict
-    new_state_dict = OrderedDict()
-    for k, v in state_dict.items():
-        name = k[7:]                  # remove module.
-        new_state_dict[name] = v
-    net.load_state_dict(new_state_dict)
-</code></pre>
-<h1 id="torchvision中datasets加载cifar10cifar100问题">torchvision中datasets加载CIFAR10,CIFAR100问题</h1>
-<p>因为网络的问题，自己就提前下载了数据集，但是网络一加载就报错，找不到数据，我就奇了怪了。。。。明明有就是找不到</p>
-<pre><code class="language-python">train_set = datasets.CIFAR10(data, train=True, transform=train_transforms, download=False) 
-test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, download=False)
-</code></pre>
-<p>报错如下：</p>
-<pre><code>RuntimeError: Dataset not found or corrupted. You can use download=True to download it
-</code></pre>
-<p>几经折腾才发现问题在那，自己提前下载了，**参数要给全。。。**路径给全，也就是绝对路径</p>
-<pre><code class="language-python">train_set = datasets.CIFAR10(root=data, train=True, transform=train_transforms, download=False)  
-test_set = datasets.CIFAR10(root=data, train=False, transform=test_transforms, download=False)
-</code></pre>
-<h1 id="pytorch中cudnn错误">Pytorch中cudnn错误</h1>
-<pre><code>RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED. This error may appear if you passed in a non-contiguous input.
-</code></pre>
-<p>看官方说法是矩阵太大了，然后把批量换小点，我换小了也不行，只有换到1才行。。。。</p>
-<p>还有就是禁用cudnn的加速</p>
-<pre><code class="language-python">torch.backends.cudnn.enabled = False
-</code></pre>
-<p><strong>这个方法是可行的，但是慢的一批</strong></p>
-<h1 id="pycharm-数据显示不全">Pycharm 数据显示不全</h1>
-<p>在Anaconda中notebook可以显示全部的数据，但是在pycharm中，使用print(dataframe)，不能显示dataframe的全部数据，中间的数据用省略号表示。</p>
-<p>在pycharm中显示全部数据解决方法，输入下面代码：</p>
-<pre><code class="language-python">import pandas as pd 
-#显示所有列
-pd.set_option('display.max_columns', None)
-#显示所有行
-pd.set_options('display.max_rows', None)
-</code></pre>
-<p>类似的，对于numpy array print后不能完全显示输入下面代码：</p>
-<pre><code class="language-python">numpy.set_printoptions(threshold = np.inf)
-
-#若想不以科学计数显示:
-numpy.set_printoptions(suppress = True)
-</code></pre>
-<h1 id="numpy问题">numpy问题</h1>
-<p>报错如下：</p>
-<pre><code>in numpy.import_array
-ImportError: numpy.core.multiarray failed to import
-</code></pre>
-<p>这个问题可能有两个原因</p>
-<ol>
-<li>你用conda装了一个numpy,又用pip装了一个numpy。导致冲突，你卸载一个就行了；比如：</li>
-</ol>
-<pre><code>conda uninstall numpy
-</code></pre>
-<ol start="2">
-<li>numpy 版本太低，导致不兼容，更新一下</li>
-</ol>
-<pre><code>pip install -U numpy
-conda update numpy
-</code></pre>
-<h1 id="pip问题">pip问题</h1>
-<p>装sklean的时候发现如下错误</p>
-<pre><code>ERROR: Could not find a version that satisfies the requirement threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn) (from versions: 1.0.0, 1.1.0)
-ERROR: No matching distribution found for threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn)
-</code></pre>
-<p>然后上网找了下解决方案，更新pip</p>
-<pre><code>python -m pip install --upgrade pip
-</code></pre>
-<p>然后 然后 然后就悲剧了！！！我的pip就崩了</p>
-<pre><code>Script file 'D:\Anaconda3\Scripts\pip-script.py' is not present
-</code></pre>
-<p><strong>大家更新的时候一定要在管理员的情况下更新你的pip</strong></p>
-<p><strong>然后管理员运行</strong></p>
-<pre><code>easy_install pip
-</code></pre>
-<p>解决上面的问题</p>
 ]]></content>
     </entry>
 </feed>
