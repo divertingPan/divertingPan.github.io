@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>11月2日 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608271495026">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608895804596">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="11月2日 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@ len(dataloader)返回的是在dataset长度除以batc..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608271495026" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608895804596" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -227,6 +227,11 @@ image_name = sorted(image_name, key=str)
 </code></pre>
 <p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
 <pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
+</code></pre>
+<p>或者用正则表达式，按照数字排序</p>
+<pre><code class="language-python">import re
+pic_path=os.listdir(pic_dir)
+pic_path.sort(key=lambda i: int(re.match(r'(\d+)', i).group()))
 </code></pre>
 
               </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-12-18T06:05:42.100Z</updated>
+    <updated>2020-12-25T11:43:41.828Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -324,6 +324,11 @@ image_name = sorted(image_name, key=str)
 </code></pre>
 <p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
 <pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
+</code></pre>
+<p>或者用正则表达式，按照数字排序</p>
+<pre><code class="language-python">import re
+pic_path=os.listdir(pic_dir)
+pic_path.sort(key=lambda i: int(re.match(r'(\d+)', i).group()))
 </code></pre>
 ]]></content>
     </entry>
