@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2020-12-25T11:43:41.828Z</updated>
+    <updated>2021-01-03T10:16:39.713Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
     <subtitle>大型摸鱼现场</subtitle>
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, 老潘家的潘老师</rights>
+    <rights>All rights reserved 2021, 老潘家的潘老师</rights>
     <entry>
         <title type="html"><![CDATA[pytorch的奇怪报错坑]]></title>
         <id>https://divertingPan.github.io/post/wh-_qBYkG/</id>

@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1608895804596">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609668892331">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -11,8 +11,9 @@
 
 
 
-    <meta name="description" content="前言
-之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据，分析结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的代码又良莠不齐风格各异。..." />
+    <meta name="description" content="本项目全部源代码地址：
+前言
+之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据，分析结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的..." />
     <meta name="keywords" content="pytorch,计算机视觉,自动化,python,杂谈" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1608895804596" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609668892331" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -102,7 +103,7 @@
                 2020-12-17
               </span>
               <span>
-                4 min read
+                7 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
@@ -129,7 +130,8 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h1 id="前言">前言</h1>
+                <p>本项目全部源代码地址：</p>
+<h1 id="前言">前言</h1>
 <p>之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据，分析结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的代码又良莠不齐风格各异。如果能有一个比较成熟的流程化代码，这时有一个新任务，我们可以直接拿祖传代码改里面的dataloader，或者改net.py，而训练预测结果分析等等流程都可以直接用，或者很少的改动即可用。既然都说这么多了，那就自己搞一个吧，既方便自己也方便别人。</p>
 <h1 id="摘要">摘要</h1>
 <p>本次所用代码其实大部分也都是以前自己攒的乱七八糟的小模块堆起来的，只是一直没有一个系统的优化整理。借着这次机会，本文将从一个图像识别的任务入手，从<strong>数据的收集、清洗、预处理、读取、神经网络识别、结果分析、可视化分析、自动超参数搜索</strong>这几个方面一步一步介绍，最终完成一套整体的项目流程。由于这个工程量并不是一天能搞完的，所以采用日记体的方式记录。也可以记一下自己实操一个完整实际的项目到底是怎样的速度。</p>
@@ -139,8 +141,93 @@
 <p>好在有一种技术叫爬虫，通过这种方法可以获得很多高质量的数据，前提是需要找到一个有你感兴趣数据的网站，并且这个网站的反爬机制又不是那么强，以及需要会爬虫。</p>
 <p>这次项目用到的图片来自一个明信片网站，鉴于可能的版权或其他纠纷风险，这里不再对数据收集的详细过程做介绍。<strong>但是这个内容我写过</strong>，如果有实在非常感兴趣的同学，我相信他有能力找到我写的内容。</p>
 <p>这里做一些通用的额外补充说明：爬虫最好挂在一个云服务器上，这样不用担心断电断网的风险（比起放在自己家电脑上），更重要的是，即使服务器IP被网站封了，也不影响你自己在家的正常使用（爬虫的另一个值得注意的点在于封号或者封IP的风险），而且如果需要模拟登录，请使用一个小号，不要傻乎乎拿自己的账号做。</p>
+<p>下载完成后，所有图片的存储结构如图所示。这么做可以直接使用pytorch的数据加载模块读取图片和类别。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1609664620754.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1609664696701.PNG" alt="" loading="lazy"></figure>
+<p>可以看一下数据各类别的分布情况。这里可以看出来自某些国家的明信片很多，而某些非常少。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1609664854490.png" alt="" loading="lazy"></figure>
+<p>绘制数据集分布情况.py</p>
+<pre><code class="language-python">import os
+import matplotlib.pyplot as plt
+
+
+dataset_path = './img'
+
+name_dict = {}
+for maindir, subdir, filename in os.walk(dataset_path):
+    if len(filename) != 0:
+        name_dict[os.path.basename(maindir)] = len(filename)
+
+name_list = sorted(name_dict.items(), key=lambda item:item[1], reverse=True)
+x = []
+y = []
+for i in name_list:
+    x.append(i[0])
+    y.append(i[1])
+
+plt.barh(x, y)
+plt.yticks(x[0:-1:20])
+plt.savefig('./dataset.png', dpi=150, bbox_inches='tight')
+</code></pre>
 <h1 id="数据清洗">数据清洗</h1>
-<p>（去除重复图片）</p>
+<p>数据都拿到以后，首先做一下去重和去错。防止有无法读取的图片影响训练进程，同时根据初步观察，某些国家的明信片样子有限，有很多重复的图片（但是这个去重只限于去除一图多传的情况，比如某个人用一个相同的明信片寄给了很多人，他就用同一张照片做了多个记录。但是这个方法并不能对不同发件人不同角度不同光照的同一个明信片进行很好的检测）</p>
+<p>操作方法之前写过，参见<a href="https://divertingpan.github.io/post/remove_duplicate/">【5分钟实例】去除大量图片中重复的图片</a></p>
+<p>思路相同，只是读取的时候把路径再做一层嵌套即可。例如</p>
+<pre><code class="language-python">if __name__ == '__main__':
+    dataset_path = './img'
+    for maindir, subdir, filename in os.walk(dataset_path):
+        if maindir != dataset_path:
+            path = maindir
+
+            # 接下来的就和之前做过的一模一样
+            pass
+</code></pre>
+<p>这步其实可以优化，可以通过并行的方法，同时对多个类别进行操作。因为每个类别的检测是独立的过程。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1609664919760.PNG" alt="" loading="lazy"></figure>
+<p>再看一下清洗之后的数据分布情况。实际的数量比例不会改变太多。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1609667711295.png" alt="" loading="lazy"></figure>
+<h1 id="数据划分">数据划分</h1>
+<p>这样获取的数据并没有划分训练集验证集测试集，这里再给他划分一下。对于每个类别下的图片文件，首先把文件顺序打乱一下，之后将文件按照比例划分成三个部分，利用列表的长度和给定的比例计算新的<code>训练集：验证集：测试集</code>列表，然后根据列表里的文件名和相应的路径分别拷贝出来。</p>
+<p>这里主要涉及的都是零碎的小操作，没什么难点，直接看代码即可：</p>
+<p>划分数据集.py</p>
+<pre><code class="language-python">import os
+import random
+from shutil import copyfile
+
+
+dataset_path = './img'
+
+split_folder = ['train', 'val', 'test']
+split_num = [6, 2, 2]
+
+train_img = []
+val_img = []
+test_img = []
+
+for maindir, subdir, filename in os.walk(dataset_path):
+    if maindir != dataset_path:
+        random.shuffle(filename)
+        size = len(filename)
+        
+        train_filename = filename[0 : size*split_num[0]//10]
+        val_filename = filename[size*split_num[0]//10 : size*(split_num[0]+split_num[1])//10]
+        test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
+        
+        file_list = [train_filename, val_filename, test_filename]
+        
+        for idx in range(0, 3):
+            os.makedirs(os.path.join(split_folder[idx], os.path.basename(maindir)))
+            for i in file_list[idx]:
+                src = os.path.join(maindir, i)
+                dst = os.path.join(split_folder[idx], os.path.basename(maindir), i)
+                copyfile(src, dst)
+                print(dst)
+</code></pre>
+<p>划分好的数据将分别存储在三个文件夹内。每个文件夹内也都和原本的分组文件夹格式一样</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1609668596769.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1609668842503.PNG" alt="" loading="lazy"></figure>
+<p>至此，前期准备工作已经完毕。</p>
+<p><u>2021年1月3日，元旦假期，稍微摸个鱼，把数据准备工作做了。在打日期的时候不小心又打了2020年。。。</u></p>
 <h1 id="数据预处理">数据预处理</h1>
 <p>（transforms.conpose([...])<br>
 affine, crop, color jitter, gaussian noise, gaussian blur,</p>
@@ -165,6 +252,7 @@ affine, crop, color jitter, gaussian noise, gaussian blur,</p>
 <li><a href="#%E6%91%98%E8%A6%81">摘要</a></li>
 <li><a href="#%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86">数据收集</a></li>
 <li><a href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97">数据清洗</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86">数据划分</a></li>
 <li><a href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86">数据预处理</a></li>
 <li><a href="#%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96">数据读取</a></li>
 <li><a href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AF%86%E5%88%AB">神经网络识别</a></li>
