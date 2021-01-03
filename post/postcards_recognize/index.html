@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609668892331">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609670779512">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【从头实战】基于pytorch的明信片检测任务 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609668892331" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609670779512" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -103,7 +103,7 @@
                 2020-12-17
               </span>
               <span>
-                7 min read
+                8 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
@@ -226,6 +226,18 @@ for maindir, subdir, filename in os.walk(dataset_path):
 <p>划分好的数据将分别存储在三个文件夹内。每个文件夹内也都和原本的分组文件夹格式一样</p>
 <figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1609668596769.PNG" alt="" loading="lazy"></figure>
 <figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1609668842503.PNG" alt="" loading="lazy"></figure>
+<p>这里有一个细节的地方需要注意：如果某个类别下的图片数量太少了，怎么办？有可能没法分成三个集合。例如，如果filename这个列表太短，只有2个元素。会被划分成什么样子呢？可以通过试验观察一下</p>
+<pre><code class="language-python">filename = [1,2,3]
+size = len(filename)
+train_filename = filename[0 : size*split_num[0]//10]
+val_filename = filename[size*split_num[0]//10 : size*(split_num[0]+split_num[1])//10]
+test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
+</code></pre>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1609670170830.PNG" alt="" loading="lazy"></figure>
+<p>如果filename只有两个元素，会是什么样子</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1609670240290.PNG" alt="" loading="lazy"></figure>
+<p>之所以提到这个，是因为有一类里面确实只有两个样本，所以鉴于此，我们手动去补一下这个类的验证集里面的样本，避免空路径，把测试集里的数据也放进验证集里。</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1609670505554.PNG" alt="" loading="lazy"></figure>
 <p>至此，前期准备工作已经完毕。</p>
 <p><u>2021年1月3日，元旦假期，稍微摸个鱼，把数据准备工作做了。在打日期的时候不小心又打了2020年。。。</u></p>
 <h1 id="数据预处理">数据预处理</h1>
