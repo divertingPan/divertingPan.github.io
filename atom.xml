@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2021-01-05T09:23:47.707Z</updated>
+    <updated>2021-01-05T14:51:43.573Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
-    <subtitle>大型摸鱼现场</subtitle>
+    <subtitle>CV方向小学二年级在读</subtitle>
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 老潘家的潘老师</rights>
@@ -16,49 +16,6 @@
         <link href="https://divertingPan.github.io/post/wh-_qBYkG/">
         </link>
         <updated>2020-12-09T07:59:07.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="runtimeerror-received-0-items-of-ancdata">RuntimeError: received 0 items of ancdata</h1>
-<p>https://github.com/pytorch/pytorch/issues/973<br>
-If you are having this problem, try running <code>torch.multiprocessing.set_sharing_strategy('file_system')</code> right after your import of torch<br>
-自己试的时候发现只要放在代码的开头部分就行</p>
-<h1 id="多gpu并行情况下missing-keys-in-state_dict-conv_1weight-bn1weight-bn1bias">多GPU并行情况下：Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;,</h1>
-<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
-<p>之后使用</p>
-<pre><code class="language-python">Net = net(args)
-Net = torch.nn.DataParallel(Net)
-Net = Net.to(device)
-</code></pre>
-<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
-<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
-</code></pre>
-<hr>
-<p>之前如果存权重的时候没在意这一点，就会报错：</p>
-<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
-Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
-Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
-</code></pre>
-<p>解决方法是</p>
-<pre><code class="language-python"># original saved file with DataParallel
-state_dict = torch.load(model_path)
-# create new OrderedDict that does not contain `module.`
-from collections import OrderedDict
-new_state_dict = OrderedDict()
-for k, v in state_dict.items():
-    name = k.replace('.module.','.') # remove `module.`
-    new_state_dict[name] = v
-# load params
-net.load_state_dict(new_state_dict)
-</code></pre>
-<blockquote>
-<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
-</blockquote>
-<h1 id="进程退出了但是显存没释放">进程退出了但是显存没释放</h1>
-<p>ref: https://blog.csdn.net/heiheiya/article/details/81454212<br>
-显存被占满了，但是并没有进程显示占用。</p>
-<p>使用命令</p>
-<pre><code>fuser -v /dev/nvidia*
-</code></pre>
-<p>之后<code>kill -9 xxxxx</code>把/dev/nvidia0等几个进程kill掉就可以了</p>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[pytorch训练加速方案整理]]></title>
@@ -66,52 +23,6 @@ net.load_state_dict(new_state_dict)
         <link href="https://divertingPan.github.io/post/pY2wg6lTe/">
         </link>
         <updated>2020-12-05T12:03:26.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-把数据放内存里降低-io-延迟">1. 把数据放内存里，降低 io 延迟。</h1>
-<p>使用：</p>
-<pre><code>sudo mount tmpfs /path/to/your/data -t tmpfs -o size=30G
-</code></pre>
-<p>然后把数据放挂载的目录下，即可。</p>
-<p>使用时发现应该用一个空目录先挂载内存分区，再把数据拷贝进去。如果直接把数据文件夹挂上去，底下的数据就不可见了。</p>
-<h1 id="2-多gpu并行">2. 多GPU并行</h1>
-<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
-<p>之后使用</p>
-<pre><code class="language-python">Net = net(args)
-Net = torch.nn.DataParallel(Net)
-Net = Net.to(device)
-</code></pre>
-<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
-<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
-</code></pre>
-<hr>
-<p>之前如果存权重的时候没在意这一点，就会报错：</p>
-<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
-Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
-Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
-</code></pre>
-<p>解决方法是</p>
-<pre><code class="language-python"># original saved file with DataParallel
-state_dict = torch.load(model_path)
-# create new OrderedDict that does not contain `module.`
-from collections import OrderedDict
-new_state_dict = OrderedDict()
-for k, v in state_dict.items():
-    name = k.replace('.module.','.') # remove `module.`
-    new_state_dict[name] = v
-# load params
-net.load_state_dict(new_state_dict)
-</code></pre>
-<blockquote>
-<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
-</blockquote>
-<h1 id="3-使用numba">3. 使用numba</h1>
-<p>对于嵌套for循环，尽量将涉及到的变量都转换为numpy的数组（只接受numpy，不能有tensor），将循环放入一个函数里，然后使用numba下面的jit装饰器。例如</p>
-<pre><code class="language-python">from numba import jit
-
-@jit(nopython=True)
-def insertion_sort(arr):
-    pass
-</code></pre>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[ubuntu挂载硬盘（或内存盘）方法]]></title>
@@ -119,47 +30,6 @@ def insertion_sort(arr):
         <link href="https://divertingPan.github.io/post/mjw29qAq0/">
         </link>
         <updated>2020-11-30T02:56:49.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="挂载内存盘">挂载内存盘</h1>
-<blockquote>
-<p>ref：https://blog.csdn.net/qq_29912325/article/details/108666516</p>
-</blockquote>
-<p>对于超大内存（RAM）的服务器，可以把需要经常IO的数据放在内存上。具体做法就是把内存的一部分挂载到目录上，当做普通存储使用。只是需要注意，关机会消失，所以要做好备份。</p>
-<p>先准备一个空的目录，然后执行</p>
-<pre><code>sudo mount -t tmpfs -o size=50G tmpfs /your/whatever/path
-</code></pre>
-<p>然后把数据复制进去即可。如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
-<p>也可以写在/etc/fstab里面永久挂载，但是RAM掉电数据消失的情况是不会改变的。</p>
-<pre><code>tmpfs	/home/user/ramdisk	tmpfs	defaults,size=100M	0 0
-</code></pre>
-<h1 id="挂载普通硬盘">挂载普通硬盘</h1>
-<ol>
-<li>找到准备存内容的硬盘</li>
-</ol>
-<pre><code>sudo fdisk -lu
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606705184275.PNG" alt="" loading="lazy"></figure>
-<ol start="2">
-<li>准备将D盘挂载到disk目录上面</li>
-</ol>
-<pre><code>cd / 
-mkdir disk
-</code></pre>
-<ol start="3">
-<li>执行后disk就是D盘的入口，只是临时挂载，重启后消失，'ntfs'可以使用<code>blkid</code>返回的TYPE=xx查看</li>
-</ol>
-<pre><code>mount -vl -t ntfs /dev/sda4 /disk
-</code></pre>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606705295046.PNG" alt="" loading="lazy"></figure>
-<ol start="4">
-<li>把home路径下的内容拷贝进disk</li>
-</ol>
-<pre><code>cp -r /home/ /disk/
-</code></pre>
-<ol start="5">
-<li>成功拷贝进另一硬盘</li>
-</ol>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1606705334879.PNG" alt="" loading="lazy"></figure>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[使用xshell连接远程服务器的tensorboard]]></title>
@@ -167,11 +37,6 @@ mkdir disk
         <link href="https://divertingPan.github.io/post/ooDGpcsHZ/">
         </link>
         <updated>2020-11-29T06:38:18.000Z</updated>
-        <content type="html"><![CDATA[<p>在会话上右键-属性，在‘SSH-隧道’下面新建这样一条规则【网上有些用的本地端口也是6006，我试了半天发现我只有用其他端口才能连上，可能是本地的系统6006端口被占了或者其他问题】</p>
-<p>设置好之后访问本地的<a href="http://127.0.0.1:16006/">http://127.0.0.1:16006/</a>即可</p>
-<p>需要注意的一点是，当每次想要访问这个页面的时候，需要先建立xshell的会话连接</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606632031362.PNG" alt="" loading="lazy"></figure>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[pandas的一些杂技（记）]]></title>
@@ -179,58 +44,6 @@ mkdir disk
         <link href="https://divertingPan.github.io/post/Vu450XcwM/">
         </link>
         <updated>2020-11-17T14:01:00.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="html页面table存储成本地csv">HTML页面table存储成本地csv</h1>
-<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
-<pre><code class="language-python">&quot;&quot;&quot;
-reference: 如果单个表格，直接存
-https://www.jianshu.com/p/01c550e5341b
-&quot;&quot;&quot;
-index_url = 'https://www.postcrossing.com/explore/countries'
-df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
-df.to_csv('./country_list.csv', index=False)
-</code></pre>
-<pre><code class="language-python">&quot;&quot;&quot;
-reference: 如果多个表格，用for循环全部存下
-https://blog.csdn.net/qq_36663202/article/details/89159878
-&quot;&quot;&quot;
-for table in pd.read_html(index_url, encoding='utf-8', header=0):
-    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
-</code></pre>
-<h1 id="表格中的na字符串变成了nan">表格中的NA字符串变成了nan？</h1>
-<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
-ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
-<h1 id="df数据的读取">df数据的读取</h1>
-<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
-<pre><code class="language-python"># 获取df长度
-len(df)
-
-# 获取第0行，属性为Code的值
-df.loc[0]['Code']
-</code></pre>
-<h1 id="每行索引重置">每行索引重置</h1>
-<p>有时候需要对dataframe做一些操作，使得行顺序变化，这会导致索引也变化。有时候就会导致一些奇怪的bug。这时候希望对操作完的dataframe重新排索引，可以简单的使用</p>
-<pre><code class="language-python">df = df.reset_index(drop=True)
-</code></pre>
-<p>来操作。drop的含义是，丢掉原来的错误的索引列。</p>
-<h1 id="获取某个值所在的行号">获取某个值所在的行号</h1>
-<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
-</code></pre>
-<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
-例如，对下图这样的df查询'Code'为'CN'的条目<br>
-<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
-执行以下操作</p>
-<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
-</code></pre>
-<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
-要取出某一个值，可以</p>
-<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
-print(string)
-&gt;&gt;&gt; China
-</code></pre>
-<h1 id="打乱数据顺序">打乱数据顺序</h1>
-<pre><code class="language-python">df = df.sample(frac=1.0)
-</code></pre>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[11月2日]]></title>
@@ -238,112 +51,6 @@ print(string)
         <link href="https://divertingPan.github.io/post/ACRHQMvIw/">
         </link>
         <updated>2020-11-02T06:30:32.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-pytorch的dataset和dataloader长度">1. pytorch的dataset和dataloader长度</h1>
-<p><code>len(dataset)</code>返回的是在dataset类里面的<code>def __len__(self):</code>返回的长度。<br>
-<code>len(dataloader)</code>返回的是在dataset长度除以batch_size，即实际一个epoch内执行的步数。</p>
-<h1 id="2-pytorch指定不同层数以不同的lr">2. pytorch指定不同层数以不同的LR</h1>
-<blockquote>
-<p>ref:<br>
-pytorch在不同的层使用不同的学习率<br>
-https://blog.csdn.net/wangbin12122224/article/details/79949824</p>
-</blockquote>
-<p>有时候我们希望某些层的学习率与整个网络有些差别，这里我简单介绍一下在pytorch里如何设置，方法略麻烦，如果有更好的方法，请务必教我：</p>
-<p>首先我们定义一个网络：</p>
-<pre><code class="language-python">class net(nn.Module):
-    def __init__(self):
-        super(net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, 1)
-        self.conv2 = nn.Conv2d(64, 64, 1)
-        self.conv3 = nn.Conv2d(64, 64, 1)
-        self.conv4 = nn.Conv2d(64, 64, 1)
-        self.conv5 = nn.Conv2d(64, 64, 1)
-    def forward(self, x):
-        out = conv5(conv4(conv3(conv2(conv1(x)))))
-        return out
-</code></pre>
-<p>我们希望conv5学习率是其他层的100倍，我们可以：</p>
-<pre><code class="language-python">net = net()
-lr = 0.001
-
-conv5_params = list(map(id, net.conv5.parameters()))
-base_params = filter(lambda p: id(p) not in conv5_params,
-                     net.parameters())
-optimizer = torch.optim.SGD([
-            {'params': base_params},
-            {'params': net.conv5.parameters(), 'lr': lr * 100},
-, lr=lr, momentum=0.9)
-</code></pre>
-<p>如果多层，则：</p>
-<pre><code class="language-python">conv5_params = list(map(id, net.conv5.parameters()))
-conv4_params = list(map(id, net.conv4.parameters()))
-base_params = filter(lambda p: id(p) not in conv5_params + conv4_params,
-                     net.parameters())
-optimizer = torch.optim.SGD([
-            {'params': base_params},
-            {'params': net.conv5.parameters(), 'lr': lr * 100},
-            {'params': net.conv4.parameters(), 'lr': lr * 100},
-            , lr=lr, momentum=0.9)
-</code></pre>
-<h1 id="3-pytorch卷积层的groups参数">3. pytorch卷积层的groups参数</h1>
-<p>下面是官方文档对于groups的解释。简单来说就是输入和输出都会被划成groups个组，groups个卷积层并列操作。输入和输出的维度还是总的维度数。</p>
-<blockquote>
-<p>groups controls the connections between inputs and outputs. in_channels and out_channels must both be divisible by groups. For example,<br>
-At groups=1, all inputs are convolved to all outputs.<br>
-At groups=2, the operation becomes equivalent to having two conv layers side by side, each seeing half the input channels, and producing half the output channels, and both subsequently concatenated.<br>
-At groups=in_channels, each input channel is convolved with its own set of filters, of size ⌊out_channels/in_channels⌋ .</p>
-</blockquote>
-<h1 id="4-一个常用的模块检测并建立工作路径">4. 一个常用的模块：检测并建立工作路径</h1>
-<pre><code class="language-python">if not os.path.exists(destination_path):
-    os.makedirs(destination_path)
-</code></pre>
-<h1 id="5-backward报错runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">5. backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</h1>
-<blockquote>
-<p>ref: https://blog.csdn.net/SY_qqq/article/details/107384161</p>
-</blockquote>
-<h1 id="6-pytorch-hook">6. pytorch hook</h1>
-<blockquote>
-<p>ref:<br>
-https://zhuanlan.zhihu.com/p/75054200<br>
-https://blog.csdn.net/winycg/article/details/100695373<br>
-https://oldpan.me/archives/pytorch-autograd-hook</p>
-</blockquote>
-<h1 id="7-多gpu并行">7. 多GPU并行</h1>
-<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
-<p>之后使用</p>
-<pre><code class="language-python">Net = net(args)
-Net = torch.nn.DataParallel(Net)
-Net = Net.to(device)
-</code></pre>
-<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
-<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
-</code></pre>
-<h1 id="8-几个常用的resize尺寸问题">8. 几个常用的resize尺寸问题</h1>
-<p>PIL的Image里面，resize的写法是先宽后高</p>
-<pre><code class="language-python">image.resize((width, height))
-</code></pre>
-<p>cv2也是</p>
-<pre><code class="language-python">image = cv2.resize(image, (width, height))
-</code></pre>
-<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
-<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
-</code></pre>
-<h1 id="9-win和ubuntu的oslistdir有区别">9. Win和Ubuntu的os.listdir有区别</h1>
-<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
-<pre><code class="language-python">image_name = os.listdir(image_path)
-</code></pre>
-<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
-<pre><code class="language-python">image_name = os.listdir(image_path)
-image_name = sorted(image_name, key=str)
-</code></pre>
-<p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
-<pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
-</code></pre>
-<p>或者用正则表达式，按照数字排序</p>
-<pre><code class="language-python">import re
-pic_path=os.listdir(pic_dir)
-pic_path.sort(key=lambda i: int(re.match(r'(\d+)', i).group()))
-</code></pre>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[手写签名识别-数据预处理部分]]></title>
@@ -351,183 +58,6 @@ pic_path.sort(key=lambda i: int(re.match(r'(\d+)', i).group()))
         <link href="https://divertingPan.github.io/post/handwriting_en_recognition/">
         </link>
         <updated>2020-10-30T10:28:03.000Z</updated>
-        <content type="html"><![CDATA[<p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
-<p>项目地址：<a href="https://github.com/divertingPan/HandwritingEnglishRecognition_FlyAI">https://github.com/divertingPan/HandwritingEnglishRecognition_FlyAI</a></p>
-<h1 id="对数据的分析">对数据的分析</h1>
-<p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1604054018444.jpg" alt="" loading="lazy"></figure>
-<p>这两种是这个数据集内比较典型的干扰，第一幅图的行干扰（就是说不仅有签名字的行，还有其他的字符又占了一行）和第二幅图的列干扰（就是紧挨着手写签名的前面有干扰字符），以及行列组合干扰（严格来讲第二幅图其实算是行列组合干扰）。</p>
-<p>首先就考虑对读入的图片进行预处理，尽可能消除干扰字符。</p>
-<h2 id="灰度化和二值化">灰度化和二值化</h2>
-<p>第一，这种图片没必要考虑RGB的问题，所以干脆点，进来先转灰度，也方便后面的形态学处理。更进一步地，我在后期形态学处理的时候甚至只关心非黑即白的像素点，所以干脆再做一个二值化的图出来。</p>
-<p><strong>这里需要说明一点的是，灰度图img和二值图gray应该分开两个变量存储。因为我仅仅使用二值图进行定界操作，定好界以后我还是希望能返回原本的灰度图，所以一开始读进来的灰度图要先给他存起来，后面只对他裁剪之后返回即可。</strong></p>
-<p><strong>为什么不直接返回二值图呢？这个操作返回的图片还是要传给CRNN去计算的，我想尽量减少预处理上对信息的损伤。二值化可能会导致灰度图的一部分信息丢失。</strong></p>
-<p>第二，后期操作的时候希望更关注写字的笔划部分，所以最好是让有笔划的部分是1，没有笔划的地方是0，这里就需要对原图做一个反相操作（原图有笔划的地方是黑色是0，白纸的地方是1）</p>
-<pre><code class="language-python">img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-_, gray = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
-gray = np.logical_xor(1, gray).astype('uint8')
-</code></pre>
-<h2 id="选择正确的行">选择正确的行</h2>
-<p>接下来考虑消除行干扰。我想裁掉签名行上下的干扰字符或者干扰像素。我可以直接对图片（二值化的图片）按行求和，这样有字符的行，和就会比较大；每行字符行间的空隙，求和之后值就很小。将相连区域长度最大的所在行取出来，基本就是手写签名对应的行了。</p>
-<pre><code class="language-python">sum_of_row = np.sum(gray, axis=1)
-</code></pre>
-<p>例：下图左边为每行的和，右边为手写字体<br>
-<img src="https://divertingPan.github.io/post-images/1604054901608.PNG" alt="" loading="lazy"></p>
-<p>如何找到一个数组的最长相连区域？这里我写了一个笨方法，在数组里面遍历，如果大于某个阈值就将行号和flag记下来，直到取到的数又小于阈值时检查flag：如果flag大于当前的最大值就记录这几个行号，如果flag小于最大值就不管。对于遍历结束的时候要特殊处理一下，万一数组最后一个值也是大于阈值的，需要执行类似“取到的数又小于阈值时检查flag”的操作。具体的代码实现如下：</p>
-<pre><code class="language-python">index_row_valid = []
-max_index_row_valid = []
-len_row_valid = 0
-max_len_row_valid = 0
-for index, value in enumerate(sum_of_row):
-    if value &gt; 2:
-        index_row_valid.append(index)
-        len_row_valid += 1
-    else:
-        if len_row_valid &gt; max_len_row_valid:
-            max_len_row_valid = len_row_valid
-            max_index_row_valid = index_row_valid
-            len_row_valid = 0
-            index_row_valid = []
-        else:
-            len_row_valid = 0
-            index_row_valid = []
-    # if the slice end in the last row
-    if len_row_valid &gt; max_len_row_valid:
-        max_len_row_valid = len_row_valid
-        max_index_row_valid = index_row_valid
-</code></pre>
-<p>对cv读进来的图片，做裁切很简单，直接取数组对应的索引即可。对二维数组，这样写就相当于只按行取索引：</p>
-<pre><code class="language-python">gray = gray[max_index_row_valid]
-img = img[max_index_row_valid]
-</code></pre>
-<p>进行按行裁剪的效果如下：<br>
-<img src="https://divertingPan.github.io/post-images/1604056454722.png" alt="" loading="lazy"></p>
-<h2 id="选择合适的列">选择合适的列</h2>
-<p>首先类似的操作，对列求和。这里多做一步，对于大多数数据，可以剪掉右边大部分的空白，这里可以逆序遍历这个数组，一般后面的都是0或者小于某个阈值的。一旦走到一个值大于了设置的阈值，那就从这里截断即可。range可以通过-1来实现逆序。</p>
-<pre><code class="language-python">sum_of_column = np.sum(gray, axis=0)
-for i in range(len(sum_of_column)-1, -1, -1):
-    if sum_of_column[i] &gt;= 2:
-        gray = gray[:, 0:i]
-        img = img[:, 0:i]
-        break
-</code></pre>
-<p>为了消掉那些印刷体，可以使用传统艺能，将这些印刷体先连到一起。之后再针对图中每个图形查看他的尺寸。一般而言手写的字符比印刷体要大一些，而且长宽也有一定的比例范围（l或者i后面再说）所以先用一下膨胀，给印刷体连起来。由于印刷体排列比较紧，用一个小结构元就可以不破坏手写体的连通性的基础上把印刷体连起来。</p>
-<pre><code class="language-python">kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 2))
-thresh = cv2.dilate(gray, kernel)
-</code></pre>
-<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
-<p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用外接矩形的高度排掉两个冒号部分，再可以利用外接矩形长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
-<pre><code class="language-python"># get edges [with opencv 4.4 return 2 values, previous version return 3 values]
-cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-# cut the correct image
-character_bbox_list = []
-
-for i, cnt in enumerate(cnts):
-    x, y, w, h = cv2.boundingRect(cnt)
-
-    if h &gt; 6 and 0.5 &lt; w / h &lt; 2:
-        character_bbox_list.append([x, y, w, h])
-
-character_bbox_list = np.array(character_bbox_list)
-</code></pre>
-<p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，每项有4个元素，分别对应外接矩形的左上角x，左上角y，宽度w和高度h。8项也就对应了图里的8个字母<br>
-<img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"></p>
-<p>把定界框画出来也确实是这8个字母：<br>
-<img src="https://divertingPan.github.io/post-images/1604057340827.PNG" alt="" loading="lazy"></p>
-<p>再之后的操作就要略微绕一点弯子了。</p>
-<h2 id="最终确定手写签名区域">最终确定手写签名区域</h2>
-<p>对于上面步骤获得的这几个bbox，我选择取所有列表内bbox的</p>
-<blockquote>
-<p>最上界（所有bbox的y值中，最小的值）<br>
-最下界（[所有bbox的y值+所有h值]的最大值）<br>
-最左顶点（所有bbox的x值的最小值）<br>
-最右顶点（所有bbox中x值最大的值+该bbox的w值）</p>
-</blockquote>
-<p>构成整个手写签名裁剪区。<br>
-PS. 区域的横向长度（所有bbox中x值最大的值-最左顶点+该bbox的w值）或者说（最右顶点-最左顶点）</p>
-<p>代码写的比较杂乱，这里简单捋一下：<br>
-<code>left_x_index</code>和<code>right_x_index</code>对应着最左、最右顶点的bbox索引号，<br>
-<code>left_x_position</code>和<code>right_x_position</code>对应最左、最右顶点实际的坐标，（这里和上述的‘最右顶点’实际应该是最右bbox的左上点的坐标）<br>
-<code>length_character</code>是区域的横向长度，<br>
-<code>top_y_index</code>是最上界对应的bbox索引号，<br>
-<code>top_y_position</code>是最上界的坐标高度，<br>
-<code>max_height</code>是整个手写签名区域触及到的最底端，<br>
-<code>height_character</code>是能包住手写签名区域的最大的高度。</p>
-<p>对于这里涉及到的所有变量含义已经写出来了，具体的赋值和计算流程如下：</p>
-<pre><code class="language-python"># axis x need to be found in the range of [:,0] array
-# np.min[0] means that the min value of 0 column which stands for axis x
-left_x_index = np.where(character_bbox_list[:, 0] == np.min(character_bbox_list, axis=0)[0])[0][0]
-right_x_index = np.where(character_bbox_list[:, 0] == np.max(character_bbox_list, axis=0)[0])[0][0]
-left_x_position = character_bbox_list[left_x_index][0]
-right_x_position = character_bbox_list[right_x_index][0]
-right_bbox_width = character_bbox_list[right_x_index][2]
-length_character = right_x_position - left_x_position + right_bbox_width
-
-# axis y need to be found in the range of [:,1] array
-# np.min[1] means that the min value of 1 column which stands for axis y
-top_y_index = np.where(character_bbox_list[:, 1] == np.min(character_bbox_list, axis=0)[1])[0][0]
-top_y_position = character_bbox_list[top_y_index][1]
-max_height = 0
-
-for i, value in enumerate(character_bbox_list):
-    if character_bbox_list[i][1] + character_bbox_list[i][3] &gt; max_height:
-        max_height = character_bbox_list[i][1] + character_bbox_list[i][3]
-
-height_character = max_height - top_y_position
-
-img = img[top_y_position:top_y_position + height_character, left_x_position:left_x_position + length_character]
-</code></pre>
-<p>最终剪出来的手写签名区域就是这样：<br>
-<img src="https://divertingPan.github.io/post-images/1604058610449.png" alt="" loading="lazy"></p>
-<h1 id="一些解释">一些解释</h1>
-<h2 id="第一点">第一点</h2>
-<p>为什么在对行列求和之后的数组的操作里面总是有阈值呢？主要是考虑到以下情况：<br>
-<img src="https://divertingPan.github.io/post-images/1604058947300.jpg" alt="" loading="lazy"></p>
-<p>他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值给大一点也不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
-<img src="https://divertingPan.github.io/post-images/1604059122687.PNG" alt="" loading="lazy"></p>
-<p>也有一些少数例外情况，比如Emmmmm这样的字符串，E最上面那个横杠和下面连接处只依靠着E的左侧竖线链接，可能会把E最上头的横杠给裁掉。</p>
-<p>或者一些手写字体特别小，比印刷体还要小，用最大连通区域就识别不到了，这个暂时没有想到什么办法。</p>
-<h2 id="第二点">第二点</h2>
-<p>之前有一个地方提到“一部分”（这样可以获得一部分（后面解释“一部分”的含义）手写体字母），这里的“一部分”如何理解？</p>
-<p>首先，用我这个方法去框定字母，主要是根据长宽比确定的，但是对于l，j，i这样的字母，显然是不适用于这个比例的。“一部分”的含义是指用这种方法可能无法框定这种类型的字母。</p>
-<p>但是还有办法稍微补救一下的，即利用上面<strong>最终确定手写签名区域</strong>一章内的上下左右界弥补。利用这个上下左右界，即使字母中间出现了这种类型的字母，也可以被框选在裁剪区域内。但是如果对于开头或结尾出现这种字母的情景就还是会被遗漏掉。</p>
-<p>关于如何更好更精准地裁剪，在flyAI里面有一个人提到了用模板匹配，但他是匹配印刷体之后定位印刷体的，然后裁剪定位到“NOM”字符的右边裁剪或者定位到“PRENOM”的下边裁剪。这个倒是我没考虑到的一个点，但是个人感觉可能不太行，因为这样还是没法解决被剪裁一半的手写体干扰、以及其他可能的印刷体字符。而且有一些印刷体字符也是被剪裁了的，只有一半的能被模板匹配上吗？不太肯定。</p>
-<h1 id="加载数据">加载数据</h1>
-<p>加载数据的时候，在dataset里面读取图片的时候调用一下上面流程就行，将最后处理好的图片return即可。但是需要注意，一部分图片可能识别之后里面没有character_bbox，即<code>character_bbox_list</code>这个列表是空的，就会引发异常。所以可以采用一下try/except，对于所有识别为空的图，直接在训练阶段跳过该图，或者在验证的时候把原来的图不处理直接丢给网络，或者在测试的时候直接给一个‘EMPTY’标签。在实验中，出现这种状况被跳过的图片大概占1~2%，而成功被处理但是处理结果不完善（如裁剪区域有多余或遗漏）的占比大约在10%。</p>
-<p>具体的写法可以这样：<br>
-训练阶段的dataset图像处理部分：</p>
-<pre><code class="language-python">try:
-    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
-    img = Image.fromarray(np.uint8(img))
-except:
-    return self[(index + 1) % len(self.img_path)]
-</code></pre>
-<p>验证阶段：</p>
-<pre><code class="language-python">try:
-    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
-    img = Image.fromarray(np.uint8(img))
-except:
-    img = cv2.imread(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    img = Image.fromarray(np.uint8(img))
-</code></pre>
-<p>测试阶段：</p>
-<pre><code class="language-python">try:
-    img = cut_character(image_path)
-    img = Image.fromarray(np.uint8(img))
-except:
-    return {&quot;label&quot;: 'EMPTY'}
-</code></pre>
-<p>之前有提过要慎用try/except，就是这里，按照这个写法，在try里面随便发生什么错误都会走except里面的流程，如果是因为一些bug导致的异常，那就会使每次读数据都触发except的流程了。例如如果是因为图片路径写的不对，那在测试阶段每次都直接返回一个‘EMPTY’标签，就等同于程序将所有输入都给一个‘EMPTY’的输出，而这显然是不对的，却又无法第一时间通过错误信息看到错误是出现在读取图片这里。</p>
-<p>所以要么在except处显式指定错误类型<code>except (XXXError, XXXError): ...</code>，要么就先不要套try/except，测试好没有问题在套上。</p>
-<h1 id="神经网络部分">神经网络部分</h1>
-<p>这没啥好说的，反正大家都是无脑上CRNN，最多就是改了改里面CNN的结构，没有啥很花哨的操作。</p>
-<h1 id="后记">后记</h1>
-<p>本以为这个比赛的第一名会给我露一手魔改attention的，结果并没有。flyAI的答辩链接：https://mp.weixin.qq.com/s/8RqoINhXH2Hnjr5Xe1QQOA，个人觉得没太多亮点。</p>
-<p>倒是有一个逐步喂入数据的trick值得挖一挖。大概流程是先给少量数据训练到loss下降到稳定然后再用更多的训练到稳定再用更多的……他那个loss可能是指训练集loss？喂入数据可以理解为数据集取不同大小的子集增量，然后在越来越大的子集上训练？这里还存疑。网上好像也没有太多参考资料。</p>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[10月20日（Scrapy爬虫为主）]]></title>
@@ -535,74 +65,6 @@ except:
         <link href="https://divertingPan.github.io/post/PKRyQR_xc/">
         </link>
         <updated>2020-10-20T05:01:04.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-在chrome的console里面使用xpath定位元素">1. 在chrome的console里面使用xpath定位元素</h1>
-<p><code>$x('xpath表达式')</code><br>
-一个细节的地方是要注意有时候表达式里面有引号，要注意和最外层引号区分开，一般xpath里多见双引号，所以最好用单引号做外层的引号。<br>
-扩展：ccs表达式：<code>$(&quot;css表达式&quot;)</code>或者<code>$$(&quot;css表达式&quot;)</code></p>
-<blockquote>
-<p>ref: https://blog.csdn.net/jamieblue1/article/details/101075193</p>
-</blockquote>
-<h1 id="2-scrapy模拟登录">2. scrapy模拟登录</h1>
-<p>首先需要分析网站登录的时候发送了哪些信息，以postcrossing.com举例，在登录表单上检查信息，会看到这么些东西：<br>
-<img src="https://divertingPan.github.io/post-images/1603179821618.PNG" alt="" loading="lazy"><br>
-用户名和密码不用多说，另外还有一个hidden的东西，登录的时候这个也要传走，（但是我在实验的时候发现不带这个值直接用名字密码也能登）<br>
-对于在建立formdata的时候，用什么作为字典的键值？要查看页面提交信息，具体如何查看提交上去的信息，可以参考该链接：https://mofanpy.com/tutorials/data-manipulation/scraping/requests/</p>
-<blockquote>
-<p>这个<code>&lt;form&gt;</code>里面有一些<code>&lt;input&gt;</code>个 tag, 我们仔细看到<code>&lt;input&gt;</code>里面的这个值 name=&quot;firstname&quot; 和 name=&quot;lastname&quot;, 这两个就是我们要 post 提交上去的关键信息了. 我们填好姓名, 为了记录点击 submit 后, 浏览器究竟发生了什么翻天覆地的变化, 我们在 inspect 窗口, 选择<code>Network</code>, 勾选<code>Preserve log</code>, 再点击<code>submit</code>, 你就能看到服务器返回给你定制化后的页面时, 你使用的方法和数据.</p>
-</blockquote>
-<p>在本例中，上传的登录内容如图：<br>
-<img src="https://divertingPan.github.io/post-images/1603716950650.PNG" alt="" loading="lazy"></p>
-<p>具体而言，怎么登录？在Spider脚本里的class XXSpider里面写下面这个函数</p>
-<pre><code class="language-python">    def start_requests(self):
-        yield Request('https://www.postcrossing.com/login', meta={&quot;cookiejar&quot;: 1}, callback=self.post_login)
-</code></pre>
-<p>这样，程序一开始会Request这个login界面，紧接着在这个页面上进行callback即post_login所做的操作。<br>
-post_login的内容是：</p>
-<pre><code class="language-python">    def post_login(self, response):
-        token = response.xpath('//*[@id=&quot;signin__login_csrf_token&quot;]/@value').extract_first()
-        # print('login_csrf_token: ', token)
-        form_data = {
-            'signin[_login_csrf_token]': token,
-            'signin[username]': 'XXXXXX',
-            'signin[password]': 'YYYYYY'
-        }
-        yield FormRequest.from_response(response, formdata=form_data,
-                                        meta={&quot;cookiejar&quot;: response.meta['cookiejar']},
-                                        callback=self.country_gallery
-                                        )
-</code></pre>
-<p>其中，token获取了那个隐藏的会在登录时一同上传的神秘值，form_data构造了登录时需要的信息。通过FormRequest.from_response对response过来的内容（就是刚刚的登录页面）进行提交表单操作，用meta记下cookie信息。后续所有的Request都可以用这个cookie。</p>
-<blockquote>
-<p>ref:<br>
-https://scrapy-cookbook.readthedocs.io/zh_CN/latest/scrapy-11.html<br>
-https://www.jianshu.com/p/404e4ac156a6</p>
-</blockquote>
-<h1 id="3-xpath解析内容为空">3. xpath解析内容为空</h1>
-<p>第一种情况是解析的页面不对，造成页面不对的原因是调用这个函数的上一级函数传过来的页面不对（其实就是上一级函数的Request里面那个url写的并不是自己要解析的那个）。一般就是字母拼错，页面层级搞混了，需要自己仔细检查。又或者是这个页面需要登录才能正常显示，不登陆的话进的是登录页面而不是内容页面，这就又回到了上一条需要做的事情。<br>
-第二种情况是user-agent的问题，在settings.py里加入</p>
-<pre><code class="language-python">USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'
-</code></pre>
-<p>再尝试即可。</p>
-<h1 id="4-pandas获取某个值所在的行号">4. pandas获取某个值所在的行号</h1>
-<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
-</code></pre>
-<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
-例如，对下图这样的df查询'Code'为'CN'的条目<br>
-<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
-执行以下操作</p>
-<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
-</code></pre>
-<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
-要取出某一个值，可以</p>
-<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
-print(string)
-&gt;&gt;&gt; China
-</code></pre>
-<h1 id="5-注意安全">5. 注意安全</h1>
-<p>在做的时候，有可能涉及到需要登录的操作。这里尽量不要用自己常用的账号（这个应该是常识），但是同时还要注意也尽量避免用自己常用的IP。</p>
-<p>因为有时候操作不当会导致IP被封，与此同时在这个IP上活跃的其他账号也容易被一并误伤。</p>
-<p>当然，能被服务器ban掉，那证明操作有点过火，所以一定要控制访问间隔，不要太密集的连续发送请求。不着急的话5s一次，再快就有风险了。</p>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[绕过需要认证的网络（校园网）直接联网的方法]]></title>
@@ -610,44 +72,6 @@ print(string)
         <link href="https://divertingPan.github.io/post/lCfwQ3hC0/">
         </link>
         <updated>2020-10-18T08:31:31.000Z</updated>
-        <content type="html"><![CDATA[<p>目前（2020.10.18）测试可用的办法是这个链接里面的方法：http://note.cfyqy.com/posts/390158a6.html<br>
-为了防和谐，以及蹚坑经历记录，我将他精简一下<br>
-工作环境：Ubuntu18.04+Win10<br>
-该工程需要前期准备：一个服务器（最好大带宽），三个软件（Linux和Win下的SoftEther-vpnserver和Win下的softether-vpnclient）<br>
-软件下载地址：https://www.softether-download.com/cn.aspx?product=softether<br>
-或者GitHub个人备用链接（但是不能保证是最新版的，不过这俩版本自测可用）https://github.com/divertingPan/SEVPN</p>
-<p>以下操作尽量按照文中的先后顺序，否则可能出现各种玄学bug</p>
-<h1 id="服务器安装server端">服务器安装server端</h1>
-<p>先用xftp把Ubuntu的server端传进服务器，之后在xshell里的所有操作指令如下，按顺序来</p>
-<pre><code>tar -zxvf XXXX.tar.gz
-cd vpnserver
-make
-然后3次全输入1
-./vpnserver start
-./vpncmd
-依次1，回车，回车
-ServerPasswordSet
-设置VPN服务器密码
-</code></pre>
-<p>关机以后需要再开启VPN服务就输入<code>./vpnserver start</code>即可</p>
-<h1 id="随便一台win电脑对linux服务器进行配置管理">随便一台Win电脑，对Linux服务器进行配置管理</h1>
-<p>安装win版本的softether server，选择红框里的，其他都一路默认安装下去<br>
-<img src="https://divertingPan.github.io/post-images/1603010961185.png" alt="" loading="lazy"></p>
-<p>运行该软件后，新设置一个连接，主机名为Ubuntu那台服务器的公网IP，端口默认，密码是刚刚设置的“VPN服务器密码”<br>
-<img src="https://divertingPan.github.io/post-images/1603011067411.png" alt="" loading="lazy"></p>
-<p>之后点击“管理虚拟HUB”，再找到“管理用户”，新建一个用户，填写用户名和密码，这个作为以后用client登vpn的用户（随便设一个简单的就行）<br>
-<img src="https://divertingPan.github.io/post-images/1603011216824.png" alt="" loading="lazy"></p>
-<p>在虚拟NAT和DHCP服务器中启动secureNAT，启动就行，不用查看配置了反正也不去改<br>
-<img src="https://divertingPan.github.io/post-images/1603011326200.png" alt="" loading="lazy"></p>
-<p><strong>勾选VPN over ICMP/DNS的配置</strong>。到加密与网络中，点击VPN over ICMP/DNS，勾上那两个功能，校园防断网的实现就靠这个了。（前面如果不老老实实按步骤做，瞎搞的话有可能会导致53端口无法打开）<br>
-<img src="https://divertingPan.github.io/post-images/1603011399522.png" alt="" loading="lazy"></p>
-<h1 id="免费上网">免费上网</h1>
-<p>给需要免费上网的电脑安装softether client，选择红框的这个。其他默认<br>
-<img src="https://divertingPan.github.io/post-images/1603011496405.png" alt="" loading="lazy"></p>
-<p>新建一个vpn连接，如下图填写相应的配置，主机名是Ubuntu服务器的公网IP，虚拟HUB名会自动出来，用户名和密码就是“登vpn的用户（随便设一个简单的就行）”的那个<br>
-<img src="https://divertingPan.github.io/post-images/1603011544986.png" alt="" loading="lazy"></p>
-<p>之后在菜单里双击或者右键可以打开链接或者关闭链接。</p>
-]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型]]></title>
@@ -655,63 +79,5 @@ ServerPasswordSet
         <link href="https://divertingPan.github.io/post/oXF7jp9e6/">
         </link>
         <updated>2020-10-17T03:25:39.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
-<h2 id="11-加载一部分权重">1.1 加载一部分权重</h2>
-<p>实际上有两种思路加载预训练权重。<br>
-先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
-<pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
-pretrained_dict = torch.load('pretrainedXXXX.pth')
-model = MyNetXXXX()
-model_dict = model.state_dict()
-pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-model_dict.update(pretrained_dict)
-model.load_state_dict(model_dict)
-</code></pre>
-<h2 id="12-只改最后一层">1.2 只改最后一层</h2>
-<p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
-<pre><code class="language-python"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
-net = SameWithPretrainingNetXXXX()
-net.load_state_dict(torch.load('pretrainedXXXX.pth')
-fc_features = model.fc.in_features
-net.fc = nn.Linear(fc_features, 9)
-net = net.to(DEVICE)
-</code></pre>
-<p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
-<h2 id="13-模型涉及到nndataparallel的话">1.3 模型涉及到nn.DataParallel的话</h2>
-<p>还有一个坑是，如果在多GPU上训练时，保存模型权重要使用<code>torch.save(model.module.state_dict(), model_out_path)</code>的方法，否则会报一种错误：</p>
-<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
-Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
-Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
-</code></pre>
-<p>如果想要抢救一下的话，可以看到错误信息提示key中多了‘.module’，那么，只要把‘.module’移除即可：</p>
-<pre><code class="language-python"># original saved file with DataParallel
-state_dict = torch.load(model_path)
-# create new OrderedDict that does not contain `module.`
-from collections import OrderedDict
-new_state_dict = OrderedDict()
-for k, v in state_dict.items():
-    name = k.replace('.module.','.') # remove `module.`
-    new_state_dict[name] = v
-# load params
-net.load_state_dict(new_state_dict)
-</code></pre>
-<blockquote>
-<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
-</blockquote>
-<h1 id="2-pytorch冻结部分层的权重">2. pytorch冻结部分层的权重</h1>
-<blockquote>
-<p>ref:<br>
-https://www.jianshu.com/p/fcafcfb3d887</p>
-</blockquote>
-<p>想要只训练网络最后的全连接层，可先查看所有的<code>net.named_parameters()</code>找到对应的参数名称，然后使用锁定梯度的方法冻结权重训练。</p>
-<pre><code class="language-python">for k,v in model.named_parameters():
-    if k not in ['fc.weight', 'fc.bias']:
-        v.requires_grad=False
-</code></pre>
-<h1 id="3-不同参数设置不同学习率">3. 不同参数设置不同学习率</h1>
-<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606045451447.webp" alt="" loading="lazy"></figure>
-<h1 id="4-一个网络的输出是另一个的输入只训练后半个网络">4. 一个网络的输出是另一个的输入，只训练后半个网络</h1>
-<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606045564441.webp" alt="" loading="lazy"></figure>
-]]></content>
     </entry>
 </feed>
