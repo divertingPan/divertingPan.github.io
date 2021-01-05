@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2021-01-05T06:33:21.968Z</updated>
+    <updated>2021-01-05T08:56:00.072Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -114,12 +114,25 @@ def insertion_sort(arr):
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[ubuntu挂载硬盘方法]]></title>
+        <title type="html"><![CDATA[ubuntu挂载硬盘（或内存盘）方法]]></title>
         <id>https://divertingPan.github.io/post/mjw29qAq0/</id>
         <link href="https://divertingPan.github.io/post/mjw29qAq0/">
         </link>
         <updated>2020-11-30T02:56:49.000Z</updated>
-        <content type="html"><![CDATA[<ol>
+        <content type="html"><![CDATA[<h1 id="挂载内存盘">挂载内存盘</h1>
+<blockquote>
+<p>ref：https://blog.csdn.net/qq_29912325/article/details/108666516</p>
+</blockquote>
+<p>对于超大内存（RAM）的服务器，可以把需要经常IO的数据放在内存上。具体做法就是把内存的一部分挂载到目录上，当做普通存储使用。只是需要注意，关机会消失，所以要做好备份。</p>
+<p>先准备一个空的目录，然后执行</p>
+<pre><code>sudo mount -t tmpfs -o size=50G tmpfs /your/whatever/path
+</code></pre>
+<p>然后把数据复制进去即可。如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
+<p>也可以写在/etc/fstab里面永久挂载，但是RAM掉电数据消失的情况是不会改变的。</p>
+<pre><code>tmpfs	/home/user/ramdisk	tmpfs	defaults,size=100M	0 0
+</code></pre>
+<h1 id="挂载普通硬盘">挂载普通硬盘</h1>
+<ol>
 <li>找到准备存内容的硬盘</li>
 </ol>
 <pre><code>sudo fdisk -lu

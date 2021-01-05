@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【从头实战】基于pytorch的明信片分类任务 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609828006794">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609836856814">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【从头实战】基于pytorch的明信片分类任务 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609828006794" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609836856814" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -103,7 +103,7 @@
                 2020-12-17
               </span>
               <span>
-                14 min read
+                15 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/JXxlr5egg/" class="post-tag">
@@ -152,7 +152,7 @@
 <figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1609664696701.PNG" alt="" loading="lazy"></figure>
 <p>可以看一下数据各类别的分布情况。这里可以看出来自某些国家的明信片很多，而某些非常少。</p>
 <figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1609664854490.png" alt="" loading="lazy"></figure>
-<p><code>绘制数据集分布情况.py</code></p>
+<p><code>show_dataset.py</code></p>
 <pre><code class="language-python">import os
 import matplotlib.pyplot as plt
 
@@ -194,9 +194,9 @@ plt.savefig('./dataset.png', dpi=150, bbox_inches='tight')
 <figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1609667711295.png" alt="" loading="lazy"></figure>
 <h1 id="数据划分">数据划分</h1>
 <h2 id="划分至新的路径下">划分至新的路径下</h2>
-<p>这样获取的数据并没有划分训练集验证集测试集，这里再给他划分一下。对于每个类别下的图片文件，首先把文件顺序打乱一下，之后将文件按照比例划分成三个部分，利用列表的长度和给定的比例计算新的<code>训练集：验证集：测试集</code>列表，然后根据列表里的文件名和相应的路径分别拷贝出来。</p>
+<p>这样获取的数据并没有划分训练集验证集测试集，这里再给他划分一下。对于每个类别下的图片文件，首先把文件顺序打乱一下，之后将文件按照6：2：2的比例划分成三个部分（即“训练集：验证集：测试集”），利用列表的长度和给定的比例计算新的<code>训练集：验证集：测试集</code>列表，然后根据列表里的文件名和相应的路径分别拷贝出来。</p>
 <p>这里主要涉及的都是零碎的小操作，没什么难点，直接看代码即可：</p>
-<p><code>划分数据集.py</code></p>
+<p><code>split_train_val_test.py</code></p>
 <pre><code class="language-python">import os
 import random
 from shutil import copyfile
@@ -243,7 +243,7 @@ test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
 <figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1609670505554.PNG" alt="" loading="lazy"></figure>
 <h2 id="划分为csv格式数据">划分为csv格式数据</h2>
 <p>另外一种办法是，不额外将图片拷贝到分立的trian, val, test，而是使用csv列表来存储不同集合的图片路径。具体而言，和上面分文件夹存储的操作很像，只是把copy操作换成加入存储列表的操作。</p>
-<p><strong>使用这种方法的优点在于，可以统一各种存储方式的数据集的读取工作，如果需要定制dataloader的话可以省去很多麻烦。在后面将示范使用csv读取数据的优势。</strong></p>
+<p><strong>使用这种方法的优点在于，可以把按照不同存储方式的多种数据集的读取工作统一起来，如果需要定制dataloader的话可以省去很多麻烦。在后面将示范使用csv读取数据的优势。</strong></p>
 <p>而且，对于刚刚说到的那个val集合里缺一项的类别，也可以无视他。不会因为空的文件夹路径造成读取上的问题。</p>
 <pre><code class="language-python">img_path = ([], [], [])
 img_label = ([], [], [])
@@ -273,6 +273,8 @@ for maindir, subdir, filename in os.walk(dataset_path):
 <p>之后在img_label里就需要处理一下，将对应dict里面的类名字换成对应的编号。</p>
 <pre><code class="language-python">img_label[idx].append(name_dict[os.path.basename(maindir)])
 </code></pre>
+<p>这里我们看一眼生成的csv里面是什么样子的。可以看到这个列表就是数据的“路径-对应类别”的一个个对照。（注：csv格式可以通过excel打开）</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1609833225858.PNG" alt="" loading="lazy"></figure>
 <p>为了方便起见，可以将“名字-数字”对应表也存一下，很简单</p>
 <pre><code class="language-python">df = pd.DataFrame.from_dict(name_dict, orient='index', columns=['label'])
 df = df.reset_index().rename(columns = {'index':'country_name'})
@@ -284,18 +286,19 @@ df.to_csv('./label.csv', index=None)
 <li>后面将每个集合里面的元素数量append到字典值上，</li>
 <li>最后字典列名对应也改一改。</li>
 </ol>
-<p>这便是下面三处代码的变动细节：</p>
+<p>这便是下面三处代码的变动细节：(2021-01-05 debugging：看到倒数第二行那个代码最后的<code>[0]</code>了吗？如果不加的话，最后会导致输出的train，val，test的标签csv的label列是一个列表，加上这个索引代表我们要img_label是数列第0个元素，即类别号。而后面的其他三个元素是划分的三个集的数量值)</p>
 <pre><code class="language-python">......
 name_dict[os.path.basename(maindir)] = [flag]
 ......
 for idx in range(0, 3):
     name_dict[os.path.basename(maindir)].append(len(file_list[idx]))
     ......
+        img_label[idx].append(name_dict[os.path.basename(maindir)][0])
 df = pd.DataFrame.from_dict(name_dict, orient='index', columns=['label', 'train_cls', 'val_cls', 'test_cls'])
 </code></pre>
 <p>这便是生成的dataframe，包含了类别名，类别编号，train，val，test下的样本数量。</p>
-<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1609683351416.PNG" alt="" loading="lazy"></figure>
-<p><code>完整的csv生成过程.py</code></p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1609683351416.PNG" alt="" loading="lazy"></figure>
+<p><code>csv_train_val_test.py</code></p>
 <pre><code class="language-python">import os
 import random
 import pandas as pd
@@ -332,7 +335,7 @@ for maindir, subdir, filename in os.walk(dataset_path):
             name_dict[os.path.basename(maindir)].append(len(file_list[idx]))
             for i in file_list[idx]:
                 img_path[idx].append(os.path.join('dataset', 'img', os.path.basename(maindir), i))
-                img_label[idx].append(name_dict[os.path.basename(maindir)])
+                img_label[idx].append(name_dict[os.path.basename(maindir)][0])
 
 for idx in range(0, 3):          
     df = pd.DataFrame({'path':img_path[idx], 'label':img_label[idx]})
@@ -344,9 +347,9 @@ df.to_csv('./label.csv', index=None)
 
 </code></pre>
 <p>为了对比确认一下是不是对的，可以拿上一步用文件夹划分的结果来对比看看。经过检查是对的，图片不好放，就不放了。其实这一步获取各类数量的方法，也可以利用显示数据集各类分布的那一步里面的方法来。但是前提是需要构建好三个集合的文件夹。如果直接构建csv路径列表，就只能用这一步这个方法了。既然提到这了，不如把三个集合里面的各类别数量也显示一下看看？</p>
-<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1609685686614.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1609685686614.png" alt="" loading="lazy"></figure>
 <p>值得注意的是，第一，画叠加柱状图的时候，需要将数据转成numpy格式。第二，柱状图的条纹宽度可以改，对于横向的图，需要改的参数是height。第三，数据排序的时候，应该以某一个为基准（例如以train样本的数量从大到小排序，然后将对应的val和test也按照这个顺序来，不然都独立排序，有可能顺序不一致）</p>
-<p><code>画各个类下的样本数量.py</code></p>
+<p><code>show_dataset.py</code></p>
 <pre><code class="language-python">train_path = './train'
 train_dict = {}
 for maindir, subdir, filename in os.walk(train_path):
