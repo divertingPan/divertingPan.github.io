@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【从头实战】基于pytorch的明信片分类任务 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1609992481246">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1610455269563">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【从头实战】基于pytorch的明信片分类任务 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1609992481246" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1610455269563" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -103,7 +103,7 @@
                 2020-12-17
               </span>
               <span>
-                15 min read
+                16 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/JXxlr5egg/" class="post-tag">
@@ -194,7 +194,7 @@ plt.savefig('./dataset.png', dpi=150, bbox_inches='tight')
 <figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1609667711295.png" alt="" loading="lazy"></figure>
 <h1 id="数据划分">数据划分</h1>
 <h2 id="划分至新的路径下">划分至新的路径下</h2>
-<p>这样获取的数据并没有划分训练集验证集测试集，这里再给他划分一下。对于每个类别下的图片文件，首先把文件顺序打乱一下，之后将文件按照6：2：2的比例划分成三个部分（即“训练集：验证集：测试集”），利用列表的长度和给定的比例计算新的<code>训练集：验证集：测试集</code>列表，然后根据列表里的文件名和相应的路径分别拷贝出来。</p>
+<p>这样获取的数据并没有划分训练集验证集测试集，这里需要自己给他划分一下。对于每个类别下的图片文件，首先把文件顺序打乱一下，之后将文件按照23：1：1的比例划分成三个部分（即“训练集：验证集：测试集”），利用列表的长度和给定的比例计算新的<code>训练集：验证集：测试集</code>列表，然后根据列表里的文件名和相应的路径分别拷贝出来。【词典：train-训练，validate-验证，test-测试】（2021-01-07：修改三个集合的比例，图片总数有25万左右，验证和测试留1万个样本足矣，多留点给训练集用）</p>
 <p>这里主要涉及的都是零碎的小操作，没什么难点，直接看代码即可：</p>
 <p><code>split_train_val_test.py</code></p>
 <pre><code class="language-python">import os
@@ -205,16 +205,17 @@ from shutil import copyfile
 dataset_path = './img'
 
 split_folder = ['train', 'val', 'test']
-split_num = [6, 2, 2]
+split_num = [23, 1, 1]
+total = sum(split_num)
 
 for maindir, subdir, filename in os.walk(dataset_path):
     if maindir != dataset_path:
         random.shuffle(filename)
         size = len(filename)
         
-        train_filename = filename[0 : size*split_num[0]//10]
-        val_filename = filename[size*split_num[0]//10 : size*(split_num[0]+split_num[1])//10]
-        test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
+        train_filename = filename[0 : size*split_num[0]//total]
+        val_filename = filename[size*split_num[0]//total : size*(split_num[0]+split_num[1])//total]
+        test_filename = filename[size*(split_num[0]+split_num[1])//total : ]
         
         file_list = [train_filename, val_filename, test_filename]
         
@@ -231,6 +232,7 @@ for maindir, subdir, filename in os.walk(dataset_path):
 <figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1609668842503.PNG" alt="" loading="lazy"></figure>
 <p>这里有一个细节的地方需要注意：如果某个类别下的图片数量太少了，怎么办？有可能没法分成三个集合。例如，如果filename这个列表太短，只有2个元素。会被划分成什么样子呢？可以通过试验观察一下</p>
 <pre><code class="language-python">filename = [1,2,3]
+split_num = [6, 2, 2]
 size = len(filename)
 train_filename = filename[0 : size*split_num[0]//10]
 val_filename = filename[size*split_num[0]//10 : size*(split_num[0]+split_num[1])//10]
@@ -239,7 +241,7 @@ test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
 <figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1609670170830.PNG" alt="" loading="lazy"></figure>
 <p>如果filename只有两个元素，会是什么样子</p>
 <figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1609670240290.PNG" alt="" loading="lazy"></figure>
-<p>之所以提到这个，是因为有一类里面确实只有两个样本，所以鉴于此，我们手动去补一下这个类的验证集里面的样本，避免空路径，把测试集里的数据也放进验证集里。</p>
+<p>之所以提到这个，是因为有一些类里面样本数确实不够，所以鉴于此，我们手动去补一下这个类的验证集里面的样本，避免空路径，把测试集里的数据也放进验证集里。</p>
 <figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1609670505554.PNG" alt="" loading="lazy"></figure>
 <h2 id="划分为csv格式数据">划分为csv格式数据</h2>
 <p>另外一种办法是，不额外将图片拷贝到分立的trian, val, test，而是使用csv列表来存储不同集合的图片路径。具体而言，和上面分文件夹存储的操作很像，只是把copy操作换成加入存储列表的操作。</p>
@@ -297,7 +299,7 @@ for idx in range(0, 3):
 df = pd.DataFrame.from_dict(name_dict, orient='index', columns=['label', 'train_cls', 'val_cls', 'test_cls'])
 </code></pre>
 <p>这便是生成的dataframe，包含了类别名，类别编号，train，val，test下的样本数量。</p>
-<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1609683351416.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1610006908158.PNG" alt="" loading="lazy"></figure>
 <p><code>csv_train_val_test.py</code></p>
 <pre><code class="language-python">import os
 import random
@@ -307,7 +309,8 @@ import pandas as pd
 dataset_path = './img'
 
 split_folder = ['train', 'val', 'test']
-split_num = [6, 2, 2]
+split_num = [23, 1, 1]
+total = sum(split_num)
 
 img_path = ([], [], [])
 img_label = ([], [], [])
@@ -325,9 +328,9 @@ for maindir, subdir, filename in os.walk(dataset_path):
         random.shuffle(filename)
         size = len(filename)
         
-        train_filename = filename[0 : size*split_num[0]//10]
-        val_filename = filename[size*split_num[0]//10 : size*(split_num[0]+split_num[1])//10]
-        test_filename = filename[size*(split_num[0]+split_num[1])//10 : ]
+        train_filename = filename[0 : size*split_num[0]//total]
+        val_filename = filename[size*split_num[0]//total : size*(split_num[0]+split_num[1])//total]
+        test_filename = filename[size*(split_num[0]+split_num[1])//total : ]
         
         file_list = [train_filename, val_filename, test_filename]
         
@@ -337,18 +340,18 @@ for maindir, subdir, filename in os.walk(dataset_path):
                 img_path[idx].append(os.path.join('dataset', 'img', os.path.basename(maindir), i))
                 img_label[idx].append(name_dict[os.path.basename(maindir)][0])
 
-for idx in range(0, 3):          
+for idx in range(0, 3):
     df = pd.DataFrame({'path':img_path[idx], 'label':img_label[idx]})
     df.to_csv('./{}.csv'.format(split_folder[idx]), index=None)
 
 df = pd.DataFrame.from_dict(name_dict, orient='index', columns=['label', 'train_cls', 'val_cls', 'test_cls'])
 df = df.reset_index().rename(columns = {'index':'country_name'})
 df.to_csv('./label.csv', index=None)
-
+      
 </code></pre>
-<p>为了对比确认一下是不是对的，可以拿上一步用文件夹划分的结果来对比看看。经过检查是对的，图片不好放，就不放了。其实这一步获取各类数量的方法，也可以利用显示数据集各类分布的那一步里面的方法来。但是前提是需要构建好三个集合的文件夹。如果直接构建csv路径列表，就只能用这一步这个方法了。既然提到这了，不如把三个集合里面的各类别数量也显示一下看看？</p>
-<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1609685686614.png" alt="" loading="lazy"></figure>
-<p>值得注意的是，第一，画叠加柱状图的时候，需要将数据转成numpy格式。第二，柱状图的条纹宽度可以改，对于横向的图，需要改的参数是height。第三，数据排序的时候，应该以某一个为基准（例如以train样本的数量从大到小排序，然后将对应的val和test也按照这个顺序来，不然都独立排序，有可能顺序不一致）</p>
+<p>为了对比确认一下是不是对的，可以通过上一节用文件夹划分的结果来对比看看。经过检查是对的。其实获取各类数量的方法，也可以利用显示数据集各类分布的那步的方法来。但是前提是需要构建好三个集合的文件夹。如果直接构建csv路径列表，就只能用本节的这个方法了。既然提到这了，不如把三个集合里面的各类别数量也显示一下看看？</p>
+<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1610006304454.png" alt="" loading="lazy"></figure>
+<p>值得注意的是，第一，画叠加柱状图的时候，需要将数据转成numpy格式。第二，柱状图的条纹宽度可以改，对于横向的图，需要改的参数便为height。第三，数据排序的时候，应该以某一个为基准（例如以train样本的数量从大到小排序，然后将对应的val和test也按照这个顺序来，如若三个集合各排各的，有可能错位）</p>
 <p><code>show_dataset.py</code></p>
 <pre><code class="language-python">train_path = './train'
 train_dict = {}
@@ -387,24 +390,26 @@ plt.barh(x, y_train, height=1, label='train')
 plt.barh(x, y_val, left=y_train, height=1, label='val')
 plt.barh(x, y_test, left=y_train+y_val, height=1, label='test')
 plt.yticks(x[0:-1:20])
+plt.legend()
 plt.savefig('./split_dataset.png', dpi=150, bbox_inches='tight')
 </code></pre>
 <p>至此，前期准备工作已经完毕。</p>
 <p><u>2021年1月3日，元旦假期，稍微摸个鱼，把数据准备工作做了。在打日期的时候不小心又打了2020年。。。</u></p>
 <h1 id="数据预处理">数据预处理</h1>
 <p>（transforms.conpose([...])<br>
-affine, crop, color jitter, gaussian noise, gaussian blur,</p>
+affine, crop, color jitter, gaussian noise, gaussian blur, normalize, totensor</p>
 <h1 id="数据读取">数据读取</h1>
 <p>（dataloader的杂谈，num_worker在win平台上不好用？folder_loader能不能自动划分训练验证测试集？）</p>
 <h1 id="神经网络识别">神经网络识别</h1>
 <p>（为了防止读取的数据由于bug而全是0，或者网络本身结构有问题，代码能通但是结果有问题，需要在小样本上做过拟合测试<br>
-迁移学习<br>
+先从头训练，再迁移学习<br>
 SENet+预训练模型。<br>
 数据不均衡怎么办？<br>
 tensorboard可视化（以及在远程服务器上的使用），<br>
 early stop）</p>
 <h1 id="结果分析">结果分析</h1>
-<p>需要把分类矩阵画出来，看是否集中在对角线。</p>
+<p>因为没有先前的研究，依靠人工来分辨也完全没有办法识别，所以自己设置一个baseline，将所有样本都预测为最多的那类，作为准确度baseline<br>
+需要把分类矩阵画出来，看是否集中在对角线。</p>
 <h1 id="可视化分析">可视化分析</h1>
 <p>（浅析Grad CAM以及guided backprop）</p>
 <h1 id="结论">结论</h1>
