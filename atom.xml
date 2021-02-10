@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2021-01-12T12:41:45.026Z</updated>
+    <updated>2021-02-10T16:27:48.569Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[【硬核摄影】给火车拍个全身照]]></title>
+        <id>https://divertingPan.github.io/post/train_scanning/</id>
+        <link href="https://divertingPan.github.io/post/train_scanning/">
+        </link>
+        <updated>2021-02-10T04:17:14.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[pytorch的奇怪报错坑]]></title>
         <id>https://divertingPan.github.io/post/wh-_qBYkG/</id>
@@ -72,12 +79,5 @@
         <link href="https://divertingPan.github.io/post/lCfwQ3hC0/">
         </link>
         <updated>2020-10-18T08:31:31.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[pytorch加载预训练权重、冻结权重、设置学习率、训练半个模型]]></title>
-        <id>https://divertingPan.github.io/post/oXF7jp9e6/</id>
-        <link href="https://divertingPan.github.io/post/oXF7jp9e6/">
-        </link>
-        <updated>2020-10-17T03:25:39.000Z</updated>
     </entry>
 </feed>
