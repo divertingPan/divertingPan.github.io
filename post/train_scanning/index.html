@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【硬核摄影】给火车拍个全身照 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1613026019002">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1613027361843">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【硬核摄影】给火车拍个全身照 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1613026019002" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1613027361843" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -171,7 +171,7 @@ frame_height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
 <h3 id="拼接图片">拼接图片</h3>
 <p>如果对视频的所有帧，都取一个固定宽度的图像出来，拼接在一起，那这个图像的宽度就应该是总帧数x窗口宽。所以我们直接初始化一个空的ndarray，<code>img = np.empty((frame_height, total_frames * width, 3), dtype='uint8')</code></p>
 <p>从视频帧中剪出需要的图像段很容易，直接<code>frame[:, position:position+width, :]</code>即可，这个position是一个比较靠图像中间的位置，也是这个窗口的左侧起始边。</p>
-<p>往那个空数组里面放图像段的时候有一个小坑。火车从左向右开还是从右向左开的拼接顺序也应该是反过来的，但是这个仅限于窗口宽度&gt;1，否则无必要（不解释了，自己想不明白试试也明白了）。</p>
+<p>往那个空数组里面放图像段的时候有一个小坑。火车从左向右开还是从右向左开的拼接顺序也应该是反过来的。</p>
 <ol>
 <li>如果从左向右行驶，在空数组上的拼接顺序应该是从最右端开始拼起，即起始位置应该是<code>pixel_start = total_frames * width - (i + 1) * width</code></li>
 <li>反之，应该从最左端拼，起始位置是<code>pixel_start = i * width</code></li>
