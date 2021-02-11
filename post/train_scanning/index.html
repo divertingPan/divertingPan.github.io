@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【硬核摄影】给火车拍个全身照 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1612974410586">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1613021825643">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【硬核摄影】给火车拍个全身照 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1612974410586" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1613021825643" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -102,7 +102,7 @@
                 2021-02-10
               </span>
               <span>
-                15 min read
+                16 min read
               </span>
               
                 <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
@@ -131,18 +131,19 @@
 <p>用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主体太小了看不清。用录像的办法可以离近的同时，拍到完整的火车形态。但是视线就只能被限制在这一个小窗口内，只能看到一小部分的图像，还是不能自由观察整个火车全貌。</p>
 <p>但是，既然录像已经把完整的火车给录下来了，那就可以直接用拼图的方法，把每一帧图像里面新录到的部分往后接上去。从视频一开始出现火车，就将这之后新出现的内容向后延展，直到火车走掉。基本的思路如下图所示。</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1612932731617.png" alt="" loading="lazy"></figure>
-<p>这时候很明显的发现，这样做的话，由于画面有透视的原因，会使画面不均匀，并且拼接得不太严丝合缝。如果把这个窗口缩窄，只取画面中部的一小部分，这一小部分只要足够小就可以忽略他的透视形变，画面就会均匀很多。这样做顺便还有一个好处，可以避免周围杂物的干扰，理论上只要录像视线内别被遮挡太多都是可以的。</p>
+<p>这时候很明显的发现，这样做的话，由于画面有透视的原因，会使画面不均匀，并且拼接得不太严丝合缝。如果把这个窗口缩窄，只取画面中部的一小部分，这一小部分只要足够小就可以忽略他的透视形变，画面就会均匀很多。这样做顺便还有一个好处，可以避免周围杂物的干扰，理论上只要录像视线内有这一小条能够完整照到火车就是可以的。</p>
 <figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1612934113750.png" alt="" loading="lazy"></figure>
 <p>这样的话，可以对视频的每一帧，都剪出中间某个固定宽度的图像然后拼起来就好了。这个窗口可以无限窄（只留1像素宽）吗？这个窗口宽度显然应该和同一个点在两帧之间的距离有关。窗口比这个距离窄，就会丢信息，比这个距离宽，就会有重复出现的内容。如果和这个距离相等，则是刚刚好的。例如下图是前后两帧叠加显示的示意图，同一点的距离就应该作为这个窗口的宽度来拼接图像</p>
 <figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1612935112494.png" alt="" loading="lazy"></figure>
-<p>同时我们还得确保这个窗口尽量窄。所以说，录像的时候尽量让物体在视频里动的慢一点，也就是让两帧之间同一点的位移尽量小。所以要么拍慢速移动的物体，要么用高速摄影机。当然，为了确保这个动着的东西在画面里不糊，每一帧的快门速度也要尽量快。</p>
+<p>同时我们还得确保这个窗口尽量窄，以确保减少透视形变和光照不均。所以说，录像的时候尽量让物体在视频里动的慢一点，也就是让两帧之间同一点的位移尽量小。所以要么拍慢速移动的物体，要么用高速摄影机。当然，为了确保这个动着的东西在画面里不糊，每一帧的快门速度也要尽量快。</p>
 <p>那我们干脆算一算快门速度还有这个窗口宽度和实际运动速度之间的关系。利用一些已知信息可以推算图像里的一像素对应实际焦平面上的区域尺寸。</p>
 <blockquote>
 <p>根据TB/T 1010-2016 《铁道车辆轮对及轴承型式与基本尺寸》，大部分的货车轮滚动圆直径是840mm，根据图中所示这个型号是P62k，根据<a href="http://www.trainfanz.com/series_info.aspx?Series=55&amp;msg=576">http://www.trainfanz.com/series_info.aspx?Series=55&amp;msg=576</a>的数据，这个车的轴重是21t，又根据GB/T 25024-2019 《机车车辆转向架 货车转向架》的第5.8.a：轴重25t及以下车轮滚动圆直径应为840mm。基本可以确定图中车轮的直径是840mm。</p>
 </blockquote>
 <figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1612949774146.png" alt="" loading="lazy"></figure>
-<p>这样，做一个简单的比例换算关系就可知，图片里的1像素=实际该处位置6.83mm。如果在60fps的录像帧率下，若想要窗口宽度为1像素，则火车速度就应该为6.83x60 mm/s，即0.41m/s。实际录像时为了保证尽量小的窗口间隔，录像帧率尽量选择设备能达到的最大帧率。</p>
-<p>假设使用1/8000的快门速度，不出现模糊的火车最高速度应该是6.83/(1/8000) mm/s，即54.64m/s。（意义为在一个像素能识别到的运动距离内，在快门速度时间内运动这样的距离。可以参考“弥散圆”的概念）虽然为了确保快门速度能够压住运动的物体速度，但是显然1/8000也太没有必要了。而且快门速度过快会导致摄像机需要很高的感光度（ISO），导致画面质量降低。而普通列车（指由车头拖拉的这种火车）设计的最高速度也就是160km/h，所以推算快门速度只要达到(6.83/1000)/(160/3.6)=1/6507，理论的根据车轮估算最低快门速度的完整换算公式应该是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>s</mi><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mfrac><mrow><mtext> 车轮直径 </mtext><mo>(</mo><mtext> 像素 </mtext><mo>)</mo><mo>×</mo><mtext> 火车速度 </mtext></mrow><mrow><mn>0.84</mn><mo>(</mo><mo>×</mo><mn>3.6</mn><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">ss=1 / \frac{\text { 车轮直径 }(\text { 像素 }) \times \text { 火车速度 }}{0.84(\times 3.6)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mord mtight">.</span><span class="mord mtight">8</span><span class="mord mtight">4</span><span class="mopen mtight">(</span><span class="mord mtight">×</span><span class="mord mtight">3</span><span class="mord mtight">.</span><span class="mord mtight">6</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">车轮直径</span><span class="mord mtight"> </span></span><span class="mopen mtight">(</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">像素</span><span class="mord mtight"> </span></span><span class="mclose mtight">)</span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">火车速度</span><span class="mord mtight"> </span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>，当火车速度是km/h时进行(x3.6)，是m/s时不做。</p>
+<p>这样，做一个简单的比例换算关系就可知，图片里的1像素=实际该处位置6.83mm。如果在60fps的录像帧率下，若想要窗口宽度为1像素，则火车速度就应该为6.83x60 mm/s，即0.41m/s。录像帧率越高，可接纳的实际火车速度越快，因此在实际录像时为了保证尽量小的窗口间隔，录像帧率尽量选择设备能达到的最大帧率。</p>
+<p>假设使用1/8000的快门速度，不出现模糊的火车最高速度应该是6.83/(1/8000) mm/s，即54.64m/s。（意义为在一个像素能识别到的运动距离内，在快门速度时间内走过不超过这样的距离，否则会出现运动残影。可以参考“弥散圆”的概念）虽然为了确保快门速度能够压住运动的物体速度，但是显然1/8000并没有必要。而且快门速度过快同时会导致需要更高的感光度（ISO），导致画面质量降低。而普通列车（指车头拖拉的这种火车）设计的最高速度也就是160km/h，所以推算快门速度只要达到(6.83/1000)/(160/3.6)=1/6507。根据我的实际观察，我所在的这个位置接近火车站，所以火车基本都不是全速从我面前通过的，因此快门速度还可以更慢。</p>
+<p>理论的<code>根据车轮估算最低快门速度</code>的完整换算公式应该是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">快</mi><mi mathvariant="normal">门</mi><mi mathvariant="normal">速</mi><mi mathvariant="normal">度</mi><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mfrac><mrow><mtext> 车轮直径 </mtext><mo>(</mo><mtext> 像素 </mtext><mo>)</mo><mo>×</mo><mtext> 火车速度 </mtext></mrow><mrow><mn>0.84</mn><mo>(</mo><mo>×</mo><mn>3.6</mn><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">快门速度=1 / \frac{\text { 车轮直径 }(\text { 像素 }) \times \text { 火车速度 }}{0.84(\times 3.6)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mord cjk_fallback">快</span><span class="mord cjk_fallback">门</span><span class="mord cjk_fallback">速</span><span class="mord cjk_fallback">度</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mord mtight">.</span><span class="mord mtight">8</span><span class="mord mtight">4</span><span class="mopen mtight">(</span><span class="mord mtight">×</span><span class="mord mtight">3</span><span class="mord mtight">.</span><span class="mord mtight">6</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">车轮直径</span><span class="mord mtight"> </span></span><span class="mopen mtight">(</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">像素</span><span class="mord mtight"> </span></span><span class="mclose mtight">)</span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">火车速度</span><span class="mord mtight"> </span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>，当火车速度是km/h时进行(x3.6)，是m/s时不乘。</p>
 <h2 id="写个自动化程序">写个自动化程序</h2>
 <h3 id="读取视频">读取视频</h3>
 <p>利用python对视频进行一些处理，主要依靠cv2提供的一些工具。首先得打开一个视频</p>
@@ -166,9 +167,9 @@ frame_height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
 <p>读进来的帧的形式为np.ndarray形式的数据，因此方便后续操作。值得注意的是，记住cv2默认的色彩通道为BGR顺序。要么自己记得转一下，要么就一直使用cv2提供的图像处理方法。</p>
 <figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1612936624283.PNG" alt="" loading="lazy"></figure>
 <h3 id="拼接图片">拼接图片</h3>
-<p>如果对视频的所有帧，都取一个固定宽度的图像出来，拼接在一起，那这个图像的宽度就应该是总帧数x窗口宽。所以我们直接初始化一个空的np ndarray，<code>img = np.empty((frame_height, total_frames * width, 3), dtype='uint8')</code></p>
-<p>从视频帧中剪出需要的图像段很容易，直接<code>frame[:, position:position+width, :]</code>即可，这个position是一个比较靠图像中间的位置，也是这个窗口的左侧。</p>
-<p>往那个空数组里面放的时候有一个小坑。火车从左向右开还是从右向左开的拼接顺序也应该是反过来的，但是这个仅限于窗口宽度&gt;1，否则无必要（不解释了，自己想不明白试试也明白了）。</p>
+<p>如果对视频的所有帧，都取一个固定宽度的图像出来，拼接在一起，那这个图像的宽度就应该是总帧数x窗口宽。所以我们直接初始化一个空的ndarray，<code>img = np.empty((frame_height, total_frames * width, 3), dtype='uint8')</code></p>
+<p>从视频帧中剪出需要的图像段很容易，直接<code>frame[:, position:position+width, :]</code>即可，这个position是一个比较靠图像中间的位置，也是这个窗口的左侧起始边。</p>
+<p>往那个空数组里面放图像段的时候有一个小坑。火车从左向右开还是从右向左开的拼接顺序也应该是反过来的，但是这个仅限于窗口宽度&gt;1，否则无必要（不解释了，自己想不明白试试也明白了）。</p>
 <ol>
 <li>如果从左向右行驶，在空数组上的拼接顺序应该是从最右端开始拼起，即起始位置应该是<code>pixel_start = total_frames * width - (i + 1) * width</code></li>
 <li>反之，应该从最左端拼，起始位置是<code>pixel_start = i * width</code></li>
@@ -212,17 +213,17 @@ if not flag or (total_frames * width) % split_width:
                 img[:, split_start:, :])
 </code></pre>
 <h3 id="使用体验优化">使用体验优化</h3>
-<p>前面那段代码的一些参数可能会随着视频不同而变化，要是每次运行前都打开代码去找实在太麻烦，写在程序开头我也嫌改着麻烦。另外，程序运行过程需要一些时间，没有进度条实在是太不友好。而且，如果加载到视频能够直接显示相邻两帧的差异，就能很方便的确定窗口宽度了。</p>
+<p>前面那段代码的一些参数可能会随着视频不同而变化，要是每次运行前都打开代码去找实在太麻烦，写在程序开头我也嫌改着麻烦。另外，程序运行过程需要一些时间，没有进度条实在是太不友好。而且，如果加载视频之后能够立刻显示相邻两帧的差异，就能很方便的确定窗口宽度了。</p>
 <p>种种迹象表明，现在需要一个界面来接收参数以及做一些显示。</p>
-<p>好在python自带有tkinter一个简易的界面制作工具。也不讲什么稳定性美观啥的了，直接搓个界面就行。反正我自己用的话绝对不会故意往输入框里给什么核爆炸输入的（何必呢）。</p>
+<p>好在python自带有tkinter一个简易的界面制作工具。也不讲什么稳定性美观啥的了，直接搓个界面就行。而且也不考虑那么多“一个用户走进酒吧点了一份炒饭”这样的问题，反正我自己用的话绝对不会故意往输入框里给什么核爆炸输入的（何必呢）。</p>
 <ul>
 <li>我想要显示两帧的差异图，如果还想带一些简单的交互，那就用matplotlib。</li>
-<li>或许需要一个视频的定位条，用来改变相邻两帧在视频里的位置（例如视频开头可能啥也没有，应该从视频中间取帧）。</li>
+<li>或许需要一个视频的定位条，用来改变显示的相邻两帧在视频里的位置（例如视频开头可能啥也没有，应该从视频中间取帧）。</li>
 <li>我还想要视频的打开和保存路径选择，这俩功能每个GUI框架必有。</li>
 <li>打开视频以后显示一下fps、总帧数等信息，这个直接传值给Label那样的控件就行。</li>
 <li>需要有输入框来接收一些值，包括窗口位置、窗宽度、切割图像的图像宽度。</li>
 <li>一个按钮来将这些值给处理的函数并且执行。</li>
-<li>一个进度条，刚好这个函数需要从头到尾遍历视频帧，这个进度就可以作为进度条的进度。</li>
+<li>一个进度条，刚好这个处理流程需要从头到尾遍历视频帧，这个进度就可以作为进度条的进度。</li>
 </ul>
 <p>首先，每个GUI都要有一个主框架</p>
 <pre><code class="language-python">window = tk.Tk()
@@ -230,7 +231,7 @@ window.title('scanning video')
 window.geometry('1024x500')
 font = tf.Font(size=12)
 </code></pre>
-<p>之后，我感觉再怎么说，基本的布局还是得科学一点，不然自己用起来肯定不顺手。图像的显示就放在左侧，其他的控制放在右侧，</p>
+<p>再怎么说，基本的布局还是得科学一点，不然自己用起来肯定不顺手。图像的显示就放在左侧，其他的控制放在右侧，</p>
 <pre><code class="language-python">frame_left = Frame(window)
 frame_left.pack(side=LEFT, fill=BOTH, expand=YES)
 
@@ -238,7 +239,7 @@ frame_right = Frame(window)
 frame_right.pack(side=LEFT, padx=10, expand=YES)
 </code></pre>
 <p>pack()是指按照顺序排在指定的框架内。可以有各种参数控制不同的排列样式。</p>
-<p>然后先放左侧的东西。一个画布显示图像，一个控制条来当做视频播放条，一个matplotlib自己的工具栏。</p>
+<p>先放左侧的东西。一个画布显示图像，一个控制条来当做视频播放条，一个matplotlib自己的工具栏。</p>
 <pre><code class="language-python">fig = Figure(figsize=(8, 4), dpi=72)
 canvas = FigureCanvasTkAgg(fig, master=frame_left)
 canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=YES)
@@ -288,7 +289,7 @@ label_video_path.pack()
 bt_open_video = tk.Button(frame_right, text='open a video', command=open_video, font=font)
 bt_open_video.pack()
 </code></pre>
-<p>之后是选择保存路径。这里我设计的是，文件在存的时候会在这个路径下建立一个与视频同名的文件夹，然后将分割的图放进去。这个可以在处理函数里面看出来。</p>
+<p>之后是选择保存路径。这里我设计的是，存文件的时候会在这个路径下建立一个与视频同名的文件夹，然后将分割的图放进去。这个可以在处理函数里面看出来。</p>
 <pre><code class="language-python">def save_img():
     save_path.set(filedialog.askdirectory())
 
