@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>【硬核摄影】给火车拍个全身照 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1613021825643">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1613026019002">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="【硬核摄影】给火车拍个全身照 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -11,8 +11,9 @@
 
 
 
-    <meta name="description" content="站在路边的思考
-用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主体太小了看不清。用录像的办法可以离近的同时，拍到完整的火车形态。但是视线就只能被限制在这一个小窗口内，只能看到一小..." />
+    <meta name="description" content="GitHub项目地址：https://github.com/divertingPan/video_scanner
+站在路边的思考
+用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主..." />
     <meta name="keywords" content="opencv,自动化,python,杂谈" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1613021825643" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1613026019002" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -127,7 +128,8 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="站在路边的思考">站在路边的思考</h2>
+                <p>GitHub项目地址：<a href="https://github.com/divertingPan/video_scanner">https://github.com/divertingPan/video_scanner</a></p>
+<h2 id="站在路边的思考">站在路边的思考</h2>
 <p>用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主体太小了看不清。用录像的办法可以离近的同时，拍到完整的火车形态。但是视线就只能被限制在这一个小窗口内，只能看到一小部分的图像，还是不能自由观察整个火车全貌。</p>
 <p>但是，既然录像已经把完整的火车给录下来了，那就可以直接用拼图的方法，把每一帧图像里面新录到的部分往后接上去。从视频一开始出现火车，就将这之后新出现的内容向后延展，直到火车走掉。基本的思路如下图所示。</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1612932731617.png" alt="" loading="lazy"></figure>
@@ -215,17 +217,17 @@ if not flag or (total_frames * width) % split_width:
 <h3 id="使用体验优化">使用体验优化</h3>
 <p>前面那段代码的一些参数可能会随着视频不同而变化，要是每次运行前都打开代码去找实在太麻烦，写在程序开头我也嫌改着麻烦。另外，程序运行过程需要一些时间，没有进度条实在是太不友好。而且，如果加载视频之后能够立刻显示相邻两帧的差异，就能很方便的确定窗口宽度了。</p>
 <p>种种迹象表明，现在需要一个界面来接收参数以及做一些显示。</p>
-<p>好在python自带有tkinter一个简易的界面制作工具。也不讲什么稳定性美观啥的了，直接搓个界面就行。而且也不考虑那么多“一个用户走进酒吧点了一份炒饭”这样的问题，反正我自己用的话绝对不会故意往输入框里给什么核爆炸输入的（何必呢）。</p>
+<p>好在python自带有tkinter一个简易的界面制作工具。也不讲什么稳定性美观啥的了，直接搓个界面就行。而且也不考虑那么多“一个用户走进酒吧点了一份炒饭”这样的问题，反正老潘自己用的话绝对不会故意往输入框里给什么核爆炸输入的（何必呢）。</p>
 <ul>
 <li>我想要显示两帧的差异图，如果还想带一些简单的交互，那就用matplotlib。</li>
 <li>或许需要一个视频的定位条，用来改变显示的相邻两帧在视频里的位置（例如视频开头可能啥也没有，应该从视频中间取帧）。</li>
-<li>我还想要视频的打开和保存路径选择，这俩功能每个GUI框架必有。</li>
+<li>我还想要视频的打开和保存路径选择，这俩功能每个GUI开发框架必有。</li>
 <li>打开视频以后显示一下fps、总帧数等信息，这个直接传值给Label那样的控件就行。</li>
 <li>需要有输入框来接收一些值，包括窗口位置、窗宽度、切割图像的图像宽度。</li>
 <li>一个按钮来将这些值给处理的函数并且执行。</li>
 <li>一个进度条，刚好这个处理流程需要从头到尾遍历视频帧，这个进度就可以作为进度条的进度。</li>
 </ul>
-<p>首先，每个GUI都要有一个主框架</p>
+<p>首先，每个GUI都要有一个主窗体，​</p>
 <pre><code class="language-python">window = tk.Tk()
 window.title('scanning video')
 window.geometry('1024x500')
@@ -362,9 +364,10 @@ bt_process.pack()
 <p>如果一切正常，窗口如图所示。利用工具栏可以放大图片局部，也可以查看某个点的坐标。</p>
 <figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1612970620699.PNG" alt="" loading="lazy"></figure>
 <h2 id="收获">收获</h2>
-<p>这样就可以收获一些角度刁钻的照片了，比如</p>
+<p>这样就可以收获一些角度刁钻的照片了，比如（封面回收）</p>
 <figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1612974206140.png" alt="" loading="lazy"></figure>
 <hr>
+<p>（可以当做新的分割线了）​</p>
 <figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1612974211721.png" alt="" loading="lazy"></figure>
 <hr>
 <figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1612974217162.png" alt="" loading="lazy"></figure>
