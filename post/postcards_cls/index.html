@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>一个使用pytorch的图片分类教程——以明信片分类为例 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1614144677960">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1614147697445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="一个使用pytorch的图片分类教程——以明信片分类为例 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -23,7 +23,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1614144677960" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1614147697445" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -136,13 +136,13 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>本项目全部源代码地址：https://github.com/divertingPan/postcard_cls</p>
+                <p>本项目全部源代码地址：<a href="https://github.com/divertingPan/postcard_cls">https://github.com/divertingPan/postcard_cls</a></p>
 <h1 id="前言">前言</h1>
 <p>之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主要是指对于加载数据、调用模型、显示结果等等流程化的代码。每次拿到一个任务，如果都从头开始搞，势必效率很低，而GitHub上的代码又良莠不齐风格各异。如果能有一个比较成熟的流程化代码，这时有一个新任务，我们可以直接拿祖传代码改里面的dataset.py或者改net.py，而训练预测结果分析等等流程都可以直接用，或者很少的改动即可用。既然都说这么多了，那就自己搞一个吧，既方便自己也方便别人。</p>
 <h1 id="摘要">摘要</h1>
 <p>本次所用代码其实大部分也都是以前自己攒的乱七八糟的小模块堆起来的，只是一直没有一个系统的优化整理。借着这次机会，本文将从一个图像识别的任务入手，从<strong>数据的收集、清洗、预处理、读取、神经网络识别、自动超参数搜索、可视化分析、结果分析</strong>这几个方面一步一步介绍，最终完成一套整体的项目流程。</p>
 <h1 id="准备数据">准备数据</h1>
-<p>**炼丹最重要的事情是什么？**是要有丹啊！</p>
+<p><strong>炼丹最重要的事情是什么？</strong> 是要有丹啊！</p>
 <p>首先要有原料，拿空气是炼不出来什么东西的。通常而言一个新算法搞出来，都是要在大家公认的标准数据集上做测试的，但是在实战中，总是要面对一些实际问题，这些问题的数据可能需要自己想办法获得，而炼丹所需要的数据量又挺大，所以收集数据（尤其是带标注的数据）就是一个大工程。</p>
 <p>好在有一种技术叫爬虫，通过这种方法可以获得很多高质量的数据，前提是需要找到一个有你感兴趣数据的网站，并且这个网站的反爬机制又不是那么强，以及需要会爬虫。</p>
 <p>这次项目用到的图片来自一个明信片网站，鉴于可能的版权或其他纠纷风险，这里不再对数据收集的详细过程做介绍。<strong>但是这个内容我写过</strong>，如果有实在非常感兴趣的同学，我相信他有能力找到我写的内容。</p>
