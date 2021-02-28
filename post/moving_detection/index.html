@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>光流法应用——自适应检测视频火车速度 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1614496328363">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1614504994054">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="光流法应用——自适应检测视频火车速度 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -25,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1614496328363" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1614504994054" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -144,6 +144,7 @@
 [2] <a href="https://users.cs.duke.edu/~tomasi/papers/shi/TR_93-1399_Cornell.pdf">Good Features to Track</a><br>
 [3] <a href="http://robots.stanford.edu/cs223b04/algo_tracking.pdf">Pyramidal Implementation of the Lucas Kanade Feature Tracker Description of the algorithm</a></p>
 </blockquote>
+<p>代码地址：<a href="https://github.com/divertingPan/video_scanner/blob/main/main_v0.2.py">https://github.com/divertingPan/video_scanner/blob/main/main_v0.2.py</a></p>
 <p>本篇是接续<a href="https://divertingpan.github.io/post/train_scanning/">【硬核摄影】给火车拍个全身照</a>的内容。使用自动脚本生成火车视频扫描图存在一个问题：如果火车的运动速度是变化的，只使用手动给定的固定扫描间隔是会有大问题的。例如下图。</p>
 <figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1614321454199.png" alt="" loading="lazy"></figure>
 <p>显然，火车在减速，车头位置扫描间隔正合适，而车尾的扫描间隔太大了。如果能够根据当前车速自动判断应该用多宽的扫描间隔就能够解决这个问题。</p>
