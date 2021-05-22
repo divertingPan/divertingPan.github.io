@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ubuntu挂载硬盘（或内存盘）方法 | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1621264522881">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1621688685315">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="ubuntu挂载硬盘（或内存盘）方法 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -25,7 +25,7 @@ ref：https://blog.csdn.net/qq_29912325/article/details/108666516
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1621264522881" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1621688685315" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -130,9 +130,18 @@ ref：https://blog.csdn.net/qq_29912325/article/details/108666516
 <p>先准备一个空的目录，然后执行</p>
 <pre><code>sudo mount -t tmpfs -o size=50G tmpfs /your/whatever/path
 </code></pre>
-<p>然后把数据复制进去即可。如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
+<p>然后把数据复制进去即可。</p>
+<pre><code>cp -r dataset_hdd dataset
+</code></pre>
+<p>如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
 <p>也可以写在/etc/fstab里面永久挂载，但是RAM掉电数据消失的情况是不会改变的。</p>
 <pre><code>tmpfs	/home/user/ramdisk	tmpfs	defaults,size=100M	0 0
+</code></pre>
+<p>要修改已挂载的大小，可以执行</p>
+<pre><code>sudo mount -o remount,size=18G tmpfs /your/whatever/path
+</code></pre>
+<p>要取消挂载，执行</p>
+<pre><code>sudo umount -v /your/whatever/path
 </code></pre>
 <h1 id="挂载普通硬盘">挂载普通硬盘</h1>
 <ol>
