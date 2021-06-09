@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://divertingPan.github.io</id>
     <title>老潘家的潘老师</title>
-    <updated>2021-05-27T14:07:03.569Z</updated>
+    <updated>2021-06-09T11:34:35.386Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://divertingPan.github.io"/>
     <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://divertingPan.github.io/images/avatar.png</logo>
     <icon>https://divertingPan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧]]></title>
+        <id>https://divertingPan.github.io/post/xDWDuQt5g/</id>
+        <link href="https://divertingPan.github.io/post/xDWDuQt5g/">
+        </link>
+        <updated>2021-06-09T10:39:41.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[如何快速了解某个新领域、方向？]]></title>
         <id>https://divertingPan.github.io/post/o4xtExHLY/</id>
@@ -72,12 +79,5 @@
         <link href="https://divertingPan.github.io/post/Vu450XcwM/">
         </link>
         <updated>2020-11-17T14:01:00.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[11月2日]]></title>
-        <id>https://divertingPan.github.io/post/ACRHQMvIw/</id>
-        <link href="https://divertingPan.github.io/post/ACRHQMvIw/">
-        </link>
-        <updated>2020-11-02T06:30:32.000Z</updated>
     </entry>
 </feed>
