@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>pandas的一些杂技（记） | 老潘家的潘老师</title>
-<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1623238576460">
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1623768042784">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="pandas的一些杂技（记） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
@@ -25,7 +25,7 @@ https://www.jianshu.com/p/01c550e..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://divertingPan.github.io">
-  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1623238576460" alt="">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1623768042784" alt="">
   </a>
   <h1 class="site-title">
     老潘家的潘老师
@@ -138,6 +138,23 @@ for table in pd.read_html(index_url, encoding='utf-8', header=0):
 <h1 id="表格中的na字符串变成了nan">表格中的NA字符串变成了nan？</h1>
 <p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
 ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
+<h1 id="检查dataframe里面有没有nan以及定位所在行">检查dataframe里面有没有NaN，以及定位所在行</h1>
+<pre><code class="language-python">landmark = pd.read_csv(path)
+check_for_nan = landmark.isnull().values.any()
+if check_for_nan:
+    print('NaN:', landmark[landmark.isna().any(axis=1)])
+</code></pre>
+<h1 id="替换nan值">替换NaN值</h1>
+<pre><code class="language-python">landmark.fillna(0, inplace=True)
+</code></pre>
+<h1 id="检查inf值以及替换">检查inf值以及替换</h1>
+<p>操作类似NaN的替换</p>
+<pre><code class="language-python">landmark = pd.read_csv(path)
+check_for_inf = np.isinf(landmark).values.any()
+if check_for_inf:
+    print('inf:', landmark[np.isinf(landmark).any(axis=1)])
+    landmark[np.isinf(landmark)] = 0
+</code></pre>
 <h1 id="df数据的读取">df数据的读取</h1>
 <p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
 <pre><code class="language-python"># 获取df长度
@@ -184,6 +201,9 @@ df = pd.DataFrame(columns=headers)
                 <ul class="markdownIt-TOC">
 <li><a href="#html%E9%A1%B5%E9%9D%A2table%E5%AD%98%E5%82%A8%E6%88%90%E6%9C%AC%E5%9C%B0csv">HTML页面table存储成本地csv</a></li>
 <li><a href="#%E8%A1%A8%E6%A0%BC%E4%B8%AD%E7%9A%84na%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E6%88%90%E4%BA%86nan">表格中的NA字符串变成了nan？</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5dataframe%E9%87%8C%E9%9D%A2%E6%9C%89%E6%B2%A1%E6%9C%89nan%E4%BB%A5%E5%8F%8A%E5%AE%9A%E4%BD%8D%E6%89%80%E5%9C%A8%E8%A1%8C">检查dataframe里面有没有NaN，以及定位所在行</a></li>
+<li><a href="#%E6%9B%BF%E6%8D%A2nan%E5%80%BC">替换NaN值</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5inf%E5%80%BC%E4%BB%A5%E5%8F%8A%E6%9B%BF%E6%8D%A2">检查inf值以及替换</a></li>
 <li><a href="#df%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%8F%96">df数据的读取</a></li>
 <li><a href="#%E6%AF%8F%E8%A1%8C%E7%B4%A2%E5%BC%95%E9%87%8D%E7%BD%AE">每行索引重置</a></li>
 <li><a href="#%E8%8E%B7%E5%8F%96%E6%9F%90%E4%B8%AA%E5%80%BC%E6%89%80%E5%9C%A8%E7%9A%84%E8%A1%8C%E5%8F%B7">获取某个值所在的行号</a></li>
