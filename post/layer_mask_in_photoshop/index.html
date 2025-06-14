@@ -1,0 +1,287 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>基础 | 详解PS特色之：图层与蒙版 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="基础 | 详解PS特色之：图层与蒙版 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="潘老师很久很久很久很久没有更新了，今天有小伙伴问了我一些问题，主要是关于PS的基本东西。所以今天就面向小白写一篇教程，至于那些抠图教程先缓一缓因为写那东西比较耗时间潘老师最近很懒。
+还有，老潘已经掌握了核心黑科技，图片看不清的，点开放大，可..." />
+    <meta name="keywords" content="photoshop,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              基础 | 详解PS特色之：图层与蒙版
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-10-24
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/3o8DItrX2/" class="post-tag">
+                  # photoshop
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/layer_mask_in_photoshop.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>潘老师很久很久<del>很久很久</del>没有更新了，今天有小伙伴问了我一些问题，主要是关于PS的基本东西。所以今天就面向小白写一篇教程，至于那些抠图教程先缓一缓因为写那东西比较耗时间<del>潘老师最近很懒。</del></p>
+<p>还有，老潘已经掌握了核心黑科技，图片看不清的，点开放大，可以看到高清图片。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606139908245.jfif" alt="" loading="lazy"></figure>
+<p>摘要：Photoshop区别于Windows画图的最主要区别就是“图层”的概念，今天通过一些实例展示图层的特性，运用和一些注意事项。</p>
+<p>现在打开你的PS，和潘老师一起动手，体会图层的特性。</p>
+<p>1</p>
+<p>打开Photoshop软件之后，点击左边“新建”（老版本的同学点击左上方“文件”-“新建”），新建一个如下画布：</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606139957897.PNG" alt="" loading="lazy"></figure>
+<p>2</p>
+<p>观察右边是否有这个“图层”的窗口，如果没有就手动在上方“窗口”里边找到“图层”勾选上。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1606139962213.png" alt="" loading="lazy"></figure>
+<p>3</p>
+<p>点击左上方的“文件”-“打开”，任意打开一张图片，我打开了一张格式为jpg的照片（留意这里我提到的格式，后面会有用）。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1606139971933.PNG" alt="" loading="lazy"></figure>
+<p>4</p>
+<p>在这个照片所在的图层上，右键，选择“复制图层”，并在弹出的窗口里如下设置。（意思是把我们要复制的图层，复制到红框选择的那个窗口去。）</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1606139978606.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1606139982876.PNG" alt="" loading="lazy"></figure>
+<p>5</p>
+<p>这时候我们看到的“未命名-1”里，应该是这个样子的。我们看到，照片层在白背景层上方。</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1606139990839.PNG" alt="" loading="lazy"></figure>
+<p>6</p>
+<p>如法炮制，再放进来一张照片。这时候我们应该看到的是，骆驼照片图层在松鼠照片图层的上面，而我们看到的画面则是，骆驼盖住了下面的松鼠。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1606139999187.PNG" alt="" loading="lazy"></figure>
+<p>7</p>
+<p>点击左边的“移动工具”，而后在画布上按住鼠标拖动，会将骆驼拖走。这时候我们还应该注意到一点，骆驼层没有占满整个画布的面积，在他没占满的地方并没有填上白色，而是保持着透明的。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1606140006210.PNG" alt="" loading="lazy"></figure>
+<p>8</p>
+<p>如果我们新建图层（快捷键ctrl+alt+shift+N），会看到图层面板里多了一个图层，但是画布上没有任何反应，这说明，新建的图层是一个透明的图层，就像一层玻璃板一样。</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1606140011648.PNG" alt="" loading="lazy"></figure>
+<p>9</p>
+<p>我们继续对骆驼进行操作。我们这时候想要删掉背后那个白色的图层背景，只需要双击背景层，在弹出的窗口点确定，此时锁定解除（小锁的图标没了），再按delete删掉即可。</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1606140022162.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1606140028267.PNG" alt="" loading="lazy"></figure>
+<p>10</p>
+<p>这时候我们会发现，在没有图像的地方，变成了网格，这代表着，这个地方现在是透明状态。（这到底是个什么鬼状态，一会儿就知道了）</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1606140037955.PNG" alt="" loading="lazy"></figure>
+<p>11</p>
+<p>我们现在想让一部分松鼠露出来，我们就要擦掉上面这层骆驼的一部分，让他出现一个窟窿，就可以让下层的松鼠露出来了（类比于剪纸）。可以用橡皮擦或者用蒙版，但是更推荐蒙版，因为蒙版在后期万一擦错了方便修改（不要说橡皮擦完了可以撤销，因为甲方可能会让你在一礼拜后修改，你上哪撤销去？）。对哪个图层修改，就点一下哪个图层选中它，然后点击下面的这个图标（方块里有一个圆形），即可添加蒙版。</p>
+<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1606140049253.png" alt="" loading="lazy"></figure>
+<p>12</p>
+<p>蒙版的原理是“黑透明，白不透”，所以空蒙版是白色的。如果我们点一下这个白色的方块，选中左边的“画笔”，就会看到右上方变成这样。在右上方调节画笔为黑色，到画布上涂抹。<strong>（此处注意要选中蒙版再画，不然就画到照片上了。）</strong></p>
+<figure data-type="image" tabindex="15"><img src="https://divertingPan.github.io/post-images/1606140057646.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="16"><img src="https://divertingPan.github.io/post-images/1606140062704.PNG" alt="" loading="lazy"></figure>
+<p>13</p>
+<p>如果画笔那里不选到100%，而只调节成50%，则会成为下面效果（被画的地方变成半透明）。</p>
+<figure data-type="image" tabindex="17"><img src="https://divertingPan.github.io/post-images/1606140076142.PNG" alt="" loading="lazy"></figure>
+<p>14</p>
+<p>如果我们后来感觉做的不好，想要还原原来的骆驼图片，只需删掉蒙版即可，在蒙版上右键“删除图层蒙版”。如果后期觉得哪里涂抹多了少了，<strong>只修改蒙版即可</strong>，十分方便。</p>
+<figure data-type="image" tabindex="18"><img src="https://divertingPan.github.io/post-images/1606140083457.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="19"><img src="https://divertingPan.github.io/post-images/1606140088606.PNG" alt="" loading="lazy"></figure>
+<p>15</p>
+<p>这时候将我们的图片保存为“未命名.<strong>png</strong>”，这里再次留意格式。</p>
+<figure data-type="image" tabindex="20"><img src="https://divertingPan.github.io/post-images/1606140093947.PNG" alt="" loading="lazy"></figure>
+<p>16</p>
+<p>此时我们打开刚才保存的png，会发现图片是这样的。也就是说png格式的图片会保留图片上有透明的地方。如果上一步保存格式选择了jpg，那么这里所有透明的地方，都会被存为白色（自己尝试吧）。</p>
+<figure data-type="image" tabindex="21"><img src="https://divertingPan.github.io/post-images/1606140115886.PNG" alt="" loading="lazy"></figure>
+<p>17</p>
+<p>基于这个道理，<strong>如果我们想给人物换背景，首先要先将人周围的地方变透明，再在它图层的下方加上你替换的背景。</strong></p>
+<figure data-type="image" tabindex="22"><img src="https://divertingPan.github.io/post-images/1606140125489.PNG" alt="" loading="lazy"></figure>
+<p>1【图层就像纸张，一层盖住一层，有透明部分的图层就像是贴了小广告的玻璃板，透明的地方可以看到下面的图案。】</p>
+<p>2【空图层并不是白色，而是透明。比方说，就是空图层不是一张白纸，而是一面没有贴任何小广告的玻璃。】</p>
+<p>3【要对哪个图层操作就选中哪个图层。】</p>
+<p>4【蒙版是一个信息，信息含义为，越黑的地方越透明，越白的地方越不透明。】</p>
+<p>5【不要用橡皮擦除图像多余部分！不要用橡皮擦除图像多余部分！不要用橡皮擦除图像多余部分！重要的事情说三遍。】</p>
+<p>6【抠图的实质就是，将不需要的部分置空（置为透明态）。】</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/using_mockup/">
+              <h3 class="post-title">
+                干货 | 甲方终结者——样机
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>抠图 | 通道抠图进阶-扣鸟鸟 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="抠图 | 通道抠图进阶-扣鸟鸟 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="接上一次通道法抠图，上一次将火焰扣出是利用了通道，将图中不为黑的地方（就是火焰以及半透明的地方）抠出。但是实际素材很难有背景是纯黑这么理想的。今天我们以这个蓝金刚鹦鹉为例，将他连毛抠出潘老师今天不想吐槽有点累了。
+
+摘要：对看起来反差比较大..." />
+    <meta name="keywords" content="艺术设计,photoshop" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              抠图 | 通道抠图进阶-扣鸟鸟
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-10-10
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/3o8DItrX2/" class="post-tag">
+                  # photoshop
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/image_selection_with_channel_2.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>接上一次通道法抠图，上一次将火焰扣出是利用了通道，将图中不为黑的地方（就是火焰以及半透明的地方）抠出。但是实际素材很难有背景是纯黑这么理想的。今天我们以这个蓝金刚鹦鹉为例，将他连毛抠出<s>潘老师今天不想吐槽有点累了。</s></p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1614517317633.jpg" alt="" loading="lazy"></figure>
+<p>摘要：对看起来反差比较大的图片，通过挑选反差最大轮廓最清的通道建立选区，从而将图像抠出。</p>
+<hr>
+<p>1</p>
+<p>将蓝鸟放入Photoshop后，点击右侧“通道”选项卡，进入通道。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1614517328297.jpg" alt="" loading="lazy"></figure>
+<p>2</p>
+<p>逐个点击并观察通道，我们会看到此图在“红”，“绿”，“蓝”通道下分别如下：</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1614517335373.jpg" alt="" loading="lazy"></figure>
+<p>3</p>
+<p>找出主体和背景反差最大并且主体边缘最清晰的一个通道。可以看到上图中，红通道和蓝通道的鸟和背景反差比较大，而绿通道则是鸟和背景都是灰蒙蒙的。而红通道在鸟头部分稍有一些混乱，蓝通道的鸟则相对于干净一些，所以我们打算从蓝通道下手。将蓝通道右键-“复制通道”，并且将其他通道隐藏，只显示“蓝 拷贝”。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1614517343398.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1614517350140.jpg" alt="" loading="lazy"></figure>
+<p>4</p>
+<p>为了让photoshop最优的识别鸟鸟，我们要将鸟和背景的反差<strong>进一步增大</strong>。点击“图像”-“调整”-“曲线”，调整如下（所以如果你不复制一份通道的话你之后的图片就会被这样搞坏了）。做这么极端的曲线目的就在于让背景和主体充分分离。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1614517381288.jpg" alt="" loading="lazy"></figure>
+<p>5</p>
+<p>用画笔，把脏的地方抹一抹。如果感觉有点看不清边缘，将这个通道隐藏，打开原来的通道看一看。（潘老师为了节省时间所以就简单用画笔抹了一下，如果对抠图要求很高的场合应该用钢笔将白色交接那里的边缘修仔细）。</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1614517388307.jpg" alt="" loading="lazy"></figure>
+<p>6</p>
+<p>在修好的通道（其实这时候这通道已经成为我们的蒙版了）前面缩略图上按住ctrl点击一下，建立了一个选区，隐藏这个通道并回到正常的图像中，给他建立蒙版。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1614517397208.jpg" alt="" loading="lazy"></figure>
+<p>7</p>
+<p>如果我们在后续操作时发现有些地方没擦干净（比如鸟身上有地方透明的，或者背景有脏点，对蒙版擦除就可以了，但是不管存在怎样的问题，主体轮廓我们已经得到了。（tips：给抠好的图层，双击，并且添加描边，可以发现肉眼发现不了的脏地方，用黑色画笔给蒙版涂一下就干净了）</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1614517403242.jpg" alt="" loading="lazy"></figure>
+<p>8</p>
+<p>换背景，或者存为PNG图片以后直接调用。</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1614517415089.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1614517433163.jfif" alt="" loading="lazy"></figure>
+<hr>
+<p>1【此方法适合某个通道反差比较大的图像使用，一般这种图像的特点就是<strong>主体和背景有一方颜色比较纯</strong>并且<strong>二者颜色混淆较少</strong>，或者<strong>主体和背景亮度差较大</strong>。类似场景还有鲜艳的水果照片，纯色画布前的人（换证件照底色啊）。】</p>
+<p>2【如果这图的所有通道都没有很大的反差，或者边缘有毛发等细节，这时候就应该尝试使用选择并遮住。】</p>
+<p>3【注意的是如果对通道进行涂抹或者做曲线调整等操作时，一定要复制一下，都做完之后隐藏这个改过的通道，因为改通道就会使原图像的颜色发生改变。（有一些照片后期调色就是在通道里做的）】</p>
+<p>4【下次讲抠图的另一利器：选择并遮住（CC以前的版本中叫做“调整边缘”）。】</p>
+<p>5【潘老师找出了图片画质差的其中一个原因，就是微信传图片的时候会再次压缩图片。潘老师正在积极寻找应对措施。】</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/train_introduction_carriage/">
+              <h3 class="post-title">
+                猎奇 | 火车车厢千千万，我也认不出一半
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

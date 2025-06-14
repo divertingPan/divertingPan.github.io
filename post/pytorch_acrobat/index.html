@@ -1,0 +1,429 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pytorch的一些杂技（记） | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="pytorch的一些杂技（记） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="1. pytorch加载预训练权重
+1.1 加载一部分权重
+实际上有两种思路加载预训练权重。
+先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法
+# ref: https://blog.c..." />
+    <meta name="keywords" content="pytorch,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              pytorch的一些杂技（记）
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-10-17
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/pytorch_acrobat.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="1-pytorch加载预训练权重">1. pytorch加载预训练权重</h1>
+<h2 id="11-加载一部分权重">1.1 加载一部分权重</h2>
+<p>实际上有两种思路加载预训练权重。<br>
+先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法</p>
+<pre><code class="language-python"># ref: https://blog.csdn.net/xzy5210123/article/details/88598436
+pretrained_dict = torch.load('pretrainedXXXX.pth')
+model = MyNetXXXX()
+model_dict = model.state_dict()
+pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+model_dict.update(pretrained_dict)
+model.load_state_dict(model_dict)
+</code></pre>
+<h2 id="12-只改最后一层">1.2 只改最后一层</h2>
+<p>另一种是，自己用一个数据集做了预训练，例如UCF101，有101类，最后fc层的out也是101维的。而实际任务只是类别数变得不一样，其他结构均不变，这时候可以用一个简单的方法。</p>
+<pre><code class="language-python"># ref: https://blog.csdn.net/KHFlash/article/details/82345441
+net = SameWithPretrainingNetXXXX()
+net.load_state_dict(torch.load('pretrainedXXXX.pth')
+fc_features = model.fc.in_features
+net.fc = nn.Linear(fc_features, 9)
+net = net.to(DEVICE)
+</code></pre>
+<p>如果是在GPU上做，这里一定要留意在最后加<code>net = net.to(DEVICE)</code>，否则会报玄学错误：<code>RuntimeError: CUDA error: an illegal memory access was encountered</code></p>
+<h2 id="13-模型涉及到nndataparallel的话">1.3 模型涉及到nn.DataParallel的话</h2>
+<p>还有一个坑是，如果在多GPU上训练时，保存模型权重要使用<code>torch.save(model.module.state_dict(), model_out_path)</code>的方法，否则会报一种错误：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>如果想要抢救一下的话，可以看到错误信息提示key中多了‘.module’，那么，只要把‘.module’移除即可：</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
+<h2 id="14-从api下载在线的预训练模型">1.4 从API下载在线的预训练模型</h2>
+<p>有时候我们不想让torchvision.models下载的权重模型存到默认的缓存位置，想让他存在某个集中管理的地方或者本项目路径下，可以在命令行设置一下环境变量：</p>
+<pre><code>(win)
+SET TORCH_HOME=.cache
+
+(linux)
+export TORCH_HOME=.cache
+</code></pre>
+<p>如果是使用了huggingface加载transformer，他的缓存路径环境变量是</p>
+<pre><code>(win)
+SET TRANSFORMERS_CACHE=.cache/huggingface/hub
+
+(linux)
+export TRANSFORMERS_CACHE=.cache/huggingface/hub
+</code></pre>
+<h1 id="pytorch冻结部分层的权重">pytorch冻结部分层的权重</h1>
+<blockquote>
+<p>ref:<br>
+https://www.jianshu.com/p/fcafcfb3d887</p>
+</blockquote>
+<p>想要只训练网络最后的全连接层，可先查看所有的<code>net.named_parameters()</code>找到对应的参数名称，然后使用锁定梯度的方法冻结权重训练。</p>
+<pre><code class="language-python">for k,v in model.named_parameters():
+    if k not in ['fc.weight', 'fc.bias']:
+        v.requires_grad=False
+</code></pre>
+<h1 id="不同参数设置不同学习率">不同参数设置不同学习率</h1>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606045451447.webp" alt="" loading="lazy"></figure>
+<h1 id="一个网络的输出是另一个的输入只训练后半个网络">一个网络的输出是另一个的输入，只训练后半个网络</h1>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606045564441.webp" alt="" loading="lazy"></figure>
+<h1 id="pytorch的dataset和dataloader长度">pytorch的dataset和dataloader长度</h1>
+<p><code>len(dataset)</code>返回的是在dataset类里面的<code>def __len__(self):</code>返回的长度。<br>
+<code>len(dataloader)</code>返回的是在dataset长度除以batch_size，即实际一个epoch内执行的步数。</p>
+<h1 id="再谈torchvisiontransforms">再谈torchvision.transforms</h1>
+<p>早在上个月我就已经思考明白了关于视频图像序列的图像增广的细节。即每次调用一下<code>img=transforms(img)</code>，就会触发一次各种随机翻转旋转等的随机数设置。如果针对序列里的图片，在每次读进来的时候或者用for循环，对每个图片做transforms，会导致一系列图片明暗色彩角度各不相同。对于序列图片，如果涉及到这种增广操作，我只能想到一种办法，即重写所用的transforms操作，每次调用的时候传进整个图片序列，这样就只调用了一次，也就只初始化了一个随机数，这样再去做<code>ColorJitter()</code>或者<code>RandomHorizontalFlip()</code>等随机操作里面对张量切片，对每个切片做变换，这样一系列图片可以有相同随机数下的变换操作。如果只是要做<code>Resize()</code>或者<code>ToTensor()</code>之类的那就无所谓了，调用多少次都是一样的结果。<br>
+之所以今天又写这个，是因为我耗了一下午，自以为把加载数据的部分优化了，结果发现又走到了错误的道路上。。。<br>
+还有，compose里面<strong>要用方括号</strong>括住各个操作，大括号会导致顺序和写的顺序不一致，导致玄学问题</p>
+<h1 id="pytorch指定不同层数以不同的lr">pytorch指定不同层数以不同的LR</h1>
+<blockquote>
+<p>ref:<br>
+pytorch在不同的层使用不同的学习率<br>
+https://blog.csdn.net/wangbin12122224/article/details/79949824</p>
+</blockquote>
+<p>有时候我们希望某些层的学习率与整个网络有些差别，这里我简单介绍一下在pytorch里如何设置，方法略麻烦，如果有更好的方法，请务必教我：</p>
+<p>首先我们定义一个网络：</p>
+<pre><code class="language-python">class net(nn.Module):
+    def __init__(self):
+        super(net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, 1)
+        self.conv2 = nn.Conv2d(64, 64, 1)
+        self.conv3 = nn.Conv2d(64, 64, 1)
+        self.conv4 = nn.Conv2d(64, 64, 1)
+        self.conv5 = nn.Conv2d(64, 64, 1)
+    def forward(self, x):
+        out = conv5(conv4(conv3(conv2(conv1(x)))))
+        return out
+</code></pre>
+<p>我们希望conv5学习率是其他层的100倍，我们可以：</p>
+<pre><code class="language-python">net = net()
+lr = 0.001
+
+conv5_params = list(map(id, net.conv5.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+, lr=lr, momentum=0.9)
+</code></pre>
+<p>如果多层，则：</p>
+<pre><code class="language-python">conv5_params = list(map(id, net.conv5.parameters()))
+conv4_params = list(map(id, net.conv4.parameters()))
+base_params = filter(lambda p: id(p) not in conv5_params + conv4_params,
+                     net.parameters())
+optimizer = torch.optim.SGD([
+            {'params': base_params},
+            {'params': net.conv5.parameters(), 'lr': lr * 100},
+            {'params': net.conv4.parameters(), 'lr': lr * 100},
+            , lr=lr, momentum=0.9)
+</code></pre>
+<h1 id="pytorch卷积层的groups参数">pytorch卷积层的groups参数</h1>
+<p>下面是官方文档对于groups的解释。简单来说就是输入和输出都会被划成groups个组，groups个卷积层并列操作。输入和输出的维度还是总的维度数。</p>
+<blockquote>
+<p>groups controls the connections between inputs and outputs. in_channels and out_channels must both be divisible by groups. For example,<br>
+At groups=1, all inputs are convolved to all outputs.<br>
+At groups=2, the operation becomes equivalent to having two conv layers side by side, each seeing half the input channels, and producing half the output channels, and both subsequently concatenated.<br>
+At groups=in_channels, each input channel is convolved with its own set of filters, of size ⌊out_channels/in_channels⌋ .</p>
+</blockquote>
+<h1 id="pytorch-hook">pytorch hook</h1>
+<blockquote>
+<p>ref:<br>
+https://zhuanlan.zhihu.com/p/75054200<br>
+https://blog.csdn.net/winycg/article/details/100695373<br>
+https://oldpan.me/archives/pytorch-autograd-hook</p>
+</blockquote>
+<h1 id="多gpu并行">多GPU并行</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<h1 id="netparameters获取网络参数">Net.parameters获取网络参数</h1>
+<p>Net.parameters返回一个generator，根据官方的用法，通过for循环得出网络各层的参数，</p>
+<pre><code class="language-python">Example::
+&gt;&gt;&gt; for param in model.parameters():
+&gt;&gt;&gt;     print(type(param), param.size())
+&lt;class 'torch.Tensor'&gt; (20L,)
+&lt;class 'torch.Tensor'&gt; (20L, 1L, 5L, 5L)
+</code></pre>
+<p>但param的类型仍然是一个封装过的parameter类型，需要通过param.data来取出里面的tensor数据<br>
+PS. 补充两个链接，这个作为Todo</p>
+<ol>
+<li>直接在网络中定义feature，直接导出：https://www.jianshu.com/p/0a23db1df55a</li>
+</ol>
+<blockquote>
+<p>比如，在这个例子中我想获得fc前面的特征，那么我就在前面加一句self.feature=x，然后再需要的地方调用model.feature即可得到。</p>
+</blockquote>
+<ol start="2">
+<li>获取Pytorch中间某一层权重或者特征：https://blog.csdn.net/happyday_d/article/details/88974361</li>
+</ol>
+<h1 id="嵌套列表以及列表包含tensor的展开">嵌套列表以及列表包含Tensor的展开</h1>
+<p>python的list里面如果嵌套的是tensor，需要先将tensor转成list，然后再通过嵌套列表展开的方法。由于tensor维数一般比较多，所以解list以后，这个list的嵌套层数会比较深，需要用递归的方法解套，才能把这个list转成一维list，最终化为tensor<br>
+例：把一个(2, 3, 4)形状的tensor转成list：</p>
+<pre><code class="language-python">x = torch.zeros(2, 3, 4)
+x_list = x.numpy().tolist()
+</code></pre>
+<p>这个x_list长2，每个list元素长3，最内层的list有4个数字。<br>
+通过以下方法解开嵌套层数很大的list：</p>
+<pre><code class="language-python">def flat(nums):
+    res = []
+    for i in nums:
+        if isinstance(i, list):
+            res.extend(flat(i))
+        else:
+            res.append(i)
+    return res
+</code></pre>
+<p>最终使用torch.Tensor(x_list)把一个list化成tensor</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#1-pytorch%E5%8A%A0%E8%BD%BD%E9%A2%84%E8%AE%AD%E7%BB%83%E6%9D%83%E9%87%8D">1. pytorch加载预训练权重</a>
+<ul>
+<li><a href="#11-%E5%8A%A0%E8%BD%BD%E4%B8%80%E9%83%A8%E5%88%86%E6%9D%83%E9%87%8D">1.1 加载一部分权重</a></li>
+<li><a href="#12-%E5%8F%AA%E6%94%B9%E6%9C%80%E5%90%8E%E4%B8%80%E5%B1%82">1.2 只改最后一层</a></li>
+<li><a href="#13-%E6%A8%A1%E5%9E%8B%E6%B6%89%E5%8F%8A%E5%88%B0nndataparallel%E7%9A%84%E8%AF%9D">1.3 模型涉及到nn.DataParallel的话</a></li>
+<li><a href="#14-%E4%BB%8Eapi%E4%B8%8B%E8%BD%BD%E5%9C%A8%E7%BA%BF%E7%9A%84%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B">1.4 从API下载在线的预训练模型</a></li>
+</ul>
+</li>
+<li><a href="#pytorch%E5%86%BB%E7%BB%93%E9%83%A8%E5%88%86%E5%B1%82%E7%9A%84%E6%9D%83%E9%87%8D">pytorch冻结部分层的权重</a></li>
+<li><a href="#%E4%B8%8D%E5%90%8C%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE%E4%B8%8D%E5%90%8C%E5%AD%A6%E4%B9%A0%E7%8E%87">不同参数设置不同学习率</a></li>
+<li><a href="#%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E7%9A%84%E8%BE%93%E5%87%BA%E6%98%AF%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%9A%84%E8%BE%93%E5%85%A5%E5%8F%AA%E8%AE%AD%E7%BB%83%E5%90%8E%E5%8D%8A%E4%B8%AA%E7%BD%91%E7%BB%9C">一个网络的输出是另一个的输入，只训练后半个网络</a></li>
+<li><a href="#pytorch%E7%9A%84dataset%E5%92%8Cdataloader%E9%95%BF%E5%BA%A6">pytorch的dataset和dataloader长度</a></li>
+<li><a href="#%E5%86%8D%E8%B0%88torchvisiontransforms">再谈torchvision.transforms</a></li>
+<li><a href="#pytorch%E6%8C%87%E5%AE%9A%E4%B8%8D%E5%90%8C%E5%B1%82%E6%95%B0%E4%BB%A5%E4%B8%8D%E5%90%8C%E7%9A%84lr">pytorch指定不同层数以不同的LR</a></li>
+<li><a href="#pytorch%E5%8D%B7%E7%A7%AF%E5%B1%82%E7%9A%84groups%E5%8F%82%E6%95%B0">pytorch卷积层的groups参数</a></li>
+<li><a href="#pytorch-hook">pytorch hook</a></li>
+<li><a href="#%E5%A4%9Agpu%E5%B9%B6%E8%A1%8C">多GPU并行</a></li>
+<li><a href="#netparameters%E8%8E%B7%E5%8F%96%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0">Net.parameters获取网络参数</a></li>
+<li><a href="#%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E4%BB%A5%E5%8F%8A%E5%88%97%E8%A1%A8%E5%8C%85%E5%90%ABtensor%E7%9A%84%E5%B1%95%E5%BC%80">嵌套列表以及列表包含Tensor的展开</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/Endnote_tips/">
+              <h3 class="post-title">
+                Endnote的一些使用技巧
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

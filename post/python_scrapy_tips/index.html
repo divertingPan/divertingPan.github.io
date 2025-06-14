@@ -1,0 +1,335 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scrapy爬虫时的一些细节 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Scrapy爬虫时的一些细节 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="一些bug
+配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用
+pip install pillow
+
+安装一下PIL模块再尝试。
+之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，..." />
+    <meta name="keywords" content="scrapy,爬虫,python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Scrapy爬虫时的一些细节
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-10-20
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/7tGB4f3t8/" class="post-tag">
+                  # scrapy
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/W7VB3D2cqH/" class="post-tag">
+                  # 爬虫
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/python_scrapy_tips.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="一些bug">一些bug</h1>
+<p>配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用</p>
+<pre><code>pip install pillow
+</code></pre>
+<p>安装一下PIL模块再尝试。</p>
+<p>之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里，不知为何缺少了PIL却没有报错。</p>
+<h1 id="正确使用代理ip的方法">正确使用代理ip的方法</h1>
+<p>在设置的时候用http://xx.xx.xx.xx:xxxx的方法设置，即设置为http模式，如果用了https设置的代理，会出现<br>
+<code>&lt;twisted.python.failure.Failure OpenSSL.SSL.Error: [('SSL routines', 'ssl3_get_record', 'wrong version number')]&gt;</code>这种报错信息。<br>
+无所谓要爬的网站是http还是https，代理ip都要设置为http才可以。</p>
+<h1 id="日志太大">日志太大</h1>
+<p>程序挂到后台运行，保存的日志会越来越大，一个偷懒的办法是到日志的目录下，执行</p>
+<pre><code>cat /dev/null &gt; nohup.out
+</code></pre>
+<p>可以不打断进程的情况下，清空日志</p>
+<h1 id="断点续传爬">断点续传（爬）</h1>
+<p>只需要启动时加入参数即可</p>
+<pre><code>scrapy crawl PAPAPA -s JOBDIR=ckpt/PAPAPA
+</code></pre>
+<p>这样，就是在ckpt这个文件夹下面，给PAPAPA这个爬虫保存了实时爬取进度。下次还执行这个命令，就会自动读取这个进度。</p>
+<p>如果结合了nohup把爬虫挂起的话，想要完整中断爬虫，就使用<code>kill 8888</code>对进程发送SIGTERM，之后等待进程自动结束即可。避免强退，否则会造成断点处混乱。</p>
+<h1 id="在chrome的console里面使用xpath定位元素">在chrome的console里面使用xpath定位元素</h1>
+<p><code>$x('xpath表达式')</code><br>
+一个细节的地方是要注意有时候表达式里面有引号，要注意和最外层引号区分开，一般xpath里多见双引号，所以最好用单引号做外层的引号。<br>
+扩展：ccs表达式：<code>$(&quot;css表达式&quot;)</code>或者<code>$$(&quot;css表达式&quot;)</code></p>
+<blockquote>
+<p>ref: https://blog.csdn.net/jamieblue1/article/details/101075193</p>
+</blockquote>
+<h1 id="scrapy模拟登录">scrapy模拟登录</h1>
+<p>首先需要分析网站登录的时候发送了哪些信息，以postcrossing.com举例，在登录表单上检查信息，会看到这么些东西：<br>
+<img src="https://divertingPan.github.io/post-images/1603179821618.PNG" alt="" loading="lazy"><br>
+用户名和密码不用多说，另外还有一个hidden的东西，登录的时候这个也要传走，（但是我在实验的时候发现不带这个值直接用名字密码也能登）<br>
+对于在建立formdata的时候，用什么作为字典的键值？要查看页面提交信息，具体如何查看提交上去的信息，可以参考该链接：https://mofanpy.com/tutorials/data-manipulation/scraping/requests/</p>
+<blockquote>
+<p>这个<code>&lt;form&gt;</code>里面有一些<code>&lt;input&gt;</code>个 tag, 我们仔细看到<code>&lt;input&gt;</code>里面的这个值 name=&quot;firstname&quot; 和 name=&quot;lastname&quot;, 这两个就是我们要 post 提交上去的关键信息了. 我们填好姓名, 为了记录点击 submit 后, 浏览器究竟发生了什么翻天覆地的变化, 我们在 inspect 窗口, 选择<code>Network</code>, 勾选<code>Preserve log</code>, 再点击<code>submit</code>, 你就能看到服务器返回给你定制化后的页面时, 你使用的方法和数据.</p>
+</blockquote>
+<p>在本例中，上传的登录内容如图：<br>
+<img src="https://divertingPan.github.io/post-images/1603716950650.PNG" alt="" loading="lazy"></p>
+<p>具体而言，怎么登录？在Spider脚本里的class XXSpider里面写下面这个函数</p>
+<pre><code class="language-python">    def start_requests(self):
+        yield Request('https://www.postcrossing.com/login', meta={&quot;cookiejar&quot;: 1}, callback=self.post_login)
+</code></pre>
+<p>这样，程序一开始会Request这个login界面，紧接着在这个页面上进行callback即post_login所做的操作。<br>
+post_login的内容是：</p>
+<pre><code class="language-python">    def post_login(self, response):
+        token = response.xpath('//*[@id=&quot;signin__login_csrf_token&quot;]/@value').extract_first()
+        # print('login_csrf_token: ', token)
+        form_data = {
+            'signin[_login_csrf_token]': token,
+            'signin[username]': 'XXXXXX',
+            'signin[password]': 'YYYYYY'
+        }
+        yield FormRequest.from_response(response, formdata=form_data,
+                                        meta={&quot;cookiejar&quot;: response.meta['cookiejar']},
+                                        callback=self.country_gallery
+                                        )
+</code></pre>
+<p>其中，token获取了那个隐藏的会在登录时一同上传的神秘值，form_data构造了登录时需要的信息。通过FormRequest.from_response对response过来的内容（就是刚刚的登录页面）进行提交表单操作，用meta记下cookie信息。后续所有的Request都可以用这个cookie。</p>
+<blockquote>
+<p>ref:<br>
+https://scrapy-cookbook.readthedocs.io/zh_CN/latest/scrapy-11.html<br>
+https://www.jianshu.com/p/404e4ac156a6</p>
+</blockquote>
+<h1 id="xpath解析内容为空">xpath解析内容为空</h1>
+<p>第一种情况是解析的页面不对，造成页面不对的原因是调用这个函数的上一级函数传过来的页面不对（其实就是上一级函数的Request里面那个url写的并不是自己要解析的那个）。一般就是字母拼错，页面层级搞混了，需要自己仔细检查。又或者是这个页面需要登录才能正常显示，不登陆的话进的是登录页面而不是内容页面，这就又回到了上一条需要做的事情。<br>
+第二种情况是user-agent的问题，在settings.py里加入</p>
+<pre><code class="language-python">USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'
+</code></pre>
+<p>再尝试即可。</p>
+<h1 id="pandas获取某个值所在的行号">pandas获取某个值所在的行号</h1>
+<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
+</code></pre>
+<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
+例如，对下图这样的df查询'Code'为'CN'的条目<br>
+<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
+执行以下操作</p>
+<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
+要取出某一个值，可以</p>
+<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
+print(string)
+&gt;&gt;&gt; China
+</code></pre>
+<h1 id="注意安全">注意安全</h1>
+<p>在做的时候，有可能涉及到需要登录的操作。这里尽量不要用自己常用的账号（这个应该是常识），但是同时还要注意也尽量避免用自己常用的IP。</p>
+<p>因为有时候操作不当会导致IP被封，与此同时在这个IP上活跃的其他账号也容易被一并误伤。</p>
+<p>【更正：测试的时候也绝对不要在自己本地机器上做，测试也上服务器做，本地一封就整个ip被ban，会连带账号一起遭殃。】</p>
+<p>当然，能被服务器ban掉，那证明操作有点过火，所以一定要控制访问间隔，不要太密集的连续发送请求。不着急的话5s一次，再快就有风险了。</p>
+<h1 id="在合理的情况下使用自适应爬虫强度">在合理的情况下使用自适应爬虫强度</h1>
+<p>在setting.py里面打开以下内容，可以实现由scrapy自动管理爬虫强度，避免上述手动设置访问间隔的麻烦</p>
+<pre><code class="language-python">AUTOTHROTTLE_ENABLED = True
+</code></pre>
+<p>其他参数保持默认即可。这样的话，刚开始爬虫程序会先以默认的5s间隔爬，之后会逐步调整，加快或者减慢爬取速度。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%B8%80%E4%BA%9Bbug">一些bug</a></li>
+<li><a href="#%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86ip%E7%9A%84%E6%96%B9%E6%B3%95">正确使用代理ip的方法</a></li>
+<li><a href="#%E6%97%A5%E5%BF%97%E5%A4%AA%E5%A4%A7">日志太大</a></li>
+<li><a href="#%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0%E7%88%AC">断点续传（爬）</a></li>
+<li><a href="#%E5%9C%A8chrome%E7%9A%84console%E9%87%8C%E9%9D%A2%E4%BD%BF%E7%94%A8xpath%E5%AE%9A%E4%BD%8D%E5%85%83%E7%B4%A0">在chrome的console里面使用xpath定位元素</a></li>
+<li><a href="#scrapy%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95">scrapy模拟登录</a></li>
+<li><a href="#xpath%E8%A7%A3%E6%9E%90%E5%86%85%E5%AE%B9%E4%B8%BA%E7%A9%BA">xpath解析内容为空</a></li>
+<li><a href="#pandas%E8%8E%B7%E5%8F%96%E6%9F%90%E4%B8%AA%E5%80%BC%E6%89%80%E5%9C%A8%E7%9A%84%E8%A1%8C%E5%8F%B7">pandas获取某个值所在的行号</a></li>
+<li><a href="#%E6%B3%A8%E6%84%8F%E5%AE%89%E5%85%A8">注意安全</a></li>
+<li><a href="#%E5%9C%A8%E5%90%88%E7%90%86%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E4%BD%BF%E7%94%A8%E8%87%AA%E9%80%82%E5%BA%94%E7%88%AC%E8%99%AB%E5%BC%BA%E5%BA%A6">在合理的情况下使用自适应爬虫强度</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/bypass_limited_network/">
+              <h3 class="post-title">
+                绕过需要认证的网络（校园网）直接联网的方法
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

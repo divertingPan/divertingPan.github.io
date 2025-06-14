@@ -1,0 +1,350 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pandas的一些杂技（记） | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="pandas的一些杂技（记） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="HTML页面table存储成本地csv
+非常简单，不需要爬虫，直接用pandas即可以搞定
+&quot;&quot;&quot;
+reference: 如果单个表格，直接存
+https://www.jianshu.com/p/01c550e..." />
+    <meta name="keywords" content="pandas,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              pandas的一些杂技（记）
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-11-17
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/JXxlr5egg/" class="post-tag">
+                  # pandas
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/pandas_acrobat.jfif" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="html页面table存储成本地csv">HTML页面table存储成本地csv</h1>
+<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果单个表格，直接存
+https://www.jianshu.com/p/01c550e5341b
+&quot;&quot;&quot;
+index_url = 'https://www.postcrossing.com/explore/countries'
+df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
+df.to_csv('./country_list.csv', index=False)
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果多个表格，用for循环全部存下
+https://blog.csdn.net/qq_36663202/article/details/89159878
+&quot;&quot;&quot;
+for table in pd.read_html(index_url, encoding='utf-8', header=0):
+    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
+</code></pre>
+<h1 id="表格中的na字符串变成了nan">表格中的NA字符串变成了nan？</h1>
+<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
+ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
+<h1 id="检查dataframe里面有没有nan以及定位所在行">检查dataframe里面有没有NaN，以及定位所在行</h1>
+<pre><code class="language-python">landmark = pd.read_csv(path)
+check_for_nan = landmark.isnull().values.any()
+if check_for_nan:
+    print('NaN:', landmark[landmark.isna().any(axis=1)])
+</code></pre>
+<h1 id="替换nan值">替换NaN值</h1>
+<pre><code class="language-python">landmark.fillna(0, inplace=True)
+</code></pre>
+<h1 id="检查inf值以及替换">检查inf值以及替换</h1>
+<p>操作类似NaN的替换</p>
+<pre><code class="language-python">landmark = pd.read_csv(path)
+check_for_inf = np.isinf(landmark).values.any()
+if check_for_inf:
+    print('inf:', landmark[np.isinf(landmark).any(axis=1)])
+    landmark[np.isinf(landmark)] = 0
+</code></pre>
+<h1 id="df数据的读取">df数据的读取</h1>
+<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
+<pre><code class="language-python"># 获取df长度
+len(df)
+
+# 获取第0行，属性为Code的值
+df.loc[0]['Code']
+</code></pre>
+<h1 id="每行索引重置">每行索引重置</h1>
+<p>有时候需要对dataframe做一些操作，使得行顺序变化，这会导致索引也变化。有时候就会导致一些奇怪的bug。这时候希望对操作完的dataframe重新排索引，可以简单的使用</p>
+<pre><code class="language-python">df = df.reset_index(drop=True)
+</code></pre>
+<p>来操作。drop的含义是，丢掉原来的错误的索引列。</p>
+<h1 id="获取某个值所在的行号">获取某个值所在的行号</h1>
+<pre><code class="language-python">df[df['要检索的列'].isin([目标值]])]
+</code></pre>
+<p>这样可以返回一个新的df，里面只有符合要求的一个条目。这时候可以再从里面取其他的属性<br>
+例如，对下图这样的df查询'Code'为'CN'的条目<br>
+<img src="https://divertingPan.github.io/post-images/1603200074098.PNG" alt="" loading="lazy"><br>
+执行以下操作</p>
+<pre><code class="language-python">new_df = df[df['Code'].isin(['CN'])]
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1603200126081.PNG" alt="" loading="lazy"><br>
+要取出某一个值，可以</p>
+<pre><code class="language-python">string = new_df['Country name'].tolist()[0]
+print(string)
+&gt;&gt;&gt; China
+</code></pre>
+<h1 id="打乱数据顺序">打乱数据顺序</h1>
+<pre><code class="language-python">df = df.sample(frac=1.0)
+</code></pre>
+<h1 id="新数据一行一行来怎样扩充dataframe">新数据一行一行来，怎样扩充dataframe？</h1>
+<p>先新建一个空的dataframe</p>
+<pre><code class="language-python">headers = ['one', 'two', 'three', 'four', 'five', 'six']
+df = pd.DataFrame(columns=headers)
+</code></pre>
+<p>之后每次来一个列表<code>value = [1, 2, 3, 4, 5, 7]</code>，都可以使用</p>
+<pre><code class="language-python">df.loc[len(df)] = value
+</code></pre>
+<p>来将value追加到df后面。</p>
+<h1 id="html页面table存储成本地csv-2">HTML页面table存储成本地csv</h1>
+<p>非常简单，不需要爬虫，直接用pandas即可以搞定</p>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果单个表格，直接存
+https://www.jianshu.com/p/01c550e5341b
+&quot;&quot;&quot;
+index_url = 'https://www.postcrossing.com/explore/countries'
+df = pd.read_html(index_url, encoding='utf-8', header=0)[0]
+df.to_csv('./country_list.csv', index=False)
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;
+reference: 如果多个表格，用for循环全部存下
+https://blog.csdn.net/qq_36663202/article/details/89159878
+&quot;&quot;&quot;
+for table in pd.read_html(index_url, encoding='utf-8', header=0):
+    table.to_csv('./country_list.csv', mode='a', encoding='utf-8', index=False)
+</code></pre>
+<h1 id="pandas把表格中的na字符串变成了nan">pandas把表格中的NA字符串变成了nan</h1>
+<p>本来有一个国家的缩写是NA，结果用的时候发现这个国家成了nan，一看就知道肯定是pandas读取的时候发生了什么事情。查阅资料得知，在pandas读数据的时候是有一个参数的：<code>keep_default_na</code>这个默认会将各种NA，N/A等等形式的字符串自动变成空值，如果不需要自动变，把这个参数设置为False即可。<br>
+ref: https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html?highlight=read_csv</p>
+<h1 id="df数据的读取-2">df数据的读取</h1>
+<p>我想遍历一个DataFrame里面每行的某个属性值，需要的基本的操作如下：</p>
+<pre><code class="language-python"># 获取df长度
+len(df)
+
+# 获取第0行，属性为Code的值
+df.loc[0]['Code']
+</code></pre>
+<h1 id="每行索引重置-2">每行索引重置</h1>
+<p>有时候需要对dataframe做一些操作，使得行顺序变化，这会导致索引也变化。有时候就会导致一些奇怪的bug。这时候希望对操作完的dataframe重新排索引，可以简单的使用</p>
+<pre><code class="language-python">df = df.reset_index(drop=True)
+</code></pre>
+<p>来操作。drop的含义是，丢掉原来的错误的索引列。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#html%E9%A1%B5%E9%9D%A2table%E5%AD%98%E5%82%A8%E6%88%90%E6%9C%AC%E5%9C%B0csv">HTML页面table存储成本地csv</a></li>
+<li><a href="#%E8%A1%A8%E6%A0%BC%E4%B8%AD%E7%9A%84na%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E6%88%90%E4%BA%86nan">表格中的NA字符串变成了nan？</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5dataframe%E9%87%8C%E9%9D%A2%E6%9C%89%E6%B2%A1%E6%9C%89nan%E4%BB%A5%E5%8F%8A%E5%AE%9A%E4%BD%8D%E6%89%80%E5%9C%A8%E8%A1%8C">检查dataframe里面有没有NaN，以及定位所在行</a></li>
+<li><a href="#%E6%9B%BF%E6%8D%A2nan%E5%80%BC">替换NaN值</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5inf%E5%80%BC%E4%BB%A5%E5%8F%8A%E6%9B%BF%E6%8D%A2">检查inf值以及替换</a></li>
+<li><a href="#df%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%8F%96">df数据的读取</a></li>
+<li><a href="#%E6%AF%8F%E8%A1%8C%E7%B4%A2%E5%BC%95%E9%87%8D%E7%BD%AE">每行索引重置</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%9F%90%E4%B8%AA%E5%80%BC%E6%89%80%E5%9C%A8%E7%9A%84%E8%A1%8C%E5%8F%B7">获取某个值所在的行号</a></li>
+<li><a href="#%E6%89%93%E4%B9%B1%E6%95%B0%E6%8D%AE%E9%A1%BA%E5%BA%8F">打乱数据顺序</a></li>
+<li><a href="#%E6%96%B0%E6%95%B0%E6%8D%AE%E4%B8%80%E8%A1%8C%E4%B8%80%E8%A1%8C%E6%9D%A5%E6%80%8E%E6%A0%B7%E6%89%A9%E5%85%85dataframe">新数据一行一行来，怎样扩充dataframe？</a></li>
+<li><a href="#html%E9%A1%B5%E9%9D%A2table%E5%AD%98%E5%82%A8%E6%88%90%E6%9C%AC%E5%9C%B0csv-2">HTML页面table存储成本地csv</a></li>
+<li><a href="#pandas%E6%8A%8A%E8%A1%A8%E6%A0%BC%E4%B8%AD%E7%9A%84na%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E6%88%90%E4%BA%86nan">pandas把表格中的NA字符串变成了nan</a></li>
+<li><a href="#df%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%8F%96-2">df数据的读取</a></li>
+<li><a href="#%E6%AF%8F%E8%A1%8C%E7%B4%A2%E5%BC%95%E9%87%8D%E7%BD%AE-2">每行索引重置</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/python_acrobat/">
+              <h3 class="post-title">
+                python的一些杂技（记）
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

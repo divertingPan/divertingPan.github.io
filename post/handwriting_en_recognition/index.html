@@ -1,0 +1,419 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>手写签名识别-数据预处理部分 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="手写签名识别-数据预处理部分 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之..." />
+    <meta name="keywords" content="opencv,pytorch,python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              手写签名识别-数据预处理部分
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-10-30
+              </span>
+              <span>
+                13 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/handwriting_en_recognition.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上我做的一些尝试。以备不时之需。</p>
+<p>项目地址：<a href="https://github.com/divertingPan/HandwritingEnglishRecognition_FlyAI">https://github.com/divertingPan/HandwritingEnglishRecognition_FlyAI</a></p>
+<h1 id="对数据的分析">对数据的分析</h1>
+<p>首先拿到测试数据之后先看一眼，这些数据里面并不是干净的手写签名，有很多图片都是带有干扰字符的。比如</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1604054011799.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1604054018444.jpg" alt="" loading="lazy"></figure>
+<p>这两种是这个数据集内比较典型的干扰，第一幅图的行干扰（就是说不仅有签名字的行，还有其他的字符又占了一行）和第二幅图的列干扰（就是紧挨着手写签名的前面有干扰字符），以及行列组合干扰（严格来讲第二幅图其实算是行列组合干扰）。</p>
+<p>首先就考虑对读入的图片进行预处理，尽可能消除干扰字符。</p>
+<h2 id="灰度化和二值化">灰度化和二值化</h2>
+<p>第一，这种图片没必要考虑RGB的问题，所以干脆点，进来先转灰度，也方便后面的形态学处理。更进一步地，我在后期形态学处理的时候甚至只关心非黑即白的像素点，所以干脆再做一个二值化的图出来。</p>
+<p><strong>这里需要说明一点的是，灰度图img和二值图gray应该分开两个变量存储。因为我仅仅使用二值图进行定界操作，定好界以后我还是希望能返回原本的灰度图，所以一开始读进来的灰度图要先给他存起来，后面只对他裁剪之后返回即可。</strong></p>
+<p><strong>为什么不直接返回二值图呢？这个操作返回的图片还是要传给CRNN去计算的，我想尽量减少预处理上对信息的损伤。二值化可能会导致灰度图的一部分信息丢失。</strong></p>
+<p>第二，后期操作的时候希望更关注写字的笔划部分，所以最好是让有笔划的部分是1，没有笔划的地方是0，这里就需要对原图做一个反相操作（原图有笔划的地方是黑色是0，白纸的地方是1）</p>
+<pre><code class="language-python">img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+_, gray = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
+gray = np.logical_xor(1, gray).astype('uint8')
+</code></pre>
+<h2 id="选择正确的行">选择正确的行</h2>
+<p>接下来考虑消除行干扰。我想裁掉签名行上下的干扰字符或者干扰像素。我可以直接对图片（二值化的图片）按行求和，这样有字符的行，和就会比较大；每行字符行间的空隙，求和之后值就很小。将相连区域长度最大的所在行取出来，基本就是手写签名对应的行了。</p>
+<pre><code class="language-python">sum_of_row = np.sum(gray, axis=1)
+</code></pre>
+<p>例：下图左边为每行的和，右边为手写字体<br>
+<img src="https://divertingPan.github.io/post-images/1604054901608.PNG" alt="" loading="lazy"></p>
+<p>如何找到一个数组的最长相连区域？这里我写了一个笨方法，在数组里面遍历，如果大于某个阈值就将行号和flag记下来，直到取到的数又小于阈值时检查flag：如果flag大于当前的最大值就记录这几个行号，如果flag小于最大值就不管。对于遍历结束的时候要特殊处理一下，万一数组最后一个值也是大于阈值的，需要执行类似“取到的数又小于阈值时检查flag”的操作。具体的代码实现如下：</p>
+<pre><code class="language-python">index_row_valid = []
+max_index_row_valid = []
+len_row_valid = 0
+max_len_row_valid = 0
+for index, value in enumerate(sum_of_row):
+    if value &gt; 2:
+        index_row_valid.append(index)
+        len_row_valid += 1
+    else:
+        if len_row_valid &gt; max_len_row_valid:
+            max_len_row_valid = len_row_valid
+            max_index_row_valid = index_row_valid
+            len_row_valid = 0
+            index_row_valid = []
+        else:
+            len_row_valid = 0
+            index_row_valid = []
+    # if the slice end in the last row
+    if len_row_valid &gt; max_len_row_valid:
+        max_len_row_valid = len_row_valid
+        max_index_row_valid = index_row_valid
+</code></pre>
+<p>对cv读进来的图片，做裁切很简单，直接取数组对应的索引即可。对二维数组，这样写就相当于只按行取索引：</p>
+<pre><code class="language-python">gray = gray[max_index_row_valid]
+img = img[max_index_row_valid]
+</code></pre>
+<p>进行按行裁剪的效果如下：<br>
+<img src="https://divertingPan.github.io/post-images/1604056454722.png" alt="" loading="lazy"></p>
+<h2 id="选择合适的列">选择合适的列</h2>
+<p>首先类似的操作，对列求和。这里多做一步，对于大多数数据，可以剪掉右边大部分的空白，这里可以逆序遍历这个数组，一般后面的都是0或者小于某个阈值的。一旦走到一个值大于了设置的阈值，那就从这里截断即可。range可以通过-1来实现逆序。</p>
+<pre><code class="language-python">sum_of_column = np.sum(gray, axis=0)
+for i in range(len(sum_of_column)-1, -1, -1):
+    if sum_of_column[i] &gt;= 2:
+        gray = gray[:, 0:i]
+        img = img[:, 0:i]
+        break
+</code></pre>
+<p>为了消掉那些印刷体，可以使用传统艺能，将这些印刷体先连到一起。之后再针对图中每个图形查看他的尺寸。一般而言手写的字符比印刷体要大一些，而且长宽也有一定的比例范围（l或者i后面再说）所以先用一下膨胀，给印刷体连起来。由于印刷体排列比较紧，用一个小结构元就可以不破坏手写体的连通性的基础上把印刷体连起来。</p>
+<pre><code class="language-python">kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 2))
+thresh = cv2.dilate(gray, kernel)
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1604056344681.png" alt="" loading="lazy"></figure>
+<p>观察图中主要连通区域就是印刷体部分，冒号部分，和手写体部分。首先可以利用外接矩形的高度排掉两个冒号部分，再可以利用外接矩形长宽比排掉印刷体部分。这样可以获得一部分（后面解释“一部分”的含义）手写体字母。</p>
+<pre><code class="language-python"># get edges [with opencv 4.4 return 2 values, previous version return 3 values]
+cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# cut the correct image
+character_bbox_list = []
+
+for i, cnt in enumerate(cnts):
+    x, y, w, h = cv2.boundingRect(cnt)
+
+    if h &gt; 6 and 0.5 &lt; w / h &lt; 2:
+        character_bbox_list.append([x, y, w, h])
+
+character_bbox_list = np.array(character_bbox_list)
+</code></pre>
+<p>如果这时候去看一下character_bbox_list即边界框的列表，可以看到有8项，每项有4个元素，分别对应外接矩形的左上角x，左上角y，宽度w和高度h。8项也就对应了图里的8个字母<br>
+<img src="https://divertingPan.github.io/post-images/1604056711704.PNG" alt="" loading="lazy"></p>
+<p>把定界框画出来也确实是这8个字母：<br>
+<img src="https://divertingPan.github.io/post-images/1604057340827.PNG" alt="" loading="lazy"></p>
+<p>再之后的操作就要略微绕一点弯子了。</p>
+<h2 id="最终确定手写签名区域">最终确定手写签名区域</h2>
+<p>对于上面步骤获得的这几个bbox，我选择取所有列表内bbox的</p>
+<blockquote>
+<p>最上界（所有bbox的y值中，最小的值）<br>
+最下界（[所有bbox的y值+所有h值]的最大值）<br>
+最左顶点（所有bbox的x值的最小值）<br>
+最右顶点（所有bbox中x值最大的值+该bbox的w值）</p>
+</blockquote>
+<p>构成整个手写签名裁剪区。<br>
+PS. 区域的横向长度（所有bbox中x值最大的值-最左顶点+该bbox的w值）或者说（最右顶点-最左顶点）</p>
+<p>代码写的比较杂乱，这里简单捋一下：<br>
+<code>left_x_index</code>和<code>right_x_index</code>对应着最左、最右顶点的bbox索引号，<br>
+<code>left_x_position</code>和<code>right_x_position</code>对应最左、最右顶点实际的坐标，（这里和上述的‘最右顶点’实际应该是最右bbox的左上点的坐标）<br>
+<code>length_character</code>是区域的横向长度，<br>
+<code>top_y_index</code>是最上界对应的bbox索引号，<br>
+<code>top_y_position</code>是最上界的坐标高度，<br>
+<code>max_height</code>是整个手写签名区域触及到的最底端，<br>
+<code>height_character</code>是能包住手写签名区域的最大的高度。</p>
+<p>对于这里涉及到的所有变量含义已经写出来了，具体的赋值和计算流程如下：</p>
+<pre><code class="language-python"># axis x need to be found in the range of [:,0] array
+# np.min[0] means that the min value of 0 column which stands for axis x
+left_x_index = np.where(character_bbox_list[:, 0] == np.min(character_bbox_list, axis=0)[0])[0][0]
+right_x_index = np.where(character_bbox_list[:, 0] == np.max(character_bbox_list, axis=0)[0])[0][0]
+left_x_position = character_bbox_list[left_x_index][0]
+right_x_position = character_bbox_list[right_x_index][0]
+right_bbox_width = character_bbox_list[right_x_index][2]
+length_character = right_x_position - left_x_position + right_bbox_width
+
+# axis y need to be found in the range of [:,1] array
+# np.min[1] means that the min value of 1 column which stands for axis y
+top_y_index = np.where(character_bbox_list[:, 1] == np.min(character_bbox_list, axis=0)[1])[0][0]
+top_y_position = character_bbox_list[top_y_index][1]
+max_height = 0
+
+for i, value in enumerate(character_bbox_list):
+    if character_bbox_list[i][1] + character_bbox_list[i][3] &gt; max_height:
+        max_height = character_bbox_list[i][1] + character_bbox_list[i][3]
+
+height_character = max_height - top_y_position
+
+img = img[top_y_position:top_y_position + height_character, left_x_position:left_x_position + length_character]
+</code></pre>
+<p>最终剪出来的手写签名区域就是这样：<br>
+<img src="https://divertingPan.github.io/post-images/1604058610449.png" alt="" loading="lazy"></p>
+<h1 id="一些解释">一些解释</h1>
+<h2 id="第一点">第一点</h2>
+<p>为什么在对行列求和之后的数组的操作里面总是有阈值呢？主要是考虑到以下情况：<br>
+<img src="https://divertingPan.github.io/post-images/1604058947300.jpg" alt="" loading="lazy"></p>
+<p>他在行之间有一些黏连，如果直接按照0或者阈值太小就可能没法将他分开了。而且阈值给大一点也不会造成太大的影响。如果这一行有字符，按行求和的话基本都在十几往上的值。以上图为例，行和情况如下所示，大概在18-27行就是中间黏连的地方，其他往上或往下的行都是有字符的行，值的差别立现。<br>
+<img src="https://divertingPan.github.io/post-images/1604059122687.PNG" alt="" loading="lazy"></p>
+<p>也有一些少数例外情况，比如Emmmmm这样的字符串，E最上面那个横杠和下面连接处只依靠着E的左侧竖线链接，可能会把E最上头的横杠给裁掉。</p>
+<p>或者一些手写字体特别小，比印刷体还要小，用最大连通区域就识别不到了，这个暂时没有想到什么办法。</p>
+<h2 id="第二点">第二点</h2>
+<p>之前有一个地方提到“一部分”（这样可以获得一部分（后面解释“一部分”的含义）手写体字母），这里的“一部分”如何理解？</p>
+<p>首先，用我这个方法去框定字母，主要是根据长宽比确定的，但是对于l，j，i这样的字母，显然是不适用于这个比例的。“一部分”的含义是指用这种方法可能无法框定这种类型的字母。</p>
+<p>但是还有办法稍微补救一下的，即利用上面<strong>最终确定手写签名区域</strong>一章内的上下左右界弥补。利用这个上下左右界，即使字母中间出现了这种类型的字母，也可以被框选在裁剪区域内。但是如果对于开头或结尾出现这种字母的情景就还是会被遗漏掉。</p>
+<p>关于如何更好更精准地裁剪，在flyAI里面有一个人提到了用模板匹配，但他是匹配印刷体之后定位印刷体的，然后裁剪定位到“NOM”字符的右边裁剪或者定位到“PRENOM”的下边裁剪。这个倒是我没考虑到的一个点，但是个人感觉可能不太行，因为这样还是没法解决被剪裁一半的手写体干扰、以及其他可能的印刷体字符。而且有一些印刷体字符也是被剪裁了的，只有一半的能被模板匹配上吗？不太肯定。</p>
+<h1 id="加载数据">加载数据</h1>
+<p>加载数据的时候，在dataset里面读取图片的时候调用一下上面流程就行，将最后处理好的图片return即可。但是需要注意，一部分图片可能识别之后里面没有character_bbox，即<code>character_bbox_list</code>这个列表是空的，就会引发异常。所以可以采用一下try/except，对于所有识别为空的图，直接在训练阶段跳过该图，或者在验证的时候把原来的图不处理直接丢给网络，或者在测试的时候直接给一个‘EMPTY’标签。在实验中，出现这种状况被跳过的图片大概占1~2%，而成功被处理但是处理结果不完善（如裁剪区域有多余或遗漏）的占比大约在10%。</p>
+<p>具体的写法可以这样：<br>
+训练阶段的dataset图像处理部分：</p>
+<pre><code class="language-python">try:
+    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
+    img = Image.fromarray(np.uint8(img))
+except:
+    return self[(index + 1) % len(self.img_path)]
+</code></pre>
+<p>验证阶段：</p>
+<pre><code class="language-python">try:
+    img = cut_character(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
+    img = Image.fromarray(np.uint8(img))
+except:
+    img = cv2.imread(os.path.join(DATA_PATH, DATA_ID, self.img_path[index]))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = Image.fromarray(np.uint8(img))
+</code></pre>
+<p>测试阶段：</p>
+<pre><code class="language-python">try:
+    img = cut_character(image_path)
+    img = Image.fromarray(np.uint8(img))
+except:
+    return {&quot;label&quot;: 'EMPTY'}
+</code></pre>
+<p>之前有提过要慎用try/except，就是这里，按照这个写法，在try里面随便发生什么错误都会走except里面的流程，如果是因为一些bug导致的异常，那就会使每次读数据都触发except的流程了。例如如果是因为图片路径写的不对，那在测试阶段每次都直接返回一个‘EMPTY’标签，就等同于程序将所有输入都给一个‘EMPTY’的输出，而这显然是不对的，却又无法第一时间通过错误信息看到错误是出现在读取图片这里。</p>
+<p>所以要么在except处显式指定错误类型<code>except (XXXError, XXXError): ...</code>，要么就先不要套try/except，测试好没有问题在套上。</p>
+<h1 id="神经网络部分">神经网络部分</h1>
+<p>这没啥好说的，反正大家都是无脑上CRNN，最多就是改了改里面CNN的结构，没有啥很花哨的操作。</p>
+<h1 id="后记">后记</h1>
+<p>本以为这个比赛的第一名会给我露一手魔改attention的，结果并没有。flyAI的答辩链接：https://mp.weixin.qq.com/s/8RqoINhXH2Hnjr5Xe1QQOA，个人觉得没太多亮点。</p>
+<p>倒是有一个逐步喂入数据的trick值得挖一挖。大概流程是先给少量数据训练到loss下降到稳定然后再用更多的训练到稳定再用更多的……他那个loss可能是指训练集loss？喂入数据可以理解为数据集取不同大小的子集增量，然后在越来越大的子集上训练？这里还存疑。网上好像也没有太多参考资料。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%AF%B9%E6%95%B0%E6%8D%AE%E7%9A%84%E5%88%86%E6%9E%90">对数据的分析</a>
+<ul>
+<li><a href="#%E7%81%B0%E5%BA%A6%E5%8C%96%E5%92%8C%E4%BA%8C%E5%80%BC%E5%8C%96">灰度化和二值化</a></li>
+<li><a href="#%E9%80%89%E6%8B%A9%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%A1%8C">选择正确的行</a></li>
+<li><a href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%88%97">选择合适的列</a></li>
+<li><a href="#%E6%9C%80%E7%BB%88%E7%A1%AE%E5%AE%9A%E6%89%8B%E5%86%99%E7%AD%BE%E5%90%8D%E5%8C%BA%E5%9F%9F">最终确定手写签名区域</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E8%A7%A3%E9%87%8A">一些解释</a>
+<ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%82%B9">第一点</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%82%B9">第二点</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE">加载数据</a></li>
+<li><a href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E9%83%A8%E5%88%86">神经网络部分</a></li>
+<li><a href="#%E5%90%8E%E8%AE%B0">后记</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/python_scrapy_tips/">
+              <h3 class="post-title">
+                Scrapy爬虫时的一些细节
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

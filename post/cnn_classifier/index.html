@@ -1,0 +1,492 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="本来这一篇应该在两个月之前就写完的，但是众所周知在家=生产力0这样一条定律限制了老潘。所以在大量粉丝取关之际，赶紧把这篇推送搞上来，诚挚为已经取关的同学没法看完本系列作而深感遗憾。
+本篇继承“高效获取互联网资源”这一主题，并引进目前非常时髦..." />
+    <meta name="keywords" content="计算机视觉,自动化,python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-09-28
+              </span>
+              <span>
+                18 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/Ng8pxYRJg/" class="post-tag">
+                  # 计算机视觉
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/cnn_classifier.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>本来这一篇应该在两个月之前就写完的，但是众所周知<code>在家=生产力0</code>这样一条定律限制了老潘。所以在大量粉丝取关之际，赶紧把这篇推送搞上来，<del>诚挚为已经取关的同学没法看完本系列作而深感遗憾。</del></p>
+<p>本篇继承“高效获取互联网资源”这一主题，并引进目前非常时髦的神经网络技术，实现前文<a href="https://divertingpan.github.io/post/python_tieba/">进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例</a>的后续功能开发，为广大<del>挂逼</del>网友创造自动分类校花与水图表情包的自动分拣机。</p>
+<h1 id="摘要">摘要</h1>
+<p>本项目以百度贴吧众多图片作为待分类数据，通过最少的操作步骤，实现了在Keras环境下使用以ImageNet为预训练权重的ResNet50网络进行图片分类。分类效果比较好甚至不需要对模型进行什么改动，最终实现了从杂乱图片中筛选包含目标主体的图片。针对包含人体人像这类图片，调用了Face++进行识别，做到了识别图片中是否包含人像和人像的性别<del>颜值打分（并没有）</del>评判。项目整体准确度一般，只能作为娱乐项目玩一玩。</p>
+<h1 id="绪论">绪论</h1>
+<p>当某同学阅读完本系列前一作，兴致勃勃的把程序<strong>复制-粘贴</strong>下来之后，准备上贴吧去抓取校花，却不料被现实绊倒，迷茫在表情包的海洋中。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597824112149.PNG" alt="" loading="lazy"></figure>
+<p>虽然可以<del>像一个痴汉</del>去手动地一个一个检查哪个图片是美女哪个图片是表情包，但是一来会让同学们身体被掏空，二来也丧失了高效获取信息的初心。所以为了使各位同学身体健康心情愉悦，一个自动分拣照片的设备是非常必要的。</p>
+<p>众所周知，近年关于图像分类的技术已经非常成熟，我们可以<del>易如反掌的</del>做一个自动分类机出来，但是里面涉及若干技术细节，了解这些细节既有助于各位同学<del>保持健康</del>了解一些神经网络的科普知识，又有助于大家学习一些Python的奇技淫巧。</p>
+<h1 id="一-神经网络是啥">一、神经网络是啥</h1>
+<p>之前老潘和一个同学针对神经网络进行过一些探讨，趁着这个时候回忆了一下当时我们探讨得出的一些看法。</p>
+<p>众所周知，平时使用计算器的时候，需要在键盘上输入待计算的数字和算符，之后显示器会显示计算结果。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597824176011.png" alt="" loading="lazy"></figure>
+<p>计算器算数的过程无非就是（1）：拿来要算的东西（2）：放进某种程序或者电路中（3）：把算完的结果再拿给你。这其中我们只能看到算前的式子和算后的结果。</p>
+<p>那么神经网络运作类似，（1）：拿来要算的东西（2）：放进某种神经网络中（3）：把算完的结果再拿给你。这其中我们只能看到算前的东西和算后的结果。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597824249108.png" alt="" loading="lazy"></figure>
+<p>但是神经网络和普通计算器的区别在于，计算器输入只限数字和计算符号，输出一般就是一个数字或者其他化简后的算式。神经网络输入的东西形式多种多样，图片/声音/人脸/你的购买记录……输出的结果多种多样，例如算一下你的脸像猫的概率，算一下把你的声音变成老潘的声音是什么样的，算一下你双十一最可能买的东西……</p>
+<p>计算器可以设计各种按钮接受一二三四五加减乘除号，神经网络也可以设计各种“类似按钮”接受图片声音购买记录。计算器用屏幕或者数码管显示计算完的结果，神经网络用列表显示这个输入的结果算完之后更像哪一个类别。那么具体这个网络怎么计算，怎么分类，分几类，就是各位<del>调参</del>工程师的工作了。</p>
+<p>所以当时讨论的结果是，<strong>神经网络实质上是一个超大型的计算器</strong>。</p>
+<p>有一个图片来描述人工智能，机器学习，深度学习，神经网络这些名词之间的关系：</p>
+<p><img src="https://divertingPan.github.io/post-images/1597824306080.jpg" alt="" loading="lazy"><br>
+人工智能，机器学习，神经网络，深度学习的关系：https://blog.csdn.net/lemonade_117/article/details/82668084</p>
+<h1 id="二-怎么用神经网络计算">二、怎么用神经网络“计算”</h1>
+<p>如果自己从头仿照主流的神经网络搭建并且用数据集训练，耗时巨大而且需要超强劲的设备。即使自己勉强训练出来，得到的结果一般也比不上Google等一票大团队使用超大数据集超强劲显卡超贵的电费训练好给大家用的预训练模型。直接拿这些模型来简单用一用已经足够，如果有特殊需求或者特殊的数据，还可以使用微调来做迁移学习。（名词：训练，科普解释为：通过设定好的一种算法，给一批题目和答案，让神经网络自己配置内部权重）</p>
+<h2 id="21-resnet">2.1 ResNet</h2>
+<p>这里使用ResNet50，加载ImageNet的预训练权重来试一下图片分类。（名词：权重，科普解释为：类比于计算器内部的接线和电路）</p>
+<p>首先导入需要的库：</p>
+<pre><code class="language-python">from keras.applications.resnet50 import ResNet50
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input, decode_predictions
+import numpy as np
+</code></pre>
+<p>加载模型，参数weights是加载预训练权重，否则使用随机化权重，include_top是指定是否包含顶部全连接层，全连接层最终输出这个图片属于每个类别下的概率，这个参数可能用于迁移学习。</p>
+<pre><code class="language-python">model = ResNet50(weights='imagenet', include_top=True);
+</code></pre>
+<p>接下来把结果预处理一下，输进去，获取到结果：</p>
+<pre><code class="language-python">img_path = 'test/4.jpg'; #加载图片
+img = image.load_img(img_path, target_size=(224, 224)); #由于包含全连接层所以需要固定图片尺寸
+x = image.img_to_array(img); #图片转成数组
+x = np.expand_dims(x,axis=0); #增加一维
+x = preprocess_input(x);
+preds = model.predict(x);
+</code></pre>
+<p>通过matplotlib把结果统计并显示出来：</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt #加载绘图库
+
+print('Path:',img_path, '\nPredicted:', decode_predictions(preds, top=8)[0]); #decode_predictions如果不指定top参数默认显示概率最高的前5个，指定几个显示几个
+plt.figure(figsize=(8,8)); #默认plot图太小了
+plt.subplot(2,1,1); #类似MATLAB画子图
+plt.axis('off'); #关掉这里的坐标轴
+plt.imshow(plt.imread(img_path)); #显示原图像
+name_list = [decode_predictions(preds)[0][i][1] for i in range (0, 5)]; #关于列表推导式的使用见参考文献
+num_list = [decode_predictions(preds)[0][i][2] for i in range (0, 5)]; #decode_predictions(preds)出的是一个嵌套结构的list
+plt.subplot(2,1,2);
+plt.barh(range(len(num_list)),num_list, tick_label = name_list); #把各类概率画个条状图
+plt.show();
+</code></pre>
+<p>实际测试一下看看效果</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597824441196.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597824447464.PNG" alt="" loading="lazy"></figure>
+<h2 id="22-vgg">2.2 VGG</h2>
+<p>使用VGG16，基本步骤和上一节几乎一模一样，只是需要修改一下调用的库和加载的模型即可：</p>
+<pre><code class="language-python">from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input, decode_predictions
+ 
+model = VGG16(weights='imagenet', include_top=True)
+</code></pre>
+<p>实际测试效果与ResNet差别在于最高概率之外的识别结果稍有不同，但是对主体都能比较清晰的分出来。至于表情包水图，结果更杂乱了。有一个想法是，可以用两个网络对结果分两次类，即使真的有水图被误分进目标类别，也能够再被检出来？这个留作课堂作业，下课交给各班学委。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597824482922.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597824488434.PNG" alt="" loading="lazy"></figure>
+<p>（ImageNet全1000分类见参考文献）</p>
+<p>这里有一个坑是，直接在代码里调网络模型，下载速度可能会很慢（尤其VGG实在是太大了），所以可以手动下载好然后放在存储目录中：Linux路径~/.keras/models，Win路径C:\Users\老潘.keras\models，下载链接在参考文献中。</p>
+<h1 id="三-自动分类">三、自动分类</h1>
+<p>到这里其实就已经成送分题了，直接把对应图片按照最高的类别概率放进不同的文件夹就行了。重点是关注一下准确度，由于没有标注好的数据直接做测试集，所以就自己用眼睛看来判断吧。</p>
+<p>Python实现拷贝文件操作，将img_path指定的文件移动到done文件夹下，命名为13.jpg：</p>
+<pre><code class="language-python">import shutil
+new_path = 'done/13.jpg';
+path = shutil.copy(img_path, new_path)；
+</code></pre>
+<p>用Python遍历目录下的文件：</p>
+<pre><code class="language-python">import os
+ 
+result = []; #所有的文件的路径
+for maindir, subdir, file_name_list in os.walk('test/'):
+    print(&quot;1:&quot;, maindir); #当前目录
+    print(&quot;2:&quot;, subdir); #当前目录下的所有目录
+    print(&quot;3:&quot;, file_name_list);  #当前目录下的所有文件名
+    for filename in file_name_list:
+        apath = os.path.join(maindir, filename);#合并成一个完整路径
+        result.append(apath);
+</code></pre>
+<p>到这里基本所有需要的模块都准备完毕了，交给实习生去整合一下代码就可以使用了。</p>
+<pre><code class="language-python">#-*- coding: utf-8 -*-
+from keras.applications.resnet50 import ResNet50
+from keras.preprocessing import image
+from keras.applications.resnet50 import preprocess_input, decode_predictions
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import shutil
+ 
+model = ResNet50(weights='imagenet', include_top=True);
+testing_dir = '火车/'; #存放待分类图片的路径
+done_dir = 'done/'; #分类完毕的图片存放路径
+temp_dir = 'temp/'; #未进入指定分类的图片，以免漏选
+target_list = ['steam_locomotive', 'passenger_car', 'freight_car', 'electric_locomotive','bullet_train']; #指定挑出来的分类名称
+ 
+for maindir, subdir, file_name_list in os.walk(testing_dir):
+    print(&quot;testing directory:&quot;, maindir); #当前目录
+    print(&quot;file list:&quot;, file_name_list);  #当前目录下的所有文件名
+ 
+for file in file_name_list:
+    img_path = maindir + file;
+    img = image.load_img(img_path, target_size=(224, 224));
+    x = image.img_to_array(img);
+    x = np.expand_dims(x, axis=0);
+    x = preprocess_input(x);
+    preds = model.predict(x);
+    if decode_predictions(preds)[0][0][1] in target_list:
+        new_path = done_dir + file;
+        path = shutil.copy(img_path, new_path);
+        print('select: ' + path);
+    else:
+        new_path = temp_dir + file;
+        path = shutil.copy(img_path, new_path);
+        print('out: ' + path);
+</code></pre>
+<p>准确度不是特别高，因为老潘发现这个图片竟然被分类成了货车，图片里明明是空铁道</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597824646827.PNG" alt="" loading="lazy"></figure>
+<p>表情包和灌水图倒是都剔出去了，不过也有一两个由于特征确实不明显于是被遗漏没有被识别的：</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597824661237.PNG" alt="" loading="lazy"></figure>
+<h1 id="四-校花识别">四、校花识别</h1>
+<p>之所以这次真的讲了校花识别，是因为<del>老潘良心发现不能当标题党</del>ImageNet对识别人脸来说是无力的，上面那种方法只限于识别除人脸之外的物品，想分出人类/身体/美女的脸是不行的。所以针对识别照片中有没有人的需求，要用别的方法来操作。</p>
+<p>Face++上面有现成的API可以调用，注册一个账号可以获得使用一个免费试用的API接口，在官网上有很多应用场景，打开页面就可以直接体验一下，感觉效果好的话就可以用API接口在自己程序里直接调用，例如下面的在线测颜值打分：</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597824694904.PNG" alt="" loading="lazy"></figure>
+<p>关于API的应用，老潘在<a href="https://divertingpan.github.io/post/auto_lottery/">猎奇 | Python+ADB实现自动点赞和抽奖检测</a>里面用到了百度的文本识别。</p>
+<p>在Python中调用Face++的API方法如下：</p>
+<pre><code class="language-python">import requests
+from json import JSONDecoder
+from PIL import Image
+ 
+#HumanBodyDetect API（V1）
+http_url = &quot;https://api-cn.faceplusplus.com/humanbodypp/v1/detect&quot;
+file_path = &quot;test/901.jpg&quot;
+temp_path = &quot;temp/&quot;
+data = {&quot;api_key&quot;: &quot;老潘家的潘老师&quot;,
+        &quot;api_secret&quot;: &quot;Diverting_Pan&quot;,
+        &quot;return_attributes&quot;: &quot;gender&quot;}
+ 
+img = Image.open(file_path).convert('RGB').resize((512, 512), Image.BILINEAR) #API要求图片&lt;2M或&lt;1024*1024，而且色彩模式需要RGB
+img.save(temp_path + &quot;human_temp.jpg&quot;) #压缩后的图片缓存一下
+files = {&quot;image_file&quot;: open(temp_path + &quot;human_temp.jpg&quot;, &quot;rb&quot;)} #以二进制读入图像
+response = requests.post(http_url, data=data, files=files) #POST上传
+</code></pre>
+<p>data里各个参数的作用可以在https://console.faceplusplus.com.cn/documents/4888383找到。这个API会返回图片中人物的性别的概率，所以可以根据有无此参数和此参数的值来筛选需要的图片。</p>
+<p>若识别成功照片中有人，则将这个人的范围坐标、性别、穿衣颜色等信息包含在返回的信息里，如果没识别到有人则没有这些信息。通过读取返回的值，提取关键字段筛选有用的照片，以挑出有女性的照片为例：</p>
+<pre><code class="language-python">req_con = response.content.decode('utf-8')
+req_dict = JSONDecoder().decode(req_con) #解码成字典格式
+if len(req_dict['humanbodies']): #如果图片中没有识别到人体则['attributes']['gender']['female']都不存在
+    ifreq_dict['humanbodies'][0]['attributes']['gender']['female'] &gt; req_dict['humanbodies'][0]['attributes']['gender']['male']:
+        print(&quot;Female&quot;)
+    else:
+        print(&quot;Not Female&quot;)
+else:
+    print(&quot;Not Female&quot;)
+</code></pre>
+<p>基本部件都准备完毕了，实习生可以再来加一下班了：（完整代码<a href="https://github.com/divertingPan/Get_Beauty_Image">见GitHub</a>）</p>
+<pre><code class="language-python">#-*- coding: utf-8 -*-
+import requests
+from json import JSONDecoder
+from PIL import Image
+import os
+import shutil
+import time
+ 
+http_url = &quot;https://api-cn.faceplusplus.com/humanbodypp/v1/detect&quot;
+data = {&quot;api_key&quot;: &quot;_xdd7OMPd5rsHSsqwNaFTi-j-U_4T2HG&quot;,
+        &quot;api_secret&quot;: &quot;fnGuZLo26p2vn0MWh6MCRgIdg5p_sESp&quot;,
+        &quot;return_attributes&quot;: &quot;gender&quot;}
+#HumanBodyDetect API（V1）
+ 
+testing_dir = '校花/';
+done_path = 'done/';
+temp_path = 'temp/';
+ 
+for maindir, subdir, file_name_list in os.walk(testing_dir):
+    print(&quot;testing directory:&quot;, maindir); #当前目录
+    print(&quot;file list:&quot;, file_name_list);  #当前目录下的所有文件名
+ 
+for file in file_name_list:
+    file_path = maindir + file;
+    img = Image.open(file_path).convert('RGB').resize((512,512), Image.BILINEAR)
+    img.save(temp_path + &quot;human_temp.jpg&quot;)
+    files = {&quot;image_file&quot;:open(temp_path + &quot;human_temp.jpg&quot;, &quot;rb&quot;)}
+ 
+    response = requests.post(http_url,data=data, files=files)
+    req_con = response.content.decode('utf-8')
+    req_dict = JSONDecoder().decode(req_con)
+ 
+    if len(req_dict['humanbodies']):
+        if req_dict['humanbodies'][0]['attributes']['gender']['female'] &gt;req_dict['humanbodies'][0]['attributes']['gender']['male']:
+            new_path = done_path + file;
+            path = shutil.copy(file_path, new_path);
+            print('select: ' + path);
+        else:
+            new_path = temp_path + file;
+            path = shutil.copy(file_path, new_path);
+            print('out: ' + path);
+    else:
+        new_path = temp_path + file;
+        path = shutil.copy(file_path, new_path);
+        print('out: ' + path);
+ 
+    time.sleep(1) #如果循环速度太快会被服务器断掉链接
+</code></pre>
+<p>有一个改进策略是记录下最近一次成功操作的文件，如果发现网络连接发生错误或者被服务器断掉连接就自动断点续传，&lt;del不过老潘懒得做了</del>可以留作课后作业交给各位想试着做的同学。</p>
+<p>分类结果准确度不是特别高，不过也分出了大部分的水图，个别图片由于人体特征不明显或者性别特征不明显导致了分类失败</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597824850811.PNG" alt="" loading="lazy"></figure>
+<h1 id="五-总结">五、总结</h1>
+<p>统计一下本次实验分类的情况</p>
+<p>火车图片（ResNet50）总数 589</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597824870269.png" alt="" loading="lazy"></figure>
+<p>美女图片（Face++）总数 573</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597824886513.png" alt="" loading="lazy"></figure>
+<p>由于都是未加工的从网上抓的原生图片，所以只能依靠自己手动分类。而且很多图确实含混不清，比如在图片上只有一个火车车门，我把这类图也归结为有火车的类别了，依此标准来进行准确度的判别。不过从这个准确度看来，本次项目的两类自动分拣机，都有很大**调校（jiao）**的潜力。</p>
+<p>从网上通过爬虫获取图片有一定几率导致图片结尾异常，从而导致程序读取图片出错</p>
+<pre><code>（OSError: image file is truncated (0 bytes not processed)）
+</code></pre>
+<p>若遇到这种错误，删掉出错图像即可。可以添加一个检测图片读取成功的代码，不成功读取直接跳过（后记：可以用try/except）。<del>老潘懒得做了</del>留给大家作为课后作业。</p>
+<h1 id="六-参考文献">六、参考文献</h1>
+<p>[1] keras中使用预训练模型进行图片分类：https://www.cnblogs.com/vactor/p/9813108.html</p>
+<p>[2] Keras中模型 《th与tf的区别》、《notop的含义》：https://blog.csdn.net/elvirangel/article/details/88854612</p>
+<p>[3] keras的基本用法(四)——Fine Tuning神经网络：https://blog.csdn.net/quincuntial/article/details/72896690</p>
+<p>[4] 全连接层有何作用？https://www.cnblogs.com/Terrypython/p/11147665.html</p>
+<p>[5] 实战 迁移学习 VGG19、ResNet50、InceptionV3 实践 猫狗大战 问题：https://blog.csdn.net/pengdali/article/details/79050662</p>
+<p>[6] keras离线下载模型的存储位置：https://www.jianshu.com/p/0a4ba12df520</p>
+<p>[7] keras提供的所有模型下载地址：https://github.com/fchollet/deep-learning-models/releases</p>
+<p>[8] 使用keras加载vgg16等模型权重文件失败的解决办法和模型.h5文件网盘下载地址：https://blog.csdn.net/icurious/article/details/80077035</p>
+<p>[9] VGG16学习笔记：https://blog.csdn.net/dta0502/article/details/79654931</p>
+<p>[10] VGG16学习笔记：https://www.cnblogs.com/lfri/p/10493408.html</p>
+<p>[11] ResNet解析：https://blog.csdn.net/lanran2/article/details/79057994</p>
+<p>[12] Python 列表推导式：https://www.runoob.com/note/15802</p>
+<p>[13] Python——使用matplotlib绘制柱状图：https://www.cnblogs.com/decode1234/p/8535638.html</p>
+<p>[14] ImageNet图像库1000个类别名称（中文注释不断更新）：https://blog.csdn.net/weixin_41770169/article/details/80482942</p>
+<p>[15] python3之shutil高级文件操作：https://www.cnblogs.com/zhangxinqi/p/8038479.html</p>
+<p>[16] Python遍历指定目录下的所有文件以及文件的过滤：https://blog.csdn.net/douyaoxin_126/article/details/88638359</p>
+<p>[17]人工智能，机器学习，神经网络，深度学习的关系：https://blog.csdn.net/lemonade_117/article/details/82668084</p>
+<p>[18] PYTHON 3 调用face++API代码（简单易懂）：https://blog.csdn.net/qq_41122796/article/details/79945873</p>
+<p>[19]文档中心/HumanBody Detect API（V1）：https://console.faceplusplus.com.cn/documents/10071565</p>
+<p>[20] Python3 字典：https://www.runoob.com/python3/python3-dictionary.html</p>
+<p>[21]利用python PIL库进行图像模式的转换：https://www.jianshu.com/p/2e9539bdc307</p>
+<p>[22] Python程序中PIL Image &quot;image file is truncated&quot;问题分析与解决：https://blog.csdn.net/scool_winter/article/details/89426509</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%91%98%E8%A6%81">摘要</a></li>
+<li><a href="#%E7%BB%AA%E8%AE%BA">绪论</a></li>
+<li><a href="#%E4%B8%80-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%98%AF%E5%95%A5">一、神经网络是啥</a></li>
+<li><a href="#%E4%BA%8C-%E6%80%8E%E4%B9%88%E7%94%A8%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%A1%E7%AE%97">二、怎么用神经网络“计算”</a>
+<ul>
+<li><a href="#21-resnet">2.1 ResNet</a></li>
+<li><a href="#22-vgg">2.2 VGG</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E8%87%AA%E5%8A%A8%E5%88%86%E7%B1%BB">三、自动分类</a></li>
+<li><a href="#%E5%9B%9B-%E6%A0%A1%E8%8A%B1%E8%AF%86%E5%88%AB">四、校花识别</a></li>
+<li><a href="#%E4%BA%94-%E6%80%BB%E7%BB%93">五、总结</a></li>
+<li><a href="#%E5%85%AD-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">六、参考文献</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/python_tieba/">
+              <h3 class="post-title">
+                进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

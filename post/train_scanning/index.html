@@ -1,0 +1,499 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【硬核摄影】给火车拍个全身照 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【硬核摄影】给火车拍个全身照 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="GitHub项目地址：https://github.com/divertingPan/video_scanner
+站在路边的思考
+用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主..." />
+    <meta name="keywords" content="火车,艺术设计,opencv,自动化,python,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              【硬核摄影】给火车拍个全身照
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-10
+              </span>
+              <span>
+                16 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/wJs8SzK3B/" class="post-tag">
+                  # 火车
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/train_scanning.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>GitHub项目地址：<a href="https://github.com/divertingPan/video_scanner">https://github.com/divertingPan/video_scanner</a></p>
+<h2 id="站在路边的思考">站在路边的思考</h2>
+<p>用普通相机拍摄火车的时候，离得近拍不到全貌，或者拍到的全貌带透视，看不清远处。离得远就能拍到完整的形态，但是主体太小了看不清。用录像的办法可以离近的同时，拍到完整的火车形态。但是视线就只能被限制在这一个小窗口内，只能看到一小部分的图像，还是不能自由观察整个火车全貌。</p>
+<p>但是，既然录像已经把完整的火车给录下来了，那就可以直接用拼图的方法，把每一帧图像里面新录到的部分往后接上去。从视频一开始出现火车，就将这之后新出现的内容向后延展，直到火车走掉。基本的思路如下图所示。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1612932731617.png" alt="" loading="lazy"></figure>
+<p>这时候很明显的发现，这样做的话，由于画面有透视的原因，会使画面不均匀，并且拼接得不太严丝合缝。如果把这个窗口缩窄，只取画面中部的一小部分，这一小部分只要足够小就可以忽略他的透视形变，画面就会均匀很多。这样做顺便还有一个好处，可以避免周围杂物的干扰，理论上只要录像视线内有这一小条能够完整照到火车就是可以的。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1612934113750.png" alt="" loading="lazy"></figure>
+<p>这样的话，可以对视频的每一帧，都剪出中间某个固定宽度的图像然后拼起来就好了。这个窗口可以无限窄（只留1像素宽）吗？这个窗口宽度显然应该和同一个点在两帧之间的距离有关。窗口比这个距离窄，就会丢信息，比这个距离宽，就会有重复出现的内容。如果和这个距离相等，则是刚刚好的。例如下图是前后两帧叠加显示的示意图，同一点的距离就应该作为这个窗口的宽度来拼接图像</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1612935112494.png" alt="" loading="lazy"></figure>
+<p>同时我们还得确保这个窗口尽量窄，以确保减少透视形变和光照不均。所以说，录像的时候尽量让物体在视频里动的慢一点，也就是让两帧之间同一点的位移尽量小。所以要么拍慢速移动的物体，要么用高速摄影机。当然，为了确保这个动着的东西在画面里不糊，每一帧的快门速度也要尽量快。</p>
+<p>那我们干脆算一算快门速度还有这个窗口宽度和实际运动速度之间的关系。利用一些已知信息可以推算图像里的一像素对应实际焦平面上的区域尺寸。</p>
+<blockquote>
+<p>根据TB/T 1010-2016 《铁道车辆轮对及轴承型式与基本尺寸》，大部分的货车轮滚动圆直径是840mm，根据图中所示这个型号是P62k，根据<a href="http://www.trainfanz.com/series_info.aspx?Series=55&amp;msg=576">http://www.trainfanz.com/series_info.aspx?Series=55&amp;msg=576</a>的数据，这个车的轴重是21t，又根据GB/T 25024-2019 《机车车辆转向架 货车转向架》的第5.8.a：轴重25t及以下车轮滚动圆直径应为840mm。基本可以确定图中车轮的直径是840mm。</p>
+</blockquote>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1612949774146.png" alt="" loading="lazy"></figure>
+<p>这样，做一个简单的比例换算关系就可知，图片里的1像素=实际该处位置6.83mm。如果在60fps的录像帧率下，若想要窗口宽度为1像素，则火车速度就应该为6.83x60 mm/s，即0.41m/s。录像帧率越高，可接纳的实际火车速度越快，因此在实际录像时为了保证尽量小的窗口间隔，录像帧率尽量选择设备能达到的最大帧率。</p>
+<p>假设使用1/8000的快门速度，不出现模糊的火车最高速度应该是6.83/(1/8000) mm/s，即54.64m/s。（意义为在一个像素能识别到的运动距离内，在快门速度时间内走过不超过这样的距离，否则会出现运动残影。可以参考“弥散圆”的概念）虽然为了确保快门速度能够压住运动的物体速度，但是显然1/8000并没有必要。而且快门速度过快同时会导致需要更高的感光度（ISO），导致画面质量降低。而普通列车（指车头拖拉的这种火车）设计的最高速度也就是160km/h，所以推算快门速度只要达到(6.83/1000)/(160/3.6)=1/6507。根据我的实际观察，我所在的这个位置接近火车站，所以火车基本都不是全速从我面前通过的，因此快门速度还可以更慢。</p>
+<p>理论的<code>根据车轮估算最低快门速度</code>的完整换算公式应该是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">快</mi><mi mathvariant="normal">门</mi><mi mathvariant="normal">速</mi><mi mathvariant="normal">度</mi><mo>=</mo><mn>1</mn><mi mathvariant="normal">/</mi><mfrac><mrow><mtext> 车轮直径 </mtext><mo>(</mo><mtext> 像素 </mtext><mo>)</mo><mo>×</mo><mtext> 火车速度 </mtext></mrow><mrow><mn>0.84</mn><mo>(</mo><mo>×</mo><mn>3.6</mn><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">快门速度=1 / \frac{\text { 车轮直径 }(\text { 像素 }) \times \text { 火车速度 }}{0.84(\times 3.6)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mord cjk_fallback">快</span><span class="mord cjk_fallback">门</span><span class="mord cjk_fallback">速</span><span class="mord cjk_fallback">度</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mord mtight">.</span><span class="mord mtight">8</span><span class="mord mtight">4</span><span class="mopen mtight">(</span><span class="mord mtight">×</span><span class="mord mtight">3</span><span class="mord mtight">.</span><span class="mord mtight">6</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">车轮直径</span><span class="mord mtight"> </span></span><span class="mopen mtight">(</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">像素</span><span class="mord mtight"> </span></span><span class="mclose mtight">)</span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight"> </span><span class="mord cjk_fallback mtight">火车速度</span><span class="mord mtight"> </span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>，当火车速度是km/h时进行(x3.6)，是m/s时不乘。</p>
+<h2 id="写个自动化程序">写个自动化程序</h2>
+<h3 id="读取视频">读取视频</h3>
+<p>利用python对视频进行一些处理，主要依靠cv2提供的一些工具。首先得打开一个视频</p>
+<pre><code class="language-python">video_path = './DSCF1150.MOV'
+vc = cv2.VideoCapture(video_path)
+</code></pre>
+<p>这时，vc就代表了加载进来的视频文件了，利用<code>vc.set(cv2.CAP_PROP_POS_FRAMES, 666666)</code>可以指定一个想象的进度条放在第666666帧上，之后的对帧操作将从这个想象的进度条开始往后操作。如果要从头开始，指定他为0或者直接加载视频就可以。</p>
+<p>利用以下操作将获得这个视频的一系列属性参数。fps-每秒帧数，total_frames-视频总帧数，frame_width，frame_height-视频的宽度和高度</p>
+<pre><code class="language-python">fps = vc.get(cv2.CAP_PROP_FPS)
+total_frames = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
+frame_width = int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
+</code></pre>
+<p>当程序每次调用一下<code>rval, frame = vc.read()</code>，就会往后读一帧，rval代表是否成功读到这个帧，frame代表读到的帧图像。因此，读整个视频就可以写成以下样子</p>
+<pre><code class="language-python">for i in range(total_frames):
+    rval, frame = vc.read()
+    if not rval:
+        print('break')
+        break
+</code></pre>
+<p>读进来的帧的形式为np.ndarray形式的数据，因此方便后续操作。值得注意的是，记住cv2默认的色彩通道为BGR顺序。要么自己记得转一下，要么就一直使用cv2提供的图像处理方法。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1612936624283.PNG" alt="" loading="lazy"></figure>
+<h3 id="拼接图片">拼接图片</h3>
+<p>如果对视频的所有帧，都取一个固定宽度的图像出来，拼接在一起，那这个图像的宽度就应该是总帧数x窗口宽。所以我们直接初始化一个空的ndarray，<code>img = np.empty((frame_height, total_frames * width, 3), dtype='uint8')</code></p>
+<p>从视频帧中剪出需要的图像段很容易，直接<code>frame[:, position:position+width, :]</code>即可，这个position是一个比较靠图像中间的位置，也是这个窗口的左侧起始边。</p>
+<p>往那个空数组里面放图像段的时候有一个小坑。火车从左向右开还是从右向左开的拼接顺序也应该是反过来的。</p>
+<ol>
+<li>如果从左向右行驶，在空数组上的拼接顺序应该是从最右端开始拼起，即起始位置应该是<code>pixel_start = total_frames * width - (i + 1) * width</code></li>
+<li>反之，应该从最左端拼，起始位置是<code>pixel_start = i * width</code></li>
+<li>i代表的是帧的编号</li>
+</ol>
+<p>好，关键组件都到齐了，现在把核心的处理过程完整的写出来，如下：</p>
+<pre><code class="language-python">vc = cv2.VideoCapture(video_path)
+vc.set(cv2.CAP_PROP_POS_FRAMES, 0)
+total_frames = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
+frame_height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+img = np.empty((frame_height, int(total_frames * width), 3), dtype='uint8')
+for i in range(total_frames):
+    rval, frame = vc.read()
+    if not rval:
+        print('break')
+        break
+        
+    if v_left_right.get():
+        pixel_start = int(total_frames * width) - int((i + 1) * width)
+    else:
+        pixel_start = int(i * width)
+    pixel_end = pixel_start + math.ceil(width)
+
+    img[:, pixel_start:pixel_end, :] = frame[:, position:position + math.ceil(width), :]
+</code></pre>
+<p>另外，如果想每隔几个像素取一列，即窗口宽是一个大于0小于1的小数。这样的话需要在涉及到与width进行计算的所有地方进行取整判断。这就是在上面的一些地方反复出现int()以及ceil()的原因。</p>
+<p>保存图片的话，直接用cv2.imwrite岂不是太没水平了？其实一个关键的因素在于，如果图片太长，在Ubuntu系统上会有无法显示的bug。所以存图的时候，给他裁开，避免单个图太大。裁图时我们先给一个固定的长度，当图片足够裁出这个长度的段时，就裁剪保存，不够裁就直接把剩余的保存。可是这里我写的不够优雅，希望哪位同学能提供一种更优美的写法。</p>
+<pre><code class="language-python">flag = 0
+i = 0
+for i in range(int((total_frames * width) / split_width)):
+    split_start = i * split_width
+    split_end = split_start + split_width
+    cv2.imwrite('{}/{}_{}.jpg'.format(save_dir, os.path.split(video_path.get())[-1].split('.')[-2], i),
+                img[:, split_start:split_end, :])
+    flag = 1
+if not flag or (total_frames * width) % split_width:
+    i += flag
+    split_start = i * split_width
+    cv2.imwrite('{}/{}_{}.jpg'.format(save_dir, os.path.split(video_path.get())[-1].split('.')[-2], i),
+                img[:, split_start:, :])
+</code></pre>
+<h3 id="使用体验优化">使用体验优化</h3>
+<p>前面那段代码的一些参数可能会随着视频不同而变化，要是每次运行前都打开代码去找实在太麻烦，写在程序开头我也嫌改着麻烦。另外，程序运行过程需要一些时间，没有进度条实在是太不友好。而且，如果加载视频之后能够立刻显示相邻两帧的差异，就能很方便的确定窗口宽度了。</p>
+<p>种种迹象表明，现在需要一个界面来接收参数以及做一些显示。</p>
+<p>好在python自带有tkinter一个简易的界面制作工具。也不讲什么稳定性美观啥的了，直接搓个界面就行。而且也不考虑那么多“一个用户走进酒吧点了一份炒饭”这样的问题，反正老潘自己用的话绝对不会故意往输入框里给什么核爆炸输入的（何必呢）。</p>
+<ul>
+<li>我想要显示两帧的差异图，如果还想带一些简单的交互，那就用matplotlib。</li>
+<li>或许需要一个视频的定位条，用来改变显示的相邻两帧在视频里的位置（例如视频开头可能啥也没有，应该从视频中间取帧）。</li>
+<li>我还想要视频的打开和保存路径选择，这俩功能每个GUI开发框架必有。</li>
+<li>打开视频以后显示一下fps、总帧数等信息，这个直接传值给Label那样的控件就行。</li>
+<li>需要有输入框来接收一些值，包括窗口位置、窗宽度、切割图像的图像宽度。</li>
+<li>一个按钮来将这些值给处理的函数并且执行。</li>
+<li>一个进度条，刚好这个处理流程需要从头到尾遍历视频帧，这个进度就可以作为进度条的进度。</li>
+</ul>
+<p>首先，每个GUI都要有一个主窗体，​</p>
+<pre><code class="language-python">window = tk.Tk()
+window.title('scanning video')
+window.geometry('1024x500')
+font = tf.Font(size=12)
+</code></pre>
+<p>再怎么说，基本的布局还是得科学一点，不然自己用起来肯定不顺手。图像的显示就放在左侧，其他的控制放在右侧，</p>
+<pre><code class="language-python">frame_left = Frame(window)
+frame_left.pack(side=LEFT, fill=BOTH, expand=YES)
+
+frame_right = Frame(window)
+frame_right.pack(side=LEFT, padx=10, expand=YES)
+</code></pre>
+<p>pack()是指按照顺序排在指定的框架内。可以有各种参数控制不同的排列样式。</p>
+<p>先放左侧的东西。一个画布显示图像，一个控制条来当做视频播放条，一个matplotlib自己的工具栏。</p>
+<pre><code class="language-python">fig = Figure(figsize=(8, 4), dpi=72)
+canvas = FigureCanvasTkAgg(fig, master=frame_left)
+canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=YES)
+toolbar = NavigationToolbar2Tk(canvas, frame_left)
+toolbar.update()
+canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=YES)
+
+scrollbar_display = Scale(frame_left, orient=HORIZONTAL, from_=0, to=500,
+                            resolution=1, command=display_frames)
+scrollbar_display.pack(fill=X)
+</code></pre>
+<p>关于这个Scale，每次他被拖动以后，值就会变，就会执行command对应的函数，也会传进去当前的值，如果函数比较复杂（例如我的这个）就会比较卡，所以合理的优化是必要的。另外，这个Scale的长度to参数貌似必须是确定的，不能是个变量。我试了几种方法都会出错，只有给定数字才对劲。</p>
+<pre><code class="language-python">def display_frames(idx):
+    global vc, canvas, fig
+    idx = int(idx)
+    vc.set(cv2.CAP_PROP_POS_FRAMES, idx)
+    rval, frame_1 = vc.read()
+    rval, frame_2 = vc.read()
+    frame_overlay = ((frame_1.astype(np.int) + frame_2.astype(np.int)) * 0.5).astype(np.uint8)
+    frame_overlay = cv2.cvtColor(frame_overlay, cv2.COLOR_BGR2RGB)
+    ax = fig.add_subplot(111)
+    ax.imshow(frame_overlay)
+    canvas.draw()
+</code></pre>
+<p>再放右侧的东西，右侧会涉及到一些逻辑操作。首先是打开视频。这里不想解释那么多了，看代码一目了然。</p>
+<pre><code class="language-python">def open_video():
+    global fig, vc, total_frames, frame_height
+    fig.clear()
+
+    video_path.set(filedialog.askopenfilename(title='choose a video'))
+    vc = cv2.VideoCapture(video_path.get())
+    fps = vc.get(cv2.CAP_PROP_FPS)
+    total_frames = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
+    frame_width = int(vc.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(vc.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    label_video_attr['text'] = '... ......... ...\n' \
+                               '... fps: {} ...\n' \
+                               '... total_frames: {} ...\n' \
+                               '... resolution: {}x{} ...\n' \
+                               '... ......... ...'.format(fps, total_frames, frame_width, frame_height)
+    display_frames(0)
+
+video_path = StringVar()
+video_path.set('... select a video ...')
+label_video_path = tk.Label(frame_right, textvariable=video_path, font=font)
+label_video_path.pack()
+bt_open_video = tk.Button(frame_right, text='open a video', command=open_video, font=font)
+bt_open_video.pack()
+</code></pre>
+<p>之后是选择保存路径。这里我设计的是，存文件的时候会在这个路径下建立一个与视频同名的文件夹，然后将分割的图放进去。这个可以在处理函数里面看出来。</p>
+<pre><code class="language-python">def save_img():
+    save_path.set(filedialog.askdirectory())
+
+save_path = StringVar()
+save_path.set('... select save dir ...')
+label_save_path = tk.Label(frame_right, textvariable=save_path, font=font)
+label_save_path.pack()
+bt_save_img = tk.Button(frame_right, text='save dir', command=save_img, font=font)
+bt_save_img.pack()
+</code></pre>
+<p>之后显示视频的一些信息，这个会和前面open_video()联动，只要打开了视频就会读取这个视频的这些信息，并且显示在这。</p>
+<pre><code class="language-python">label_video_attr = tk.Label(frame_right, font=font, text='... ......... ...\n'
+                                                            '... info area ...\n'
+                                                            '... ......... ...')
+label_video_attr.pack()
+</code></pre>
+<p>再下面放三个接受输入值的东西。在程序里调用这些输入框里的值，使用诸如<code>int(text_position.get())</code>来获取到里面的数。</p>
+<pre><code class="language-python">label_position = tk.Label(frame_right, text='position:', font=font)
+label_position.pack()
+text_position = tk.Entry(frame_right, font=font)
+text_position.pack()
+
+label_width = tk.Label(frame_right, text='width:', font=font)
+label_width.pack()
+text_width = tk.Entry(frame_right, font=font)
+text_width.pack()
+
+label_split_width = tk.Label(frame_right, text='split_width:', font=font)
+label_split_width.pack()
+text_split_width = tk.Entry(frame_right, font=font)
+text_split_width.pack()
+</code></pre>
+<p>进度条，以及一个显示是否完成的label。</p>
+<pre><code class="language-python">def process():
+    ......
+    progressbar['maximum'] = total_frames
+    for i in range(total_frames):
+        ......
+        progressbar['value'] = i + 1
+
+progressbar = ttk.Progressbar(frame_right, length=300, cursor='watch')
+progressbar.pack()
+label_status = tk.Label(frame_right, text='Status: waiting...', font=font)
+label_status.pack()
+</code></pre>
+<p>一个用来选择运动方向的单选按钮。可以给每个选项赋予value，然后使用v_left_right.get()获取选中的选项的value。</p>
+<pre><code class="language-python">def process():
+    ......
+    for i in range(total_frames):
+        if v_left_right.get():
+            pixel_start = int(total_frames * width) - int((i + 1) * width)
+        else:
+            pixel_start = int(i * width)
+
+v_left_right = IntVar()
+radio_left_to_right = tk.Radiobutton(frame_right, text='left to right',
+                                        variable=v_left_right, value=1, font=font)
+radio_left_to_right.pack()
+radio_right_to_left = tk.Radiobutton(frame_right, text='right to left',
+                                        variable=v_left_right, value=0, font=font)
+radio_right_to_left.pack()
+</code></pre>
+<p>最重要的一个按钮。</p>
+<pre><code class="language-python">bt_process = tk.Button(frame_right, text='process', command=process, font=font)
+bt_process.pack()
+</code></pre>
+<p>最后，一个套路化的东西。</p>
+<pre><code class="language-python">window.mainloop()
+</code></pre>
+<p>如果一切正常，窗口如图所示。利用工具栏可以放大图片局部，也可以查看某个点的坐标。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1612970620699.PNG" alt="" loading="lazy"></figure>
+<h2 id="收获">收获</h2>
+<p>这样就可以收获一些角度刁钻的照片了，比如（封面回收）</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1612974206140.png" alt="" loading="lazy"></figure>
+<hr>
+<p>（可以当做新的分割线了）​</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1612974211721.png" alt="" loading="lazy"></figure>
+<hr>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1612974217162.png" alt="" loading="lazy"></figure>
+<hr>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1612974222368.png" alt="" loading="lazy"></figure>
+<p>这样还可以将录像极大压缩。一个录像有接近1G，而对应的图像则只有100M左右，不损失画质的情况下减少90%的空间占用。（不过，声音没了）（不过，在高帧率录制时本来也录不上声音）</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E7%AB%99%E5%9C%A8%E8%B7%AF%E8%BE%B9%E7%9A%84%E6%80%9D%E8%80%83">站在路边的思考</a></li>
+<li><a href="#%E5%86%99%E4%B8%AA%E8%87%AA%E5%8A%A8%E5%8C%96%E7%A8%8B%E5%BA%8F">写个自动化程序</a>
+<ul>
+<li><a href="#%E8%AF%BB%E5%8F%96%E8%A7%86%E9%A2%91">读取视频</a></li>
+<li><a href="#%E6%8B%BC%E6%8E%A5%E5%9B%BE%E7%89%87">拼接图片</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96">使用体验优化</a></li>
+</ul>
+</li>
+<li><a href="#%E6%94%B6%E8%8E%B7">收获</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/postcards_cls/">
+              <h3 class="post-title">
+                一个使用pytorch的图片分类教程——以明信片分类为例
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

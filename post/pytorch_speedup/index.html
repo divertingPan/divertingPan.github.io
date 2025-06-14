@@ -1,0 +1,283 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pytorch训练加速方案整理 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="pytorch训练加速方案整理 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="1. 把数据放内存里，降低 io 延迟。
+使用：
+sudo mount tmpfs /path/to/your/data -t tmpfs -o size=30G
+
+然后把数据放挂载的目录下，即可。
+使用时发现应该用一个空目录先挂载内存分区..." />
+    <meta name="keywords" content="Linux,Ubuntu,pytorch,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              pytorch训练加速方案整理
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-12-05
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/1tPSLd7pII/" class="post-tag">
+                  # Ubuntu
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/pytorch_speedup.jfif" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="1-把数据放内存里降低-io-延迟">1. 把数据放内存里，降低 io 延迟。</h1>
+<p>使用：</p>
+<pre><code>sudo mount tmpfs /path/to/your/data -t tmpfs -o size=30G
+</code></pre>
+<p>然后把数据放挂载的目录下，即可。</p>
+<p>使用时发现应该用一个空目录先挂载内存分区，再把数据拷贝进去。如果直接把数据文件夹挂上去，底下的数据就不可见了。</p>
+<h1 id="2-多gpu并行">2. 多GPU并行</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<hr>
+<p>之前如果存权重的时候没在意这一点，就会报错：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>解决方法是</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
+<h1 id="3-使用numba">3. 使用numba</h1>
+<p>对于嵌套for循环，尽量将涉及到的变量都转换为numpy的数组（只接受numpy，不能有tensor），将循环放入一个函数里，然后使用numba下面的jit装饰器。例如</p>
+<pre><code class="language-python">from numba import jit
+
+@jit(nopython=True)
+def insertion_sort(arr):
+    pass
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#1-%E6%8A%8A%E6%95%B0%E6%8D%AE%E6%94%BE%E5%86%85%E5%AD%98%E9%87%8C%E9%99%8D%E4%BD%8E-io-%E5%BB%B6%E8%BF%9F">1. 把数据放内存里，降低 io 延迟。</a></li>
+<li><a href="#2-%E5%A4%9Agpu%E5%B9%B6%E8%A1%8C">2. 多GPU并行</a></li>
+<li><a href="#3-%E4%BD%BF%E7%94%A8numba">3. 使用numba</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/linux_disk_mount/">
+              <h3 class="post-title">
+                Linux挂载硬盘/内存盘/网络硬盘方法
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

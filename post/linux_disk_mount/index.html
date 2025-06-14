@@ -1,0 +1,322 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linux挂载硬盘/内存盘/网络硬盘方法 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Linux挂载硬盘/内存盘/网络硬盘方法 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="挂载普通硬盘
+
+找到准备存内容的硬盘
+
+sudo fdisk -lu
+
+
+设备的UUID可以通过以下指令查看
+sudo blkid
+
+
+准备将D盘挂载到disk目录上面
+
+cd / 
+mkdir disk
+
+
+执行后disk就是D盘的入口，..." />
+    <meta name="keywords" content="Linux,Ubuntu" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Linux挂载硬盘/内存盘/网络硬盘方法
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-11-30
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/1tPSLd7pII/" class="post-tag">
+                  # Ubuntu
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/linux_disk_mount.jfif" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="挂载普通硬盘">挂载普通硬盘</h2>
+<ol>
+<li>找到准备存内容的硬盘</li>
+</ol>
+<pre><code>sudo fdisk -lu
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606705184275.PNG" alt="" loading="lazy"></figure>
+<p>设备的UUID可以通过以下指令查看</p>
+<pre><code>sudo blkid
+</code></pre>
+<ol start="2">
+<li>准备将D盘挂载到disk目录上面</li>
+</ol>
+<pre><code>cd / 
+mkdir disk
+</code></pre>
+<ol start="3">
+<li>执行后disk就是D盘的入口，只是临时挂载，重启后消失，'ntfs'可以使用<code>blkid</code>返回的TYPE=xx查看</li>
+</ol>
+<pre><code>mount -vl -t ntfs /dev/sda4 /disk
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606705295046.PNG" alt="" loading="lazy"></figure>
+<ol start="4">
+<li>把home路径下的内容拷贝进disk</li>
+</ol>
+<pre><code>cp -r /home/ /disk/
+</code></pre>
+<ol start="5">
+<li>成功拷贝进另一硬盘</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1606705334879.PNG" alt="" loading="lazy"></figure>
+<h3 id="永久挂载">永久挂载</h3>
+<p>可以直接用命令</p>
+<pre><code>echo UUID=afab653d-7620-49df-ba66-f956c372ef93 /your/whatever/path ext4 defaults 0 0 &gt;&gt; /etc/fstab
+</code></pre>
+<p>或者打开/etc/fstab手动编辑，加入echo后面的文字。上面需要改变的地方在于UUID，路径，和文件系统。</p>
+<p>编辑完后，执行</p>
+<pre><code>mount -a 
+</code></pre>
+<h2 id="挂载内存盘">挂载内存盘</h2>
+<blockquote>
+<p>ref：https://blog.csdn.net/qq_29912325/article/details/108666516</p>
+</blockquote>
+<p>对于超大内存（RAM）的服务器，可以把需要经常IO的数据放在内存上。具体做法就是把内存的一部分挂载到目录上，当做普通存储使用。只是需要注意，关机会消失，所以要做好备份。</p>
+<p>先准备一个空的目录，然后执行</p>
+<pre><code>sudo mount -t tmpfs -o size=50G tmpfs /your/whatever/path
+</code></pre>
+<p>然后把数据复制进去即可。</p>
+<pre><code>cp -r dataset_hdd dataset
+</code></pre>
+<p>如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
+<p>也可以写在/etc/fstab里面永久挂载，但是RAM掉电数据消失的情况是不会改变的。</p>
+<pre><code>tmpfs	/home/user/ramdisk	tmpfs	defaults,size=100M	0 0
+</code></pre>
+<p>要修改已挂载的大小，可以执行</p>
+<pre><code>sudo mount -o remount,size=18G tmpfs /your/whatever/path
+</code></pre>
+<p>要取消挂载，执行</p>
+<pre><code>sudo umount -v /your/whatever/path
+</code></pre>
+<h2 id="挂载网络硬盘">挂载网络硬盘</h2>
+<p>参考<br>
+https://cloud.tencent.com/developer/article/1073125</p>
+<p>这里用了CentOS，首先安装以下内容</p>
+<pre><code>yum install -y epel-release
+yum -y install fuse-sshfs
+</code></pre>
+<p>挂载服务器8.8.8.8上面的/data/tmp目录到本机的/tmp目录下</p>
+<pre><code>[root@tokyo /]#  sshfs -o allow_other root@8.8.8.8:/data/tmp /tmp
+root@8.8.8.8's password:
+</code></pre>
+<p>使用<code>df -h</code>查看挂载结果，使用<code>umount /tmp</code>卸载</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E6%8C%82%E8%BD%BD%E6%99%AE%E9%80%9A%E7%A1%AC%E7%9B%98">挂载普通硬盘</a>
+<ul>
+<li><a href="#%E6%B0%B8%E4%B9%85%E6%8C%82%E8%BD%BD">永久挂载</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8C%82%E8%BD%BD%E5%86%85%E5%AD%98%E7%9B%98">挂载内存盘</a></li>
+<li><a href="#%E6%8C%82%E8%BD%BD%E7%BD%91%E7%BB%9C%E7%A1%AC%E7%9B%98">挂载网络硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/xshell_to_tensorboard/">
+              <h3 class="post-title">
+                使用xshell连接远程服务器的tensorboard
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

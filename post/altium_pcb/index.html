@@ -1,0 +1,389 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>用Altium Designer制作PCB过程总结 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="用Altium Designer制作PCB过程总结 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="潘老师很久没有更新了，最近在考虑往这里放一些学习笔记之类的东西。潘老师不打算写高数英语这种需要大量练习的东西，打算写一些可以用很短时间学会的软件或者什么技能，以备不时之需。主要的思路就是，把学到的东西，通过一个案例尽可能丰富的涵盖大部分重点..." />
+    <meta name="keywords" content="PCB,Altium" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              用Altium Designer制作PCB过程总结
+            </h2>
+            <div class="post-info">
+              <span>
+                2018-04-14
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/VRigV_Uj_/" class="post-tag">
+                  # PCB
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wJaUg7-MNg/" class="post-tag">
+                  # Altium
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/altium_pcb.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>潘老师很久没有更新了，最近在考虑往这里放一些学习笔记之类的东西。潘老师不打算写高数英语这种需要大量练习的东西，打算写一些可以用很短时间学会的软件或者什么技能，以备不时之需。主要的思路就是，把学到的东西，通过一个案例尽可能丰富的涵盖大部分重点，这样即使以后忘记了，回来查找对应的步骤也能很快解决。一方面给潘老师自己做一个知识备份，另一方面万一有人正好需要并且正好看到了，也能帮助到他。至于PS教程，其实严格来讲也属于软件工具应用的范畴。</p>
+<p>今天记录的是使用Altium Designer制作PCB工程文件的过程，之前因为使用ADS（AD和ADS不是一个东西）做大作业，但是当时苦于不知道如何画PCB，大作业做的虎头蛇尾。趁着这两天被图书馆欺负到不能学习于是就看了看如何操作AD。找了几本书，从画原理图到生成PCB都有详细步骤，潘老师将几本书的东西拼合了一下，并且对于一些细节也进行了查证，做了一个简单但涵盖内容比较全面的示例，以备之后参考。对于擅长使用AD的同学，请你们随时指出潘老师在下文中理解的偏差和操作的错误，非常感谢。关于ADS的使用，潘老师在之后有空的时间也会整理出来。<br>
+<img src="https://divertingPan.github.io/post-images/1597660267924.PNG" alt="" loading="lazy"></p>
+<p>封面那个图的来历是潘老师去年工程实践课做的一个原理图，可惜那个开发板做完被收走了<del>令潘老师对此耿耿于怀</del>，于是仅能依靠一幅照片来努力还原当时PCB的布局。后来因为自己又加了一个USB线路，所以一部分布局和之前工程实践给的不一样。如果有时间（和金钱）的话，把这个板打出来，搞不好还可以<del>做好之后卖给下届的在工程实践课电子训练模块选做单片机的同学直接交作业，</del>做成开发板套件，那也是极好的。</p>
+<h1 id="创建原理图">创建原理图</h1>
+<h2 id="1">1</h2>
+<p>新建一个PCB Project，在工程中新建一个Schematic（原理图）<br>
+<img src="https://divertingPan.github.io/post-images/1597660373964.PNG" alt="" loading="lazy"></p>
+<h2 id="2">2</h2>
+<p>右键-放置-器件，或者直接在右边库中找到需要的器件，放进原理图中。并连接起来。<br>
+<img src="https://divertingPan.github.io/post-images/1597660395313.PNG" alt="" loading="lazy"></p>
+<h2 id="3">3</h2>
+<p>点击“工具”-“标注”-“原理图标注”。（可在左上角更改自动标号的顺序方式。）点击“更新更改列表”之后点击“接受更改”，在弹出窗口中点击“执行变更”，若没有红叉出现则全部正确，之后关闭。元件会被自动标号。<br>
+<img src="https://divertingPan.github.io/post-images/1597660411987.PNG" alt="" loading="lazy"></p>
+<h2 id="4">4</h2>
+<p>修改元件的封装。以LED为例。双击LED，双击右下footprint。<br>
+<img src="https://divertingPan.github.io/post-images/1597660431351.PNG" alt="" loading="lazy"></p>
+<h2 id="5">5</h2>
+<p>弹出窗口后，PCB元件库选择“任意”，并点击封装模型中的“浏览”，从现有库中选择一种封装。<br>
+<img src="https://divertingPan.github.io/post-images/1597660454604.PNG" alt="" loading="lazy"><br>
+<img src="https://divertingPan.github.io/post-images/1597660460337.PNG" alt="" loading="lazy"></p>
+<h1 id="为元件创建自定义封装">为元件创建自定义封装</h1>
+<h2 id="6">6</h2>
+<p>若需要自制封装，则首先新建一个“库”-“PCB元件库”，若左边栏目没有自动更改则点击左下选择PCB Library的选项卡。<br>
+<img src="https://divertingPan.github.io/post-images/1597660485072.PNG" alt="" loading="lazy"></p>
+<h2 id="7">7</h2>
+<p>通过“工具”-“新的空元件”或者“工具”-“元器件向导”建立新的元件封装库。双击左侧元件表栏里的元件可以修改名称和描述。元器件向导方便快速建立与标准封装类似的封装。<br>
+<img src="https://divertingPan.github.io/post-images/1597660516173.PNG" alt="" loading="lazy"></p>
+<h2 id="8">8</h2>
+<p>为LED建立如下的封装。弄好后保存。<br>
+<img src="https://divertingPan.github.io/post-images/1597660531120.PNG" alt="" loading="lazy"></p>
+<h2 id="9">9</h2>
+<p>回到原理图，将LED的封装改为刚刚建立的封装。通过步骤4,5，在选择封装的窗口里选择刚刚建立的库和封装。<br>
+<img src="https://divertingPan.github.io/post-images/1597660547533.PNG" alt="" loading="lazy"></p>
+<h2 id="10">10</h2>
+<p>由于LED是有极性元件。必须保证原理图引脚和封装引脚顺序一样。双击LED，在左下角Edit Pin里将引脚号勾选上。<br>
+<img src="https://divertingPan.github.io/post-images/1597660566320.PNG" alt="" loading="lazy"></p>
+<h2 id="11">11</h2>
+<p>原理图中正极引脚号为1，但是在PCB封装图中我却在2脚上画了正极。所以要么在封装里换过来。要么在“管脚映射”里将元器件1号引脚映射到封装的2号脚。<br>
+<img src="https://divertingPan.github.io/post-images/1597660582933.PNG" alt="" loading="lazy"></p>
+<h1 id="创建自定义原理图符号">创建自定义原理图符号</h1>
+<h2 id="12">12</h2>
+<p>开脑洞时间。假设现在我们自主研发出了一个芯片。4个引脚。功能是12引脚产生电势差的5秒后断开34脚之间的通路，5秒后再自动恢复。那么我们需要画在原理图上。首先需要给一个电路符号。新建一个“库”-“原理图库”。类似建立PCB封装库的过程。新建一个有4个引脚的符号。放置矩形和引脚。注意带数字的对侧是管脚的对外接口。修改名字和引脚号如图。<br>
+<img src="https://divertingPan.github.io/post-images/1597660610035.PNG" alt="" loading="lazy"></p>
+<h2 id="13">13</h2>
+<p>双击左侧器件栏里的元件，修改信息。完成后点击左侧“器件”栏下方的放置。加入原理图中。<br>
+<img src="https://divertingPan.github.io/post-images/1597660629970.PNG" alt="" loading="lazy"></p>
+<h2 id="14">14</h2>
+<p>给这个新的芯片指定封装。点击右下的Add，选择footprint，之后的操作同之前，为其指定一个4脚的DIP封装。并且检查引脚顺序是否一致。<br>
+<img src="https://divertingPan.github.io/post-images/1597660646082.PNG" alt="" loading="lazy"></p>
+<h2 id="15">15</h2>
+<p>修改U?的编号，接好原理图。保存。<br>
+<img src="https://divertingPan.github.io/post-images/1597660664704.PNG" alt="" loading="lazy"></p>
+<h1 id="制作pcb">制作PCB</h1>
+<h2 id="16">16</h2>
+<p>新建一个PCB。点击“设计”-“规则”，修改一些尺寸的约束规则。这些尺寸的最大值和最小值要求与实际板厂加工能力有关，例如，布线通常不能比6mil还细，那么就约束线宽最小为6mil（不过10mil是默认的，所以可保持不改）。<br>
+<img src="https://divertingPan.github.io/post-images/1597660690039.PNG" alt="" loading="lazy"></p>
+<h2 id="17">17</h2>
+<p>将过孔尺寸改小（默认值太大，占用面积多），只要不小于板厂的最小加工能力即可（太小的过孔会导致加工费较贵）。之后点击确定，并且保存PCB。<br>
+<img src="https://divertingPan.github.io/post-images/1597660705132.PNG" alt="" loading="lazy"></p>
+<h2 id="18">18</h2>
+<p>点击“设计”-“Import Change From (工程名)”，在弹出的窗口中勾选这些选项，之后点击“执行变更”，若没有红叉出现则成功，关闭此窗口。<br>
+<img src="https://divertingPan.github.io/post-images/1597660720559.PNG" alt="" loading="lazy"></p>
+<h2 id="19">19</h2>
+<p>排布一下元件的位置。鼠标按住某个元件再按空格可以旋转他。由于示例非常简单所以用不了1分钟即可整理完毕。尽量让导线（白色连线）少有交叉的情况。<br>
+<img src="https://divertingPan.github.io/post-images/1597660738123.PNG" alt="" loading="lazy"></p>
+<h2 id="20">20</h2>
+<p>在窗口底部选项卡中切换到top layer，然后点击“放置”-“禁止布线”-“线径”，画出边界。并双击线条，设置限制层为all layer。<br>
+<img src="https://divertingPan.github.io/post-images/1597660775167.PNG" alt="" loading="lazy"></p>
+<h2 id="21">21</h2>
+<p>点击“布线”-“自动布线”-“全部”，使用默认的双层版布线策略。点击route all，软件会开始自动布置连线。由于示例非常简单所以瞬间完成了布线。<br>
+<img src="https://divertingPan.github.io/post-images/1597660791508.PNG" alt="" loading="lazy"><br>
+<img src="https://divertingPan.github.io/post-images/1597660810809.PNG" alt="" loading="lazy"></p>
+<h2 id="22">22</h2>
+<p>红色代表上层的线，蓝色代表下层的线。如果自动布线不好看可以手动拖移调节。之后给焊盘补泪滴。点击“工具”-“泪滴”，弹出如图窗口，确定即可。<br>
+<img src="https://divertingPan.github.io/post-images/1597660844271.PNG" alt="" loading="lazy"></p>
+<h2 id="23">23</h2>
+<p>给PCB空余的地方铺铜。点击“放置”-“铺铜”，选择层之后按确定，在绘图区域画出铺铜区域即可。分别给top layer和bottom layer铺铜。<br>
+<img src="https://divertingPan.github.io/post-images/1597660862393.PNG" alt="" loading="lazy"><br>
+<img src="https://divertingPan.github.io/post-images/1597660869648.PNG" alt="" loading="lazy"></p>
+<h1 id="添加自定义图案">添加自定义图案</h1>
+<h2 id="24">24</h2>
+<p>通常会把产品的品牌或者一些其他信息印在丝印上（也可以做在敷铜层上），用防静电图标为例，将图案导入之前，应在PS内将图片改为黑白的图片。先执行“图像”-“模式”-“灰度”，再进行“图像”-“模式”-“位图”，之后存储成BMP图像。事先改好图像的尺寸为实际尺寸，分辨率为500。<br>
+<img src="https://divertingPan.github.io/post-images/1597660896011.PNG" alt="" loading="lazy"></p>
+<h2 id="25">25</h2>
+<p>在AD的“DXP”-“运行脚本”中，找到PCB Logo Creator，打开。放置在Top Overlay层（想做到敷铜层上就选择Top layer），加载刚刚制作的图片。转换即可。<br>
+<img src="https://divertingPan.github.io/post-images/1597660914340.PNG" alt="" loading="lazy"></p>
+<h2 id="26">26</h2>
+<p>选中生成的图片（一条条线拼合成的），右键“联合”-“从选中的器件生成联合”，然后复制到需要的板上即可。（点击复制，点击一下图标，到目标板文件里点击粘贴，点击一个位置）。放好后还可以右键“联合”-“调整联合的大小”，之后点击图标，改大小。注意一下线宽，不要太细（不知道图形里的线太细了会不会导致印刷困难，还没有探究）。<br>
+<img src="https://divertingPan.github.io/post-images/1597660935777.PNG" alt="" loading="lazy"></p>
+<h2 id="27">27</h2>
+<p>至此PCB文件制作完毕，交由板厂生产即可。（某些元件带3D模型但是十分简陋）<br>
+<img src="https://divertingPan.github.io/post-images/1597660959081.PNG" alt="" loading="lazy"></p>
+<h1 id="附录">附录</h1>
+<ul>
+<li>
+<p>在原理图中查找器件：E-J-C</p>
+</li>
+<li>
+<p>修改板子大小：全选之后D-S-D</p>
+</li>
+<li>
+<p>AD中的各层功能：</p>
+<p>Top/Bottom layer：顶层/底层走线或铺铜区域</p>
+<p>Keep-Out layer：板中不准走线的范围（板边缘线）</p>
+<p>Top/Bottom solder：顶层/底层不被绿油盖住的区域</p>
+<p>Top/Bottom paste：开钢网上锡膏的区域</p>
+</li>
+</ul>
+<h1 id="后记">后记</h1>
+<ul>
+<li>
+<p>问：请问altium designer16生成gberber文件和钻孔文件后没有后缀名为drl的文件？只有一个txt文件，查资料说该文件和drl文件内容是一模一样的，但加工板的技术人员非要后缀名为drl的文件，大神有没有什么好的办法解决？</p>
+</li>
+<li>
+<p>答：在nc drill输出设置的窗口中勾选上生成二进制drl文件</p>
+</li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%88%9B%E5%BB%BA%E5%8E%9F%E7%90%86%E5%9B%BE">创建原理图</a>
+<ul>
+<li><a href="#1">1</a></li>
+<li><a href="#2">2</a></li>
+<li><a href="#3">3</a></li>
+<li><a href="#4">4</a></li>
+<li><a href="#5">5</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%BA%E5%85%83%E4%BB%B6%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B0%81%E8%A3%85">为元件创建自定义封装</a>
+<ul>
+<li><a href="#6">6</a></li>
+<li><a href="#7">7</a></li>
+<li><a href="#8">8</a></li>
+<li><a href="#9">9</a></li>
+<li><a href="#10">10</a></li>
+<li><a href="#11">11</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8E%9F%E7%90%86%E5%9B%BE%E7%AC%A6%E5%8F%B7">创建自定义原理图符号</a>
+<ul>
+<li><a href="#12">12</a></li>
+<li><a href="#13">13</a></li>
+<li><a href="#14">14</a></li>
+<li><a href="#15">15</a></li>
+</ul>
+</li>
+<li><a href="#%E5%88%B6%E4%BD%9Cpcb">制作PCB</a>
+<ul>
+<li><a href="#16">16</a></li>
+<li><a href="#17">17</a></li>
+<li><a href="#18">18</a></li>
+<li><a href="#19">19</a></li>
+<li><a href="#20">20</a></li>
+<li><a href="#21">21</a></li>
+<li><a href="#22">22</a></li>
+<li><a href="#23">23</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%A1%88">添加自定义图案</a>
+<ul>
+<li><a href="#24">24</a></li>
+<li><a href="#25">25</a></li>
+<li><a href="#26">26</a></li>
+<li><a href="#27">27</a></li>
+</ul>
+</li>
+<li><a href="#%E9%99%84%E5%BD%95">附录</a></li>
+<li><a href="#%E5%90%8E%E8%AE%B0">后记</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/r_map_data/">
+              <h3 class="post-title">
+                猎奇 | 记录如何用R绘制数据地图
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

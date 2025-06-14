@@ -1,0 +1,285 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>科普 | 电脑里的图片到底是什么样的 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="科普 | 电脑里的图片到底是什么样的 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="使用图片处理软件，就不可避免的要用到计算机（不管是手机还是电脑，原理都是一样）。今天潘老师从科学的角度解剖图片，了解图片背后的一些机制，再使用Photoshop就会更明白些。
+今天的文章侧重科普，没有很多操作上的东西。即使读者没有任何计算机..." />
+    <meta name="keywords" content="数字图像处理,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              科普 | 电脑里的图片到底是什么样的
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-10-26
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/8brsisIkG/" class="post-tag">
+                  # 数字图像处理
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/basic_digital_image_processing.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>使用图片处理软件，就不可避免的要用到计算机（不管是手机还是电脑，原理都是一样）。今天潘老师从科学的角度解剖图片，了解图片背后的一些机制，再使用Photoshop就会更明白些。</p>
+<p>今天的文章侧重科普，没有很多操作上的东西。即使读者没有任何计算机相关知识也可以看懂这篇推文<del>但愿吧。</del></p>
+<h1 id="摘要">摘要</h1>
+<p>主要讨论了计算机中图片的存储方式和颜色显示机制。</p>
+<p>首先的首先，需要树立如下的观念，**计算机内存储的所有东西都是一个一个的点（离散的），**阅读整篇文章都请坚持此思想，并且以后在和电脑打交道时此规律同样适用。没错很绝对就是所有。</p>
+<h1 id="矩阵">矩阵</h1>
+<p>矩阵，就是一个由数字排列成的方块。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1606139227968.PNG" alt="" loading="lazy"></figure>
+<center>（图1，一个矩阵）</center>
+<p>计算机存储图片时，实质也是上图这么一个东西。那么会有人纳闷“我看到的是图，也不是一屏幕的数字啊”，这是因为，（以普通的黑白照片为例）<strong>在计算机内，从黑到白的范围被等距的划分成了256份</strong>，最暗的地方数字是0，最白的地方数字是255，在硬盘里，存储的只是数字，而我们看到的是电脑根据这个矩阵“翻译”后的结果。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1606139412104.png" alt="" loading="lazy"></figure>
+<center>（图2，放大的黑白照片，可以清楚看到一个一个的小方格。一个小方格就对应了矩阵里的一个数。这个数越大，这个方格就越白。）</center>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1606139437368.png" alt="" loading="lazy"></figure>
+<center>（图3，灰阶图，左上角为0，右下角为255。这个相当于电脑翻译矩阵和图片的词典。Tips：灰阶图通常在印刷业用来校色，检查印刷机有没有色偏。）</center>
+<h1 id="像素分辨率">像素/分辨率</h1>
+<p>接着上面的继续说，像素，就是照片里的小方格，不论黑白照片还是彩色照片，放大后都会看到这样的方格。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1606139467745.png" alt="" loading="lazy"></figure>
+<center>（图4，放大的彩色照片）</center>
+<p>**分辨率的值（多少乘多少）代表这个照片由几个方格拼成的。**分辨率越大的图片，看起来越清晰，分辨率低，则看起来有马赛克感。如果做设计的同学还会听说分辨率有72和300，这代表的是在一英寸平方内有多少个像素点。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1606139482209.png" alt="" loading="lazy"></figure>
+<center>（图5，一个分辨率是1920x1080的图片所代表的含义是，横向有1920列方格，纵向有1080行方格）</center>
+<h1 id="三原色">三原色</h1>
+<p>不论你小学有没有上过美术课，都应该知道三原色的知识，红黄蓝颜料，互相掺和在一块，会有各种不同的颜色。要是全搅在一起，就会成一坨黑乎乎的东西（但是并不会是纯黑）。在电脑里有一种色彩模式称为CMYK，是和彩色印刷相衔接的一种色彩模式，他的颜色混合状态如下图：</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1606139541237.png" alt="" loading="lazy"></figure>
+<center>（图6，CMYK）</center>
+<p>老潘你先等等，不是三原色吗，我知道CMY分别代表了Cyan青色，Magenta品红色，Yellow黄色，K是啥，咋多了一个？</p>
+<p>K是Key Plate，定位套版色，就是黑色。那么为什么不用三原色，还多加了一个黑色？就算加了黑色进来，为什么不干脆再加一个White白色呢？</p>
+<p>刚刚潘老师说，三原色可以互相调配得到其他颜色，然而三种颜色全混在一起，实际并不会得到纯黑，而印刷中需要用到大量纯黑，所以为他专门调了一种油墨。纸张一般都是白色的，图片里白色的地方不印任何油墨就行，没必要做白色油墨（这也是为什么牛皮纸上印的照片都发黄）（当然在极特殊的情况下需要白色油墨也能造出来，比如会带银色反光的特种油墨）。</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1606139565210.jpg" alt="" loading="lazy"></figure>
+<center>（图7，印在牛皮纸上的图片）</center>
+<p>嗯，说完了CMYK，下面还有另一种色彩模式，称为RGB，是和显示屏显示彩色相关的一种色彩模式。RGB，就是Red，Green和Blue。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1606139509241.png" alt="" loading="lazy"></figure>
+<center>（图8，RGB）</center>
+<p>诶老潘你再等一会儿，这咋三原色不是红黄蓝变成红绿蓝了？而且，就算是红绿蓝，咋全掺在一起成了白色？</p>
+<p>印刷的染料，水彩颜料，油漆等是反射光显色的，而显示屏，灯泡，阳光是发光显色的。<strong>颜料的三原色确实是“红黄蓝”，而光学的三原色是“红绿蓝”</strong>，大家都知道白光可以分解出七色光，所以光学三原色组合在一起自然也就是白色。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1606139613151.jpg" alt="" loading="lazy"></figure>
+<center>（图9，白光由于折射分解为原色光）</center>
+<p>光学的三原色是红绿蓝的原因，是人眼细胞对红绿蓝三种光最敏感，我们看到的各种彩色与眼睛对三种光的混合感知到的等效。比如我们看到了黄光，我们看到红光加绿光也是黄光。但是黄光并不能分解出红和绿光。显示屏实际上只是一种仿生学的应用。相关具体知识请学习医学的同学以及光学的同学作答。</p>
+<h1 id="通道">通道</h1>
+<p>现在就该考虑一下让电脑存储的照片由黑白照片向彩色照片进化了。刚刚说到，黑白照片可以将他的灰度域（就是从黑到白的这个范围）划分成200多段，那彩色怎么划分呢？七彩颜色而且还有深浅变化，这能划分吗？</p>
+<p>刚刚又提到，三原色（不论是印刷三原色还是光学三原色）都可以组合出任何颜色，那么想要将一副彩色图片也想黑白图那样分段（离散）并且用数字表示（量化），完全可以对三原色分段并且和数字表示，表示完之后，将三个矩阵叠起来。比如**对图片最左上角的小方格，规定红色加多少，绿色加多少，蓝色加多少，然后混在一起，就会形成一种颜色。**所有的小方格都这样办，一幅图就完成了。这也就是通道的原理。</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1606139651394.PNG" alt="" loading="lazy"></figure>
+<center>（图10，Photoshop中的通道，分别用一种表示方法（灰阶图）表示所在的方格里要填多少红绿蓝）</center>
+<h1 id="图像后期处理">图像后期处理</h1>
+<p>如果理解了图片的存储原理（即通过一份份的，用数字代表里面颜色状态的小方格存储），一些后期工具的原理就很清楚了：</p>
+<p>1</p>
+<p>如果想让一副黑白的图整个变亮，那就让矩阵里的所有数都变大。要是想只让比较黑的小方格变亮，那就只让矩阵里所有小于某个值的数变大即可，这就是“曲线”的原理。</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1606139696864.PNG" alt="" loading="lazy"></figure>
+<center>（图11，曲线。横坐标代表原始数值，纵坐标代表输出数值。）</center>
+<p>2</p>
+<p>如果想让图像从一个明暗度的临界点分离开，亮的变亮暗的变暗，就使用某种方法使矩阵中低于某个值（我设置的是120）的数全变为0，高于120的数全变为255。这就是“阈值”的原理。</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1606139732049.PNG" alt="" loading="lazy"></figure>
+<center>（图12，阈值，滑块调节明暗临界点。）</center>
+<p>3</p>
+<p>我们把这个图片的矩阵，几个点一组几个点一组的放在一起，用他们的平均值来取代这些颜色，这就是打马赛克的原理。</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1606139748004.PNG" alt="" loading="lazy"></figure>
+<center>（图13，打马赛克的图片，几个像素点方格合并成了一个，合并后的颜色是原来这些颜色的平均值）</center>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%91%98%E8%A6%81">摘要</a></li>
+<li><a href="#%E7%9F%A9%E9%98%B5">矩阵</a></li>
+<li><a href="#%E5%83%8F%E7%B4%A0%E5%88%86%E8%BE%A8%E7%8E%87">像素/分辨率</a></li>
+<li><a href="#%E4%B8%89%E5%8E%9F%E8%89%B2">三原色</a></li>
+<li><a href="#%E9%80%9A%E9%81%93">通道</a></li>
+<li><a href="#%E5%9B%BE%E5%83%8F%E5%90%8E%E6%9C%9F%E5%A4%84%E7%90%86">图像后期处理</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/layer_mask_in_photoshop/">
+              <h3 class="post-title">
+                基础 | 详解PS特色之：图层与蒙版
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

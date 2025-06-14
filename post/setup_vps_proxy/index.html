@@ -1,0 +1,734 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>利用动态VPS服务器建立自用专属proxy | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="利用动态VPS服务器建立自用专属proxy | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：
+
+动态VPS支持拨号换ip
+普通的服务器用来挂爬虫
+
+（其实可以把爬虫也放在VPS上，但是一般VPS的内存C..." />
+    <meta name="keywords" content="Linux,爬虫,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              利用动态VPS服务器建立自用专属proxy
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-12-16
+              </span>
+              <span>
+                14 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/W7VB3D2cqH/" class="post-tag">
+                  # 爬虫
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/setup_vps_proxy.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：</p>
+<ol>
+<li>动态VPS支持拨号换ip</li>
+<li>普通的服务器用来挂爬虫</li>
+</ol>
+<p>（其实可以把爬虫也放在VPS上，但是一般VPS的内存CPU硬盘都很小。而性能够的普通服务器又不能换ip，用两个便宜服务器的这种方案是比较省钱的选择）</p>
+<p>整个设置过程如下：</p>
+<h2 id="设置proxy服务器">设置proxy服务器</h2>
+<p>首先配置VPS服务器，大流程参考如下链接：<a href="https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&amp;mid=2247495757&amp;idx=1&amp;sn=059a6723b882f51c1516ab844a77c8ff&amp;source=41#wechat_redirect">轻松获得海量稳定代理！ADSL拨号代理的搭建 (qq.com)</a></p>
+<h3 id="设置adsl">设置adsl</h3>
+<p>第一步需要先使用pppoe-setup, pppoe-start, pppoe-stop来控制拨号，先让机器连上外网才能正常联网下载安装app，但是可能具体命令要视不同服务器而定。参考：<a href="https://www.centoschina.cn/course/config-centos/2965.html">CentOS下配置ADSL 拨号上网CentOS中文站 - 专注Linux技术 (centoschina.cn)</a></p>
+<p>使用pppoe-setup进行设置：第一步按回车，第二步填账号，第三步填网卡，第四步按回车，DNS也直接按回车，第五步填密码，第六步回车，第七步输入0，第八步输入yes，第九步输入y，设置完之后，pppoe-stop，先关闭拨号，然后pppoe-start启动拨号</p>
+<p>参考：<a href="https://www.zhihu.com/question/26101987/answer/1538728150">linux 在shell 下连接pppoe出现/usr/sbin/adsl-start: line 217:怎么办？</a></p>
+<h3 id="安装python3">安装python3</h3>
+<p>在centos7上直接源码安装python3，按照以下方式安装</p>
+<pre><code>yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make
+wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+tar -zxvf Python-3.6.4.tgz
+cd Python-3.6.4
+./configure &amp;&amp; make &amp;&amp;make install
+</code></pre>
+<h3 id="安装tinyproxy">安装tinyproxy</h3>
+<p>使用源码安装新版本的，能开启密码认证，避免自己的vps沦为网上的免费代理</p>
+<p>1：安装gcc（如果前面安装python时安装过，可跳过）</p>
+<pre><code>yum install gcc
+</code></pre>
+<p>2：安装TinyProxy，不使用yum安装，直接下载最新的源码安装</p>
+<pre><code>wget https://github.com/tinyproxy/tinyproxy/releases/download/1.11.0/tinyproxy-1.11.0.tar.gz
+tar -zxvf tinyproxy-1.11.0.tar.gz
+cd tinyproxy-1.11.0
+</code></pre>
+<p>3：编译安装</p>
+<pre><code>./configure &amp;&amp; make &amp;&amp;make install
+bash -r
+</code></pre>
+<p>4：创建系统服务</p>
+<p>新建tinyproxy.service文件</p>
+<pre><code>vi /usr/lib/systemd/system/tinyproxy.service
+</code></pre>
+<p>贴入以下代码</p>
+<pre><code>[Unit]
+Description=Startup script for the tinyproxy server
+After=network.target
+ 
+[Service]
+Type=forking
+PIDFile=/usr/local/var/run/tinyproxy/tinyproxy.pid
+ExecStart=/bin/bash -c &quot;/usr/local/bin/tinyproxy -c /usr/local/etc/tinyproxy/tinyproxy.conf &amp;&quot;
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+ExecStartPost=/bin/sleep 0.1
+ 
+[Install]
+WantedBy=multi-user.target
+
+</code></pre>
+<p>5：手动创建log和pid文件</p>
+<pre><code>mkdir -p /usr/local/var/run/tinyproxy
+mkdir -p /usr/local/var/log/tinyproxy
+touch /usr/local/var/log/tinyproxy/tinyproxy.log
+touch /usr/local/var/run/tinyproxy/tinyproxy.pid
+</code></pre>
+<p>6：改配置文件<code>/usr/local/etc/tinyproxy/tinyproxy.conf</code></p>
+<pre><code>#这里设置使用的用户名和组
+User root
+Group root
+
+# 设置爬虫的ip，如果需要本地也连接的话就全部注释掉
+# 只采用密码认证的方式，否则本地连本地会被拒绝
+Allow xxx.xxx.xxx.xxx
+ 
+# 设置用户名密码
+BasicAuth username password
+ 
+# 顺便将下面两行取消注释，后面有用到
+PidFile &quot;/usr/local/var/run/tinyproxy/tinyproxy.pid&quot;
+LogFile &quot;/usr/local/var/log/tinyproxy/tinyproxy.log&quot;
+</code></pre>
+<p>7：启动服务</p>
+<pre><code>sudo systemctl enable tinyproxy
+service tinyproxy start
+service tinyproxy status
+</code></pre>
+<p>参考：<a href="https://www.yuncongz.com/archives/6.html">Linux安装最新版Tinyproxy</a></p>
+<p>之后改一下防火墙设置</p>
+<pre><code class="language-bash">firewall-cmd --zone=public --add-port=8888/tcp --permanent
+firewall-cmd --reload
+</code></pre>
+<p>这时候拿一台机器（本地或者用要做爬虫的那台机器）试以下命令</p>
+<pre><code class="language-bash">curl -x http://user_username:mypassword1234@xx.xx.xx.xx:8888 httpbin.org/get
+</code></pre>
+<p>这里xx的ip是用来拨号的网卡的ip地址，名字一般是ppp0的那个</p>
+<h3 id="设置ip地址提取方法">设置ip地址提取方法</h3>
+<p>代码参考: <a href="https://zhuanlan.zhihu.com/p/259795465">Python网络爬虫开发实战，ADSL 拨号代理</a></p>
+<p>1：在centos7上安装anaconda，流程和普通的Linux安装都是一样的。（直接用服务器python3环境的话可跳过）</p>
+<p>2：安装redis、requests，直接pip安装即可，注意如果用conda安装redis库的话需要执行</p>
+<pre><code>conda install redis
+conda install redis-py
+</code></pre>
+<p>3：之后建两个文件，第一个文件是<code>db_setup.py</code>，需要定制的地方就是<code>REDIS_HOST</code>和<code>REDIS_PASSWORD</code>，根据后面redis配置改。</p>
+<pre><code class="language-python">import redis
+import random
+
+# Redis数据库安装在爬虫服务器上，他的ip
+REDIS_HOST = '111.11.111.111'
+# Redis数据库密码, 如无则填None
+REDIS_PASSWORD = '11111111'
+# Redis数据库端口
+REDIS_PORT = 6379
+# 代理池键名
+PROXY_KEY = 'adsl'
+
+class RedisClient(object):
+    def __init__(self, host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, proxy_key=PROXY_KEY):
+        &quot;&quot;&quot;
+        初始化Redis连接
+        :param host: Redis 地址
+        :param port: Redis 端口
+        :param password: Redis 密码
+        :param proxy_key: Redis 散列表名
+        &quot;&quot;&quot;
+        self.db = redis.StrictRedis(host=host, port=port, password=password, decode_responses=True)
+        self.proxy_key = proxy_key
+
+    def set(self, name, proxy):
+        &quot;&quot;&quot;
+        设置代理
+        :param name: 主机名称
+        :param proxy: 代理
+        :return: 设置结果
+        &quot;&quot;&quot;
+        return self.db.hset(self.proxy_key, name, proxy)
+
+    def get(self, name):
+        &quot;&quot;&quot;
+        获取代理
+        :param name: 主机名称
+        :return: 代理
+        &quot;&quot;&quot;
+        return self.db.hget(self.proxy_key, name)
+
+    def count(self):
+        &quot;&quot;&quot;
+        获取代理总数
+        :return: 代理总数
+        &quot;&quot;&quot;
+        return self.db.hlen(self.proxy_key)
+
+    def remove(self, name):
+        &quot;&quot;&quot;
+        删除代理
+        :param name: 主机名称
+        :return: 删除结果
+        &quot;&quot;&quot;
+        return self.db.hdel(self.proxy_key, name)
+
+    def names(self):
+        &quot;&quot;&quot;
+        获取主机名称列表
+        :return: 获取主机名称列表
+        &quot;&quot;&quot;
+        return self.db.hkeys(self.proxy_key)
+
+    def proxies(self):
+        &quot;&quot;&quot;
+        获取代理列表
+        :return: 代理列表
+        &quot;&quot;&quot;
+        return self.db.hvals(self.proxy_key)
+
+    def random(self):
+        &quot;&quot;&quot;
+        随机获取代理
+        :return:
+        &quot;&quot;&quot;
+        proxies = self.proxies()
+        if proxies:
+            ip = random.choice(proxies)
+        else:
+            ip = None
+        return ip
+
+    def all(self):
+        &quot;&quot;&quot;
+        获取字典
+        :return:
+        &quot;&quot;&quot;
+        return self.db.hgetall(self.proxy_key)
+</code></pre>
+<p>4：建一个<code>refresh_ip.py</code>，需要定制的地方是<code>ADSL_CYCLE</code>控制刷新ip的间隔。</p>
+<p>另外在执行这个脚本之前也要确保机器联外网（执行pppoe-start），不然一直连不上爬虫服务器的redis</p>
+<pre><code class="language-python">import re
+import time
+import requests
+from requests.exceptions import ConnectionError, ReadTimeout
+from db_setup import RedisClient
+import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(message)s')
+logger = logging.getLogger(__name__)
+
+# 拨号网卡
+ADSL_IFNAME = 'ppp0'
+# 测试URL
+TEST_URL = 'http://httpbin.org/get'
+# 测试超时时间
+TEST_TIMEOUT = 30
+# 拨号间隔
+ADSL_CYCLE = 43200  # 12 hours
+# 拨号出错重试间隔
+ADSL_ERROR_CYCLE = 10
+# 从数据库删掉旧ip到关闭旧ip之间的冷却时间
+COOL_DOWN_CYCLE = 600
+# ADSL命令
+ADSL_BASH = 'pppoe-stop;pppoe-start'
+# 代理运行端口
+PROXY_PORT = 8888
+# 客户端唯一标识
+CLIENT_NAME = 'adsl1'
+
+# proxy的用户名和密码
+USERNAME = 'user_username'
+PASSWORD = 'mypassword1234'
+
+class Sender():
+    def get_ip(self, ifname=ADSL_IFNAME):
+        &quot;&quot;&quot;
+        获取本机IP
+        :param ifname: 网卡名称
+        :return:
+        &quot;&quot;&quot;
+        (status, output) = subprocess.getstatusoutput('ifconfig')
+        if status == 0:
+            pattern = re.compile(ifname + '.*?inet.*?(\d+\.\d+\.\d+\.\d+).*?netmask', re.S)
+            result = re.search(pattern, output)
+            if result:
+                ip = result.group(1)
+                return ip
+
+    def test_proxy(self, proxy):
+        &quot;&quot;&quot;
+        测试代理
+        :param proxy: 代理
+        :return: 测试结果
+        &quot;&quot;&quot;
+        try:
+            response = requests.get(TEST_URL, proxies={
+                'http': '{}:{}@{}'.format(USERNAME, PASSWORD, proxy)
+            }, timeout=TEST_TIMEOUT)
+            if response.status_code == 200:
+                return True
+        except (ConnectionError, ReadTimeout):
+            return False
+
+    def remove_proxy(self):
+        &quot;&quot;&quot;
+        移除代理
+        :return: None
+        &quot;&quot;&quot;
+        self.redis = RedisClient()
+        self.redis.remove(CLIENT_NAME)
+        logger.info('Successfully Removed Proxy')
+
+    def set_proxy(self, proxy):
+        &quot;&quot;&quot;
+        设置代理
+        :param proxy: 代理
+        :return: None
+        &quot;&quot;&quot;
+        self.redis = RedisClient()
+        if self.redis.set(CLIENT_NAME, proxy):
+            logger.info('Successfully Set Proxy {}'.format(proxy))
+
+    def adsl(self):
+        &quot;&quot;&quot;
+        拨号主进程
+        :return: None
+        &quot;&quot;&quot;
+
+        logger.info('Remove Proxy')
+        self.remove_proxy()
+        logger.info('Cooling Down')
+        time.sleep(COOL_DOWN_CYCLE)
+
+        while True:
+            logger.info('ADSL Dialing Start')
+            (status, output) = subprocess.getstatusoutput(ADSL_BASH)
+            if status == 0:
+                logger.info('Success')
+                ip = self.get_ip()
+                if ip:
+                    logger.info('IP: {}'.format(ip))
+                    logger.info('Testing Proxy')
+                    proxy = '{ip}:{port}'.format(ip=ip, port=PROXY_PORT)
+                    if self.test_proxy(proxy):
+                        logger.info('Valid Proxy')
+                        self.set_proxy(proxy)
+                        logger.info('Waiting for Next Dialing')
+                        time.sleep(ADSL_CYCLE)
+                        logger.info('Remove Proxy')
+                        self.remove_proxy()
+                        logger.info('Cooling Down')
+                        time.sleep(COOL_DOWN_CYCLE)
+                    else:
+                        logger.info('Invalid Proxy')
+                        time.sleep(ADSL_ERROR_CYCLE)
+                else:
+                    logger.info('Get IP Failed, Re Dialing')
+                    time.sleep(ADSL_ERROR_CYCLE)
+            else:
+                logger.info('ADSL Dialing Failed, Please Check')
+                time.sleep(ADSL_ERROR_CYCLE)
+                
+if __name__ == '__main__':
+    sender = Sender()
+    sender.adsl()
+</code></pre>
+<p>5：但是偶尔有可能在拨号间隙时ip挂掉或者被ban，所以我又简化了一个'manual_refresh.py'，可以手动控制切换ip</p>
+<pre><code class="language-python">import re
+import time
+import requests
+from requests.exceptions import ConnectionError, ReadTimeout
+from db_setup import RedisClient
+import subprocess
+import logging
+
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(message)s')
+logger = logging.getLogger(__name__)
+
+# 拨号网卡
+ADSL_IFNAME = 'ppp0'
+# ADSL命令
+ADSL_BASH = 'pppoe-stop;pppoe-start'
+# 代理运行端口
+PROXY_PORT = 8888
+# 客户端唯一标识
+CLIENT_NAME = 'adsl1'
+
+
+class Sender():
+    def get_ip(self, ifname=ADSL_IFNAME):
+        &quot;&quot;&quot;
+        获取本机IP
+        :param ifname: 网卡名称
+        :return:
+        &quot;&quot;&quot;
+        (status, output) = subprocess.getstatusoutput('ifconfig')
+        if status == 0:
+            pattern = re.compile(ifname + '.*?inet.*?(\d+\.\d+\.\d+\.\d+).*?netmask', re.S)
+            result = re.search(pattern, output)
+            if result:
+                ip = result.group(1)
+                return ip
+
+    def remove_proxy(self):
+        &quot;&quot;&quot;
+        移除代理
+        :return: None
+        &quot;&quot;&quot;
+        self.redis = RedisClient()
+        self.redis.remove(CLIENT_NAME)
+        logger.info('Successfully Removed Proxy')
+
+    def set_proxy(self, proxy):
+        &quot;&quot;&quot;
+        设置代理
+        :param proxy: 代理
+        :return: None
+        &quot;&quot;&quot;
+        self.redis = RedisClient()
+        if self.redis.set(CLIENT_NAME, proxy):
+            logger.info('Successfully Set Proxy {}'.format(proxy))
+
+    def adsl(self):
+        logger.info('ADSL Start, Remove Proxy, Please wait')
+        self.remove_proxy()
+        (status, output) = subprocess.getstatusoutput(ADSL_BASH)
+        ip = self.get_ip()
+        logger.info('IP: {}'.format(ip))
+        proxy = '{ip}:{port}'.format(ip=ip, port=PROXY_PORT)
+        self.set_proxy(proxy)
+
+
+if __name__ == '__main__':
+    sender = Sender()
+    sender.adsl()
+</code></pre>
+<h2 id="设置爬虫服务器">设置爬虫服务器</h2>
+<p>爬虫服务器除了放爬虫代码以外，还要放一个redis数据库用来接proxy传来的ip，然后用web页面传进爬虫代码解析出来代理ip的地址。</p>
+<h3 id="安装redis">安装redis</h3>
+<p>参考：<a href="https://developer.aliyun.com/article/764565">如何在 Ubuntu 20.04 上安装和配置 Redis-阿里云开发者社区 (aliyun.com)</a></p>
+<p>首先安装</p>
+<pre><code class="language-bash">apt install redis-server
+</code></pre>
+<p>之后可以利用下面指令查看状态</p>
+<pre><code class="language-bash">systemctl status redis-server
+</code></pre>
+<p>找到<code>/etc/redis/redis.conf</code>之后把下面这句的前面加个#号注释掉</p>
+<pre><code>bind 127.0.0.1 ::1
+</code></pre>
+<p>找到<code>#requirepass foobared</code>这句，取消前面的#号，并且把密码改成自己的</p>
+<pre><code>requirepass mypassword12345
+</code></pre>
+<p>之后重启服务</p>
+<pre><code class="language-bash">systemctl restart redis-server
+</code></pre>
+<p>然后上服务器的安全组或者防火墙什么的里面，把6379这个端口放开。</p>
+<h3 id="设置获取ip的web链接">设置获取ip的web链接</h3>
+<p>1：安装redis，tornado，之后把上面那个<code>db_setup.py</code>照搬过来。</p>
+<p>2：建立一个文件<code>api.py</code>，可以改的参数是<code>def serve(port=8425)</code>可以根据需要改。</p>
+<pre><code class="language-python">import json
+import tornado.ioloop
+import tornado.web
+from tornado.web import RequestHandler, Application
+from db_setup import RedisClient
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+class Server(RequestHandler):
+    &quot;&quot;&quot;
+    服务器，对接 Redis 并提供 API
+    &quot;&quot;&quot;
+
+    def initialize(self, redis):
+        &quot;&quot;&quot;
+        初始化
+        :param redis:
+        :return:
+        &quot;&quot;&quot;
+        self.redis = redis
+
+    def get(self, api=''):
+        &quot;&quot;&quot;
+        API 列表
+        :param api:
+        :return:
+        &quot;&quot;&quot;
+        if not api:
+            links = ['random', 'proxies', 'names', 'all', 'count']
+            self.write('&lt;h4&gt;Welcome to ADSL Proxy API&lt;/h4&gt;')
+            for link in links:
+                self.write('&lt;a href=' + link + '&gt;' + link + '&lt;/a&gt;&lt;br&gt;')
+
+        if api == 'random':
+            result = self.redis.random()
+            if result:
+                self.write(result)
+
+        if api == 'names':
+            result = self.redis.names()
+            if result:
+                self.write(json.dumps(result))
+
+        if api == 'proxies':
+            result = self.redis.proxies()
+            if result:
+                self.write(json.dumps(result))
+
+        if api == 'all':
+            result = self.redis.all()
+            if result:
+                self.write(json.dumps(result))
+
+        if api == 'count':
+            self.write(str(self.redis.count()))
+
+
+def serve(port=8425, address='0.0.0.0'):
+    redis = RedisClient()
+    application = Application([
+        (r'/', Server, dict(redis=redis)),
+        (r'/(.*)', Server, dict(redis=redis)),
+    ])
+    application.listen(port, address=address)
+    logger.info(f'API listening on http://{address}:{port}')
+    tornado.ioloop.IOLoop.instance().start()
+
+
+if __name__ == '__main__':
+    serve()
+</code></pre>
+<p>3：可以通过在爬虫的脚本里面解析<code>http://0.0.0.0:8425/random</code>来直接获取到代理ip，然后传给爬虫就行。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E8%AE%BE%E7%BD%AEproxy%E6%9C%8D%E5%8A%A1%E5%99%A8">设置proxy服务器</a>
+<ul>
+<li><a href="#%E8%AE%BE%E7%BD%AEadsl">设置adsl</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85python3">安装python3</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85tinyproxy">安装tinyproxy</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AEip%E5%9C%B0%E5%9D%80%E6%8F%90%E5%8F%96%E6%96%B9%E6%B3%95">设置ip地址提取方法</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E7%88%AC%E8%99%AB%E6%9C%8D%E5%8A%A1%E5%99%A8">设置爬虫服务器</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85redis">安装redis</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E8%8E%B7%E5%8F%96ip%E7%9A%84web%E9%93%BE%E6%8E%A5">设置获取ip的web链接</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/setup_webpage_server/">
+              <h3 class="post-title">
+                使用Ubuntu+apache设置带验证的http服务器
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

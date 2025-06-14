@@ -1,0 +1,326 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>pytorch的奇怪报错 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="pytorch的奇怪报错 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="pytorch也有CUDA版本对应的问题
+搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载t..." />
+    <meta name="keywords" content="Linux,Ubuntu,pytorch,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              pytorch的奇怪报错
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-12-09
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/1tPSLd7pII/" class="post-tag">
+                  # Ubuntu
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/pytorch_bizarre_error_debug.jfif" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="pytorch也有cuda版本对应的问题">pytorch也有CUDA版本对应的问题</h1>
+<p>搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to('cuda')报错。<br>
+较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA<br>
+尽管只需要torch和torchvision版本对应上即可，但是使用1.6和1.5的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br>
+这里是官网的参考版本搭配：https://pytorch.org/get-started/previous-versions/</p>
+<p>运行crnn的时候，1.3的版本会导致loss变nan，1.4往后的版本是正常的，不知是哪里有问题。</p>
+<h1 id="多卡并行下要注意batch-size">多卡并行下要注意batch size</h1>
+<p>在使用DataParallel时，可能会出现这样的报错</p>
+<pre><code>IndexError: dimension specified as 0 but tensor has no dimensions
+</code></pre>
+<p>训练时读取dataset时使用drop_last，或者使每次batch的数量一样，总之要控制每次batch的大小是一致的。</p>
+<p>参考：https://blog.csdn.net/weixin_44012382/article/details/108190006</p>
+<h1 id="代码卡死问题">代码卡死问题</h1>
+<p>有时候会遇到代码卡住，检查cpu，gpu，硬盘都没有占用，强退之后会看到有一条信息</p>
+<pre><code>gotit = waiter.acquire(True, timeout)
+</code></pre>
+<p>原因是在dataloader里面使用了cv2，需要设置</p>
+<pre><code class="language-python">cv2.setNumThreads(0)
+cv2.ocl.setUseOpenCL(False)
+</code></pre>
+<p>同时，在开头段加入</p>
+<pre><code class="language-python">import os
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1&quot; 
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot; 
+</code></pre>
+<p>ref: https://nekokiku.cn/2021/07/05/dataloader%E7%9A%84%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/</p>
+<h1 id="报错超出显存但是实际并没有">报错超出显存但是实际并没有</h1>
+<p>场景：在多gpu服务器上，由于0号gpu被占用于是只能使用后面的gpu，但是突然有一天再运行代码时不论如何设置batchsize和数据大小都会报</p>
+<pre><code>RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED
+</code></pre>
+<p>并且前面某处还会有out of memory类似的字眼</p>
+<p>经过尝试排查，在指定设备时不使用</p>
+<pre><code class="language-python">device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu' )
+</code></pre>
+<p>而使用以下方法代替即可解决</p>
+<pre><code class="language-python">import os 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu' )
+</code></pre>
+<p>具体机制不明</p>
+<h1 id="runtimeerror-received-0-items-of-ancdata">RuntimeError: received 0 items of ancdata</h1>
+<p>https://github.com/pytorch/pytorch/issues/973<br>
+If you are having this problem, try running <code>torch.multiprocessing.set_sharing_strategy('file_system')</code> right after your import of torch<br>
+自己试的时候发现只要放在代码的开头部分就行</p>
+<h1 id="多gpu并行情况下missing-keys-in-state_dict-conv_1weight-bn1weight-bn1bias">多GPU并行情况下：Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;,</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<hr>
+<p>之前如果存权重的时候没在意这一点，就会报错：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>解决方法是</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: https://blog.csdn.net/weixin_41735859/article/details/108610687</p>
+</blockquote>
+<h1 id="进程退出了但是显存没释放">进程退出了但是显存没释放</h1>
+<p>ref: https://blog.csdn.net/heiheiya/article/details/81454212<br>
+显存被占满了，但是并没有进程显示占用。</p>
+<p>使用命令</p>
+<pre><code>fuser -v /dev/nvidia*
+</code></pre>
+<p>之后<code>kill -9 xxxxx</code>把/dev/nvidia0等几个进程kill掉就可以了</p>
+<h1 id="backward报错runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</h1>
+<blockquote>
+<p>ref: https://blog.csdn.net/SY_qqq/article/details/107384161</p>
+</blockquote>
+<p>保持住梯度信息：m.backward(retain_graph=True)</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#pytorch%E4%B9%9F%E6%9C%89cuda%E7%89%88%E6%9C%AC%E5%AF%B9%E5%BA%94%E7%9A%84%E9%97%AE%E9%A2%98">pytorch也有CUDA版本对应的问题</a></li>
+<li><a href="#%E5%A4%9A%E5%8D%A1%E5%B9%B6%E8%A1%8C%E4%B8%8B%E8%A6%81%E6%B3%A8%E6%84%8Fbatch-size">多卡并行下要注意batch size</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E5%8D%A1%E6%AD%BB%E9%97%AE%E9%A2%98">代码卡死问题</a></li>
+<li><a href="#%E6%8A%A5%E9%94%99%E8%B6%85%E5%87%BA%E6%98%BE%E5%AD%98%E4%BD%86%E6%98%AF%E5%AE%9E%E9%99%85%E5%B9%B6%E6%B2%A1%E6%9C%89">报错超出显存但是实际并没有</a></li>
+<li><a href="#runtimeerror-received-0-items-of-ancdata">RuntimeError: received 0 items of ancdata</a></li>
+<li><a href="#%E5%A4%9Agpu%E5%B9%B6%E8%A1%8C%E6%83%85%E5%86%B5%E4%B8%8Bmissing-keys-in-state_dict-conv_1weight-bn1weight-bn1bias">多GPU并行情况下：Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;,</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA%E4%BA%86%E4%BD%86%E6%98%AF%E6%98%BE%E5%AD%98%E6%B2%A1%E9%87%8A%E6%94%BE">进程退出了但是显存没释放</a></li>
+<li><a href="#backward%E6%8A%A5%E9%94%99runtimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/pytorch_speedup/">
+              <h3 class="post-title">
+                pytorch训练加速方案整理
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

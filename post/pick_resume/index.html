@@ -1,0 +1,291 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【5分钟实例】按名字从大量简历中筛出需要的简历 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【5分钟实例】按名字从大量简历中筛出需要的简历 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="水一篇。开个新坑，本系列重点打造能够在5分钟内完成的又简单又实用的实例。今天以办公场景比较常见的一个需求为例。具体场景如下。
+需求假设
+你的老板给你上万份候选人交的简历，又给了你一个Excel表格，让你把表格里的人的简历挑出来，下班之前发给..." />
+    <meta name="keywords" content="自动化,5分钟实例" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              【5分钟实例】按名字从大量简历中筛出需要的简历
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-06-24
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Wqq_epKtm/" class="post-tag">
+                  # 5分钟实例
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/pick_resume.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p><del>水一篇。</del>开个新坑，本系列重点打造能够在5分钟内完成的又简单又实用的实例。今天以办公场景比较常见的一个需求为例。具体场景如下。</p>
+<h1 id="需求假设">需求假设</h1>
+<p>你的老板给你<code>上万份</code>候选人交的简历，又给了你一个Excel表格，让你把表格里的人的简历挑出来，下班之前发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。</p>
+<p>这时候你定睛一看，所有的简历文件名里面都包含人名。</p>
+<h1 id="只需5分钟的操作">只需5分钟的操作</h1>
+<p>拿起键盘打开你最爱的IDE二话不说首先import以下必定要用到的库</p>
+<pre><code class="language-python">import pandas as pd
+import os
+from shutil import copyfile
+</code></pre>
+<p>打开Excel表格看一眼，找到“姓名”所在的列<br>
+<img src="https://divertingPan.github.io/post-images/1597652772497.webp" alt="" loading="lazy"></p>
+<p>是第一列，所以直接读第一列进来即可</p>
+<pre><code class="language-python">df = pd.read_excel(menu_path, usecols=[0])
+</code></pre>
+<p>之后去遍历存放简历的文件夹下的所有简历文件</p>
+<pre><code class="language-python">for maindir, subdir, filename in os.walk(resume_path):
+    for i, file in enumerate(filename):
+</code></pre>
+<p>对每个遍历到的文件，先去除文件名里面的空格，以免两个字的人名中间有空格，干扰识别。但是又不能直接把变量file给改变，否则后面复制文件时会找不到文件。</p>
+<pre><code class="language-python">file_no_space = ''.join(file.split())
+</code></pre>
+<p>这时候再遍历读进来的Excel的人名信息，逐条检查是否能和这个文件名匹配上人名。若可以匹配到，那就把这个文件复制走。</p>
+<pre><code class="language-python">for key in df['姓名']:
+    if key in file_no_space:
+        copyfile(os.path.join(maindir, file), os.path.join(destination_path, file))
+        print(file)
+</code></pre>
+<p>拓展功能，如果想要把顺序也排好，那就只需记录一下目前匹配到的情况下，这个人名在Excel表格里的序号。可以对上面这一块代码做以下改动。首先使用enumerate()迭代df['姓名']，这样可以启用循环时的索引计数（我不知道这到底叫什么，我就这样称呼了），之后输出文件时将这个索引加在文件名最开头，就能实现按照Excel里面的人名顺序排序简历。</p>
+<pre><code class="language-python">for i, key in enumerate(df['姓名']):
+    if key in file_no_space:
+        copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
+        print(file)
+</code></pre>
+<p>结束。看一下效果，证明我不是在胡扯，是真的可以用。文件标号1缺失了，顺便还能发现有人没交简历。看一眼时间离下班还剩5分01秒。<br>
+<img src="https://divertingPan.github.io/post-images/1597653189483.png" alt="" loading="lazy"></p>
+<p>对于重名的问题，可以按照“学号”，或者“身份证号”等其他不易重复的值作为匹配的键值。但前提是要让简历名字里包含这些信息。</p>
+<h1 id="附录">附录</h1>
+<p>全部代码如下。或者<a href="https://github.com/divertingPan/utility_room/blob/master/pick_resume.py">到github下载</a>。</p>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import pandas as pd
+import os
+from shutil import copyfile
+
+
+resume_path = './resume'
+menu_path = './1组分组名单.xlsx'
+destination_path = './sorted'
+
+
+if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+
+df = pd.read_excel(menu_path, usecols=[0]) # 以第1列（人名）作为检索key
+
+for maindir, subdir, filename in os.walk(resume_path):
+    for i, file in enumerate(filename):
+        file_no_space = ''.join(file.split())
+        for i, key in enumerate(df['姓名']):
+            if key in file_no_space:
+                copyfile(os.path.join(maindir, file), os.path.join(destination_path, str(i)+file))
+                print(file)
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E9%9C%80%E6%B1%82%E5%81%87%E8%AE%BE">需求假设</a></li>
+<li><a href="#%E5%8F%AA%E9%9C%805%E5%88%86%E9%92%9F%E7%9A%84%E6%93%8D%E4%BD%9C">只需5分钟的操作</a></li>
+<li><a href="#%E9%99%84%E5%BD%95">附录</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/coin_show/">
+              <h3 class="post-title">
+                【课间休息】各国硬币大赏
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

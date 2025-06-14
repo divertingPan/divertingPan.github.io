@@ -1,0 +1,313 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。
+
+前期准备
+首先说一说R里面最..." />
+    <meta name="keywords" content="R语言,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              猎奇 | 记录如何用R绘制数据地图
+            </h2>
+            <div class="post-info">
+              <span>
+                2018-02-13
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/_0TZiw1tn/" class="post-tag">
+                  # R语言
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/r_map_data.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们<del>程序猿</del>想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。<br>
+<img src="https://divertingPan.github.io/post-images/1597655999416.webp" alt="" loading="lazy"></p>
+<h1 id="前期准备">前期准备</h1>
+<p>首先说一说R里面最基本的知识。首先在电脑上要安装R语言的环境。<br>
+<img src="https://divertingPan.github.io/post-images/1597656037584.PNG" alt="" loading="lazy"></p>
+<p>安装好环境之后，为了提高工作效率，我们一般选用RStudio进行创作。R环境和RStudio都是免费的工具，直接下载无需破解无需注册即可用。（土豪非要买专业版的RStudio请随意）<br>
+<img src="https://divertingPan.github.io/post-images/1597656109234.PNG" alt="" loading="lazy"></p>
+<p>在R中，赋值运算符不是“=”，而是“&lt;-”，倒也很好理解，把右边的值给左边的变量。<br>
+<img src="https://divertingPan.github.io/post-images/1597656118261.PNG" alt="" loading="lazy"></p>
+<p>在RStudio的脚本编辑窗口中，点击右上角的run，执行的是光标所在的这一行，如果想执行多行请用光标选中多行后再“run”。新建一个脚本，在窗口栏中“File”-“New File”-“R Script”即可。<br>
+<img src="https://divertingPan.github.io/post-images/1597656122811.PNG" alt="" loading="lazy"></p>
+<h1 id="绘制地图">绘制地图</h1>
+<p>基本知识就这些，下面潘老师要开始绘制数据地图了。因为在地图上画点画柱状图什么的太低级了（用Excel自带的就能做），所以这次用R画一个分区按值填色的地图。</p>
+<h2 id="1">1</h2>
+<p>首先到网上找一个世界地图的shapefile文件，这个文件包含了所有国家的边界信息，在染色时可以根据国家数值来给不同国家的形状染色。下载之后把里面的文件全部解压出来，找一个文件夹放在里面。<br>
+<img src="https://divertingPan.github.io/post-images/1597656131355.png" alt="" loading="lazy"></p>
+<h2 id="2">2</h2>
+<p>需要使用ArcGIS系列软件中的ArcCatalog打开后缀名为.shp的文件，进行一些准备工作。首先点击Connect To Folder的图标（图中位置），选择存放.shp文件的文件夹。<br>
+<img src="https://divertingPan.github.io/post-images/1597656135669.PNG" alt="" loading="lazy"></p>
+<h2 id="3">3</h2>
+<p>在左边选中shp文件，在右边选项卡选择“Preview”，在下面的选项栏中选择“Table”，在表格信息中，找到国家名字和他的列名，在这个文件里面国家名称存储在NAME_LONG列中。<br>
+<img src="https://divertingPan.github.io/post-images/1597656143762.PNG" alt="" loading="lazy"></p>
+<h2 id="4">4</h2>
+<p>将我们手里的数据表修改修改。国家名和NAME_LONG中的国家名保持一致，列名也改成NAME_LONG。<br>
+<img src="https://divertingPan.github.io/post-images/1597656148941.PNG" alt="" loading="lazy"></p>
+<h2 id="5">5</h2>
+<p>把数据存储成.csv文件。<br>
+<img src="https://divertingPan.github.io/post-images/1597656153275.PNG" alt="" loading="lazy"></p>
+<h2 id="6">6</h2>
+<p>运行R代码，在右边可以预览结果，可以点击国家查看数值，可以选择导出为HTML文件或者是图片，完成。（代码附在后面）<br>
+<img src="https://divertingPan.github.io/post-images/1597656157491.PNG" alt="" loading="lazy"></p>
+<h2 id="7">7</h2>
+<p>如果报错“pandoc.exe: Out of memory”，手动进入缓存文件夹去拿HTML文件即可。<br>
+<img src="https://divertingPan.github.io/post-images/1597656161358.PNG" alt="" loading="lazy"></p>
+<h2 id="8">8</h2>
+<p>HTML文件保留有不失真缩放和交互功能。<br>
+<img src="https://divertingPan.github.io/post-images/1597656166375.PNG" alt="" loading="lazy"></p>
+<h1 id="相关链接">相关链接</h1>
+<p>世界地图shapefile下载：http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/</p>
+<p>arcgis10.2如何导出属性表：https://jingyan.baidu.com/article/14bd256e6e3a4cbb6d261205.html</p>
+<p>R语言在线地图神器：Leafletfor R包（二）基础底图：http://blog.csdn.net/allenlu2008/article/details/52823492</p>
+<h1 id="源代码">源代码</h1>
+<pre><code class="language-python">#安装所需的包，安装执行过一次之后就可以把这两行注释掉了
+#号为单行注释符
+install.packages(&quot;leaflet&quot;)
+install.packages(&quot;rgdal&quot;)
+#加载包
+library(leaflet) 
+library(rgdal) 
+#在指定路径里读取shp文件，path里输入存放路径
+path &lt;- &quot;C:/Users/ASUSFX50J/Desktop/RWorldMap&quot; 
+fn &lt;- list.files(path, pattern=&quot;.shp&quot;, full.names=FALSE) 
+fn &lt;- gsub(&quot;.shp&quot;, &quot;&quot;, fn) 
+maps &lt;- readOGR(path, fn) 
+#读取csv数据表
+value &lt;- read.csv(&quot;C:/Users/ASUSFX50J/Desktop/RWorldMap/OriginalData.csv&quot;, header = TRUE) 
+#以NAME_LONG为基准将两个表的数据进行连接，csv里没有的国家在对应项置为空
+shape &lt;- merge(maps, value, by = &quot;NAME_LONG&quot;) 
+#交互式地图点击弹出信息
+i_popup &lt;- paste0(&quot;&lt;strong&gt;Country: &lt;/strong&gt;&quot;, shape$NAME_LONG, &quot;&lt;br&gt;&quot;, &quot;&lt;strong&gt;Value: &lt;/strong&gt;&quot;, shape$VALUE) 
+#三种上色模式，任选一种即可
+pal &lt;- colorBin(c(&quot;darkred&quot;, &quot;orangered&quot; ,&quot;yellow&quot;, &quot;darkgreen&quot;, &quot;blue&quot;), shape$VALUE, 11)
+#pal &lt;- colorQuantile(&quot;YlOrRd&quot;, NULL, n = 5) 
+#pal &lt;- colorNumeric(c(&quot;darkred&quot;, &quot;orangered&quot; ,&quot;yellow&quot;, &quot;darkgreen&quot;, &quot;darkblue&quot;), shape$VALUE)
+#绘制图像
+leaflet(shape) %&gt;% addTiles() %&gt;% 
+  #下面这一行，通过修改引号内可以获得炫酷的地图背景
+  addProviderTiles(&quot;Esri.WorldStreetMap&quot;) %&gt;%
+  setView(0.000000, 0.000000, zoom = 2) %&gt;% 
+  addPolygons(color = ~pal(shape$VALUE), fillOpacity = 0.8, weight = 1, popup = i_popup) %&gt;% 
+#显示图例
+  addLegend(pal = pal, values = shape$VALUE, position = &quot;bottomright&quot;, title = &quot;Data Map&quot;)
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87">前期准备</a></li>
+<li><a href="#%E7%BB%98%E5%88%B6%E5%9C%B0%E5%9B%BE">绘制地图</a>
+<ul>
+<li><a href="#1">1</a></li>
+<li><a href="#2">2</a></li>
+<li><a href="#3">3</a></li>
+<li><a href="#4">4</a></li>
+<li><a href="#5">5</a></li>
+<li><a href="#6">6</a></li>
+<li><a href="#7">7</a></li>
+<li><a href="#8">8</a></li>
+</ul>
+</li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">相关链接</a></li>
+<li><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81">源代码</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/broken_fridges/">
+              <h3 class="post-title">
+                猎奇 | 教你怎样修复坏冰箱
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

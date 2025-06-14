@@ -1,0 +1,488 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【硬核摄影2.0】用线性CCD器件制作扫描相机 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【硬核摄影2.0】用线性CCD器件制作扫描相机 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="本文参考资料：
+[1] (Strongly Recommend!) Fundamentals and Experiments of Line Scan Camera: http://www.elm-chan.org/works/lcam/r..." />
+    <meta name="keywords" content="火车,艺术设计,计算机视觉" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              【硬核摄影2.0】用线性CCD器件制作扫描相机
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-08-06
+              </span>
+              <span>
+                22 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/wJs8SzK3B/" class="post-tag">
+                  # 火车
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Ng8pxYRJg/" class="post-tag">
+                  # 计算机视觉
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/line_scan_camera.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>本文参考资料：<br>
+[1] (Strongly Recommend!) Fundamentals and Experiments of Line Scan Camera: <a href="http://www.elm-chan.org/works/lcam/report.html">http://www.elm-chan.org/works/lcam/report.html</a><br>
+[2] 线阵 CCD 的使用方法(以 TCD1304 为例): <a href="https://zzi.io/?p=1091">https://zzi.io/?p=1091</a></p>
+<p>工程地址：<a href="https://github.com/divertingPan/Line_Scan_Camera">https://github.com/divertingPan/Line_Scan_Camera</a></p>
+<h2 id="前言">前言</h2>
+<h3 id="overview">Overview</h3>
+<p>这篇是接续<a href="https://divertingpan.github.io/post/train_scanning/">【硬核摄影】给火车拍个全身照</a>和<a href="https://divertingpan.github.io/post/moving_detection/">光流法应用——自适应检测视频火车速度</a>的内容。但是实则整个工程和前作关系又不是那么密切，只能算是精神续作。</p>
+<p>实际上，这篇2.0的内容是之前做软件层面的视频扫描代码的精神鼻祖。这个扫描相机的原项目[<a href="http://www.elm-chan.org/works/lcam/report.html">1</a>]是2011年左右设计的，老潘在大概2018年看到的这个并且尝试复现（失败），但一直对这个项目留有念想。因为已经大致了解了原理，所以就用视频录像做了这个相机的模拟版。结果在2021年的时候突然得知，国内PCB厂商居然开始免费打样，于是老潘决定重启这个项目，告别繁杂的飞线，拆解原来的洞洞板，直接上PCB。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1628313889587.jpg" alt="" loading="lazy"></figure>
+<p>老潘在原来的设计基础上做了一些小改动。本篇主要是为了记录复现过程中趟过的无数大小坑，以及对本项目的改进的一些指南。</p>
+<p>本项目完全开源在github上，包括电路，PCB，硬件代码，各种资料等。</p>
+<p>老潘不是专业搞硬件开发的，所以肯定很多地方说不明白，希望各位能给予指导或者纠正。</p>
+<p>一些效果展示：</p>
+<p>这个是手持平移扫过桌上的静物，因为手抖所以会有变形。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1628488540288.png" alt="" loading="lazy"></figure>
+<p>这是架在路边拍摄，因为光圈开到最大，对焦在中央车道，近景就会失焦模糊。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1628488663875.png" alt="" loading="lazy"></figure>
+<p>一个完整的扫描结果，没有调整长宽比例的原始图像。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1628488772979.png" alt="" loading="lazy"></figure>
+<p>火车虽迟但到，可惜这个相机想要准确取景对焦十分考验手感，导致出片率不高。需要一定练习才能掌握手感。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1628599463864.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1628606723224.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1628606488351.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1630589411563.png" alt="" loading="lazy"></figure>
+<h3 id="线性-vs-二维">线性 vs 二维</h3>
+<p>这种一维相机也能拍照的原理在前面篇章里已经介绍了，如果理解了线性扫描的原理，这个相机的原理是一模一样的。只是利用线性的CCD直接从拍摄（或者说录制视频）这个地方就已经做好了<strong>固定位置-连续取帧-逐帧拼接成图</strong>这么个过程。</p>
+<p>这时候会有人问：既然能用录像机直接录像之后用软件拼图，那毫无必要用线性CCD来做这个？这时候我们应该考虑一下两种方法的优劣，来选择到底用哪种方法。</p>
+<ul>
+<li>线性CCD器件的分辨率可以轻松做到10000×n，即CCD的单帧覆盖像素可以做到很高，这点在当前的二维传感器上很难实现（即使强如GFX 100可以做到最长边11648×8736分辨率，但是成本爆炸，而且还会带来第二点问题）</li>
+<li>线性CCD只有1维的数据，在高速采集中对外围电路要求更低（GFX 100和一个线性CCD，同时设计每秒1000帧的采样速度，难度差异显而易见）。有人会说：二维器件的采样率限制可以利用二维平面弥补（即，11648×8736×1帧，采集图像范围等同于11648×1×8736帧），但是前文已经实验证明，利用视频的窄窗来模拟线性扫描的前提是，开窗的尺寸不能太大，否则会出现透视效应。因此，二维CMOS或者CCD器件会有大量数据浪费。</li>
+<li>承接上条，利用线性CCD可以节约存储空间和IO开销。</li>
+<li>使用CCD的缺点是，由于存在采样率上限，因此速度超过帧速率上限的物体会发生形变，且丢失的帧细节无法弥补，通过二维器件的录像和后处理，可以利用窄窗弥补。（这里的速度-帧率-窗尺寸关系在前作也有推导，线性CCD设定窗宽度固定为1即可）</li>
+<li>尽管如此，窄窗仍然会带来以下问题，且很难通过简单的后期手法修正：</li>
+</ul>
+<ol>
+<li>开窗的窗宽度和目标运动速度紧密相关，并且分正负。</li>
+<li>带有透视的物体，无法统一开窗宽度。</li>
+<li>对于变速的物体，对开窗宽度非常敏感。</li>
+<li>物体受到固定位置的光影反射会产生条纹干扰。</li>
+</ol>
+<p>如图所示：</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1628237267302.jpg" alt="" loading="lazy"></figure>
+<p>而以上问题在窗宽度等于1像素，即直接使用线性CCD捕捉图像时，可以消除这些缺陷。例如下图所示，拍摄的汽车是属于双向车道的，被白色横线挡住的大卡车是自右向左行驶的，白线前面的车是自左向右行驶的。但是由于每帧像素宽度为1，因此帧排列顺序不会出现上图问题1的效应，只会影响到物体的镜像翻转与否（注意卡车上的字）。</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1628260816396.png" alt="" loading="lazy"></figure>
+<p>至于物体发生的拉伸形变，可以通过ps缩放简单修正。将运动速度慢而造成影像拉长的物体可以压回正常尺寸，没有信息损失；而运动过快造成的影像缩短，仅使用插值法拉回原本比例则会带来信息损失。</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1628315382328.jpg" alt="" loading="lazy"></figure>
+<h2 id="传感器简介">传感器简介</h2>
+<h3 id="基本原理">基本原理</h3>
+<p>整个项目最重要的部分就是传感器了，这里使用的是TCD132D线性单色传感器，具有1024个像素单元，最高捕捉速度可以达到每秒大约2000帧。其实目前的科技已经有最多一万个像元，可以达到更高的分辨率，还支持RGB彩色模式，不过这些东西的原理基本都相通。想要TCD132D输出东西，首先需要给它一些信号，如图所示：</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1628261512290.PNG" alt="" loading="lazy"></figure>
+<p>这里SH是控制CCD采集光信号，控制积累由光强度转化成的电信号（即积分）所用的时间长度，遇到一个SH下降沿就使得CCD开始把目前积累的电信号往外搬运。因此可以发现，帧率越大，给每个像元的积分时间就越短，相当于感光度变低。在此同时，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD控制搬运的节奏，这个信号变一次，就让下一个像素的信号出来，直到走完所有的像元。但是这上面并不是所有像元都能捕捉到光信号，只有中间部分的1024个可以，其他的只会打酱油。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>M是总时钟，根据图里的比例可以看到，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD变一次，就要对应<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>M变4次，就是说<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>M的频率需要是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD的4倍。</p>
+<p>而这个传感器能接受的这些信号的频率范围如下表前三行所示。可以看到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>M的频率确实是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD的4倍。而<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD每变一次就会输出一个数据，即一个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD周期会有2个数据输出，所以数据速率是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">ϕ</span></span></span></span>CCD的两倍。一帧有1024个数据，每秒2M个数据即每秒2k个帧，所以这个传感器的极速就是每秒2千帧左右。</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1628262058977.PNG" alt="" loading="lazy"></figure>
+<p>这个TCD132D输出的是模拟信号（一个连续区间的电压值），所以需要一个ADC来把电压值转化到0-255之间的数码值。这也就是说，我们需要一个能够支持每秒转化2M个数据的ADC才行。ADC1173可以达到15MHz。而驱动他的方法也很简单，使用一个时钟，在每次时钟下降沿的时候就会把当前的数据采集转化。</p>
+<h3 id="arduino相关实验">Arduino相关实验</h3>
+<p>老潘早些时候用arduino尝试着去驱动TCD132D以及ADC1173，奈何没有示波器，没法查看输出信号是不是符合期望值，arduino mega上面又不带DMC，数据来不及依次捕捉下来。而且对于如何同步列与列之间的数据，我也没什么头绪。这里示范一下使用arduino+ADC1173来把这个CCD当做光线传感器使用的一个例子吧（无奈）。</p>
+<p>好在mega上面有很多定时器可以使用，这些定时器被我拿来当做各个时钟了。配置定时器又涉及到了寄存器操作，我的浅见是寄存器就是一堆功能按钮，按下他就会产生相应的功能，这些功能排列组合出来就成了神奇或者诡异的运行姿态。。。使用对应的寄存器的方法就是通过设置某个变量的名字（一般用到的单片机都会把每个寄存器做好名称和底层地址的对应文件给大家）等于一个二进制的数字，这个二进制数字的每一位都对应了这个寄存器里的一个按钮，1就是按下，0就是不按。通过纷杂迷人眼的来回切换这些按钮，这个机器就运转起来了。</p>
+<p>但是一般来说，直接设置某个寄存器就等于某一个数字可能不太妥当。因为有时候我们只想改变这里面好几个按钮中的一个按钮，不想动其他的按钮，如果每次都这样手动的一次设置一大排按钮的状态，容易搞错。所以有些时候可以利用逻辑符号来指定对某一个按钮做操作。</p>
+<pre><code class="language-c">// 让DDRB的第0位和第1位变成1 这里|是按位或
+DDRB |= (00000001 | 00000010);
+
+// 让ADCSRA的ADPS0:2变成0 这里的&amp;是按位与
+ADCSRA &amp;= ~((1 &lt;&lt; ADPS2) | (1 &lt;&lt; ADPS1) | (1 &lt;&lt; ADPS0));
+
+// Arduino里面_BV()的用法等同于设置某个位为1 DDRB和DDB7已经预定义过
+DDRB |= _BV(DDB7)
+</code></pre>
+<p>因此arduino里面对于各部分的时钟设置，结合说明书里的指示和网上的例程，可以写出以下：</p>
+<pre><code class="language-c">void setup() {
+    // read one frame (line)
+    // Init the port to output mode
+    DDRB |= _BV(DDB7) | _BV(DDB5) | _BV(DDB4);
+    DDRE |= _BV(DDE3);
+    DDRH |= _BV(DDH3);
+
+    // LEDCLK (pin 13)(PB7)
+    TCCR0A = _BV(COM0A1) | _BV(WGM01) | _BV(WGM00);
+    TCCR0B = _BV(CS00);
+    OCR0A = 255;
+
+    // MCLK (pin 11)(PB5)
+    TCCR1A = _BV(COM1A0);
+    TCCR1B = _BV(WGM12) | _BV(CS10);
+    OCR1A = 1;             // 4MHz
+    PORTB |= _BV(PORTB5);  // start from HIGH
+
+    // CCD (pin 10)(PB4)
+    TCCR2A = _BV(COM2A0) | _BV(WGM21);
+    TCCR2B = _BV(CS20);
+    OCR2A = 7;  // 1MHz
+
+    // ADCCLK (pin 5)(PE3)
+    TCCR3A = _BV(COM3A0);
+    TCCR3B = _BV(WGM32) | _BV(CS30);
+    OCR3A = 3;  // 2MHz
+    TCNT3 = 3;
+
+    // SH (pin 6)(PH3) total: 1092x500ns = 546us
+    TCCR4A = _BV(COM4A1) | _BV(WGM41);
+    TCCR4B = _BV(WGM42) | _BV(WGM43) | _BV(CS40);
+    OCR4A = 7;
+    ICR4 = 8735;
+    TCNT4 = 18;
+}
+</code></pre>
+<p>接线如下（懒得画详细的面包板图了，就大概看看图一乐吧）</p>
+<figure data-type="image" tabindex="14"><img src="https://divertingPan.github.io/post-images/1628265160726.jpg" alt="" loading="lazy"></figure>
+<p>时序图如下，不知道为什么ADC时钟总是无法对齐，不过只要ADC下降沿在CCD变化的附近即可，这个范围内的CCD输出信号仍然是稳定的。（有待通过示波器考证）</p>
+<figure data-type="image" tabindex="15"><img src="https://divertingPan.github.io/post-images/1628265471060.PNG" alt="" loading="lazy"></figure>
+<p>最后通过Arduino采集ADC输出的值，可以看出一定的响应规律。实验中发现传感器在亮光时输出低电位，无光时输出高电位，和一般数字图像里的情况刚好反过来。</p>
+<figure data-type="image" tabindex="16"><img src="https://divertingPan.github.io/post-images/1628265706569.gif" alt="" loading="lazy"></figure>
+<p>另外还写了个用Arduino做呼吸灯的无聊代码，就是板上13号口自带的那个灯。但是这个呼吸灯是用的定时器，以及变化规律是正弦的（感觉还是毫无用处呵）。</p>
+<pre><code class="language-c">void led_blink() {
+  for (float i = 0; i &lt; 5000; i++) {
+    int t = 255 * 0.5 * (1 + sin(i / 5000 * 2 * PI));
+    OCR0A = t;
+  }
+}
+</code></pre>
+<h3 id="ccd的老化">CCD的老化</h3>
+<figure data-type="image" tabindex="17"><img src="https://divertingPan.github.io/post-images/1628492781782.PNG" alt="" loading="lazy"></figure>
+<p>如果在很暗的环境下捕获图像，之后通过调整曲线或者色阶将图片提亮后，有可能会看到这种条纹。根据参考链接[<a href="https://zzi.io/?p=1091">2</a>]，这个现象是因为CCD传感器内部的两个放大器的微小误差导致的。</p>
+<blockquote>
+<p>事实上，大多数线阵 CCD 为了提高输出频率，都具有多个 Shift Register 结构的设计，在这一点上理论与实际的差异可以用于解释在线阵 CCD 寿命快要结束时，往往得到的信号会出现奇怪的周期性(伪信号)的现象。比如说 TCD1304 有两套 Shift Register，因此在使用很长时间之后，两个 Shift Register 对应的模拟放大器的老化情况不一致，因此输出的信号中，每个偶数像素的信号比相邻的奇数像素的信号总是高一些，或者总是低一些)</p>
+</blockquote>
+<h2 id="线性相机实施细节">线性相机实施细节</h2>
+<p>这一节按照顺序讲述一下在抄作业的时候可能遇到的各种坑，以免抄作业都抄不好。</p>
+<p>说在最前面，这里的元件用贴片还是接插件都影响不大。（我自己为了制作方便，能用直插件都用了，实际试验没发现太大问题）</p>
+<h3 id="显示部分替换为ssd1306模组">显示部分替换为SSD1306模组</h3>
+<p>原作者所用的各种元件，我在当时基本都能集齐，并且花费不是太多。唯独他所用的OLED显示屏完全找不到。所以这部分干脆就直接用淘宝白菜价的OLED模块就行。经过一番研究，这里是用了4线的SPI和OLED通信，所以要买那种7个针脚的OLED模块。这样一来，原来设计里面的显示屏供电部分也可以去掉了，因为模块上面就带有供电管理。但是这样还不够，因为原作的OLED驱动芯片和淘宝常见的不一样，所以要改代码。</p>
+<p>好在店家当时给了SSD1306的例程，并且改的地方比较简单，只是改一下初始化参数。在原作的disp.c里面的233行是这样的：</p>
+<pre><code class="language-c">static const BYTE ini[] = {	/* Initialization parameters for UG-2832ASWAG or UG-2864ASWAG */
+		0xDB, 0x3F,		/* Vcom level */
+		0xD9, 0x1F,		/* Pre/Dis-charge period */
+		0xA1,			/* Column direction (L/R inverted) */
+		0xC8,			/* COM direction (U/D inverted) */
+		0xDA, 0x12,		/* COM scan alt mode */
+		0xA8, 0x3F,		/* Mux ratio (2832:1F, 2864:3F) */
+		0xD5, 0xF0,		/* Clock */
+		0x81, 0x64,		/* Contrast (2832:0x14, 2864:0x64) */
+		0xD3, 0x00,		/* Display offset (0) */
+		0xAD, 0x8A,		/* Internal DC-DC (off) */
+		0xA6,			/* Display invert mode (normal) */
+		0xA4,			/* Entire display (0) */
+		0x40			/* Display start line (0) */
+	};
+</code></pre>
+<p>如果把这里的初始化参数改成SSD1306的，并且按照我修改的电路图中的连线方式，直接插上模块就可以正常使用了：</p>
+<pre><code class="language-c">static const BYTE ini[] = {	/* Initialization parameters for SSD1306 */
+		0xAE,//--turn off oled panel
+		0x00,//--set low column address
+		0x10,//--set high column address
+		0x40,//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+		0x81,//--set contrast control register
+		0xCF,//--Set SEG Output Current Brightness
+		0xA1,//--Set SEG/Column Mapping      0xa0: horizonal reverse  0xa1: none
+		0xC8,//--Set COM/Row Scan Direction  0xc0: vertical reverse   0xc8: none
+		0xA6,//--set normal display
+		0xA8,//--set multiplex ratio(1 to 64)
+		0x3f,//--1/64 duty
+		0xD3,//--set display offset	Shift Mapping RAM Counter (0x00~0x3F)
+		0x00,//--not offset
+		0xd5,//--set display clock divide ratio/oscillator frequency
+		0x80,//--set divide ratio, Set Clock as 100 Frames/Sec
+		0xD9,//--set pre-charge period
+		0xF1,//--Set Pre-Charge as 15 Clocks &amp; Discharge as 1 Clock
+		0xDA,//--set com pins hardware configuration
+		0x12,
+		0xDB,//--set vcomh
+		0x40,//--Set VCOM Deselect Level
+		0x20,//--Set Page Addressing Mode (0x00/0x01/0x02)
+		0x02,//
+		0x8D,//--set Charge Pump enable/disable
+		0x14,//--set(0x10) disable
+		0xA4,//--Disable Entire Display On (0xa4/0xa5)
+		0xA6,//--Disable Inverse Display On (0xa6/a7) 
+		0xAF //--turn on oled panel
+	};
+</code></pre>
+<p>但是这里仍然有一些小问题，用这个方法屏幕虽然能显示，但是有2像素的偏移。注意看左上角的一个]，其实那是右上角的电池标志的最右边的框。虽然这个无伤大雅，但是我不知道如何修正这个bug。</p>
+<figure data-type="image" tabindex="18"><img src="https://divertingPan.github.io/post-images/1628318811251.jpg" alt="" loading="lazy"></figure>
+<h3 id="代码编译">代码编译</h3>
+<p>作者给了一个Makefile文件，因此只要配置好编译环境，进入源文件路径直接执行make命令即可。但是有一个小细节是，Linux环境里必须先配置好arm-linux-eabi-gcc编译器（可以直接使用<code>sudo apt-get install gcc-arm-none-eabi</code>，和<code>apt-get install lsb-core</code>）才可以顺利的make。最终编译成功会在路径下生成一个obj文件夹，里面会有一个hex文件，终端里会显示这样。</p>
+<figure data-type="image" tabindex="19"><img src="https://divertingPan.github.io/post-images/1628238268582.PNG" alt="" loading="lazy"></figure>
+<h3 id="hex下载进主控">hex下载进主控</h3>
+<p>这里出了大问题，原本我死活连不上这个单片机，一度以为是焊接的时候烧坏了芯片（好巧不巧的是我从原来的电路拆这个芯片，以及往新板上装这个芯片的时候都搞了半天才弄好）。结果看了一下多年前自己留下的记录才知道，下载的时候需要给芯片复位并且拉低某个引脚，进入ISP模式才行。具体操作是：<code>将P2.10（ISP）置为低，同时让reset为低，然后先放开RST，再放开ISP，以加载BootLoader，不然flash magic识别不了芯片（LOW on this pin while RESET is LOW forces on-chip bootloader to take over control of the part after a reset.）</code>。判断方法是：使用flash magic，如果点击ISP-Read Device Signature能够出设备的ID，那就是成功连上了。</p>
+<p>对于两个引脚的操作，需要自己手动用插线去接插这两个针脚到任意的GND上。当时画PCB的时候没有留意这部分的操作，当然你也可以拿去图纸，自己把这部分加两个按钮上去。下载器的TX口和RX口要接在主控板上面的RX和TX脚上。</p>
+<p>另外，在下载程序时，尽量把另外两块板拿掉，我发现在Control Board上插着Analog Board的时候，在下载程序途中总是失败断开。有可能是供电不足的问题？</p>
+<h3 id="lc4256v">LC4256V</h3>
+<p>这部分原作者只给了一个abl文件，需要用ispLEVER classic操作一下，但是我在当年已经做过了操作，并且得到了直接往器件里面写的二进制文件。这部分代码确实是触及到了我的知识盲区，我实在改不动什么，所以就没有再仔细研究。至于下载的方法，首先用lattice下载线，接好线之后需要单独给主控板通电，下载线是不能供电的。之后利用软件操作。软件部分的编译下载等操作根据说明书操作即可。说明书也在github里面了。</p>
+<h3 id="调零">调零</h3>
+<p>这里需要调整变阻器分压来控制传感器在最暗的环境下输出的信号强度，或者理解为零点校准。我们期望在完全无光的环境时图像值为0。如果需要调整曝光，希望在很暗的环境下也输出有一定亮度的图片也可以在这里调整。通过改变这个变阻器的阻值，遮住镜头，观察屏幕上的亮度强度到自己希望的位置即可（正常状态下，黑暗时屏幕上的光线曲线也在中央虚线位置）。但是要注意先设置算法层面的增益调为0再调整变阻器。</p>
+<figure data-type="image" tabindex="20"><img src="https://divertingPan.github.io/post-images/1628313693742.png" alt="" loading="lazy"></figure>
+<h3 id="fs-error">FS ERROR</h3>
+<p>开机是必需要插入内存卡的，不然会报错。但是如果你插了内存卡还是报错，检查你的内存卡格式，需要为FAT32才可以。现在的新内存卡都比较大，一般都是exFAT格式并且windows系统自带的右键格式化没法格式化为FAT32，可以用DiskGenius格式化，注意格式化前检查好数据情况。</p>
+<h3 id="最大记录长度">最大记录长度</h3>
+<p>在lcam.h的第一行就是设定最大记录长度的参数，当相机的任意按钮被按下，或者达到最大记录长度时，记录停止。原始设定是100000，但是你可以改更大。不过注意，FAT32系统支持的最大文件大小是4GB。同时，BMP格式文件头里面通过bfSize定义文件大小，bfSize占4个字节，因此支持的最大文件存储也是4GB。</p>
+<h3 id="bmp图像转存png">BMP图像转存PNG</h3>
+<p>当图像超过一定大小后，用普通的照片查看器甚至是Photoshop都可能无法正常打开文件，但是使用Windows自带的画图就可以查看。不能用PS编辑简直震怒，但是既然有些软件能查看有些没法查看，而且PS本身编辑操作很大的图片都没有问题，于是猜测可能是因为BMP编码的问题。因为这个BMP里面的颜色表信息是自定义的，也许PS对这方面的支持不是很好。</p>
+<p>所以可以把原数据用python先读进内存，然后再转存成更加通用的PNG格式，既能压缩体积还能让PS编辑。代码非常简单。总共就几行，如下。懒得复制粘贴的话github里也有。</p>
+<pre><code class="language-python">import cv2
+
+image_path = 'Y0023.BMP'
+image = cv2.imread(image_path)
+cv2.imwrite('{}_modified.png'.format(image_path[:-4]), image)
+</code></pre>
+<h3 id="光路与镜头">光路与镜头</h3>
+<p>首先要确保镜头的像场能够覆盖CCD的长度。其次要根据所用镜头的卡口对应法兰距来设计机身法兰盘的外平面到传感器的距离。这里有一个灵魂手绘尺寸图，仅供参考。</p>
+<figure data-type="image" tabindex="21"><img src="https://divertingPan.github.io/post-images/1628266599922.jpg" alt="" loading="lazy"></figure>
+<p>机身我直接搞了个纸盒来装电路以及卡镜头，但是机身需要密闭不漏光，如果盒子上有漏光的窟窿（尤其是离传感器近的位置）最好补住。关于如何获得法兰盘，可以通过低价收废旧相机拆法兰盘，或者买最便宜的卡口转接环来获得。但是挑转接环时要注意法兰盘的公母之分。</p>
+<figure data-type="image" tabindex="22"><img src="https://divertingPan.github.io/post-images/1628266395149.jpg" alt="" loading="lazy"></figure>
+<p>后来我直接给相机主体量身定做了一个外壳。配套的cad文件也放在了github资料里面。</p>
+<figure data-type="image" tabindex="23"><img src="https://divertingPan.github.io/post-images/1630500762337.png" alt="" loading="lazy"></figure>
+<p>装入相机后可以利用M3铜柱和配套的螺丝螺母和外壳相互固定，在外壳的上半部有一块空缺可以用来放电池。第一版我用最便宜的树脂打印，之后发现尺寸略有差异于是对模型进一步做了微调。镜头接环是根据富士的FX卡口尺寸做的，但是镜头的卡住弹扣不好实现，所以在卡口上结合了一个半螺纹的形状来拧紧镜头。最后，白色树脂透光，放在灯下一照简直通透的一批，最好是用CNC直接做金属外壳。</p>
+<figure data-type="image" tabindex="24"><img src="https://divertingPan.github.io/post-images/1630500784218.jpg" alt="" loading="lazy"></figure>
+<p>其实最佳解决方案并不是这样，而应该是直接复用一套现成的单反相机外壳，这样还可以利用里面的单反结构顺便解决取景对焦难的问题。</p>
+<h3 id="图像撕裂问题">图像撕裂问题</h3>
+<p>如果你用比较旧/杂牌/便宜的内存卡，会发现经常出现下面这种情况，</p>
+<figure data-type="image" tabindex="25"><img src="https://divertingPan.github.io/post-images/1628266838025.png" alt="" loading="lazy"></figure>
+<p>车尾部的断层说明这里的数据有卡顿，采集到的数据没有及时被存下来造成了丢帧。老潘使用过一个捡来的写速度相当慢的内存卡，经常出现这种情况。使用了一个新买的U1速度的内存卡，偶尔会出现这种情况。使用一个U3的内存卡，极少出现这种情况。</p>
+<h3 id="相机操作方法">相机操作方法</h3>
+<p>在原作者的博客里面详细介绍了。此处无必要再次复制粘贴。</p>
+<h3 id="黑白拍照心得">黑白拍照心得</h3>
+<p>老潘顺便还参悟了一些关于黑白摄影的体验。很多人说摄影是用光的艺术，尤其在黑白摄影里面，没有颜色加持，光线这一点就相当重要。</p>
+<p>例如这里的火车，因为是背光所以整个背光区域就显得非常平，没有质感，车体的棱条完全没感觉。但是车顶的布受光很好，显得起伏明显，光影变化很丰富。</p>
+<figure data-type="image" tabindex="26"><img src="https://divertingPan.github.io/post-images/1628607452523.png" alt="" loading="lazy"></figure>
+<p>而同样的车体，在顺光侧拍摄，就会显得整个车体起伏质感分明。</p>
+<figure data-type="image" tabindex="27"><img src="https://divertingPan.github.io/post-images/1630589385303.png" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#%E7%BA%BF%E6%80%A7-vs-%E4%BA%8C%E7%BB%B4">线性 vs 二维</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BC%A0%E6%84%9F%E5%99%A8%E7%AE%80%E4%BB%8B">传感器简介</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">基本原理</a></li>
+<li><a href="#arduino%E7%9B%B8%E5%85%B3%E5%AE%9E%E9%AA%8C">Arduino相关实验</a></li>
+<li><a href="#ccd%E7%9A%84%E8%80%81%E5%8C%96">CCD的老化</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BA%BF%E6%80%A7%E7%9B%B8%E6%9C%BA%E5%AE%9E%E6%96%BD%E7%BB%86%E8%8A%82">线性相机实施细节</a>
+<ul>
+<li><a href="#%E6%98%BE%E7%A4%BA%E9%83%A8%E5%88%86%E6%9B%BF%E6%8D%A2%E4%B8%BAssd1306%E6%A8%A1%E7%BB%84">显示部分替换为SSD1306模组</a></li>
+<li><a href="#%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91">代码编译</a></li>
+<li><a href="#hex%E4%B8%8B%E8%BD%BD%E8%BF%9B%E4%B8%BB%E6%8E%A7">hex下载进主控</a></li>
+<li><a href="#lc4256v">LC4256V</a></li>
+<li><a href="#%E8%B0%83%E9%9B%B6">调零</a></li>
+<li><a href="#fs-error">FS ERROR</a></li>
+<li><a href="#%E6%9C%80%E5%A4%A7%E8%AE%B0%E5%BD%95%E9%95%BF%E5%BA%A6">最大记录长度</a></li>
+<li><a href="#bmp%E5%9B%BE%E5%83%8F%E8%BD%AC%E5%AD%98png">BMP图像转存PNG</a></li>
+<li><a href="#%E5%85%89%E8%B7%AF%E4%B8%8E%E9%95%9C%E5%A4%B4">光路与镜头</a></li>
+<li><a href="#%E5%9B%BE%E5%83%8F%E6%92%95%E8%A3%82%E9%97%AE%E9%A2%98">图像撕裂问题</a></li>
+<li><a href="#%E7%9B%B8%E6%9C%BA%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95">相机操作方法</a></li>
+<li><a href="#%E9%BB%91%E7%99%BD%E6%8B%8D%E7%85%A7%E5%BF%83%E5%BE%97">黑白拍照心得</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/paper_review_rebuttal/">
+              <h3 class="post-title">
+                SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

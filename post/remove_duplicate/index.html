@@ -1,0 +1,318 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【5分钟实例】去除大量图片中重复的图片 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【5分钟实例】去除大量图片中重复的图片 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="需求假设
+你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。
+
+这时候你灵光一现，想起了python有图..." />
+    <meta name="keywords" content="计算机视觉,自动化,5分钟实例" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              【5分钟实例】去除大量图片中重复的图片
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-08-17
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/Ng8pxYRJg/" class="post-tag">
+                  # 计算机视觉
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Wqq_epKtm/" class="post-tag">
+                  # 5分钟实例
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/remove_duplicate.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="需求假设">需求假设</h1>
+<p>你的老板给你<code>上万张</code>候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩<code>5分钟</code>了，加班是不可能加班的。<br>
+<img src="https://divertingPan.github.io/post-images/1597651150468.PNG" alt="" loading="lazy"><br>
+这时候你灵光一现，想起了python有图像处理模块</p>
+<h1 id="只需5分钟的操作">只需5分钟的操作</h1>
+<p>拿起键盘打开你最爱的IDE二话不说首先import以下必定要用到的库</p>
+<pre><code class="language-python">import cv2
+import numpy as np
+import os
+</code></pre>
+<p>别急，这种任务网上肯定是有现成轮子的，直接借鉴就好。对于图像去重，主要思路有，md5比较法和感知哈希法。其中md5比较法的鲁棒性稍微低了点，有时候图片因为多次压制或其他因素导致md5变化，从而图片看起来一样，但是会被判做不同图片。</p>
+<p>感知哈希算法是比较常用的方法，在硬币分类检测时老潘也尝试过，但是并不适用于那个场景。但是今天的场景是绝对适合的。其中感知哈希算法又可以细分出平均哈希（aHash），感知哈希（pHash），差异值哈希（dHash）三种。硬币分类里使用了pHash，对于这三种的对比，在一篇CSDN博文<a href="https://blog.csdn.net/qq_32799915/article/details/81000437">感知哈希 ，平均哈希，差异值哈希</a>里面有详细的讲解和对比实验。</p>
+<p>这里老潘在网上找到的一个现成的图片去重的脚本使用的是aHash</p>
+<pre><code class="language-python">img = cv2.resize(img,(8,8))
+avg_np = np.mean(img)
+img = np.where(img&gt;avg_np,1,0)
+hash_dic[img_name] = img
+</code></pre>
+<p>读取每个图片，计算出他的aHash值，如果记录表里没有这个值，就把他和他的值存进去，如果有，证明重复，删掉这个图即可。思路很简单。</p>
+<p>当然，这里并不是直接检测有没有一模一样的aHash值，而是检测有没有汉明距离小于某个值的，以防两个一样的图片因为微小的差异被漏检。</p>
+<p>顺手再添加一个功能，有些人的照片可能损坏了或者夹杂了奇奇怪怪的不是图片的文件。我们把这种也剔除掉。</p>
+<pre><code class="language-python">try:
+    img= cv2.imread(os.path.join(path, img_name))
+    img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+except:
+    os.remove(os.path.join(path, img_name))
+    print('wrong file')
+    continue
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597651168140.PNG" alt="" loading="lazy"></figure>
+<p>复制粘贴代码1秒钟，4分59秒钟用来运行代码。将筛选好的图片给正在加班的程序员，下班回家。</p>
+<h1 id="附录1">附录1</h1>
+<p>aHash到底可靠不可靠？会不会有误检和漏检？以这个现成脚本代码为例，做几个尝试性的实验看看。</p>
+<p>实验1：普通去重，实验前后的图片集合如图所示。<br>
+<img src="https://divertingPan.github.io/post-images/1597651178686.PNG" alt="" loading="lazy"></p>
+<p>实验2：相似图片（我真的觉得这几位差不多，如有冒犯，狗妹纳赛）<br>
+<img src="https://divertingPan.github.io/post-images/1597651185463.PNG" alt="" loading="lazy"></p>
+<p>实验3：相同图片不同饱和度（反正图片读进来都是要先转成灰度的，所以改变饱和度确实不会对改变aHash值有什么作用）<br>
+<img src="https://divertingPan.github.io/post-images/1597651191249.PNG" alt="" loading="lazy"></p>
+<h1 id="附录2">附录2</h1>
+<p>完整的开箱即用代码，也可以<a href="https://github.com/divertingPan/utility_room/blob/master/remove_duplicate.py">到github里面下载</a></p>
+<pre><code class="language-python">'''
+https://www.jianshu.com/p/5a7daa2123a8
+'''
+ 
+import cv2
+import numpy as np
+import os
+ 
+ 
+if __name__ == '__main__':
+   path = './anim'
+   
+   img_list = os.listdir(path)
+   hash_list = []
+   for ind, img_name in enumerate(img_list):
+       print('checking:', ind+1, 'from total:', len(img_list))
+       try:
+           img = cv2.imread(os.path.join(path, img_name))
+           img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+       except:
+           os.remove(os.path.join(path, img_name))
+           print('wrong file')
+           continue
+ 
+       img = cv2.resize(img,(8,8))
+ 
+       avg_np = np.mean(img)
+       img = np.where(img&gt;avg_np,1,0)
+       if len(hash_list)&lt;1:
+           hash_list.append(img)
+       else:
+           for i in hash_list:
+                flag = True
+                dis = np.bitwise_xor(i,img)
+ 
+                if np.sum(dis) &lt; 5:
+                    flag = False
+                   os.remove(os.path.join(path, img_name))
+                    print('remove')
+                    break
+           if flag:
+                hash_list.append(img)
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E9%9C%80%E6%B1%82%E5%81%87%E8%AE%BE">需求假设</a></li>
+<li><a href="#%E5%8F%AA%E9%9C%805%E5%88%86%E9%92%9F%E7%9A%84%E6%93%8D%E4%BD%9C">只需5分钟的操作</a></li>
+<li><a href="#%E9%99%84%E5%BD%951">附录1</a></li>
+<li><a href="#%E9%99%84%E5%BD%952">附录2</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/coin_classifier/">
+              <h3 class="post-title">
+                硬币系列三 | 硬币自动分类的一个论文复现
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

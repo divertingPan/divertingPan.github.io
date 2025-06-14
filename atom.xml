@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://divertingPan.github.io</id>
+    <title>老潘家的潘老师</title>
+    <updated>2025-06-14T14:52:55.720Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://divertingPan.github.io"/>
+    <link rel="self" href="https://divertingPan.github.io/atom.xml"/>
+    <subtitle>CV方向小学二年级在读</subtitle>
+    <logo>https://divertingPan.github.io/images/avatar.png</logo>
+    <icon>https://divertingPan.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2025, 老潘家的潘老师</rights>
+    <entry>
+        <title type="html"><![CDATA[《三体人航天志第3卷·银河系篇》（第33版节选）]]></title>
+        <id>https://divertingPan.github.io/post/threebody_alien_voyage/</id>
+        <link href="https://divertingPan.github.io/post/threebody_alien_voyage/">
+        </link>
+        <updated>2025-06-14T14:22:42.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[win10系统完美配置mamba-ssm全整合方案]]></title>
+        <id>https://divertingPan.github.io/post/win-mamba/</id>
+        <link href="https://divertingPan.github.io/post/win-mamba/">
+        </link>
+        <updated>2025-04-18T02:52:44.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[杂谈-与ChatGPT的一段哲学对话]]></title>
+        <id>https://divertingPan.github.io/post/phil_human_ai/</id>
+        <link href="https://divertingPan.github.io/post/phil_human_ai/">
+        </link>
+        <updated>2023-03-11T14:46:27.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[【5分钟实例】一个ChatGPT辅助编程全过程实录]]></title>
+        <id>https://divertingPan.github.io/post/chatgpt_coding/</id>
+        <link href="https://divertingPan.github.io/post/chatgpt_coding/">
+        </link>
+        <updated>2023-03-02T10:30:40.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[两个图像处理问题的实例以及分析思路]]></title>
+        <id>https://divertingPan.github.io/post/quiz_two_cv_tasks/</id>
+        <link href="https://divertingPan.github.io/post/quiz_two_cv_tasks/">
+        </link>
+        <updated>2022-09-23T06:41:57.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[从统一的视角理解扩散模型]]></title>
+        <id>https://divertingPan.github.io/post/understanding_diffusion_models/</id>
+        <link href="https://divertingPan.github.io/post/understanding_diffusion_models/">
+        </link>
+        <updated>2022-09-02T11:37:35.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[什么是Diffusion模型？]]></title>
+        <id>https://divertingPan.github.io/post/what_is_diffusion_model/</id>
+        <link href="https://divertingPan.github.io/post/what_is_diffusion_model/">
+        </link>
+        <updated>2022-08-22T10:58:54.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例]]></title>
+        <id>https://divertingPan.github.io/post/CN_story_copyright_law/</id>
+        <link href="https://divertingPan.github.io/post/CN_story_copyright_law/">
+        </link>
+        <updated>2022-03-22T12:12:40.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[利用动态VPS服务器建立自用专属proxy]]></title>
+        <id>https://divertingPan.github.io/post/setup_vps_proxy/</id>
+        <link href="https://divertingPan.github.io/post/setup_vps_proxy/">
+        </link>
+        <updated>2021-12-15T17:24:05.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用Ubuntu+apache设置带验证的http服务器]]></title>
+        <id>https://divertingPan.github.io/post/setup_webpage_server/</id>
+        <link href="https://divertingPan.github.io/post/setup_webpage_server/">
+        </link>
+        <updated>2021-11-01T08:02:52.000Z</updated>
+    </entry>
+</feed>

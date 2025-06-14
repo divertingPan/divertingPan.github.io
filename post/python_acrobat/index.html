@@ -1,0 +1,328 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>python的一些杂技（记） | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="python的一些杂技（记） | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="python的工作路径关系
+使用pycharm或者spyder的时候，当前目录os.getcwd()都是脚本所在的目录。而sys.path模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。
+一个常用..." />
+    <meta name="keywords" content="Linux,Ubuntu,opencv,python,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              python的一些杂技（记）
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-11-02
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/kpcKyjrY4/" class="post-tag">
+                  # Linux
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/1tPSLd7pII/" class="post-tag">
+                  # Ubuntu
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/python_acrobat.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="python的工作路径关系">python的工作路径关系</h1>
+<p>使用pycharm或者spyder的时候，当前目录<code>os.getcwd()</code>都是脚本所在的目录。而<code>sys.path</code>模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而spyder不会。</p>
+<h1 id="一个常用的模块检测并建立工作路径">一个常用的模块：检测并建立工作路径</h1>
+<pre><code class="language-python">if not os.path.exists(destination_path):
+    os.makedirs(destination_path)
+</code></pre>
+<h1 id="判断list为空">判断list为空</h1>
+<p>直接利用bool判断，list为空返回False，不为空返回True</p>
+<h1 id="几个常用的resize尺寸问题">几个常用的resize尺寸问题</h1>
+<p>PIL的Image里面，resize的写法是先宽后高</p>
+<pre><code class="language-python">image.resize((width, height))
+</code></pre>
+<p>cv2也是</p>
+<pre><code class="language-python">image = cv2.resize(image, (width, height))
+</code></pre>
+<p>而如果用numpy建立数组类的图片时，注意其维度是先高后宽，例中是建立了一个视频帧组成的图像包：</p>
+<pre><code class="language-python">image_pack = np.empty((frame_len, height, width, 3), np.dtype('float32'))
+</code></pre>
+<h1 id="win和ubuntu的oslistdir有区别">Win和Ubuntu的os.listdir有区别</h1>
+<p>在Windows系统下面，使用以下代码，可以返回image_path内按文件名排序好的文件名列表image_name</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+</code></pre>
+<p>而Ubuntu系统中，直接调用这个，返回的文件名列表是乱序的，需要额外排一下序</p>
+<pre><code class="language-python">image_name = os.listdir(image_path)
+image_name = sorted(image_name, key=str)
+</code></pre>
+<p>另外还有一个问题，如果文件名是直接用数字，1，2，3，...，100，101这样的话，用上面这招也是有问题的。要么存的时候用001，002，...，100，101，要么用下面这个方法排序。</p>
+<pre><code class="language-python">image_name.sort(key=lambda x: [int(x[:-4])])
+</code></pre>
+<p>或者用正则表达式，按照数字排序</p>
+<pre><code class="language-python">import re
+pic_path=os.listdir(pic_dir)
+pic_path.sort(key=lambda i: int(re.match(r'(\d+)', i).group()))
+</code></pre>
+<h1 id="opencv的api变化">OpenCV的API变化</h1>
+<p>cv2.findContours这个函数在某些版本里（比如4.2）返回三个值：</p>
+<pre><code class="language-python">thresh, cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+</code></pre>
+<p>而某些版本（比如4.4）不再返回原图，只返回后面两个参数①轮廓的点集(contours)②各层轮廓的索引(hierarchy)。参考这个博客https://www.cnblogs.com/guobin-/p/10842486.html，他降到3.几也是可以的。</p>
+<pre><code class="language-python">cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+</code></pre>
+<h1 id="慎用tryexcept">慎用try/except</h1>
+<p>在搞flyai测试的时候发现准确率低的离谱。基本可以确定是代码本身的问题。经过检查是因为读入的路径不对导致的cv读取图片失败，但是这个读取放在了一个try/except里面，一旦出现错误就返回一个'EMPTY'的label值。去掉这个try以后发现程序报错，锁定这个问题。至于为什么会有一丁点准确率，是因为测试程序会返回所有label都为EMPTY，总有在真值表里的EMPTY能对上。</p>
+<h1 id="python多线程运行">python多线程运行</h1>
+<p>python运行for循环比较慢，但是for循环必须每次循环是相互独立的时候用多线程才行。我需要for循环从一个列表里逐次获取链接并下载链接的内容，每次是相互独立的，所以可以使用多线程来优化速度。<br>
+我需要爬取postcrossing的所有图片。首先，我需要遍历一个国家列表，对于每个国家，我要遍历这个国家的所有已发送postcard列表，下载图片链接。这里存在一个问题：每个国家的postcard列表是不一样长的。对于多线程优化，我认为较好的方法是针对每个国家下的postcard列表做优化，而非对整个国家列表做多线程优化。<br>
+具体而言，首先我利用for循环来遍历这个国家列表，其中df为所有国家的列表，code是国家代码，Postcards  (sent)是已发送的明信片数量。所有存在的图片的id一定不大于已发送明信片数量，这个作为后面postcard列表的长度。</p>
+<pre><code class="language-python">    for idx in range(len(df)):
+        country_code = df.loc[idx]['Code']
+        postcards_sent = df.loc[idx]['Postcards  (sent)']
+</code></pre>
+<p>之后的多线程办法参考了一个来源不详的nsfw数据集多线程下载的代码。首先做一个遍历明信片的数量上限</p>
+<pre><code class="language-python">img_count = postcards_sent + 1
+</code></pre>
+<p>之后为每个线程分配需要遍历的子列表长度。相当于把总列表切成n份，分给n个线程各自去执行。</p>
+<pre><code class="language-python">pre_thread_img_count = int(np.floor(img_count / worker_count))
+if img_count % worker_count == 0:
+    last_thread_img_count = pre_thread_img_count
+else:
+    last_thread_img_count = pre_thread_img_count + (img_count % worker_count)
+</code></pre>
+<p>再之后获取各个线程相对于总表的起止执行位置（就是每个子列表对于总列表的起止位置），target就是并行执行的函数，args是传给函数的参数。具体而言，相当于在worker_count次循环里，每次都触发了一下以args为参数的multi_downloader，这几个被触发的函数是齐头并进执行的。</p>
+<pre><code class="language-python">thread_list = []
+for i in range(1, worker_count + 1):
+    if i != worker_count:
+        start = pre_thread_img_count * (i - 1)
+        end = pre_thread_img_count * i - 1
+    else:
+        start = pre_thread_img_count * (i - 1)
+        end = start + last_thread_img_count - 1
+
+    thread = threading.Thread(target=multi_downloader, args=(i, country_code, start, end))
+    thread.start()
+    thread_list.append(thread)
+</code></pre>
+<p>为什么在这里面要放个线程列表做记录？因为在之后需要执行一步检测线程终止的操作</p>
+<pre><code class="language-python">for thread in thread_list:
+    thread.join()
+</code></pre>
+<p>这的作用是使得在这个国家里的这几个下载线程都结束之后，再触发对下一个国家的for循环。不然的话，for循环所在的这个主线程会一股脑把所有的国家列表全部遍历，并且每个国家下都建立了n个下载子进程，与我们的设想不符。</p>
+<blockquote>
+<p>join所完成的工作就是线程同步，即主线程任务结束之后，进入阻塞状态，一直等待其他的子线程执行结束之后，主线程再终止<br>
+关于join的作用，以及多线程之间的时间关系：https://www.cnblogs.com/cnkai/p/7504980.html</p>
+</blockquote>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#python%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84%E5%85%B3%E7%B3%BB">python的工作路径关系</a></li>
+<li><a href="#%E4%B8%80%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9D%97%E6%A3%80%E6%B5%8B%E5%B9%B6%E5%BB%BA%E7%AB%8B%E5%B7%A5%E4%BD%9C%E8%B7%AF%E5%BE%84">一个常用的模块：检测并建立工作路径</a></li>
+<li><a href="#%E5%88%A4%E6%96%ADlist%E4%B8%BA%E7%A9%BA">判断list为空</a></li>
+<li><a href="#%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84resize%E5%B0%BA%E5%AF%B8%E9%97%AE%E9%A2%98">几个常用的resize尺寸问题</a></li>
+<li><a href="#win%E5%92%8Cubuntu%E7%9A%84oslistdir%E6%9C%89%E5%8C%BA%E5%88%AB">Win和Ubuntu的os.listdir有区别</a></li>
+<li><a href="#opencv%E7%9A%84api%E5%8F%98%E5%8C%96">OpenCV的API变化</a></li>
+<li><a href="#%E6%85%8E%E7%94%A8tryexcept">慎用try/except</a></li>
+<li><a href="#python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C">python多线程运行</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/handwriting_en_recognition/">
+              <h3 class="post-title">
+                手写签名识别-数据预处理部分
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

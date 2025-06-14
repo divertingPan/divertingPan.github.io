@@ -1,0 +1,254 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>干货 | 用Ai处理图标和Matlab生成的图像 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="干货 | 用Ai处理图标和Matlab生成的图像 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="潘老师今天刚刚开通了原创，意味着以后可以在推送下面开留言或者接受打赏了，但是每次都需要给文章选择分类，潘老师自己也不知道这些乱七八糟的文章应该属于什么分类建议专门定义一个分类叫没点卵用。
+上次潘老师讲了如何用Photoshop放大一个log..." />
+    <meta name="keywords" content="illustrator,艺术设计" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              干货 | 用Ai处理图标和Matlab生成的图像
+            </h2>
+            <div class="post-info">
+              <span>
+                2017-10-12
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/9qmX-nd-S/" class="post-tag">
+                  # illustrator
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/vectorgraph_with_illustrator.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>潘老师今天刚刚开通了原创，意味着以后可以在推送下面开留言或者接受打赏了，但是每次都需要给文章选择分类，潘老师自己也不知道这些乱七八糟的文章应该属于什么分类<s>建议专门定义一个分类叫没点卵用。</s></p>
+<p>上次潘老师讲了如何用Photoshop放大一个logo。但是放大后细节还是不够圆滑不够精细<s>甲方说的</s>，所以今天潘老师打算用另一个软件来搞这件事。</p>
+<p>illustrator（图标是Ai，嫌读写illustrator这个词太费劲我们一般就简称他Ai）是Adobe的矢量图形编辑软件，所以，对于logo这种纯图形来说，用illustrator是非常合适的。因为矢量图可以随意放大缩小放大缩小而不会使其丢失细节，而且我们还可以精确编辑他的每一个边边角角，所以深受UI设计师，图标设计师甚至是做一些数学图表<s>MATLAB的折线图神马的也可以编辑哦科科文章最后告诉你怎么做。</s></p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1614516603494.jfif" alt="" loading="lazy"></figure>
+<p>摘要：用illustrator将图标矢量化并且精调细节。</p>
+<hr>
+<p>1</p>
+<p>打开illustrator，点击“新建”，新建一张A4纸。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1614516654764.jpg" alt="" loading="lazy"></figure>
+<p>2</p>
+<p>点击“文件”-“置入”，找到要编辑的logo，打开之后，鼠标在纸上点一下，即可。</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1614516681764.jpg" alt="" loading="lazy"></figure>
+<p>3</p>
+<p>在上面找到“图像描摹”，点他一下，然后会看见图片变光滑了，锯齿边都没有了。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1614516690819.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1614516698935.jpg" alt="" loading="lazy"></figure>
+<p>4</p>
+<p>但是此时还没有完，图标的有些地方发生了我们不希望的变化，应该给图标进一步修正。我们会发现刚刚的“图像描摹”按钮变成了“嵌入”，点他。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1614516710472.jpg" alt="" loading="lazy"></figure>
+<p>5</p>
+<p>此时这个标志变成了可编辑的图形了，先按一下ctrl+G解除编组，然后可以将白色的背景删掉，避免修改的不是图标本身而是背景（背景是一个白色的但是中间有一个图标形状的洞），修改每个锚点。</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1614516736835.jpg" alt="" loading="lazy"></figure>
+<p>6</p>
+<p>放大屏幕或者放大图像本身都可以发现，矢量图不论放多大都保持清晰的边缘。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1614516753659.jpg" alt="" loading="lazy"></figure>
+<p>【对于色彩分界比较清晰的图片（比如说图标这样的）用这招都比较好使。如果是普通照片的话……emmm潘老师还没有尝试。】</p>
+<hr>
+<p>【再说一个比较实用的技能，就是用illustrator编辑修改MATLAB生成的坐标图。因为潘老师在一次偶然的机会中发现MATLAB输出的坐标图居然可以为.eps格式，。操作步骤如下。以后写论文觉得图表难看的话可以用此方法改一改。】</p>
+<p>☟☟☟☟☟</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1614516778939.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1614516788401.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1614516795271.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1614516807552.jpg" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/bitmap_icon_lossless_scaling/">
+              <h3 class="post-title">
+                干货 | 用PS无损放大图标
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

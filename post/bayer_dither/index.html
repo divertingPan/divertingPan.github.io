@@ -1,0 +1,341 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>数字图像处理 | 图像二值化中的规则抖动算法 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="数字图像处理 | 图像二值化中的规则抖动算法 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="前言
+在只有黑色墨水的印刷机上只能搞出黑白的图形，那么问题就来了，印刷机里并没有灰色的墨，图片里的灰色阴影是怎么弄出来的？
+印刷机处理灰色的方式，是通过控制区域内小墨点的密度来实现的。很好理解，如果不印任何黑点，这个区域就是白色，如果印满黑..." />
+    <meta name="keywords" content="艺术设计,matlab,数字图像处理,抖动" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              数字图像处理 | 图像二值化中的规则抖动算法
+            </h2>
+            <div class="post-info">
+              <span>
+                2018-06-29
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/KsnYAf4bJ/" class="post-tag">
+                  # matlab
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/8brsisIkG/" class="post-tag">
+                  # 数字图像处理
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/BhX-aVBNsY/" class="post-tag">
+                  # 抖动
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/bayer_dither.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="前言">前言</h1>
+<p>在只有黑色墨水的印刷机上只能搞出黑白的图形，那么问题就来了，印刷机里并没有灰色的墨，图片里的灰色阴影是怎么弄出来的？</p>
+<p>印刷机处理灰色的方式，是通过控制区域内小墨点的密度来实现的。很好理解，如果不印任何黑点，这个区域就是白色，如果印满黑点，这个区域就是黑色，自然地，我们能推理出：印的黑点越密，显得颜色越深。在老式的报纸上能观察到这种效应。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597661759495.jpg" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">报纸上的图片的放大，这张报纸是通过控制墨点的大小来控制密度的</center>
+<p>如果墨点的大小是不变的，通过改变区域内墨点的数量，来使人看到不同的灰度，这种方法叫做图像抖动。而计算显出来的灰度和打印墨点数量之间关系的算法（抖动算法）主要有规则抖动和误差扩散抖动，由于通过规则抖动会使图像出现一些有意思的情况，故潘老师这次主要研究的是规则抖动算法。</p>
+<p>这次写的东西在网上能找到的参考资料比较匮乏，潘老师通过自己尝试以及瞎猜，总结了一下，并且得出了一些没什么用的结果。对算法、数学恐惧或是不想动脑思考的同学可只看图片。</p>
+<h1 id="计算过程">计算过程</h1>
+<p>规则抖动，顾名思义，可以理解为他的抖动方法是有一定规则的。规则就来自于Bayer抖动表。至于为什么叫<strong>Bayer</strong>抖动表，潘老师也不太清楚，只知道仿佛<strong>并不是</strong>叫Bayer的人发明的这个方法。这是Bayer抖动表的计算过程：<br>
+<img src="https://divertingPan.github.io/post-images/1597662259033.PNG" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597662263985.PNG" alt="" loading="lazy"></figure>
+<p>通常大家会取M<sub>3</sub>作为Bayer抖动表。为了不想看见数学式子直观的看到Bayer抖动表里面到底是什么样的，潘老师让MATLAB计算了一下M<sub>3</sub>：<br>
+<img src="https://divertingPan.github.io/post-images/1597662391052.PNG" alt="" loading="lazy"></p>
+<p>用大白话解释规则抖动算法的想法：<em>给你一个点的灰度值，在这个点的位置上要不要打印墨点？你这时候就去立刻拿来Bayer抖动表，从里面随机挑选一个数，如果挑到的数大于这个点的灰度值，就打上墨点，不然就不打。</em>（关于灰度值的解释：灰度值越高，就越趋于白色。灰度值越低，越趋于黑色。）</p>
+<p>这样会发生什么事呢？假设给我一个区域，这里面大多是<strong>很深的颜色</strong>（假如灰度值是10），那么我均匀地随机在Bayer抖动表里挑到的数，大部分（从11到63）都会大于这个<strong>很深的颜色</strong>（10），结果就会导致大部分点都被打上墨点，呈现的视觉效果确实是<strong>很深的颜色</strong>。</p>
+<p>如果考虑极端情况。给我的一个区域是纯黑色。那么我在这个表里，不管怎样取数，都会大于我手里的纯黑色，所以导致，每个点都打墨点，所以就铺满了墨点就呈现黑色了。同理，给我一个纯白的区域，我在这个表里，不管怎么取数都会小于纯白色的灰度值，所以总是没有墨点打在纸上，就呈白色了。</p>
+<p>算法思想非常简单，但是具体实现算法的时候，我们用另一种方法在抖动表里取值，方法是：用图像里的点的（x，y）坐标与抖动表的尺寸取余。具体操作的过程大概就是，随着我在图片上取点的位置一格一格移动，我在抖动表里取数的位置也在移动。对于一个足够大的区域来说，这个区域呈现的色彩可以均匀的被抖动表里所有元素“判断”一遍，在宏观上呈现预期的概率分布。通过这种方法抖动出来的图是很有特点的，如下图。也正因如此，他叫做规则抖动。<br>
+<img src="https://divertingPan.github.io/post-images/1597663002331.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597663011546.png" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">灰阶图以及其规则抖动图，一个方格代表一个像素点。为了观察方便，图片被放大了</center>
+<p>还有一点，因为实际图像灰度范围是0-255，然而Bayer抖动表里的数字范围是0-63，所以对源图像还要进行范围的压缩。以下是使用MATLAB进行抖动表的生成和抖动的算法，供学有余力想要研究技术细节的同学参考。需要完整代码的请<a href="https://github.com/divertingPan/Bayer_Dither">前往github</a></p>
+<pre><code class="language-python">m1 = [[ 0 2 ];
+      [ 3 1 ]];
+
+u1 = ones(2, 2);
+
+m2 = [[ 4*m1       4*m1+2*u1 ];
+      [ 4*m1+3*u1  4*m1+u1   ]]
+
+u2 = ones(4, 4);
+
+m3 = [[ 4*m2       4*m2+2*u2 ];
+      [ 4*m2+3*u2  4*m2+u2  ]]
+
+OuputM3 = 0;
+for i = 1:height
+    for j = 1:width
+        ImageColor = GrayImage(i,j) / 4;
+        BayerMatrix = m3(bitand(i,7) + 1, bitand(j,7) + 1);
+        if ( ImageColor &lt;= BayerMatrix )
+           OuputM3(i,j) = 0;
+        else
+           OuputM3(i,j) = 255;
+        end
+    end
+end
+Image8BitM3 = uint8(OuputM3);
+</code></pre>
+<p>当然，使用M<sub>4</sub>的Bayer抖动表就不需要压缩取值范围了，M<sub>4</sub>的抖动表可以做到一个实际的灰度值对应一种取值概率，即一种抖动花纹，我们也可以称其为标准图案，即每种灰度值所对应的黑白点拼出来的图案。但是实际上用M<sub>3</sub>已经足够，所以下文均以M<sub>3</sub>作为抖动表。<br>
+<img src="https://divertingPan.github.io/post-images/1597663252226.png" alt="" loading="lazy"></p>
+<center style="font-size:14px;color:#AAAAAA">4阶抖动表与3阶抖动表生成的结果相差不大</center>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597663316482.jpg" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">实际图像</center>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597663343206.jfif" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">实际图像应用抖动算法的效果（已重新缩放）</center>
+<h1 id="多折腾折腾">多折腾折腾</h1>
+<p>以上是图像中只含有黑白点（二值）的情况，接下来考虑多值的（以4个值为例——白，浅灰，深灰，黑）规则抖动。潘老师没有查找到相关的资料，干脆直接用了最简单粗暴的方法，就是，将Bayer抖动表通过运算处理成3个取值域）(0-21，22-43，44-63)，将图形色彩也划分为对应的4个取值域，分别在各自域内做规则抖动。经过测试证明这个方法还是可以接受的。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597663932594.png" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">二值规则抖动和4值规则抖动的对比，在使用同样的Bayer抖动表的基础上，4值过渡更加平缓</center>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597663984180.jfif" alt="" loading="lazy"></figure>
+<center style="font-size:14px;color:#AAAAAA">实际图像应用的效果</center>
+<p>算法见代码部分。需要完整代码的请<a href="https://github.com/divertingPan/Bayer_Dither">前往github</a></p>
+<pre><code class="language-python">output = zeros(height, width);
+for i = 1:height
+    for j = 1:width
+
+        BayerMatrix1 = m3(bitand(i,7) + 1, bitand(j,7) + 1) / 3;
+        BayerMatrix2 = 21.3333 + BayerMatrix1;
+        BayerMatrix3 = 21.3333 + BayerMatrix2;
+        ImageColor = GrayImage(i,j) / 4;
+
+        if (ImageColor &gt;= 0 &amp;&amp; ImageColor &lt; 21)
+            if (ImageColor &gt; BayerMatrix1)
+                output(i,j) = 84;
+            else
+                output(i,j) = 0;
+            end
+        elseif (ImageColor &gt;= 21 &amp;&amp; ImageColor &lt; 43)
+            if (ImageColor &gt;= BayerMatrix2)
+                output(i,j) = 171;
+            else
+                output(i,j) = 84;
+            end
+        else
+            if (ImageColor &gt;= BayerMatrix3)
+                output(i,j) = 255;
+            else
+                output(i,j) = 171;
+            end
+        end
+    end
+end
+</code></pre>
+<p>老师，能再给力点吗？</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597664079642.jpg" alt="" loading="lazy"></figure>
+<p>潘老师知道彩色图像是由RGB三个通道组成的，每个通道实际上都是类似灰度的表达方式，但是通过某种神力，三个通道的数值合成后就成为了我们能看到的彩色。如果分别对三个通道做抖动。那么R、G、B三色就分别只有0和1的取值，排列组合，会出现8种颜色。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597664107520.png" alt="" loading="lazy"></figure>
+<p>用一个实际的彩色图像看看效果。（算法和之前的都类似，不再列出）</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597664137382.webp" alt="" loading="lazy"></figure>
+<p>老师，能再给力点吗？</p>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597664079642.jpg" alt="" loading="lazy"></figure>
+<p>若是对RGB三个通道也分别进行4值抖动，那么可获得的色彩范围就更多了（4×4×4=64种），颜色也就更加准确了，算法也与灰度4值抖动相仿。</p>
+<figure data-type="image" tabindex="12"><img src="https://divertingPan.github.io/post-images/1597664203730.webp" alt="" loading="lazy"></figure>
+<p>虽然放大来看图像上会有条块状纹理出现，但如果远观的话这幅图的细节已经还原出很多了。抖动算法最主要的应用价值在于他可以极大的压缩图像存储空间，主要是因为<strong>色彩空间被压缩了</strong>，原本需要256个数值表达的灰度图我甚至可以只用黑白两色表达。（在均采用PNG格式编码的条件下，测试用的原图798KB，RGB通道二值化后95.8KB，RGB通道4值化后148KB，压缩效果明显）当然如果合理看待这些条块的话，可以把他看作一种比较独特的滤镜（这样说的话，Bayer抖动表就是一种滤波器）。</p>
+<figure data-type="image" tabindex="13"><img src="https://divertingPan.github.io/post-images/1597664376195.png" alt="" loading="lazy"></figure>
+<p>【注】写推送使用的配图都是低分辨率然后放大过的，为的是各位观察方便。实际使用代码生成的图片中，上面那些图里的一个小方格就是一个图片像素点。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B">计算过程</a></li>
+<li><a href="#%E5%A4%9A%E6%8A%98%E8%85%BE%E6%8A%98%E8%85%BE">多折腾折腾</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/altium_pcb/">
+              <h3 class="post-title">
+                用Altium Designer制作PCB过程总结
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

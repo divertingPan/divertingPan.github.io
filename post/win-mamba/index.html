@@ -1,0 +1,289 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>win10系统完美配置mamba-ssm全整合方案 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="win10系统完美配置mamba-ssm全整合方案 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也..." />
+    <meta name="keywords" content="Anaconda,pytorch,python" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              win10系统完美配置mamba-ssm全整合方案
+            </h2>
+            <div class="post-info">
+              <span>
+                2025-04-18
+              </span>
+              <span>
+                7 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/x2w_-fHcg/" class="post-tag">
+                  # Anaconda
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/kXn9gPcVn/" class="post-tag">
+                  # pytorch
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/win-mamba.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。</p>
+<p>安装包版本：causal-conv1d 1.4.0、mamba-ssm 2.2.2、triton 3.1.0（这三个包我放在github仓库：https://github.com/divertingPan/mamba-for-windows内了，使用方法在下文）</p>
+<p>前期准备：win10系统（其他版本不确定，win10实测是可以的）、anaconda、N卡（至少10系显卡算力6.1起步：查询https://developer.nvidia.com/cuda-gpus）</p>
+<p>参考链接：<br>
+<em>Windows 下安装 triton 教程：</em><br>
+https://blog.csdn.net/yyywxk/article/details/144868136<br>
+<em>Windows 下Mamba2 / Vim / Vmamba 环境安装问题记录及解决方法终极版（无需绕过triton）：</em><br>
+https://blog.csdn.net/yyywxk/article/details/145018635</p>
+<p><strong>下面开始步骤详解</strong></p>
+<p>1）首先给系统安装cuda 12.4.0，点击下面链接里的download：https://developer.nvidia.com/cuda-12-4-0-download-archive?target_os=Windows&amp;target_arch=x86_64&amp;target_version=10&amp;target_type=exe_local</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1744952742619.png" alt="" loading="lazy"></figure>
+<p>2）准备安装triton-windows。这一步是最关键的，因为大量教程都忽略了这部分，导致安装了原版triton，里面很多命令是linux版的，用在windows上就跑不通。首先第一步，参考<a href="https://blog.csdn.net/yyywxk/article/details/144868136">Windows 下安装 triton 教程</a>进行准备，下载安装Visual Studio Installer：https://aka.ms/vs/17/release/vs_BuildTools.exe。安装好后打开，在窗口上部找到“单个组件”，搜索MSVC v143，勾选最新版本的（我所安装完毕的版本是14.43.34808），搜索Windows 10 SDK，选最大的版本号（或者选择和我一致的号，尽量保持环境一致）</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1744952763630.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1744952768192.png" alt="" loading="lazy"></figure>
+<p>3）修改环境变量，参考<a href="https://blog.csdn.net/yyywxk/article/details/144868136">Windows 下安装 triton 教程</a>右键“此电脑”-在“属性”里面找到最后面，点击高级系统设置，右下角“环境变量”，修改系统变量里面的部分。注意如果版本号和我的不一样，修改版本号为你自己的版本再粘贴</p>
+<ul>
+<li>选择 Path ，添加：<br>
+<code>C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\bin\Hostx64\x64 C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64</code></li>
+<li>新建 LIB，添加3条：<br>
+<code>C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\lib\x64; C:\Program Files (x86)\Windows Kits\10\Lib\10.0.20348.0\ucrt\x64; C:\Program Files (x86)\Windows Kits\10\Lib\10.0.20348.0\um\x64</code></li>
+<li>新建 INCLUDE，添加6条：<br>
+<code>C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include; C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\ucrt; C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\um; C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\winrt; C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\cppwinrt; C:\Program Files (x86)\Windows Kits\10\Include\10.0.20348.0\shared</code></li>
+</ul>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1744952781982.png" alt="" loading="lazy"></figure>
+<p>4）打开一个cmd窗口，输入<code>cl</code>，输出以下内容即为成功。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1744952791880.png" alt="" loading="lazy"></figure>
+<p>5）以防万一，下载https://aka.ms/vs/17/release/vc_redist.x64.exe并安装，如果按钮显示是修复，则点一下修复，以防系统缺失依赖文件。运行到这里时，重启一下电脑再继续。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1744952800054.png" alt="" loading="lazy"></figure>
+<p>6）创建虚拟环境，执行以下内容</p>
+<pre><code>conda create -n mamba python=3.10
+conda activate mamba
+
+pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu124
+
+conda install nvidia/label/cuda-12.4.0::cuda-nvcc
+</code></pre>
+<p>7）安装<code>pip install triton-3.1.0-cp310-cp310-win_amd64.whl</code>，运行验证脚本triton_test.py，如果输出没有报错即完成这部分安装。</p>
+<p>8）打开目录<code>C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64</code><br>
+找到“rc.exe”和“rcdll.dll”拷贝至以下目录<br>
+<code>C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\bin\Hostx64\x64</code><br>
+（若你的版本号不一致，找到你对应的号）</p>
+<p>9）准备编译安装causal-conv1d，首先在环境里面安装</p>
+<pre><code>conda install nvidia/label/cuda-12.4.0::cuda-cccl
+pip install ninja
+pip install setuptools==68.2.2
+conda install packaging
+</code></pre>
+<p>然后下载我提供的文件，进入到causal-conv1d-1.4.0的目录，这个目录下有一个setup.py文件，在此目录下执行</p>
+<pre><code>set CAUSAL_CONV1D_FORCE_BUILD=TRUE
+python setup.py install
+</code></pre>
+<p>若最终输出没有出现error字样，则成功安装，运行<code>pip list</code>应看到causal-conv1d的版本号为1.4.0（原本应该是可以<code>pip install .</code>的，但不知道为什么我用这个命令就会报错什么No .egg-info directory found，只能使用<code>python setup.py install</code>才能安装）</p>
+<p>10）准备编译安装mamba-ssm，首先在环境里面安装</p>
+<pre><code>pip install einops transformers
+</code></pre>
+<p>然后下载我提供的文件，进入到mamba-2.2.2的目录，这个目录下有一个setup.py文件，在此目录下执行</p>
+<pre><code>set MAMBA_FORCE_BUILD=TRUE
+python setup.py install
+</code></pre>
+<p>若最终输出没有出现error字样，则成功安装，运行<code>pip list</code>应看到mamba-ssm的版本号为2.2.2</p>
+<p>【备注：下载原版的软件包后，需要对应修改代码中的很多位置，如<a href="https://blog.csdn.net/yyywxk/article/details/145018635">Windows 下Mamba2 / Vim / Vmamba 环境安装问题记录及解决方法终极版（无需绕过triton）</a>中所示，我的这个包已经修改好了对应位置，直接下载之后编译安装即可。另外由于mamba要求GPU高于10系，这部分的兼容修改也已经改好，10系的卡也可以用了。老潘的测试环境是1080ti实测没问题】</p>
+<p>11）运行验证脚本mamba_test.py，如果输出没有报错即完成所有安装。</p>
+<p>（不知道原因，首次运行一个脚本会生成一些c编译的文件，但是删掉这些文件再次运行之后就不会生成了，不太懂原理是什么）</p>
+<p>我使用我原本的项目实测，没有问题</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1744952809285.png" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/phil_human_ai/">
+              <h3 class="post-title">
+                杂谈-与ChatGPT的一段哲学对话
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

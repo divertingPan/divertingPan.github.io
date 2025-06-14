@@ -1,0 +1,376 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>光流法应用——自适应检测视频火车速度 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="光流法应用——自适应检测视频火车速度 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="
+本文参考资料：
+[1] OpenCV-Python Tutorials » Video Analysis » Optical Flow
+[2] Good Features to Track
+[3] Pyramidal Implementa..." />
+    <meta name="keywords" content="火车,艺术设计,opencv,计算机视觉,自动化,python,数字图像处理" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              光流法应用——自适应检测视频火车速度
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-25
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/wJs8SzK3B/" class="post-tag">
+                  # 火车
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/aCyIthfFi/" class="post-tag">
+                  # 艺术设计
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Brnq6wNZb/" class="post-tag">
+                  # opencv
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/Ng8pxYRJg/" class="post-tag">
+                  # 计算机视觉
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/9Fe9BVz-5/" class="post-tag">
+                  # 自动化
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/wXA2QmIZp/" class="post-tag">
+                  # python
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/8brsisIkG/" class="post-tag">
+                  # 数字图像处理
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/moving_detection.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <blockquote>
+<p>本文参考资料：<br>
+[1] <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_video/py_lucas_kanade/py_lucas_kanade.html">OpenCV-Python Tutorials » Video Analysis » Optical Flow</a><br>
+[2] <a href="https://users.cs.duke.edu/~tomasi/papers/shi/TR_93-1399_Cornell.pdf">Good Features to Track</a><br>
+[3] <a href="http://robots.stanford.edu/cs223b04/algo_tracking.pdf">Pyramidal Implementation of the Lucas Kanade Feature Tracker Description of the algorithm</a></p>
+</blockquote>
+<p>代码地址：<a href="https://github.com/divertingPan/video_scanner/blob/main/main_v0.2.py">https://github.com/divertingPan/video_scanner/blob/main/main_v0.2.py</a></p>
+<p>本篇是接续<a href="https://divertingpan.github.io/post/train_scanning/">【硬核摄影】给火车拍个全身照</a>的内容。使用自动脚本生成火车视频扫描图存在一个问题：如果火车的运动速度是变化的，只使用手动给定的固定扫描间隔是会有大问题的。例如下图。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1614321454199.png" alt="" loading="lazy"></figure>
+<p>显然，火车在减速，车头位置扫描间隔正合适，而车尾的扫描间隔太大了。如果能够根据当前车速自动判断应该用多宽的扫描间隔就能够解决这个问题。</p>
+<p>那么就应该获得前后两帧之间物体运动的距离，最好连方向也能判断出来，这样直接就可以自动判断拼接方向了。</p>
+<p>显然，这个需求完全可以用<code>光流法</code>来实现。具体的算法原理和例程在开头的参考资料内，留作课后阅读材料。利用opencv可以直接获取视频中关键点在前后两帧的定位，利用这个定位的横向差值可以获得这一刻的物体运动速度，差值的正负则代表运动方向。这样利用自动检测的运动信息就可以实现变速物体的扫描了，并且还可以省下自己去数格子算运动距离的精力。</p>
+<p>先获取两个相邻帧，转成灰度图像</p>
+<pre><code class="language-python">vc = cv2.VideoCapture(video_path)
+rval = vc.isOpened()
+vc.set(cv2.CAP_PROP_POS_FRAMES, 300)
+rval, frame_1 = vc.read()
+rval, frame_2 = vc.read()
+
+frame_1_gray = cv2.cvtColor(frame_1, cv2.COLOR_BGR2GRAY)
+frame_2_gray = cv2.cvtColor(frame_2, cv2.COLOR_BGR2GRAY)
+</code></pre>
+<p>计算光流的第一步要获取图像的关键点，这些关键点将作为追踪运动情况的标靶，这里对于关键点的检测可以指定一个mask蒙版，检测时只检测蒙版内的区域。可以作为一个粗筛手段，避免背景干扰。这个mask可以在UI界面里做成一个根据左边图像栏自己制定区域的功能。</p>
+<pre><code class="language-python">feature_params = dict(maxCorners=20,
+                      qualityLevel=0.3,
+                      minDistance=3,
+                      blockSize=5)
+mask = np.zeros((frame_height, frame_width), dtype='uint8')
+mask[frame_height//2:frame_height//2+600, position-300:position+300] = 1
+p0 = cv2.goodFeaturesToTrack(frame_1_gray, mask=mask, **feature_params)
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1614322557615.png" alt="" loading="lazy"></figure>
+<p>然后计算光流，得到匹配的关键点<code>good_new</code>和<code>good_old</code></p>
+<pre><code class="language-python">lk_params = dict(winSize=(15,15),
+                  maxLevel=5,
+                  criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+p1, st, err = cv2.calcOpticalFlowPyrLK(frame_1_gray, frame_2_gray, p0, None, **lk_params)
+good_new = p1[st==1]
+good_old = p0[st==1]
+</code></pre>
+<p>画出来一下看看究竟对不对</p>
+<pre><code class="language-python">line = np.zeros_like(frame_1)
+frame = frame_overlay
+for i,(new,old) in enumerate(zip(good_new,good_old)):
+    a,b = new.ravel()
+    c,d = old.ravel()
+    line = cv2.line(line, (a,b), (c,d), [0,255,255], 1)
+    frame = cv2.circle(frame, (a,b), 3, [0,0,255], -1)
+    frame = cv2.circle(frame, (c,d), 3, [0,255,0], -1)
+img = cv2.add(frame, line)
+cv2.imwrite('optical_flow.jpg', img)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.imshow(img)
+plt.show()
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1614329054894.png" alt="" loading="lazy"></figure>
+<p>这时，我们计算<code>good_new</code>和<code>good_old</code>之间在x轴上的差值，就能获得运动的距离，但是由于偶尔会有干扰点或者误差点，所以我们直接取这一堆数里的众数，作为实际的运动距离。</p>
+<pre><code class="language-python">moving_distance = [int(good_new[i, 0]-good_old[i, 0]) for i in range(len(good_new)) if abs(good_new[i, 1]-good_old[i, 1]) &lt; 2]
+width = max(moving_distance, default=None, key=lambda v: moving_distance.count(v))
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1614323459730.png" alt="" loading="lazy"></figure>
+<p>这个差值如果是正值则代表后一帧在前一帧的右边，那么运动距离就是从左到右，是负值的话就反之。这个正负就可以作为运动方向的判断。</p>
+<p>由于这里用到的是不定的width，所以拼接图时有两种方法可选择：一种是动态地拼接图片，这个好处是程序简单，缺点是<strong>非常慢</strong>，尤其在图片越拼越大之后。一个10000多帧的录像，老潘洗完澡回来发现还没拼完。</p>
+<p>所以不推荐上述方法，建议利用第二种方法，事先初始化一个空图片矩阵，这样的话，方法和上一版本的基本一致，唯一有大变样的地方在于计算正确的矩阵大小。也就是图片长度。</p>
+<p>自适应检测运动间隔的大体思路如下：首先手动指定一个开始运动检测的第一个关键帧（避免开头无运动火车的影响），这个关键帧之前以及这个关键帧之后的一段内，width为此关键帧检测到的火车运动距离，往后有第二个检测关键帧，后续的一小段所用的width为第二关键帧检测到的火车运动距离，第三关键帧及以后同理。所以还需要指定一个检测灵敏度，这个灵敏度就是关键帧的数量，越多越能灵活应对变速情况。（灵敏度=1即只抽一帧进行速度检测，适合匀速情况，灵敏度=总帧数即每一帧都进行运动检测，适合蛇皮走位的极度复杂情况，但每帧都要计算光流会慢到爆），具体灵敏度可以根据上一篇里面<code>1像素能够接纳的火车运动速度变化区间</code>来指定。</p>
+<blockquote>
+<p>窗口宽度为1像素，则火车速度就应该为6.83x60 mm/s，即0.41m/s。</p>
+</blockquote>
+<p>这种情况下，火车在±0.41m/s内的速度变化并不会影响到当前的扫描区间结果。</p>
+<p>具体计算时为了方便起见，利用列表来管理关键帧的位置和对应的运动速度（width），为了防止短时间内可能出现的检测误差情况，向后检测连续两次光流取均值获取更稳的结果。 在循环外又额外增加了一下<code>img_length</code>是因为<code>adaptive_length//adaptive_sensitivity</code>的整除可能会导致最后有几帧被遗漏，通过这一行可以修正<code>img_length</code>的数值。经过老潘的手动计算以及实际测试，这样的图片长度是刚好的。</p>
+<pre><code class="language-python">img_length = 0
+width_list = []
+width_adjust_position = []
+for i in range(adaptive_sensitivity):
+    print(adaptive_start + i * (adaptive_length//adaptive_sensitivity))
+    vc.set(cv2.CAP_PROP_POS_FRAMES, adaptive_start + i * (adaptive_length//adaptive_sensitivity))
+    rval, frame_1 = vc.read()
+    rval, frame_2 = vc.read()
+    rval, frame_3 = vc.read()
+    width_list.append((optical_flow(frame_1, frame_2)+optical_flow(frame_2, frame_3))//2)
+    if i == 0:
+        img_length = width_list[0] * (adaptive_start + (adaptive_length//adaptive_sensitivity))
+        width_adjust_position.append(0)
+    else:
+        img_length += width_list[i] * (adaptive_length//adaptive_sensitivity)
+        width_adjust_position.append(adaptive_start + i * (adaptive_length//adaptive_sensitivity))
+img_length += width_list[-1] * (adaptive_length - (adaptive_length//adaptive_sensitivity) * adaptive_sensitivity)
+        
+img = np.empty((frame_height, abs(img_length), 3), dtype='uint8')
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1614325149690.PNG" alt="" loading="lazy"></figure>
+<p>之后还有一个难点是如何在遍历视频帧时知道当前处于哪个速度区间内？老潘想了一个鬼点子：利用当前帧的序号减关键帧的列表，统计列表里面值&lt;=0的数量，这个数量-1，就应该是当前帧所对应的关键帧之间的速度区间。而且对于img的操作，<code>pixel_start</code>的计算逻辑也应该变一下，让他像指针一样跟随进度变化而改变自己的指向位置。</p>
+<pre><code class="language-python">if width_list[0] &gt; 0:
+    pixel_start = img_length
+    for i in range(total_frames):
+        rval, frame = vc.read()
+        if not rval:
+            print('break')
+            break
+        
+        width = width_list[((width_adjust_position - i) &lt;= 0).sum() -1]
+        
+        pixel_start -= width
+        pixel_end = pixel_start + width
+        img[:, pixel_start:pixel_end, :] = frame[:, position:position + width, :]
+        
+        if i % 100 == 0:
+            print('{}/{} - {}'.format(i, total_frames, width))
+</code></pre>
+<p>如果速度为负则反之，和上述大同小异，只是指针变化情况稍微变一下：</p>
+<pre><code class="language-python">else:
+    pixel_start = 0
+    for i in range(total_frames):
+        rval, frame = vc.read()
+        if not rval:
+            print('break')
+            break
+        width = abs(width_list[((width_adjust_position - i) &lt;= 0).sum() -1])
+        
+        pixel_end = pixel_start + width
+        img[:, pixel_start:pixel_end, :] = frame[:, position:position + width, :]
+        pixel_start += width
+        
+        if i % 100 == 0:
+            print('{}/{} - {}'.format(i, total_frames, width))
+</code></pre>
+<p>上一版本的图像保存可以直接用，但是由于获取图像长度的方法不太好，这一版本里改为<code>img.shape[1]</code>获取图片长度，替换原本的什么帧数乘width的复杂操作。</p>
+<p>之后将这些功能整合到原本的UI程序里面。加一下控件互动（代码略，可自行阅读源码），修改后的布局界面如下，选择manual或者adaptive则会使用对应功能的值，另一部分的值不会起作用。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1614326401775.PNG" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1614326899533.png" alt="" loading="lazy"></figure>
+<p>至于识别的准确率，准起来比老潘手动去数格子都要准，但是偶尔也会有识别失误的情况，根据多次测试，这种情况是mask没有很好罩住车体，有一部分干扰前景或背景（例如行人的走动、草木被风吹动）影响了被检测的运动点。此时调整mask的范围，即可解决。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1614326909277.PNG" alt="" loading="lazy"></figure>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/train_scanning/">
+              <h3 class="post-title">
+                【硬核摄影】给火车拍个全身照
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

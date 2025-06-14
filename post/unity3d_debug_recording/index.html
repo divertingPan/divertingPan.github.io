@@ -1,0 +1,315 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="https://divertingPan.github.io/favicon.ico?v=1749912749413">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://divertingPan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法 | 老潘家的潘老师 - Atom Feed" href="https://divertingPan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="首先声明：为了保持严谨的求学态度，各位程序员面对bug时还是尽量搞懂问题的根源，否则后期这个bug可能会造成很大的影响（其实很多情况下也不会再造成什么影响）。
+第二条声明：这篇记录只是写了一个解决问题的路子，里面具体技术细节老潘也没太搞懂，..." />
+    <meta name="keywords" content="Unity3D,杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://divertingPan.github.io">
+  <img class="avatar" src="https://divertingPan.github.io/images/avatar.png?v=1749912749413" alt="">
+  </a>
+  <h1 class="site-title">
+    老潘家的潘老师
+  </h1>
+  <p class="site-description">
+    CV方向小学二年级在读
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          文章
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/billboard" class="menu">
+          留言
+        </a>
+      
+    
+      
+        <a href="https://divertingPan.github.io/post/friends" class="menu">
+          基友
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/divertingPan" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/yan-han-gong" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-05-09
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://divertingPan.github.io/tag/Pm1j9laBM/" class="post-tag">
+                  # Unity3D
+                </a>
+              
+                <a href="https://divertingPan.github.io/tag/hl5tcfpWs/" class="post-tag">
+                  # 杂谈
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://divertingPan.github.io/post-images/unity3d_debug_recording.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>首先声明：为了保持严谨的求学态度，各位程序员面对bug时还是尽量搞懂问题的根源，否则后期这个bug可能会造成很大的影响（其实很多情况下也不会再造成什么影响）。</p>
+<p>第二条声明：这篇记录只是写了一个解决问题的路子，里面具体技术细节老潘也没太搞懂，也没有必要搞懂，反正快速得到需要的结果就够了。所以有问题不要问老潘，老潘也不懂，请百度或Google。</p>
+<hr>
+<p>一个风和日丽的劳动节假期。</p>
+<p>某个技术团队需要解决一个<strong>小问题</strong>，他们想让<strong>用Unity3D开发的工程读取串口数据</strong>。<del>作为物联网领域非常会吹牛逼的</del>潘老师闻之欣然规往。在飚到四轮离地的公交车上，老潘已经在网上找到了<strong>C#读取串口数据</strong>的现成轮子，可以直接使用，所以这确实是一个小问题。</p>
+<p>然而，由于Unity3D的软弱性，C#的一些标准库函数不能使用。在Windows系统上运行毫无问题的代码放进U3D工程中就完全没法用。例如，以下语句大致作用是捕获每次串口数据并触发括号里那个事情，这个事情是判断目前这个命令下该干什么，这条是程序不断读取串口并且根据命令执行不同动作的<strong>关键</strong>一步：</p>
+<pre><code class="language-C">my_port.DataReceived += newSerialDataReceivedEventHandler(DoSomething)
+</code></pre>
+<p>然而很巧地，U3D不支持这种做法，如果想让程序接到串口命令后，根据命令执行不同的U3D动作，使用这条代码是行不通的。</p>
+<p>潘老师看到甲方团队已经写好的程序结构是类似这样的。</p>
+<pre><code class="language-C">void Start() {
+    // 写了点什么代码在这里
+}
+void Update() {
+    // 写了点什么代码在这里
+}
+</code></pre>
+<p>那好，潘老师猜测这个工程运行后<strong>从Start()开始</strong>，从网上找到了U3D下能够使用的读串口的代码后，潘老师使用线程启动串口读取的动作，启动的线程放在Start()里面。</p>
+<pre><code class="language-C">my_thread = new Thread(receive_thread);
+my_thread.Start();
+</code></pre>
+<p>再创建一个receive_thread()的函数，这里面放一个while循环，while里不断循环重复尝试从串口数据中读出来命令。这样一旦串口数据更新，字符串receive_str也会立刻跟进（但愿）。</p>
+<pre><code class="language-C">void receive_thread() {
+    while(true) {
+        Stringreceive_str = my_port.ReadLine();
+    }
+}
+</code></pre>
+<p>还是不行，发现进度会卡在while循环里面，没有任何反应，用log输出一下（C#里的相当于print的办法）也不出任何结果。后来查证了一下才发现：循环里用的**ReadLine()**虽然可以在U3D里面使用，但是这个函数是接收一串字符串，在开始执行接收数据后，<strong>只有遇到换行标识才会结束接收并形成一个串</strong>。然而很巧地，串口来的数据是从一个开发板来的，这串口数据源源不断根本不给换行标识。于是整个while循环其实并没有在循环，只是卡在了ReadLine()一直在等一个根本等不到的换行符。</p>
+<p>好，那就用个原始的办法吧，那就让串口的原生数据给程序，通过程序来解码字符串。好在网上有使用List等复杂方法接受数据并且形成字符串的现成轮子，拿来借用一下。所需的只是每条串口数据的<strong>起始标志和结束标志</strong>，即可不用换行符也能得到一条完整正确的串口数据。</p>
+<figure data-type="image" tabindex="1"><img src="https://divertingPan.github.io/post-images/1597760278799.png" alt="" loading="lazy"></figure>
+<p>然而很巧地，潘老师居然找不到什么明显的起始标志和结束标志，这就导致不能清晰的判断出一条数据什么时候开始什么时候结束。</p>
+<figure data-type="image" tabindex="2"><img src="https://divertingPan.github.io/post-images/1597761262982.png" alt="" loading="lazy"></figure>
+<p>探究了半天，发现大多数命令的起始标志还是一致的，那就以起始标志作为分割语句的标志吧</p>
+<figure data-type="image" tabindex="3"><img src="https://divertingPan.github.io/post-images/1597761269267.png" alt="" loading="lazy"></figure>
+<p>分割完之后，拿着一条得到的原生数据，做一下转码。好在这些码只是字符串对应的ASCII码值，还是很容易转一下的。</p>
+<pre><code class="language-c">string ascii_to_str(byte[] com_data) {
+    return System.Text.Encoding.ASCII.GetString(com_data);
+}
+</code></pre>
+<p>再从转好的字符串里提取出关键信息。甲方需要得到串口返回的命令对应ID号，串口传回来的数据类似这样：</p>
+<pre><code class="language-c">Result:ID(5),Text[&quot;老潘家的潘老师&quot;]
+</code></pre>
+<p>这里括号中的数字5就是关键信息，使用<strong>正则表达式</strong>给他拿出来：</p>
+<pre><code class="language-c">Regex rgx = newRegex(@&quot;Result:ID(([\s\S]*?)),Text&quot;);
+Match match = rgx.Match(indata);  // indata是需要识别的字符串
+string result_id = match.Groups[1].Value;
+</code></pre>
+<p>但是预想他只拿出括号里的数字，结果得到的是一个带括号的（5），但是没有时间纠结这个，至少有关键信息可以进行下一步了。这里可能是正则的括号问题，是不是应该转义一下？</p>
+<p>在使用这个命令号进行判断的时候，使用了会被人嘲笑的最简陋的if列表：</p>
+<pre><code class="language-c">if (result_id == &quot;(0)&quot;) {
+    // 0号命令需要执行的代码
+}
+if (result_id == &quot;(1)&quot;) {
+    // 1号命令需要执行的代码
+}
+if (result_id == &quot;(2)&quot;) {
+    // 2号命令需要执行的代码
+}
+</code></pre>
+<p>在if列表里面填具体的U3D动画时，运行报错<strong>动画必须放在主线程</strong>，就是Update()中。不能放在这个另扯出来的自定义线程里。经过尝试动画需要<strong>放在Update()里面</strong>。</p>
+<p>（以下是猜测，如果错误请指出）这时候潘老师突然想到，U3D的机制可能是，在Update()里面进行工程运行的大循环，这个大循环的大概作用机制是不断刷新屏幕来更新屏幕上的像素信息。但凡编写程序涉及到动画，目前见到的解决方法基本都是通过循环刷新来做的。刷新的速度单位是帧，或者fps。刷新不仅可以对屏幕刷新，还可以对键盘鼠标等设备刷新，提高接受信号的灵敏度**（所以玩游戏的还是fps越高越好）**。</p>
+<p>这时候就陷入了一个问题，接收串口信息的这个线程本身其实就是一个死循环，如果进入到这个线程就势必没法往下进行，不能往下进行就没办法循环起来刷新动画的这个事情了。</p>
+<figure data-type="image" tabindex="4"><img src="https://divertingPan.github.io/post-images/1597761281223.png" alt="" loading="lazy"></figure>
+<p>那看来需要改一下，不在Start()里运行读串口的死循环线程，而改为在Update()里，随着整体的刷新来不停执行这个线程，而线程自己不循环，只执行一次。整体上看，还是相当于一直在循环这个线程的功能。而且还可以直接把判断写在Update()里面，当识别到不同的数字，执行不同的动作。再者，线程返回值好像做起来挺麻烦，那干脆就把存数字的字符串弄成public变量，每次循环，这个变量就更新，if列表也接受这个值进行判断。潘老师的智慧闪闪发光。</p>
+<figure data-type="image" tabindex="5"><img src="https://divertingPan.github.io/post-images/1597761287879.png" alt="" loading="lazy"></figure>
+<p>这么做当然是不可以的了。虽然想法没什么问题，但是U3D在某种玄学力量的作用下，导致这个<strong>Update()的循环速度</strong>根本不够。串口偶尔会一下子给很多条数据，但Update()循环一次只能读一条数据，就会导致堵车。结果就是，一条命令已经发出了很久，屏幕上的动画才开始播放。</p>
+<figure data-type="image" tabindex="6"><img src="https://divertingPan.github.io/post-images/1597761295259.png" alt="" loading="lazy"></figure>
+<p>while循环读取串口数据的速度倒是很快，基本和串口发送数据的速度一致，但是因为跳不出来循环导致没法往下进行，也是没办法用的。</p>
+<figure data-type="image" tabindex="7"><img src="https://divertingPan.github.io/post-images/1597761302136.png" alt="" loading="lazy"></figure>
+<p>一筹莫展，潘老师掉了半斤头发，这时候甲方有人提醒我，给while加一个判断条件，判断到那个括号里的命令号被识别出来之后，<strong>跳出快的while循环</strong>，进入慢循环播动画，不就搞定了吗。是的，潘老师果然还是头发多太年轻。</p>
+<figure data-type="image" tabindex="8"><img src="https://divertingPan.github.io/post-images/1597761311695.png" alt="" loading="lazy"></figure>
+<p>最后一步还是没能平稳的走完。虽然进入大循环里的小循环里成功的判断出了命令号到来，也跳出了小循环进行下一轮的大循环，但是动画突然开始鬼畜，不停地很快地播放动画的前一秒的瞬间。</p>
+<figure data-type="image" tabindex="9"><img src="https://divertingPan.github.io/post-images/1597761318152.png" alt="" loading="lazy"></figure>
+<p>因为用的List存储了串口来的原生数据，小循环识别命令号成功并且结束循环的时候没有把List里的这条数据清空，结果导致下一轮大循环来到，进入小循环后直接这条信息就又被识别出命令号并且结束了小循环，触发了动画。懂了吗？</p>
+<figure data-type="image" tabindex="10"><img src="https://divertingPan.github.io/post-images/1597761327026.webp" alt="" loading="lazy"></figure>
+<p>反正最终，潘老师<strong>用了一天，为甲方解决了一个小问题</strong>。坐在飞翔的公交车上，潘老师给甲方发了一条消息：</p>
+<blockquote>
+<p>“今天那程序，即使你觉得哪里写的不好，也不要轻易改。不然”</p>
+</blockquote>
+<figure data-type="image" tabindex="11"><img src="https://divertingPan.github.io/post-images/1597761332917.gif" alt="" loading="lazy"></figure>
+<hr>
+<p>附：一个非常简易的不用goto的跳出双层循环的python示例。如果不加最后三行else，continue，break每次就只能跳出里面那层while。while和for都可以这样用甚至两个循环混着也能用。</p>
+<pre><code class="language-python">i = 0
+while True:
+    while True:
+        i += 1
+        print(i)
+        if i == 4:
+            break
+    else:
+        continue
+    break
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://divertingPan.github.io/post/raw_photography/">
+              <h3 class="post-title">
+                科普 | 老潘解说手机RAW拍照新姿势
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '5f30aaf5a5c8ae7c22e2',
+    clientSecret: 'b24d5537cf399910de41cd08f5807ca6e5c53d9c',
+    repo: 'divertingPan.github.io',
+    owner: 'divertingPan',
+    admin: ['divertingPan'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Email: panpyc@foxmail.com<br>© 2018 divertingpan.github.io All Rights Reserved
+  <a class="rss" href="https://divertingPan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
