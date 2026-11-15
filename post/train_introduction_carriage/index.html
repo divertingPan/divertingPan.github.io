@@ -159,21 +159,21 @@
         
         <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
-        
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
-        
-        <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
         
         <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
         
         <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
-        
         <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        
+        <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
         
       </ul>
     </div>
@@ -298,6 +298,65 @@
 
 
   
+
+<section class="comments" id="comments" aria-labelledby="comments-title" data-platform="gitalk">
+  <h2 class="comments__title" id="comments-title"><i data-xxd-icon="MessagesSquare" data-size="18"></i>评论</h2>
+  <script>
+    window.SiteComments = window.SiteComments || {
+      isDark: function () { return document.documentElement.getAttribute('data-theme') === 'dark'; },
+      onTheme: function (cb) {
+        new MutationObserver(function () { cb(window.SiteComments.isDark()); })
+          .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      },
+      css: function (href) {
+        var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l);
+      },
+      js: function (src, cb, attrs) {
+        var s = document.createElement('script'); s.src = src; s.async = true;
+        if (attrs) { for (var k in attrs) { if (k.indexOf('__') !== 0) s.setAttribute(k, attrs[k]); } }
+        if (cb) s.onload = cb;
+        s.onerror = function () { window.SiteComments.fail(); };
+        (attrs && attrs.__mount ? attrs.__mount : document.body).appendChild(s);
+      },
+      whenVisible: function (fn) {
+        var el = document.getElementById('comments');
+        if (!el || !('IntersectionObserver' in window)) return fn();
+        var io = new IntersectionObserver(function (es) {
+          if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); fn(); }
+        }, { rootMargin: '600px 0px' });
+        io.observe(el);
+      },
+      fail: function () {
+        var box = document.querySelector('.comments__state');
+        if (box) { box.hidden = false; box.textContent = '评论加载失败，可能是网络问题或评论服务暂时不可用。刷新页面再试一次。'; }
+      },
+      path: function () { return decodeURI(location.pathname); }
+    };
+  </script>
+  <div class="comments__body">
+    
+      <div id="gitalk-container"></div>
+<script>
+  SiteComments.whenVisible(function () {
+    SiteComments.css('https://unpkg.com/gitalk/dist/gitalk.css');
+    SiteComments.js('https://unpkg.com/gitalk/dist/gitalk.min.js', function () {
+      new Gitalk({
+        clientID: '\u0035f\u0033\u0030aaf\u0035a\u0035c\u0038ae\u0037c\u0032\u0032e\u0032',
+        clientSecret: 'b\u0032\u0034d\u0035\u0035\u0033\u0037cf\u0033\u0039\u0039\u0039\u0031\u0030de\u0034\u0031cd\u0030\u0038f\u0035\u0038\u0030\u0037ca\u0036e\u0035c\u0035\u0033d\u0039c',
+        repo: 'divertingPan\u002Egithub\u002Eio',
+        owner: 'divertingPan',
+        admin: 'divertingPan'.split(',').map(function (s) { return s.trim(); }).filter(Boolean),
+        id: SiteComments.path().slice(0, 50), // GitHub label 最长 50 字符
+        distractionFreeMode: false
+      }).render('gitalk-container');
+    });
+  });
+</script>
+
+    
+  </div>
+  <p class="comments__state" hidden></p>
+</section>
 
 
   <div class="site-foot-wrap">
