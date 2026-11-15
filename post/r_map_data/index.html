@@ -11,7 +11,7 @@
 首先说一说R里面最基本的知识。首先在电脑上要安装R语言的环境。
 
 安装好...">
-  <meta name="keywords" content="杂谈">
+  <meta name="keywords" content="R语言">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="猎奇 | 记录如何用R绘制数据地图">
@@ -43,7 +43,7 @@
 <meta name="description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说&amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/r_map_data/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"猎奇 | 记录如何用R绘制数据地图","url":"https://divertingpan.github.io/post/r_map_data/","description":"前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说\u0026hellip;","image":"/post-images/r_map_data.png","datePublished":"2018-02-13T17:01:09+08:00","dateModified":"2026-11-15T21:11:18+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"猎奇 | 记录如何用R绘制数据地图","url":"https://divertingpan.github.io/post/r_map_data/","description":"前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说\u0026hellip;","image":"/post-images/r_map_data.png","datePublished":"2018-02-13T17:01:09+08:00","dateModified":"2026-11-15T23:06:13+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/r_map_data/","name":"猎奇 | 记录如何用R绘制数据地图","position":2}]}</script>
 <meta property="og:title" content="猎奇 | 记录如何用R绘制数据地图">
 <meta property="og:description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说&amp;hellip;">
@@ -158,9 +158,11 @@
     <h2 class="site-nav__title">分类</h2>
     <ul class="site-nav__cats">
       
-      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">37</span></a></li>
       
-      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      <li><a href="/category/zuo-tu-yu-yi-shu/"><span class="site-nav__num">2</span><span class="site-nav__label">做图与艺术</span><span class="site-nav__tag">21</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">3</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">12</span></a></li>
       
     </ul>
   </section>
@@ -168,37 +170,39 @@
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">15</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">15</span></a></li>
         
         <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
         <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">14</span></a></li>
         
         <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">15</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">26</span></a></li>
         
         <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
         
         <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
         
-        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">4</span></a></li>
         
         <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/dian-zi-ying-jian/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">电子硬件</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/r-yu-yan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">R语言</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -210,7 +214,7 @@
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2018-02-13T17:01:09+08:00">2018-02-13</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2018-02-13T17:01:09+08:00">2018-02-13</time></span>
       <span>约 5 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -219,7 +223,7 @@
       
       <span class="xxd-badge">3506 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      <a class="xxd-badge" href="/tag/za-tan/">#杂谈</a>
+      <a class="xxd-badge" href="/tag/r-yu-yan/">#R语言</a>
     </div>
   </header>
 

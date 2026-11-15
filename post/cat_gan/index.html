@@ -8,14 +8,14 @@
   <meta name="description" content="文中所有用到的代码在github中
 本次项目运行环境为Python3.6.8 + PyTorch1.1.0
 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以通过神经网络对图片筛选分类了。拿到这么多图片之后，还有没有进一步发挥的空间？要是没有我就删掉了这么多校花图片说删就删？我们为何不用...">
-  <meta name="keywords" content="pytorch,python,计算机视觉">
+  <meta name="keywords" content="pytorch,计算机视觉">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="再进阶 | 利用生成式对抗网络自动生成猫咪图片">
   <meta property="og:description" content="文中所有用到的代码在github中
 本次项目运行环境为Python3.6.8 + PyTorch1.1.0
 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以通过神经网络对图片筛选分类了。拿到这么多图片之后，还有没有进一步发挥的空间？要是没有我就删掉了这么多校花图片说删就删？我们为何不用...">
-  <meta property="og:image" content="https://divertingpan.github.io/post-images/cat_gan.jfif">
+  <meta property="og:image" content="https://divertingpan.github.io/post-images/cat_gan.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/images/theme/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="老潘家的潘老师" href="/feed.xml">
@@ -37,19 +37,19 @@
 <meta name="description" content="文中所有用到的代码在github中 本次项目运行环境为Python3.6.8 + PyTorch1.1.0 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以[通过神经网络对图片筛选分类](htt&amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/cat_gan/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"再进阶 | 利用生成式对抗网络自动生成猫咪图片","url":"https://divertingpan.github.io/post/cat_gan/","description":"文中所有用到的代码在github中 本次项目运行环境为Python3.6.8 + PyTorch1.1.0 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以[通过神经网络对图片筛选分类](htt\u0026hellip;","image":"/post-images/cat_gan.jfif","datePublished":"2020-02-18T16:21:30+08:00","dateModified":"2026-11-15T22:40:14+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"再进阶 | 利用生成式对抗网络自动生成猫咪图片","url":"https://divertingpan.github.io/post/cat_gan/","description":"文中所有用到的代码在github中 本次项目运行环境为Python3.6.8 + PyTorch1.1.0 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以[通过神经网络对图片筛选分类](htt\u0026hellip;","image":"/post-images/cat_gan.jpg","datePublished":"2020-02-18T16:21:30+08:00","dateModified":"2026-11-15T23:01:14+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/cat_gan/","name":"再进阶 | 利用生成式对抗网络自动生成猫咪图片","position":2}]}</script>
 <meta property="og:title" content="再进阶 | 利用生成式对抗网络自动生成猫咪图片">
 <meta property="og:description" content="文中所有用到的代码在github中 本次项目运行环境为Python3.6.8 + PyTorch1.1.0 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以[通过神经网络对图片筛选分类](htt&amp;hellip;">
 <meta property="og:url" content="https://divertingpan.github.io/post/cat_gan/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="老潘家的潘老师">
-<meta property="og:image" content="/post-images/cat_gan.jfif">
+<meta property="og:image" content="/post-images/cat_gan.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://divertingpan.github.io/post/cat_gan/">
 <meta name="twitter:title" content="再进阶 | 利用生成式对抗网络自动生成猫咪图片">
 <meta name="twitter:description" content="文中所有用到的代码在github中 本次项目运行环境为Python3.6.8 + PyTorch1.1.0 书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以[通过神经网络对图片筛选分类](htt&amp;hellip;">
-<meta name="twitter:image" content="/post-images/cat_gan.jfif">
+<meta name="twitter:image" content="/post-images/cat_gan.jpg">
 </head>
 <body class="xxd-page page-post">
   <a class="xxd-sr-only-focusable" href="#main">跳到正文</a>
@@ -152,9 +152,11 @@
     <h2 class="site-nav__title">分类</h2>
     <ul class="site-nav__cats">
       
-      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">37</span></a></li>
       
-      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      <li><a href="/category/zuo-tu-yu-yi-shu/"><span class="site-nav__num">2</span><span class="site-nav__label">做图与艺术</span><span class="site-nav__tag">21</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">3</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">12</span></a></li>
       
     </ul>
   </section>
@@ -162,37 +164,39 @@
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">15</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">15</span></a></li>
         
         <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
         <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">14</span></a></li>
         
         <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">15</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">26</span></a></li>
         
         <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
         
         <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
         
-        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">4</span></a></li>
         
         <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/dian-zi-ying-jian/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">电子硬件</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/r-yu-yan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">R语言</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -204,7 +208,7 @@
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2020-02-18T16:21:30+08:00">2020-02-18</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2020-02-18T16:21:30+08:00">2020-02-18</time></span>
       <span>约 25 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -213,11 +217,11 @@
       
       <span class="xxd-badge">15043 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      <a class="xxd-badge" href="/tag/pytorch/">#pytorch</a><a class="xxd-badge" href="/tag/python/">#python</a><a class="xxd-badge" href="/tag/ji-suan-ji-shi-jue/">#计算机视觉</a>
+      <a class="xxd-badge" href="/tag/pytorch/">#pytorch</a><a class="xxd-badge" href="/tag/ji-suan-ji-shi-jue/">#计算机视觉</a>
     </div>
   </header>
 
-  <figure class="shot shot--cover"><img src="/post-images/cat_gan.jfif" alt="再进阶 | 利用生成式对抗网络自动生成猫咪图片" onerror="this.parentNode.remove()"></figure>
+  <figure class="shot shot--cover"><img src="/post-images/cat_gan.jpg" alt="再进阶 | 利用生成式对抗网络自动生成猫咪图片" onerror="this.parentNode.remove()"></figure>
 
   
   
