@@ -6,22 +6,8 @@
     <description>CV方向小学二年级在读</description>
     <language>zh-cn</language>
     <generator>Gridea Pro</generator>
-    <lastBuildDate>Sun, 15 Nov 2026 23:13:49 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2026 00:41:02 +0800</lastBuildDate>
     <atom:link href="https://divertingpan.github.io/feed.xml" rel="self" type="application/rss+xml"></atom:link>
-    <item>
-      <title>【硬核摄影2.0】用线性CCD器件制作扫描相机</title>
-      <link>https://divertingpan.github.io/post/line_scan_camera/</link>
-      <guid isPermaLink="true">https://divertingpan.github.io/post/line_scan_camera/</guid>
-      <pubDate>Fri, 06 Aug 2021 14:06:42 +0800</pubDate>
-      <description><![CDATA[<p>本文参考资料：<br />
-[1] (Strongly Recommend!) Fundamentals and Experiments of Line Scan Camera: <a href="http://www.elm-chan.org/works/lcam/report.html">http://www.elm-chan.org/works/lcam/report.html</a><br />
-[2] 线阵 CCD 的使用方法(&hellip;</p>
-]]></description>
-      <category>火车</category>
-      <category>电子硬件</category>
-      <category>艺术设计</category>
-      <enclosure url="https://divertingpan.github.io/post-images/line_scan_camera.jpg" length="0" type="image/jpeg"></enclosure>
-    </item>
     <item>
       <title>关于考研调剂/复试/面试的个人杂谈</title>
       <link>https://divertingpan.github.io/post/master-phd-appli/</link>
@@ -145,6 +131,24 @@
       <category>python</category>
       <category>Linux</category>
       <enclosure url="https://divertingpan.github.io/post-images/setup_vps_proxy.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>使用Ubuntu+apache设置带验证的http服务器</title>
+      <link>https://divertingpan.github.io/post/setup_webpage_server/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/setup_webpage_server/</guid>
+      <pubDate>Mon, 01 Nov 2021 16:02:52 +0800</pubDate>
+      <description><![CDATA[<h2 id="apache2">安装apache2</h2>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install apache2
+</code></pre>
+<p>apache2安装成功后，我们可以在/var/www/目录下看到一个html文件夹</p>
+<p>重启apache2</p>
+<pre><code class="language-bash">sudo /etc/init.d/apache2 restart
+</code></pre>
+<p>使用同一局域网的设备登录ubuntu的ip地址就&hellip;</p>
+]]></description>
+      <category>Linux</category>
+      <enclosure url="https://divertingpan.github.io/post-images/setup_webpage_server.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
   </channel>
 </rss>
