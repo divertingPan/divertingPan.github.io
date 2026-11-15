@@ -1,0 +1,299 @@
+<html>
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Gridea Pro 1.3.0-beta.2">
+<title>pytorch的奇怪报错 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1794748641">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="pytorch的奇怪报错 | 老潘家的潘老师 - Atom Feed" href="/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+<meta name="description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
+<meta name="keywords" content="老潘家的潘老师, 博客">
+<link rel="canonical" href="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"pytorch的奇怪报错","url":"https://divertingpan.github.io/post/pytorch_bizarre_error_debug/","description":"pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(\u0026lsquo;cuda\u0026rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应\u0026hellip;","image":"/post-images/pytorch_bizarre_error_debug.jfif","datePublished":"2020-12-09T15:59:07+08:00","dateModified":"2026-11-15T21:11:18+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/pytorch_bizarre_error_debug/","name":"pytorch的奇怪报错","position":2}]}</script>
+<meta property="og:title" content="pytorch的奇怪报错">
+<meta property="og:description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
+<meta property="og:url" content="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="老潘家的潘老师">
+<meta property="og:image" content="/post-images/pytorch_bizarre_error_debug.jfif">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
+<meta name="twitter:title" content="pytorch的奇怪报错">
+<meta name="twitter:description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
+<meta name="twitter:image" content="/post-images/pytorch_bizarre_error_debug.jfif">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-content">
+            
+<div class="site-header">
+    <a href="/">
+        <img class="avatar" src="/images/avatar.png?v=1794748641" alt="">
+    </a>
+    <h1 class="site-title">
+        老潘家的潘老师
+    </h1>
+    <p class="site-description">
+        CV方向小学二年级在读
+    </p>
+    <div class="menu-container">
+        
+        
+        <a href="/" class="menu">
+            首页
+        </a>
+        
+        
+        
+        <a href="/memos" class="menu">
+            闪念
+        </a>
+        
+        
+        
+        <a href="/archives" class="menu">
+            文章
+        </a>
+        
+        
+        
+        <a href="/tags" class="menu">
+            标签
+        </a>
+        
+        
+        
+        <a href="/links" class="menu">
+            友链
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/about" class="menu">
+            关于
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/billboard" class="menu">
+            留言板
+        </a>
+        
+        
+    </div>
+    <div class="social-container">
+        
+        <a href="https://github.com/divertingPan" target="_blank">
+            <i class="ri-github-line"></i>
+        </a>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+            <div class="post-detail">
+                <article class="post">
+                    <h2 class="post-title">
+                        pytorch的奇怪报错
+                    </h2>
+                    <div class="post-info">
+                        <span>
+                            2020-12-09
+                        </span>
+                        <span>
+                            5 分钟阅读
+                        </span>
+                        
+                        
+                        <a href="/tag/za-tan/" class="post-tag">
+                            # 杂谈
+                        </a>
+                        
+                    </div>
+                    
+                    <img class="post-feature-image" src="/post-images/pytorch_bizarre_error_debug.jfif" alt="">
+                    
+                    <div class="post-content-wrapper">
+                        <div class="post-content" v-pre>
+                            <h1 id="pytorchcuda">pytorch也有CUDA版本对应的问题</h1>
+<p>搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&lsquo;cuda&rsquo;)报错。<br />
+较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA<br />
+尽管只需要torch和torchvision版本对应上即可，但是使用1.6和1.5的torch，无法在CUDA10.1的服务器上运行，很奇怪。<br />
+这里是官网的参考版本搭配：https://pytorch.org/get-started/previous-versions/</p>
+<p>运行crnn的时候，1.3的版本会导致loss变nan，1.4往后的版本是正常的，不知是哪里有问题。</p>
+<h1 id="batch-size">多卡并行下要注意batch size</h1>
+<p>在使用DataParallel时，可能会出现这样的报错</p>
+<pre><code>IndexError: dimension specified as 0 but tensor has no dimensions
+</code></pre>
+<p>训练时读取dataset时使用drop_last，或者使每次batch的数量一样，总之要控制每次batch的大小是一致的。</p>
+<p>参考：https://blog.csdn.net/weixin_44012382/article/details/108190006</p>
+<h1 id="heading">代码卡死问题</h1>
+<p>有时候会遇到代码卡住，检查cpu，gpu，硬盘都没有占用，强退之后会看到有一条信息</p>
+<pre><code>gotit = waiter.acquire(True, timeout)
+</code></pre>
+<p>原因是在dataloader里面使用了cv2，需要设置</p>
+<pre><code class="language-python">cv2.setNumThreads(0)
+cv2.ocl.setUseOpenCL(False)
+</code></pre>
+<p>同时，在开头段加入</p>
+<pre><code class="language-python">import os
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1&quot; 
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot; 
+</code></pre>
+<p>ref: <a href="https://nekokiku.cn/2021/07/05/dataloader%E7%9A%84%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/">https://nekokiku.cn/2021/07/05/dataloader%E7%9A%84%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98/</a></p>
+<h1 id="heading-1">报错超出显存但是实际并没有</h1>
+<p>场景：在多gpu服务器上，由于0号gpu被占用于是只能使用后面的gpu，但是突然有一天再运行代码时不论如何设置batchsize和数据大小都会报</p>
+<pre><code>RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED
+</code></pre>
+<p>并且前面某处还会有out of memory类似的字眼</p>
+<p>经过尝试排查，在指定设备时不使用</p>
+<pre><code class="language-python">device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu' )
+</code></pre>
+<p>而使用以下方法代替即可解决</p>
+<pre><code class="language-python">import os 
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu' )
+</code></pre>
+<p>具体机制不明</p>
+<h1 id="runtimeerror-received-0-items-of-ancdata">RuntimeError: received 0 items of ancdata</h1>
+<p><a href="https://github.com/pytorch/pytorch/issues/973">https://github.com/pytorch/pytorch/issues/973</a><br />
+If you are having this problem, try running <code>torch.multiprocessing.set_sharing_strategy('file_system')</code> right after your import of torch<br />
+自己试的时候发现只要放在代码的开头部分就行</p>
+<h1 id="gpumissing-keys-in-state-dict-conv-1weight-bn1weight-bn1bias">多GPU并行情况下：Missing key(s) in state_dict: “conv_1.weight”, “bn1.weight”, “bn1.bias”,</h1>
+<p>首先使用<code>os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &quot;0, 1, 2, 3&quot;</code>指定准备使用的GPU</p>
+<p>之后使用</p>
+<pre><code class="language-python">Net = net(args)
+Net = torch.nn.DataParallel(Net)
+Net = Net.to(device)
+</code></pre>
+<p>之后按照正常方法使用即可，需要存权重的话，要用下面这个方法保存</p>
+<pre><code class="language-python">torch.save(model.module.state_dict(), model_out_path)
+</code></pre>
+<hr />
+<p>之前如果存权重的时候没在意这一点，就会报错：</p>
+<pre><code>RuntimeError: Error(s) in loading state_dict for ResNet:
+Missing key(s) in state_dict: &quot;conv_1.weight&quot;, &quot;bn1.weight&quot;, &quot;bn1.bias&quot;, ......
+Unexpected key(s) in state_dict: &quot;module.conv_1.weight&quot;, &quot;module.bn1.weight&quot;, &quot;module.bn1.bias&quot;, ......
+</code></pre>
+<p>解决方法是</p>
+<pre><code class="language-python"># original saved file with DataParallel
+state_dict = torch.load(model_path)
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k.replace('.module.','.') # remove `module.`
+    new_state_dict[name] = v
+# load params
+net.load_state_dict(new_state_dict)
+</code></pre>
+<blockquote>
+<p>ref: <a href="https://blog.csdn.net/weixin_41735859/article/details/108610687">https://blog.csdn.net/weixin_41735859/article/details/108610687</a></p>
+</blockquote>
+<h1 id="heading-2">进程退出了但是显存没释放</h1>
+<p>ref: <a href="https://blog.csdn.net/heiheiya/article/details/81454212">https://blog.csdn.net/heiheiya/article/details/81454212</a><br />
+显存被占满了，但是并没有进程显示占用。</p>
+<p>使用命令</p>
+<pre><code>fuser -v /dev/nvidia*
+</code></pre>
+<p>之后<code>kill -9 xxxxx</code>把/dev/nvidia0等几个进程kill掉就可以了</p>
+<h1 id="backwardruntimeerror-trying-to-backward-through-the-graph-a-second-time-but-the-buffers-have-already-been-freed">backward()报错RuntimeError: Trying to backward through the graph a second time, but the buffers have already been freed</h1>
+<blockquote>
+<p>ref: <a href="https://blog.csdn.net/SY_qqq/article/details/107384161">https://blog.csdn.net/SY_qqq/article/details/107384161</a></p>
+</blockquote>
+<p>保持住梯度信息：m.backward(retain_graph=True)</p>
+
+                        </div>
+                        <div class="toc-container">
+                            
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            
+            <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/pytorch_speedup/">
+                    <h3 class="post-title">
+                        pytorch训练加速方案整理
+                    </h3>
+                </a>
+            </div>
+            
+
+            
+
+            
+<div class="site-footer">
+    Powered by Gridea Pro
+© 2018 divertingpan.github.io All Rights Reserved
+    <a class="rss" href="/atom.xml" target="_blank">
+        <i class="ri-rss-line"></i> RSS
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        hljs.initHighlightingOnLoad()
+
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+
+    </script>
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: inotes v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+
+</html>

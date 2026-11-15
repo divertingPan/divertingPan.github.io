@@ -1,0 +1,285 @@
+<html>
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Gridea Pro 1.3.0-beta.2">
+<title>猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1794748641">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="猎奇 | 记录如何用R绘制数据地图 | 老潘家的潘老师 - Atom Feed" href="/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+<meta name="description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说&amp;hellip;">
+<meta name="keywords" content="老潘家的潘老师, 博客">
+<link rel="canonical" href="https://divertingpan.github.io/post/r_map_data/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"猎奇 | 记录如何用R绘制数据地图","url":"https://divertingpan.github.io/post/r_map_data/","description":"前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说\u0026hellip;","image":"/post-images/r_map_data.png","datePublished":"2018-02-13T17:01:09+08:00","dateModified":"2026-11-15T21:11:18+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/r_map_data/","name":"猎奇 | 记录如何用R绘制数据地图","position":2}]}</script>
+<meta property="og:title" content="猎奇 | 记录如何用R绘制数据地图">
+<meta property="og:description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说&amp;hellip;">
+<meta property="og:url" content="https://divertingpan.github.io/post/r_map_data/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="老潘家的潘老师">
+<meta property="og:image" content="/post-images/r_map_data.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://divertingpan.github.io/post/r_map_data/">
+<meta name="twitter:title" content="猎奇 | 记录如何用R绘制数据地图">
+<meta name="twitter:description" content="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。 前期准备 首先说一说&amp;hellip;">
+<meta name="twitter:image" content="/post-images/r_map_data.png">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-content">
+            
+<div class="site-header">
+    <a href="/">
+        <img class="avatar" src="/images/avatar.png?v=1794748641" alt="">
+    </a>
+    <h1 class="site-title">
+        老潘家的潘老师
+    </h1>
+    <p class="site-description">
+        CV方向小学二年级在读
+    </p>
+    <div class="menu-container">
+        
+        
+        <a href="/" class="menu">
+            首页
+        </a>
+        
+        
+        
+        <a href="/memos" class="menu">
+            闪念
+        </a>
+        
+        
+        
+        <a href="/archives" class="menu">
+            文章
+        </a>
+        
+        
+        
+        <a href="/tags" class="menu">
+            标签
+        </a>
+        
+        
+        
+        <a href="/links" class="menu">
+            友链
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/about" class="menu">
+            关于
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/billboard" class="menu">
+            留言板
+        </a>
+        
+        
+    </div>
+    <div class="social-container">
+        
+        <a href="https://github.com/divertingPan" target="_blank">
+            <i class="ri-github-line"></i>
+        </a>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+            <div class="post-detail">
+                <article class="post">
+                    <h2 class="post-title">
+                        猎奇 | 记录如何用R绘制数据地图
+                    </h2>
+                    <div class="post-info">
+                        <span>
+                            2018-02-13
+                        </span>
+                        <span>
+                            5 分钟阅读
+                        </span>
+                        
+                        
+                        <a href="/tag/za-tan/" class="post-tag">
+                            # 杂谈
+                        </a>
+                        
+                    </div>
+                    
+                    <img class="post-feature-image" src="/post-images/r_map_data.png" alt="">
+                    
+                    <div class="post-content-wrapper">
+                        <div class="post-content" v-pre>
+                            <p>前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们<del>程序猿</del>想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。<br />
+<img src="https://divertingPan.github.io/post-images/1597655999416.webp" alt="" /></p>
+<h1 id="heading">前期准备</h1>
+<p>首先说一说R里面最基本的知识。首先在电脑上要安装R语言的环境。<br />
+<img src="https://divertingPan.github.io/post-images/1597656037584.PNG" alt="" /></p>
+<p>安装好环境之后，为了提高工作效率，我们一般选用RStudio进行创作。R环境和RStudio都是免费的工具，直接下载无需破解无需注册即可用。（土豪非要买专业版的RStudio请随意）<br />
+<img src="https://divertingPan.github.io/post-images/1597656109234.PNG" alt="" /></p>
+<p>在R中，赋值运算符不是“=”，而是“&lt;-”，倒也很好理解，把右边的值给左边的变量。<br />
+<img src="https://divertingPan.github.io/post-images/1597656118261.PNG" alt="" /></p>
+<p>在RStudio的脚本编辑窗口中，点击右上角的run，执行的是光标所在的这一行，如果想执行多行请用光标选中多行后再“run”。新建一个脚本，在窗口栏中“File”-“New File”-“R Script”即可。<br />
+<img src="https://divertingPan.github.io/post-images/1597656122811.PNG" alt="" /></p>
+<h1 id="heading-1">绘制地图</h1>
+<p>基本知识就这些，下面潘老师要开始绘制数据地图了。因为在地图上画点画柱状图什么的太低级了（用Excel自带的就能做），所以这次用R画一个分区按值填色的地图。</p>
+<h2 id="1">1</h2>
+<p>首先到网上找一个世界地图的shapefile文件，这个文件包含了所有国家的边界信息，在染色时可以根据国家数值来给不同国家的形状染色。下载之后把里面的文件全部解压出来，找一个文件夹放在里面。<br />
+<img src="https://divertingPan.github.io/post-images/1597656131355.png" alt="" /></p>
+<h2 id="2">2</h2>
+<p>需要使用ArcGIS系列软件中的ArcCatalog打开后缀名为.shp的文件，进行一些准备工作。首先点击Connect To Folder的图标（图中位置），选择存放.shp文件的文件夹。<br />
+<img src="https://divertingPan.github.io/post-images/1597656135669.PNG" alt="" /></p>
+<h2 id="3">3</h2>
+<p>在左边选中shp文件，在右边选项卡选择“Preview”，在下面的选项栏中选择“Table”，在表格信息中，找到国家名字和他的列名，在这个文件里面国家名称存储在NAME_LONG列中。<br />
+<img src="https://divertingPan.github.io/post-images/1597656143762.PNG" alt="" /></p>
+<h2 id="4">4</h2>
+<p>将我们手里的数据表修改修改。国家名和NAME_LONG中的国家名保持一致，列名也改成NAME_LONG。<br />
+<img src="https://divertingPan.github.io/post-images/1597656148941.PNG" alt="" /></p>
+<h2 id="5">5</h2>
+<p>把数据存储成.csv文件。<br />
+<img src="https://divertingPan.github.io/post-images/1597656153275.PNG" alt="" /></p>
+<h2 id="6">6</h2>
+<p>运行R代码，在右边可以预览结果，可以点击国家查看数值，可以选择导出为HTML文件或者是图片，完成。（代码附在后面）<br />
+<img src="https://divertingPan.github.io/post-images/1597656157491.PNG" alt="" /></p>
+<h2 id="7">7</h2>
+<p>如果报错“pandoc.exe: Out of memory”，手动进入缓存文件夹去拿HTML文件即可。<br />
+<img src="https://divertingPan.github.io/post-images/1597656161358.PNG" alt="" /></p>
+<h2 id="8">8</h2>
+<p>HTML文件保留有不失真缩放和交互功能。<br />
+<img src="https://divertingPan.github.io/post-images/1597656166375.PNG" alt="" /></p>
+<h1 id="heading-2">相关链接</h1>
+<p>世界地图shapefile下载：http://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/</p>
+<p>arcgis10.2如何导出属性表：https://jingyan.baidu.com/article/14bd256e6e3a4cbb6d261205.html</p>
+<p>R语言在线地图神器：Leafletfor R包（二）基础底图：http://blog.csdn.net/allenlu2008/article/details/52823492</p>
+<h1 id="heading-3">源代码</h1>
+<pre><code class="language-python">#安装所需的包，安装执行过一次之后就可以把这两行注释掉了
+#号为单行注释符
+install.packages(&quot;leaflet&quot;)
+install.packages(&quot;rgdal&quot;)
+#加载包
+library(leaflet) 
+library(rgdal) 
+#在指定路径里读取shp文件，path里输入存放路径
+path &lt;- &quot;C:/Users/ASUSFX50J/Desktop/RWorldMap&quot; 
+fn &lt;- list.files(path, pattern=&quot;.shp&quot;, full.names=FALSE) 
+fn &lt;- gsub(&quot;.shp&quot;, &quot;&quot;, fn) 
+maps &lt;- readOGR(path, fn) 
+#读取csv数据表
+value &lt;- read.csv(&quot;C:/Users/ASUSFX50J/Desktop/RWorldMap/OriginalData.csv&quot;, header = TRUE) 
+#以NAME_LONG为基准将两个表的数据进行连接，csv里没有的国家在对应项置为空
+shape &lt;- merge(maps, value, by = &quot;NAME_LONG&quot;) 
+#交互式地图点击弹出信息
+i_popup &lt;- paste0(&quot;&lt;strong&gt;Country: &lt;/strong&gt;&quot;, shape$NAME_LONG, &quot;&lt;br&gt;&quot;, &quot;&lt;strong&gt;Value: &lt;/strong&gt;&quot;, shape$VALUE) 
+#三种上色模式，任选一种即可
+pal &lt;- colorBin(c(&quot;darkred&quot;, &quot;orangered&quot; ,&quot;yellow&quot;, &quot;darkgreen&quot;, &quot;blue&quot;), shape$VALUE, 11)
+#pal &lt;- colorQuantile(&quot;YlOrRd&quot;, NULL, n = 5) 
+#pal &lt;- colorNumeric(c(&quot;darkred&quot;, &quot;orangered&quot; ,&quot;yellow&quot;, &quot;darkgreen&quot;, &quot;darkblue&quot;), shape$VALUE)
+#绘制图像
+leaflet(shape) %&gt;% addTiles() %&gt;% 
+  #下面这一行，通过修改引号内可以获得炫酷的地图背景
+  addProviderTiles(&quot;Esri.WorldStreetMap&quot;) %&gt;%
+  setView(0.000000, 0.000000, zoom = 2) %&gt;% 
+  addPolygons(color = ~pal(shape$VALUE), fillOpacity = 0.8, weight = 1, popup = i_popup) %&gt;% 
+#显示图例
+  addLegend(pal = pal, values = shape$VALUE, position = &quot;bottomright&quot;, title = &quot;Data Map&quot;)
+</code></pre>
+
+                        </div>
+                        <div class="toc-container">
+                            
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            
+            <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/broken_fridges/">
+                    <h3 class="post-title">
+                        猎奇 | 教你怎样修复坏冰箱
+                    </h3>
+                </a>
+            </div>
+            
+
+            
+
+            
+<div class="site-footer">
+    Powered by Gridea Pro
+© 2018 divertingpan.github.io All Rights Reserved
+    <a class="rss" href="/atom.xml" target="_blank">
+        <i class="ri-rss-line"></i> RSS
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        hljs.initHighlightingOnLoad()
+
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+
+    </script>
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: inotes v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+
+</html>

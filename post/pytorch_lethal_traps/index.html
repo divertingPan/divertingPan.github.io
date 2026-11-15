@@ -1,0 +1,368 @@
+<html>
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Gridea Pro 1.3.0-beta.2">
+<title>【转载】pytorch里面的天坑 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1794748641">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="【转载】pytorch里面的天坑 | 老潘家的潘老师 - Atom Feed" href="/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="杂谈" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+<meta name="description" content="2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天 Dataset里面的随机值 ※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点： 据说在新版本pytorch已经解决这个问题，我没有测试，仅说一下1.6版本的问题及解决方法 一日捉虫，偶然发现我写在dataset里面__getitem__的随机值并没有根据每次迭代而变化。经过查阅，在h&amp;hellip;">
+<meta name="keywords" content="老潘家的潘老师, 博客">
+<link rel="canonical" href="https://divertingpan.github.io/post/pytorch_lethal_traps/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【转载】pytorch里面的天坑","url":"https://divertingpan.github.io/post/pytorch_lethal_traps/","description":"2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天 Dataset里面的随机值 ※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点： 据说在新版本pytorch已经解决这个问题，我没有测试，仅说一下1.6版本的问题及解决方法 一日捉虫，偶然发现我写在dataset里面__getitem__的随机值并没有根据每次迭代而变化。经过查阅，在h\u0026hellip;","image":"/post-images/pytorch_lethal_traps.jpg","datePublished":"2020-08-18T21:17:09+08:00","dateModified":"2026-11-15T21:11:18+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/pytorch_lethal_traps/","name":"【转载】pytorch里面的天坑","position":2}]}</script>
+<meta property="og:title" content="【转载】pytorch里面的天坑">
+<meta property="og:description" content="2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天 Dataset里面的随机值 ※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点： 据说在新版本pytorch已经解决这个问题，我没有测试，仅说一下1.6版本的问题及解决方法 一日捉虫，偶然发现我写在dataset里面__getitem__的随机值并没有根据每次迭代而变化。经过查阅，在h&amp;hellip;">
+<meta property="og:url" content="https://divertingpan.github.io/post/pytorch_lethal_traps/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="老潘家的潘老师">
+<meta property="og:image" content="/post-images/pytorch_lethal_traps.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://divertingpan.github.io/post/pytorch_lethal_traps/">
+<meta name="twitter:title" content="【转载】pytorch里面的天坑">
+<meta name="twitter:description" content="2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天 Dataset里面的随机值 ※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点： 据说在新版本pytorch已经解决这个问题，我没有测试，仅说一下1.6版本的问题及解决方法 一日捉虫，偶然发现我写在dataset里面__getitem__的随机值并没有根据每次迭代而变化。经过查阅，在h&amp;hellip;">
+<meta name="twitter:image" content="/post-images/pytorch_lethal_traps.jpg">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-content">
+            
+<div class="site-header">
+    <a href="/">
+        <img class="avatar" src="/images/avatar.png?v=1794748641" alt="">
+    </a>
+    <h1 class="site-title">
+        老潘家的潘老师
+    </h1>
+    <p class="site-description">
+        CV方向小学二年级在读
+    </p>
+    <div class="menu-container">
+        
+        
+        <a href="/" class="menu">
+            首页
+        </a>
+        
+        
+        
+        <a href="/memos" class="menu">
+            闪念
+        </a>
+        
+        
+        
+        <a href="/archives" class="menu">
+            文章
+        </a>
+        
+        
+        
+        <a href="/tags" class="menu">
+            标签
+        </a>
+        
+        
+        
+        <a href="/links" class="menu">
+            友链
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/about" class="menu">
+            关于
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/billboard" class="menu">
+            留言板
+        </a>
+        
+        
+    </div>
+    <div class="social-container">
+        
+        <a href="https://github.com/divertingPan" target="_blank">
+            <i class="ri-github-line"></i>
+        </a>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+            <div class="post-detail">
+                <article class="post">
+                    <h2 class="post-title">
+                        【转载】pytorch里面的天坑
+                    </h2>
+                    <div class="post-info">
+                        <span>
+                            2020-08-18
+                        </span>
+                        <span>
+                            8 分钟阅读
+                        </span>
+                        
+                        
+                        <a href="/tag/za-tan/" class="post-tag">
+                            # 杂谈
+                        </a>
+                        
+                    </div>
+                    
+                    <img class="post-feature-image" src="/post-images/pytorch_lethal_traps.jpg" alt="">
+                    
+                    <div class="post-content-wrapper">
+                        <div class="post-content" v-pre>
+                            <p>2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天</p>
+<h1 id="dataset">Dataset里面的随机值</h1>
+<p>※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点：</p>
+<p>据说在新版本pytorch已经解决这个问题，我没有测试，仅说一下1.6版本的问题及解决方法</p>
+<p>一日捉虫，偶然发现我写在dataset里面<code>__getitem__</code>的随机值并没有根据每次迭代而变化。经过查阅，在https://zhuanlan.zhihu.com/p/377155682以及https://github.com/pytorch/pytorch/pull/56488#issuecomment-825128350已经有了相关讨论，解决方法很简单</p>
+<p>首先在dataloader里面加点东西，最后的那个<code>worker_init_fn</code></p>
+<pre><code class="language-python">train_dataloader = DataLoader(dataset=train_dataset,
+                              batch_size=1,
+                              shuffle=True,
+                              num_workers=8,
+                              drop_last=False,
+                              worker_init_fn=worker_init_fn)
+</code></pre>
+<p>然后把下面这段粘贴到dataloader前面</p>
+<pre><code class="language-python">def worker_init_fn(worker_id):
+    worker_seed = torch.initial_seed() % 2**32
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
+</code></pre>
+<p>这样每次迭代取数据时，随机数就会不同。</p>
+<hr />
+<p>今天随便炼丹取暖，结果卡了一个坑，在网上找到一个解决方案，顺便把其他的部分也粘贴过来存个档吧</p>
+<blockquote>
+<p>作者：八戒<br />
+链接：https://zhuanlan.zhihu.com/p/95883048<br />
+来源：知乎<br />
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h1 id="pytorch-windowslinux">Pytorch 数据读取模块windows和linux不同</h1>
+<p>报错如下：</p>
+<pre><code>AttributeError: Can't pickle local object 'get_loader.&lt;locals&gt;.&lt;lambda&gt;'
+</code></pre>
+<p>问题如上所示，但是Google全是<a href="https://blog.csdn.net/javali1995/article/details/78475108">这种</a>，或者<a href="https://blog.csdn.net/qq_39314099/article/details/83822593">这种</a>。它还有一个报错是</p>
+<pre><code>EOFError: Ran out of input
+</code></pre>
+<p>又或者<a href="https://blog.51cto.com/itbases/2087664">这种</a>。无解啊，报错的是数据读取模块，但是我的程序在Linux系统下是没有问题的，但是到了Windows系统下就有问题了，不知道为什么。</p>
+<pre><code class="language-python">data.DataLoader(dataset=dataset, batch_size=1, shuffle=False, num_workers=num_thread)
+</code></pre>
+<p>就是把num_workers指定为0，或者直接不写。</p>
+<hr />
+<h1 id="pytorch-gpu">Pytorch GPU问题</h1>
+<p>Pytorch在GPU并行方面还算很方便。在定义好model之后只需要使用一行：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model)
+#默认调用所有GPU
+</code></pre>
+<p>即可实现在所有GPU上并行运算。</p>
+<p>但是有时候直接占用所有的GPU是没有必要的，如果要指定GPU，可以在DataParallel中增加一个参数：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
+</code></pre>
+<p>在运行时会报出如下错误：</p>
+<pre><code>RuntimeError: all tensors must be on devices[0]
+</code></pre>
+<p>该错误的解决方式有很多，这里推荐使用一种最简单的，在运行代码的时候，调整程序可见的GPU即可，具体而言就是将原先的运行指令：</p>
+<pre><code>python train.py
+</code></pre>
+<p>改为</p>
+<pre><code>CUDA_VISIBLE_DEVICES=2,3  python train.py
+</code></pre>
+<p>而程序中还是写为：</p>
+<pre><code class="language-python">model = torch.nn.DataParallel(model, device_ids=[0,1])
+</code></pre>
+<h1 id="pytorch-">Pytorch 权重和数据不对</h1>
+<p>报错如下：</p>
+<pre><code>Input type (CUDAFloatTensor) and weight type (FloatTensor) should be the same
+</code></pre>
+<p>仔细看错误信息，CUDA和CPU，输入数据x和模型中的权重值类型不一样，一般来说是因为模型的参数不在GPU中，而输入数据在GPU中，通过添加model.cuda()将模型转移到GPU上以解决这个问题。但是我的模型中已经有model.cuda了。</p>
+<p>问题在模型中，不能把卷积定义到forward中，像下面这样是不行的</p>
+<pre><code class="language-python">def forward(self, x):
+    fin_x = nn.Conv2d(128,1,1,1)(x)
+</code></pre>
+<p>这就会导致这个问题，必须把</p>
+<pre><code class="language-python">fin_x = nn.Conv2d(128,1,1,1)(x)
+</code></pre>
+<p>这个定义到上面的模型中</p>
+<h1 id="pytorch-cpugpu">Pytorch cpu加载多GPU训练模型</h1>
+<p>多GPU训练保存的模型会多一个module</p>
+<pre><code>Missing key(s) in state_dict: &quot;layer1.0.0.weight&quot;, &quot;layer1.0.2.weight&quot;, 
+Unexpected key(s) in state_dict: &quot;module.layer1.0.0.weight&quot;,
+</code></pre>
+<p>怎么解决呢？</p>
+<pre><code class="language-python">    state_dict = torch.load(model_path,map_location='cpu')
+    from collections import OrderedDict
+    new_state_dict = OrderedDict()
+    for k, v in state_dict.items():
+        name = k[7:]                  # remove module.
+        new_state_dict[name] = v
+    net.load_state_dict(new_state_dict)
+</code></pre>
+<h1 id="torchvisiondatasetscifar10cifar100">torchvision中datasets加载CIFAR10,CIFAR100问题</h1>
+<p>因为网络的问题，自己就提前下载了数据集，但是网络一加载就报错，找不到数据，我就奇了怪了。。。。明明有就是找不到</p>
+<pre><code class="language-python">train_set = datasets.CIFAR10(data, train=True, transform=train_transforms, download=False) 
+test_set = datasets.CIFAR10(data, train=False, transform=test_transforms, download=False)
+</code></pre>
+<p>报错如下：</p>
+<pre><code>RuntimeError: Dataset not found or corrupted. You can use download=True to download it
+</code></pre>
+<p>几经折腾才发现问题在那，自己提前下载了，**参数要给全。。。**路径给全，也就是绝对路径</p>
+<pre><code class="language-python">train_set = datasets.CIFAR10(root=data, train=True, transform=train_transforms, download=False)  
+test_set = datasets.CIFAR10(root=data, train=False, transform=test_transforms, download=False)
+</code></pre>
+<h1 id="pytorchcudnn">Pytorch中cudnn错误</h1>
+<pre><code>RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED. This error may appear if you passed in a non-contiguous input.
+</code></pre>
+<p>看官方说法是矩阵太大了，然后把批量换小点，我换小了也不行，只有换到1才行。。。。</p>
+<p>还有就是禁用cudnn的加速</p>
+<pre><code class="language-python">torch.backends.cudnn.enabled = False
+</code></pre>
+<p><strong>这个方法是可行的，但是慢的一批</strong></p>
+<h1 id="pycharm-">Pycharm 数据显示不全</h1>
+<p>在Anaconda中notebook可以显示全部的数据，但是在pycharm中，使用print(dataframe)，不能显示dataframe的全部数据，中间的数据用省略号表示。</p>
+<p>在pycharm中显示全部数据解决方法，输入下面代码：</p>
+<pre><code class="language-python">import pandas as pd 
+#显示所有列
+pd.set_option('display.max_columns', None)
+#显示所有行
+pd.set_options('display.max_rows', None)
+</code></pre>
+<p>类似的，对于numpy array print后不能完全显示输入下面代码：</p>
+<pre><code class="language-python">numpy.set_printoptions(threshold = np.inf)
+
+#若想不以科学计数显示:
+numpy.set_printoptions(suppress = True)
+</code></pre>
+<h1 id="numpy">numpy问题</h1>
+<p>报错如下：</p>
+<pre><code>in numpy.import_array
+ImportError: numpy.core.multiarray failed to import
+</code></pre>
+<p>这个问题可能有两个原因</p>
+<ol>
+<li>你用conda装了一个numpy,又用pip装了一个numpy。导致冲突，你卸载一个就行了；比如：</li>
+</ol>
+<pre><code>conda uninstall numpy
+</code></pre>
+<ol start="2">
+<li>numpy 版本太低，导致不兼容，更新一下</li>
+</ol>
+<pre><code>pip install -U numpy
+conda update numpy
+</code></pre>
+<h1 id="pip">pip问题</h1>
+<p>装sklean的时候发现如下错误</p>
+<pre><code>ERROR: Could not find a version that satisfies the requirement threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn) (from versions: 1.0.0, 1.1.0)
+ERROR: No matching distribution found for threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;sklearn)
+</code></pre>
+<p>然后上网找了下解决方案，更新pip</p>
+<pre><code>python -m pip install --upgrade pip
+</code></pre>
+<p>然后 然后 然后就悲剧了！！！我的pip就崩了</p>
+<pre><code>Script file 'D:\Anaconda3\Scripts\pip-script.py' is not present
+</code></pre>
+<p><strong>大家更新的时候一定要在管理员的情况下更新你的pip</strong></p>
+<p><strong>然后管理员运行</strong></p>
+<pre><code>easy_install pip
+</code></pre>
+<p>解决上面的问题</p>
+
+                        </div>
+                        <div class="toc-container">
+                            
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            
+            <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/possibility_of_1_after_continuous_0/">
+                    <h3 class="post-title">
+                        抛掷100次硬币都是正面，下一次抛掷更可能是反面？
+                    </h3>
+                </a>
+            </div>
+            
+
+            
+
+            
+<div class="site-footer">
+    Powered by Gridea Pro
+© 2018 divertingpan.github.io All Rights Reserved
+    <a class="rss" href="/atom.xml" target="_blank">
+        <i class="ri-rss-line"></i> RSS
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        hljs.initHighlightingOnLoad()
+
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+
+    </script>
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: inotes v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+
+</html>

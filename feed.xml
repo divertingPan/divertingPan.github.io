@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>老潘家的潘老师</title>
+    <link>https://divertingpan.github.io/</link>
+    <description>CV方向小学二年级在读</description>
+    <language>zh-cn</language>
+    <generator>Gridea Pro</generator>
+    <lastBuildDate>Sun, 15 Nov 2026 20:40:44 +0800</lastBuildDate>
+    <atom:link href="https://divertingpan.github.io/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <item>
+      <title>【硬核摄影2.0】用线性CCD器件制作扫描相机</title>
+      <link>https://divertingpan.github.io/post/line_scan_camera/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/line_scan_camera/</guid>
+      <pubDate>Fri, 06 Aug 2021 14:06:42 +0800</pubDate>
+      <description><![CDATA[<p>本文参考资料：<br />
+[1] (Strongly Recommend!) Fundamentals and Experiments of Line Scan Camera: <a href="http://www.elm-chan.org/works/lcam/report.html">http://www.elm-chan.org/works/lcam/report.html</a><br />
+[2] 线阵 CCD 的使用方法(&hellip;</p>
+]]></description>
+      <category>火车</category>
+      <category>计算机视觉</category>
+      <category>艺术设计</category>
+      <enclosure url="https://divertingpan.github.io/post-images/line_scan_camera.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>《三体人航天志第3卷·银河系篇》（第33版节选）</title>
+      <link>https://divertingpan.github.io/post/threebody_alien_voyage/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/threebody_alien_voyage/</guid>
+      <pubDate>Sat, 14 Jun 2025 22:22:42 +0800</pubDate>
+      <description><![CDATA[<p>前言：这一篇是之前摸鱼的时候开了个脑洞，然后借了一些刘慈欣的系列设定，搭了个舞台写了一点东西。里面也neta了一些其他成分。对于比较主要的设定元素，给没有看过刘慈欣系列的读者进行一些解释：</p>
+<ul>
+<li>三体人：出自《三体》系列，设定为通过鳞片一样的皮肤进行闪光来“说话”的外星人，由于母星环境十分恶劣因此开始宇宙远航。</li>
+<li>波江座ε：出自《吞食者》，其中的智慧生物正是当年恐龙大灭绝时期从地球逃走的那些恐&hellip;</li>
+</ul>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/threebody_alien_voyage.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>win10系统完美配置mamba-ssm全整合方案</title>
+      <link>https://divertingpan.github.io/post/win-mamba/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/win-mamba/</guid>
+      <pubDate>Fri, 18 Apr 2025 10:52:44 +0800</pubDate>
+      <description><![CDATA[<p>好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。</p>
+<p>安装包版本：causal-conv1d &hellip;</p>
+]]></description>
+      <enclosure url="https://divertingpan.github.io/post-images/win-mamba.png" length="0" type="image/png"></enclosure>
+    </item>
+    <item>
+      <title>【5分钟实例】一个ChatGPT辅助编程全过程实录</title>
+      <link>https://divertingpan.github.io/post/chatgpt_coding/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/chatgpt_coding/</guid>
+      <pubDate>Thu, 02 Mar 2023 18:30:40 +0800</pubDate>
+      <description><![CDATA[<p>最近突然有一个需求，要将一个数据集做一下整理。涉及到一些不复杂但是需要去查代码的用法。突发奇想让ChatGPT帮我完成一部分。于是尝试了一下我提需求，ChatGPT写代码。整体体验还是及格的。如果后来没有掉线失忆的话甚至可能给他一个优秀。只可惜他有些时刻还是不中用啊。</p>
+<p>整体来说，对于一些工程性质的杂活，直接让他来做或者让他给出一些小功能的代码段肯定是没问题的。难题反而变成了如何将我们脑中的概&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/chatgpt_coding.webp" length="0" type="image/webp"></enclosure>
+    </item>
+    <item>
+      <title>两个图像处理问题的实例以及分析思路</title>
+      <link>https://divertingpan.github.io/post/quiz_two_cv_tasks/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/quiz_two_cv_tasks/</guid>
+      <pubDate>Fri, 23 Sep 2022 14:41:57 +0800</pubDate>
+      <description><![CDATA[<p>这是老潘曾经做过的某个大学笔试题，代码尽可能干净简练并且能够快速解决问题，比较值得记录并且研究。尤其是第二题，在方法的设计上，对于结果的约束需要一些技巧才行，无脑用绝对误差很难行得通。</p>
+<p>这些题目没有标准答案和做法，这里只是抛砖引玉，欢迎进一步交流优化改进。</p>
+<p>下面是题目和解决思路以及配套完整代码（链接：https://github.com/divertingPan/utility_roo&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/quiz_two_cv_tasks.png" length="0" type="image/png"></enclosure>
+    </item>
+    <item>
+      <title>从统一的视角理解扩散模型</title>
+      <link>https://divertingpan.github.io/post/understanding_diffusion_models/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/understanding_diffusion_models/</guid>
+      <pubDate>Fri, 02 Sep 2022 19:37:35 +0800</pubDate>
+      <description><![CDATA[<p>说在最前面：最近扩散模型突然很火，甚至出圈到了那些搞艺术搞绘画的圈子里去了。而且这类模型的表现确实是很惊人，不说那些打着open名义却不开源的公司，单说现在最多人用的stable diffusion，输出效果有目共睹。但是这些模型背后的原理和之前的深度学习思路都不太一样，并且原论文的数学内容又非常浓厚，令人难以下咽。所以，本篇正文内容是来自于非常详尽的推导与解释的论文“**[Understandi&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/understanding_diffusion_models.PNG" length="0" type="image/png"></enclosure>
+    </item>
+    <item>
+      <title>什么是Diffusion模型？</title>
+      <link>https://divertingpan.github.io/post/what_is_diffusion_model/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/what_is_diffusion_model/</guid>
+      <pubDate>Mon, 22 Aug 2022 18:58:54 +0800</pubDate>
+      <description><![CDATA[<blockquote>
+<p>作者：Ray Wang，原文：<a href="https://wrong.wang/blog/20220605-%E4%BB%80%E4%B9%88%E6%98%AFdiffusion%E6%A8%A1%E5%9E%8B/">什么是Diffusion模型？</a></p>
+</blockquote>
+<h2 id="diffusion">Diffusion过程</h2>
+<p>扩散（Diffusion）在热力学中指细小颗粒从高密度区域扩散至低密度区域，在统计领域，扩散则指将复杂的分布&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/what_is_diffusion_model.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例</title>
+      <link>https://divertingpan.github.io/post/CN_story_copyright_law/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/CN_story_copyright_law/</guid>
+      <pubDate>Tue, 22 Mar 2022 20:12:40 +0800</pubDate>
+      <description><![CDATA[<p>（本文为外部转载收录，请以原作者观点与解释为准）</p>
+<p>作者：卢九名，王恩慧</p>
+<h2 id="heading">前言</h2>
+<p>“抄袭”、“剽窃”、“融梗”，谈及这些词语会使我们联想到当今一些瞒心昧己的作家，将原创作家多年的创作心血改头换面，拼凑成“自己的作品“以获取巨大的商业利益是他们惯常的做法。近年来影视文化行业的著作权侵权问题屡见不鲜，行业内外要求严厉打击剽窃作家和编剧的呼声日益高涨。2014年琼瑶以于正侵犯其著作权&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/CN_story_copyright_law.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>利用动态VPS服务器建立自用专属proxy</title>
+      <link>https://divertingpan.github.io/post/setup_vps_proxy/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/setup_vps_proxy/</guid>
+      <pubDate>Thu, 16 Dec 2021 01:24:05 +0800</pubDate>
+      <description><![CDATA[<p>需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：</p>
+<ol>
+<li>动态VPS支持拨号换ip</li>
+<li>普通的服务器用来挂爬虫</li>
+</ol>
+<p>（其实可以把爬虫也放在VPS上，但是一般VPS的内存CPU硬盘都很小。而性能够的普通服务器又不能换ip，用两个便宜服务器的这种方案是比较省钱的选择）</p>
+<p>整个设置过程如下：</p>
+<h2 id="pr">设置pr&hellip;</h2>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/setup_vps_proxy.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
+      <title>使用Ubuntu+apache设置带验证的http服务器</title>
+      <link>https://divertingpan.github.io/post/setup_webpage_server/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/setup_webpage_server/</guid>
+      <pubDate>Mon, 01 Nov 2021 16:02:52 +0800</pubDate>
+      <description><![CDATA[<h2 id="apache2">安装apache2</h2>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install apache2
+</code></pre>
+<p>apache2安装成功后，我们可以在/var/www/目录下看到一个html文件夹</p>
+<p>重启apache2</p>
+<pre><code class="language-bash">sudo /etc/init.d/apache2 restart
+</code></pre>
+<p>使用同一局域网的设&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/setup_webpage_server.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+  </channel>
+</rss>

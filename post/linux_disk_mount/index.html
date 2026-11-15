@@ -1,0 +1,280 @@
+<html>
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Gridea Pro 1.3.0-beta.2">
+<title>Linux挂载硬盘/内存盘/网络硬盘方法 | 老潘家的潘老师</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1794748641">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Linux挂载硬盘/内存盘/网络硬盘方法 | 老潘家的潘老师 - Atom Feed" href="/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+<meta name="description" content="挂载普通硬盘 找到准备存内容的硬盘 sudo fdisk -lu 设备的UUID可以通过以下指令查看 sudo blkid 准备将D盘挂载到disk目录上面 cd / m...">
+<meta name="keywords" content="老潘家的潘老师, 博客">
+<link rel="canonical" href="https://divertingpan.github.io/post/linux_disk_mount/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux挂载硬盘/内存盘/网络硬盘方法","url":"https://divertingpan.github.io/post/linux_disk_mount/","description":"挂载普通硬盘 找到准备存内容的硬盘 sudo fdisk -lu 设备的UUID可以通过以下指令查看 sudo blkid 准备将D盘挂载到disk目录上面 cd / m...","image":"/post-images/linux_disk_mount.jfif","datePublished":"2020-11-30T10:56:49+08:00","dateModified":"2026-11-15T20:40:45+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/linux_disk_mount/","name":"Linux挂载硬盘/内存盘/网络硬盘方法","position":2}]}</script>
+<meta property="og:title" content="Linux挂载硬盘/内存盘/网络硬盘方法">
+<meta property="og:description" content="挂载普通硬盘 找到准备存内容的硬盘 sudo fdisk -lu 设备的UUID可以通过以下指令查看 sudo blkid 准备将D盘挂载到disk目录上面 cd / m...">
+<meta property="og:url" content="https://divertingpan.github.io/post/linux_disk_mount/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="老潘家的潘老师">
+<meta property="og:image" content="/post-images/linux_disk_mount.jfif">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://divertingpan.github.io/post/linux_disk_mount/">
+<meta name="twitter:title" content="Linux挂载硬盘/内存盘/网络硬盘方法">
+<meta name="twitter:description" content="挂载普通硬盘 找到准备存内容的硬盘 sudo fdisk -lu 设备的UUID可以通过以下指令查看 sudo blkid 准备将D盘挂载到disk目录上面 cd / m...">
+<meta name="twitter:image" content="/post-images/linux_disk_mount.jfif">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-content">
+            
+<div class="site-header">
+    <a href="/">
+        <img class="avatar" src="/images/avatar.png?v=1794748641" alt="">
+    </a>
+    <h1 class="site-title">
+        老潘家的潘老师
+    </h1>
+    <p class="site-description">
+        CV方向小学二年级在读
+    </p>
+    <div class="menu-container">
+        
+        
+        <a href="/" class="menu">
+            首页
+        </a>
+        
+        
+        
+        <a href="/memos" class="menu">
+            闪念
+        </a>
+        
+        
+        
+        <a href="/archives" class="menu">
+            文章
+        </a>
+        
+        
+        
+        <a href="/tags" class="menu">
+            标签
+        </a>
+        
+        
+        
+        <a href="/links" class="menu">
+            友链
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/about" class="menu">
+            关于
+        </a>
+        
+        
+        
+        <a href="https://divertingpan.github.io/post/billboard" class="menu">
+            留言板
+        </a>
+        
+        
+    </div>
+    <div class="social-container">
+        
+        <a href="https://github.com/divertingPan" target="_blank">
+            <i class="ri-github-line"></i>
+        </a>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+            <div class="post-detail">
+                <article class="post">
+                    <h2 class="post-title">
+                        Linux挂载硬盘/内存盘/网络硬盘方法
+                    </h2>
+                    <div class="post-info">
+                        <span>
+                            2020-11-30
+                        </span>
+                        <span>
+                            2 分钟阅读
+                        </span>
+                        
+                        
+                    </div>
+                    
+                    <img class="post-feature-image" src="/post-images/linux_disk_mount.jfif" alt="">
+                    
+                    <div class="post-content-wrapper">
+                        <div class="post-content" v-pre>
+                            <h2 id="heading">挂载普通硬盘</h2>
+<ol>
+<li>找到准备存内容的硬盘</li>
+</ol>
+<pre><code>sudo fdisk -lu
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1606705184275.PNG" alt="" /></p>
+<p>设备的UUID可以通过以下指令查看</p>
+<pre><code>sudo blkid
+</code></pre>
+<ol start="2">
+<li>准备将D盘挂载到disk目录上面</li>
+</ol>
+<pre><code>cd / 
+mkdir disk
+</code></pre>
+<ol start="3">
+<li>执行后disk就是D盘的入口，只是临时挂载，重启后消失，&rsquo;ntfs&rsquo;可以使用<code>blkid</code>返回的TYPE=xx查看</li>
+</ol>
+<pre><code>mount -vl -t ntfs /dev/sda4 /disk
+</code></pre>
+<p><img src="https://divertingPan.github.io/post-images/1606705295046.PNG" alt="" /></p>
+<ol start="4">
+<li>把home路径下的内容拷贝进disk</li>
+</ol>
+<pre><code>cp -r /home/ /disk/
+</code></pre>
+<ol start="5">
+<li>成功拷贝进另一硬盘</li>
+</ol>
+<p><img src="https://divertingPan.github.io/post-images/1606705334879.PNG" alt="" /></p>
+<h3 id="heading-1">永久挂载</h3>
+<p>可以直接用命令</p>
+<pre><code>echo UUID=afab653d-7620-49df-ba66-f956c372ef93 /your/whatever/path ext4 defaults 0 0 &gt;&gt; /etc/fstab
+</code></pre>
+<p>或者打开/etc/fstab手动编辑，加入echo后面的文字。上面需要改变的地方在于UUID，路径，和文件系统。</p>
+<p>编辑完后，执行</p>
+<pre><code>mount -a 
+</code></pre>
+<h2 id="heading-2">挂载内存盘</h2>
+<blockquote>
+<p>ref：https://blog.csdn.net/qq_29912325/article/details/108666516</p>
+</blockquote>
+<p>对于超大内存（RAM）的服务器，可以把需要经常IO的数据放在内存上。具体做法就是把内存的一部分挂载到目录上，当做普通存储使用。只是需要注意，关机会消失，所以要做好备份。</p>
+<p>先准备一个空的目录，然后执行</p>
+<pre><code>sudo mount -t tmpfs -o size=50G tmpfs /your/whatever/path
+</code></pre>
+<p>然后把数据复制进去即可。</p>
+<pre><code>cp -r dataset_hdd dataset
+</code></pre>
+<p>如果直接在这里写了一个现有的目录，执行后会发现目录变空了，但是重启后又出现了，应该是新的存储设备覆盖了原来的存储设备。</p>
+<p>也可以写在/etc/fstab里面永久挂载，但是RAM掉电数据消失的情况是不会改变的。</p>
+<pre><code>tmpfs	/home/user/ramdisk	tmpfs	defaults,size=100M	0 0
+</code></pre>
+<p>要修改已挂载的大小，可以执行</p>
+<pre><code>sudo mount -o remount,size=18G tmpfs /your/whatever/path
+</code></pre>
+<p>要取消挂载，执行</p>
+<pre><code>sudo umount -v /your/whatever/path
+</code></pre>
+<h2 id="heading-3">挂载网络硬盘</h2>
+<p>参考<br />
+<a href="https://cloud.tencent.com/developer/article/1073125">https://cloud.tencent.com/developer/article/1073125</a></p>
+<p>这里用了CentOS，首先安装以下内容</p>
+<pre><code>yum install -y epel-release
+yum -y install fuse-sshfs
+</code></pre>
+<p>挂载服务器8.8.8.8上面的/data/tmp目录到本机的/tmp目录下</p>
+<pre><code>[root@tokyo /]#  sshfs -o allow_other root@8.8.8.8:/data/tmp /tmp
+root@8.8.8.8's password:
+</code></pre>
+<p>使用<code>df -h</code>查看挂载结果，使用<code>umount /tmp</code>卸载</p>
+
+                        </div>
+                        <div class="toc-container">
+                            
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            
+            <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/xshell_to_tensorboard/">
+                    <h3 class="post-title">
+                        使用xshell连接远程服务器的tensorboard
+                    </h3>
+                </a>
+            </div>
+            
+
+            
+
+            
+<div class="site-footer">
+    Powered by Gridea Pro
+© 2018 divertingpan.github.io All Rights Reserved
+    <a class="rss" href="/atom.xml" target="_blank">
+        <i class="ri-rss-line"></i> RSS
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        hljs.initHighlightingOnLoad()
+
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+
+    </script>
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: inotes v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+
+</html>
