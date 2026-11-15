@@ -6,7 +6,7 @@
     <description>CV方向小学二年级在读</description>
     <language>zh-cn</language>
     <generator>Gridea Pro</generator>
-    <lastBuildDate>Sun, 15 Nov 2026 22:34:53 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 23:13:49 +0800</lastBuildDate>
     <atom:link href="https://divertingpan.github.io/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <item>
       <title>【硬核摄影2.0】用线性CCD器件制作扫描相机</title>
@@ -18,7 +18,7 @@
 [2] 线阵 CCD 的使用方法(&hellip;</p>
 ]]></description>
       <category>火车</category>
-      <category>计算机视觉</category>
+      <category>电子硬件</category>
       <category>艺术设计</category>
       <enclosure url="https://divertingpan.github.io/post-images/line_scan_camera.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
