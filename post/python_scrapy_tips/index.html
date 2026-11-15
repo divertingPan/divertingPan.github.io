@@ -11,7 +11,7 @@ pip install pillow
 
 安装一下PIL模块再尝试。
 之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里...">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="python,爬虫">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Scrapy爬虫时的一些细节">
@@ -43,7 +43,7 @@ pip install pillow
 <meta name="description" content="一些bug 配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用 pip install pillow 安装一下PIL模块再尝试。 之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里，不知为何缺少了PIL却没有报错。 正确使用代理ip的方法 在&amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/python_scrapy_tips/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Scrapy爬虫时的一些细节","url":"https://divertingpan.github.io/post/python_scrapy_tips/","description":"一些bug 配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用 pip install pillow 安装一下PIL模块再尝试。 之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里，不知为何缺少了PIL却没有报错。 正确使用代理ip的方法 在\u0026hellip;","image":"/post-images/python_scrapy_tips.jpg","datePublished":"2020-10-20T13:01:04+08:00","dateModified":"2026-11-15T20:40:45+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Scrapy爬虫时的一些细节","url":"https://divertingpan.github.io/post/python_scrapy_tips/","description":"一些bug 配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用 pip install pillow 安装一下PIL模块再尝试。 之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里，不知为何缺少了PIL却没有报错。 正确使用代理ip的方法 在\u0026hellip;","image":"/post-images/python_scrapy_tips.jpg","datePublished":"2020-10-20T13:01:04+08:00","dateModified":"2026-11-15T22:53:44+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/python_scrapy_tips/","name":"Scrapy爬虫时的一些细节","position":2}]}</script>
 <meta property="og:title" content="Scrapy爬虫时的一些细节">
 <meta property="og:description" content="一些bug 配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用 pip install pillow 安装一下PIL模块再尝试。 之前在本地的conda环境下，如果缺失PIL模块会直接报错出来，但是在服务器上，我直接部署到了系统python环境里，不知为何缺少了PIL却没有报错。 正确使用代理ip的方法 在&amp;hellip;">
@@ -154,32 +154,51 @@ pip install pillow
   
 
   
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
+      
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      
+    </ul>
+  </section>
+  
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">10</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/gridea/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Gridea</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
         
-        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -191,7 +210,7 @@ pip install pillow
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2020-10-20T13:01:04+08:00">2020-10-20</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2020-10-20T13:01:04+08:00">2020-10-20</time></span>
       <span>约 6 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -200,7 +219,7 @@ pip install pillow
       
       <span class="xxd-badge">4127 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      
+      <a class="xxd-badge" href="/tag/python/">#python</a><a class="xxd-badge" href="/tag/pa-chong/">#爬虫</a>
     </div>
   </header>
 

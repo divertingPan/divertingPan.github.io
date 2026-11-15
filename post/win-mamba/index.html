@@ -6,7 +6,7 @@
   <meta name="generator" content="Gridea Pro 1.3.0-beta.2">
   <title>win10系统完美配置mamba-ssm全整合方案 · 老潘家的潘老师</title>
   <meta name="description" content="好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找...">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="Anaconda,pytorch,python">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="win10系统完美配置mamba-ssm全整合方案">
@@ -33,7 +33,7 @@
 <meta name="description" content="好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。 安装包版本：causal-conv1d &amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/win-mamba/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"win10系统完美配置mamba-ssm全整合方案","url":"https://divertingpan.github.io/post/win-mamba/","description":"好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。 安装包版本：causal-conv1d \u0026hellip;","image":"/post-images/win-mamba.png","datePublished":"2025-04-18T10:52:44+08:00","dateModified":"2026-11-15T20:40:44+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"win10系统完美配置mamba-ssm全整合方案","url":"https://divertingpan.github.io/post/win-mamba/","description":"好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。 安装包版本：causal-conv1d \u0026hellip;","image":"/post-images/win-mamba.png","datePublished":"2025-04-18T10:52:44+08:00","dateModified":"2026-11-15T22:35:45+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/win-mamba/","name":"win10系统完美配置mamba-ssm全整合方案","position":2}]}</script>
 <meta property="og:title" content="win10系统完美配置mamba-ssm全整合方案">
 <meta property="og:description" content="好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。 安装包版本：causal-conv1d &amp;hellip;">
@@ -144,32 +144,51 @@
   
 
   
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
+      
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      
+    </ul>
+  </section>
+  
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">10</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/gridea/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Gridea</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
         
-        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -181,7 +200,7 @@
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2025-04-18T10:52:44+08:00">2025-04-18</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2025-04-18T10:52:44+08:00">2025-04-18</time></span>
       <span>约 7 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -190,7 +209,7 @@
       
       <span class="xxd-badge">4573 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      
+      <a class="xxd-badge" href="/tag/anaconda/">#Anaconda</a><a class="xxd-badge" href="/tag/pytorch/">#pytorch</a><a class="xxd-badge" href="/tag/python/">#python</a>
     </div>
   </header>
 

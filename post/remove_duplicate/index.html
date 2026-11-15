@@ -11,7 +11,7 @@
 这时候你灵光一现，想起了python有图像处理模块
 只需5分钟的操作
 拿起键盘打开你最爱的ID...">
-  <meta name="keywords" content="5分钟实例,自动化,计算机视觉">
+  <meta name="keywords" content="5分钟实例,计算机视觉">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="【5分钟实例】去除大量图片中重复的图片">
@@ -43,7 +43,7 @@
 <meta name="description" content="需求假设 你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。 这时候你灵光一现，想起了python有图像处理模块 &amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/remove_duplicate/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【5分钟实例】去除大量图片中重复的图片","url":"https://divertingpan.github.io/post/remove_duplicate/","description":"需求假设 你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。 这时候你灵光一现，想起了python有图像处理模块 \u0026hellip;","image":"/post-images/remove_duplicate.jpg","datePublished":"2020-08-17T15:47:20+08:00","dateModified":"2026-11-15T20:40:45+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"【5分钟实例】去除大量图片中重复的图片","url":"https://divertingpan.github.io/post/remove_duplicate/","description":"需求假设 你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。 这时候你灵光一现，想起了python有图像处理模块 \u0026hellip;","image":"/post-images/remove_duplicate.jpg","datePublished":"2020-08-17T15:47:20+08:00","dateModified":"2026-11-15T22:55:34+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/remove_duplicate/","name":"【5分钟实例】去除大量图片中重复的图片","position":2}]}</script>
 <meta property="og:title" content="【5分钟实例】去除大量图片中重复的图片">
 <meta property="og:description" content="需求假设 你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。 这时候你灵光一现，想起了python有图像处理模块 &amp;hellip;">
@@ -154,32 +154,51 @@
   
 
   
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
+      
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      
+    </ul>
+  </section>
+  
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">10</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/gridea/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Gridea</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
         
-        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -191,7 +210,7 @@
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2020-08-17T15:47:20+08:00">2020-08-17</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2020-08-17T15:47:20+08:00">2020-08-17</time></span>
       <span>约 4 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -200,7 +219,7 @@
       
       <span class="xxd-badge">2984 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      <a class="xxd-badge" href="/tag/5-fen-zhong-shi-li/">#5分钟实例</a><a class="xxd-badge" href="/tag/zi-dong-hua/">#自动化</a><a class="xxd-badge" href="/tag/ji-suan-ji-shi-jue/">#计算机视觉</a>
+      <a class="xxd-badge" href="/tag/5-fen-zhong-shi-li/">#5分钟实例</a><a class="xxd-badge" href="/tag/ji-suan-ji-shi-jue/">#计算机视觉</a>
     </div>
   </header>
 

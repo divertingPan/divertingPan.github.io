@@ -8,7 +8,7 @@
   <meta name="description" content="本节的大部分代码参考了：莫烦python
 这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。
 首先试着写一个很简单的AutoEncoder的结构出来。根据快速理解，这个网络...">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="pytorch,python,计算机视觉">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="复习Pytorch的使用方法，在套路的基础上灵活应变">
@@ -37,7 +37,7 @@
 <meta name="description" content="本节的大部分代码参考了：莫烦python 这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。 首先试&amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/pytorch_autoencoder/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"复习Pytorch的使用方法，在套路的基础上灵活应变","url":"https://divertingpan.github.io/post/pytorch_autoencoder/","description":"本节的大部分代码参考了：莫烦python 这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。 首先试\u0026hellip;","image":"/post-images/pytorch_autoencoder.png","datePublished":"2020-04-29T18:19:42+08:00","dateModified":"2026-11-15T20:40:45+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"复习Pytorch的使用方法，在套路的基础上灵活应变","url":"https://divertingpan.github.io/post/pytorch_autoencoder/","description":"本节的大部分代码参考了：莫烦python 这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。 首先试\u0026hellip;","image":"/post-images/pytorch_autoencoder.png","datePublished":"2020-04-29T18:19:42+08:00","dateModified":"2026-11-15T22:40:13+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/pytorch_autoencoder/","name":"复习Pytorch的使用方法，在套路的基础上灵活应变","position":2}]}</script>
 <meta property="og:title" content="复习Pytorch的使用方法，在套路的基础上灵活应变">
 <meta property="og:description" content="本节的大部分代码参考了：莫烦python 这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。 首先试&amp;hellip;">
@@ -148,32 +148,51 @@
   
 
   
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
+      
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      
+    </ul>
+  </section>
+  
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">10</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/gridea/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Gridea</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
         
-        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -194,7 +213,7 @@
       
       <span class="xxd-badge">13594 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      
+      <a class="xxd-badge" href="/tag/pytorch/">#pytorch</a><a class="xxd-badge" href="/tag/python/">#python</a><a class="xxd-badge" href="/tag/ji-suan-ji-shi-jue/">#计算机视觉</a>
     </div>
   </header>
 

@@ -6,7 +6,7 @@
     <description>CV方向小学二年级在读</description>
     <language>zh-cn</language>
     <generator>Gridea Pro</generator>
-    <lastBuildDate>Sun, 15 Nov 2026 20:40:44 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 22:34:53 +0800</lastBuildDate>
     <atom:link href="https://divertingpan.github.io/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <item>
       <title>【硬核摄影2.0】用线性CCD器件制作扫描相机</title>
@@ -33,7 +33,7 @@
 <li>波江座ε：出自《吞食者》，其中的智慧生物正是当年恐龙大灭绝时期从地球逃走的那些恐&hellip;</li>
 </ul>
 ]]></description>
-      <category>杂谈</category>
+      <category>随笔</category>
       <enclosure url="https://divertingpan.github.io/post-images/threebody_alien_voyage.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
     <item>
@@ -44,6 +44,9 @@
       <description><![CDATA[<p>好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾教程也都是错的，能安装成功但是不能正常使用。花了一段时间，找到一个可行的方案，并且实际踩了坑之后总算是成功运行起来了。</p>
 <p>安装包版本：causal-conv1d &hellip;</p>
 ]]></description>
+      <category>Anaconda</category>
+      <category>pytorch</category>
+      <category>python</category>
       <enclosure url="https://divertingpan.github.io/post-images/win-mamba.png" length="0" type="image/png"></enclosure>
     </item>
     <item>
@@ -54,7 +57,7 @@
       <description><![CDATA[<p>最近突然有一个需求，要将一个数据集做一下整理。涉及到一些不复杂但是需要去查代码的用法。突发奇想让ChatGPT帮我完成一部分。于是尝试了一下我提需求，ChatGPT写代码。整体体验还是及格的。如果后来没有掉线失忆的话甚至可能给他一个优秀。只可惜他有些时刻还是不中用啊。</p>
 <p>整体来说，对于一些工程性质的杂活，直接让他来做或者让他给出一些小功能的代码段肯定是没问题的。难题反而变成了如何将我们脑中的概&hellip;</p>
 ]]></description>
-      <category>杂谈</category>
+      <category>5分钟实例</category>
       <enclosure url="https://divertingpan.github.io/post-images/chatgpt_coding.webp" length="0" type="image/webp"></enclosure>
     </item>
     <item>
@@ -66,6 +69,8 @@
 <p>这些题目没有标准答案和做法，这里只是抛砖引玉，欢迎进一步交流优化改进。</p>
 <p>下面是题目和解决思路以及配套完整代码（链接：https://github.com/divertingPan/utility_roo&hellip;</p>
 ]]></description>
+      <category>pytorch</category>
+      <category>计算机视觉</category>
       <category>杂谈</category>
       <enclosure url="https://divertingpan.github.io/post-images/quiz_two_cv_tasks.png" length="0" type="image/png"></enclosure>
     </item>
@@ -77,6 +82,7 @@
       <description><![CDATA[<p>说在最前面：最近扩散模型突然很火，甚至出圈到了那些搞艺术搞绘画的圈子里去了。而且这类模型的表现确实是很惊人，不说那些打着open名义却不开源的公司，单说现在最多人用的stable diffusion，输出效果有目共睹。但是这些模型背后的原理和之前的深度学习思路都不太一样，并且原论文的数学内容又非常浓厚，令人难以下咽。所以，本篇正文内容是来自于非常详尽的推导与解释的论文“**[Understandi&hellip;</p>
 ]]></description>
       <category>杂谈</category>
+      <category>计算机视觉</category>
       <enclosure url="https://divertingpan.github.io/post-images/understanding_diffusion_models.PNG" length="0" type="image/png"></enclosure>
     </item>
     <item>
@@ -91,6 +97,7 @@
 <p>扩散（Diffusion）在热力学中指细小颗粒从高密度区域扩散至低密度区域，在统计领域，扩散则指将复杂的分布&hellip;</p>
 ]]></description>
       <category>杂谈</category>
+      <category>计算机视觉</category>
       <enclosure url="https://divertingpan.github.io/post-images/what_is_diffusion_model.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
     <item>
@@ -120,7 +127,9 @@
 <p>整个设置过程如下：</p>
 <h2 id="pr">设置pr&hellip;</h2>
 ]]></description>
-      <category>杂谈</category>
+      <category>爬虫</category>
+      <category>python</category>
+      <category>Linux</category>
       <enclosure url="https://divertingpan.github.io/post-images/setup_vps_proxy.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
     <item>
@@ -136,9 +145,9 @@ sudo apt-get install apache2
 <p>重启apache2</p>
 <pre><code class="language-bash">sudo /etc/init.d/apache2 restart
 </code></pre>
-<p>使用同一局域网的设&hellip;</p>
+<p>使用同一局域网的设备登录ubuntu的ip地址就&hellip;</p>
 ]]></description>
-      <category>杂谈</category>
+      <category>Linux</category>
       <enclosure url="https://divertingpan.github.io/post-images/setup_webpage_server.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
   </channel>

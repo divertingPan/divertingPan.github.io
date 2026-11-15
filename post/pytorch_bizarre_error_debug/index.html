@@ -8,14 +8,14 @@
   <meta name="description" content="pytorch也有CUDA版本对应的问题
 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。
 较新...">
-  <meta name="keywords" content="杂谈">
+  <meta name="keywords" content="pytorch">
   <meta property="og:site_name" content="老潘家的潘老师">
   <meta property="og:type" content="article">
   <meta property="og:title" content="pytorch的奇怪报错">
   <meta property="og:description" content="pytorch也有CUDA版本对应的问题
 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。
 较新...">
-  <meta property="og:image" content="https://divertingpan.github.io/post-images/pytorch_bizarre_error_debug.jfif">
+  <meta property="og:image" content="https://divertingpan.github.io/post-images/pytorch_bizarre_error_debug.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/images/theme/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="老潘家的潘老师" href="/feed.xml">
@@ -37,19 +37,19 @@
 <meta name="description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
 <meta name="keywords" content="老潘家的潘老师, 博客">
 <link rel="canonical" href="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"pytorch的奇怪报错","url":"https://divertingpan.github.io/post/pytorch_bizarre_error_debug/","description":"pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(\u0026lsquo;cuda\u0026rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应\u0026hellip;","image":"/post-images/pytorch_bizarre_error_debug.jfif","datePublished":"2020-12-09T15:59:07+08:00","dateModified":"2026-11-15T21:11:18+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"pytorch的奇怪报错","url":"https://divertingpan.github.io/post/pytorch_bizarre_error_debug/","description":"pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(\u0026lsquo;cuda\u0026rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应\u0026hellip;","image":"/post-images/pytorch_bizarre_error_debug.jpg","datePublished":"2020-12-09T15:59:07+08:00","dateModified":"2026-11-15T22:47:16+08:00","author":{"@type":"Person","name":"老潘家的潘老师"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"老潘家的潘老师"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://divertingpan.github.io","name":"老潘家的潘老师","position":1},{"@type":"ListItem","item":"https://divertingpan.github.io/post/pytorch_bizarre_error_debug/","name":"pytorch的奇怪报错","position":2}]}</script>
 <meta property="og:title" content="pytorch的奇怪报错">
 <meta property="og:description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
 <meta property="og:url" content="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="老潘家的潘老师">
-<meta property="og:image" content="/post-images/pytorch_bizarre_error_debug.jfif">
+<meta property="og:image" content="/post-images/pytorch_bizarre_error_debug.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://divertingpan.github.io/post/pytorch_bizarre_error_debug/">
 <meta name="twitter:title" content="pytorch的奇怪报错">
 <meta name="twitter:description" content="pytorch也有CUDA版本对应的问题 搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用cpu运行，或者强行加载to(&amp;lsquo;cuda&amp;rsquo;)报错。 较新的版本基本不用担心CUDA版本的适配，较老的版本只能用旧版CUDA 尽管只需要torch和torchvision版本对应&amp;hellip;">
-<meta name="twitter:image" content="/post-images/pytorch_bizarre_error_debug.jfif">
+<meta name="twitter:image" content="/post-images/pytorch_bizarre_error_debug.jpg">
 </head>
 <body class="xxd-page page-post">
   <a class="xxd-sr-only-focusable" href="#main">跳到正文</a>
@@ -148,32 +148,51 @@
   
 
   
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
+      
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">26</span></a></li>
+      
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">2</span><span class="site-nav__label">随笔杂谈</span><span class="site-nav__tag">7</span></a></li>
+      
+    </ul>
+  </section>
+  
 
   
   <details class="site-nav__group site-nav__tags" open>
-    <summary class="site-nav__title">标签<span class="site-nav__title-n">10</span></summary>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">14</span></summary>
     <div class="site-nav__tagscroll">
       <ul>
         
-        <li><a href="/tag/gridea/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Gridea</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">21</span></a></li>
         
-        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">35</span></a></li>
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
         
-        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
         
-        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">18</span></a></li>
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">16</span></a></li>
         
-        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
         
-        <li><a href="/tag/zi-dong-hua/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">自动化</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">13</span></a></li>
         
-        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">17</span></a></li>
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">22</span></a></li>
         
-        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">1</span></a></li>
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
         
         <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
         
-        <li><a href="/tag/illustrator/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">illustrator</span><span class="site-nav__tag">2</span></a></li>
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/photoshop/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">photoshop</span><span class="site-nav__tag">1</span></a></li>
         
       </ul>
     </div>
@@ -185,7 +204,7 @@
 <main id="main" class="site-main">
   <header class="step-head">
     <div class="step-head__eyebrow">
-      <span>文章<span class="dot" aria-hidden="true">·</span><time datetime="2020-12-09T15:59:07+08:00">2020-12-09</time></span>
+      <span><a href="/category/default/">编程与工程</a><span class="dot" aria-hidden="true">·</span><time datetime="2020-12-09T15:59:07+08:00">2020-12-09</time></span>
       <span>约 5 分钟</span>
     </div>
     <progress class="xxd-progress" value="0" max="100" aria-label="阅读进度" data-reading-progress></progress>
@@ -194,11 +213,11 @@
       
       <span class="xxd-badge">3310 字</span>
       <span class="xxd-badge">更新于 2026-11-15</span>
-      <a class="xxd-badge" href="/tag/za-tan/">#杂谈</a>
+      <a class="xxd-badge" href="/tag/pytorch/">#pytorch</a>
     </div>
   </header>
 
-  <figure class="shot shot--cover"><img src="/post-images/pytorch_bizarre_error_debug.jfif" alt="pytorch的奇怪报错" onerror="this.parentNode.remove()"></figure>
+  <figure class="shot shot--cover"><img src="/post-images/pytorch_bizarre_error_debug.jpg" alt="pytorch的奇怪报错" onerror="this.parentNode.remove()"></figure>
 
   
   
