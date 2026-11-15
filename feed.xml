@@ -23,6 +23,20 @@
       <enclosure url="https://divertingpan.github.io/post-images/line_scan_camera.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
     <item>
+      <title>关于考研调剂/复试/面试的个人杂谈</title>
+      <link>https://divertingpan.github.io/post/master-phd-appli/</link>
+      <guid isPermaLink="true">https://divertingpan.github.io/post/master-phd-appli/</guid>
+      <pubDate>Mon, 16 Nov 2026 07:39:54 +0000</pubDate>
+      <description><![CDATA[<p>今天赛博考古，看到很久之前在朋友的视频下面留过一大段言，作为当时的个人经验分享。但是过去这么久，我也从刚读研到快要博士毕业。对于一些地方的见解可能会有一些变化。其中那些时效性强的部分（例如分数线、研招网操作等细节）可以选择性跳过。但是一些其他策略，甚至可以沿用到硕申博。</p>
+<p>以下是当时的分享以及在今天（2026年底，马上又要到研招季了）我的一些增补，仅供各位参考。</p>
+<hr />
+<h2 id="heading">发邮件相关</h2>
+<p>能&hellip;</p>
+]]></description>
+      <category>杂谈</category>
+      <enclosure url="https://divertingpan.github.io/post-images/master-phd-appli.jpg" length="0" type="image/jpeg"></enclosure>
+    </item>
+    <item>
       <title>《三体人航天志第3卷·银河系篇》（第33版节选）</title>
       <link>https://divertingpan.github.io/post/threebody_alien_voyage/</link>
       <guid isPermaLink="true">https://divertingpan.github.io/post/threebody_alien_voyage/</guid>
@@ -131,24 +145,6 @@
       <category>python</category>
       <category>Linux</category>
       <enclosure url="https://divertingpan.github.io/post-images/setup_vps_proxy.jpg" length="0" type="image/jpeg"></enclosure>
-    </item>
-    <item>
-      <title>使用Ubuntu+apache设置带验证的http服务器</title>
-      <link>https://divertingpan.github.io/post/setup_webpage_server/</link>
-      <guid isPermaLink="true">https://divertingpan.github.io/post/setup_webpage_server/</guid>
-      <pubDate>Mon, 01 Nov 2021 16:02:52 +0800</pubDate>
-      <description><![CDATA[<h2 id="apache2">安装apache2</h2>
-<pre><code class="language-bash">sudo apt-get update
-sudo apt-get install apache2
-</code></pre>
-<p>apache2安装成功后，我们可以在/var/www/目录下看到一个html文件夹</p>
-<p>重启apache2</p>
-<pre><code class="language-bash">sudo /etc/init.d/apache2 restart
-</code></pre>
-<p>使用同一局域网的设备登录ubuntu的ip地址就&hellip;</p>
-]]></description>
-      <category>Linux</category>
-      <enclosure url="https://divertingpan.github.io/post-images/setup_webpage_server.jpg" length="0" type="image/jpeg"></enclosure>
     </item>
   </channel>
 </rss>
