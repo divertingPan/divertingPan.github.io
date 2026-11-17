@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-cn">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="/styles/main.min.css">
-
-
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-
-
-<style>:root { --heatmap-color: #39d353; }</style>
-
-
-
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem('flavor-theme');
-      var theme = saved || 'light';
-      if (theme === 'light') {
-        document.documentElement.classList.add('theme-light');
-      }
-    } catch (e) { }
-  })();
-</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Gridea Pro 1.3.0-beta.2">
   <title>老潘家的潘老师</title>
+  <meta name="description" content="CV方向小学二年级在读">
+  <meta name="keywords" content="">
+  <meta property="og:site_name" content="老潘家的潘老师">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="老潘家的潘老师">
+  <meta property="og:description" content="CV方向小学二年级在读">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/images/theme/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="老潘家的潘老师" href="/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="老潘家的潘老师" href="/atom.xml">
+
+  
+  <style>@layer base, xxd, components, site;</style>
+  
+  <script src="/xxd/boot.js" data-key="gridea-3x-ui" data-default-theme="system" data-default-corners="square" data-default-accent="#0b7285"></script>
+  <link rel="stylesheet" href="/xxd/xxd.css">
+  <link rel="stylesheet" href="/styles/site.css">
+  <link rel="stylesheet" href="/styles/blog.css">
+  <link rel="stylesheet" href="/styles/comments.css">
+  <script src="/xxd/icons.js"></script>
+  <script src="/xxd/xxd.js"></script>
+  
+  
   
 <meta name="description" content="CV方向小学二年级在读">
 <meta name="keywords" content="老潘家的潘老师, 博客">
@@ -45,618 +46,399 @@
 <meta name="twitter:description" content="CV方向小学二年级在读">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-<body class="flavor-theme">
-
-  <header class="site-header" id="siteHeader">
-  <div class="header-inner">
-    <div class="top-bar">
-
-      
-      <div class="top-bar__left">
-        
-        <a href="https://divertingpan.github.io" class="site-avatar-link" aria-label="返回首页">
-          <img class="site-avatar" src="/images/avatar.png" alt="老潘家的潘老师" />
-        </a>
-        
-        <a href="https://divertingpan.github.io" class="site-name-link">老潘家的潘老师</a>
-      </div>
-
-      
-      <nav class="top-bar__nav" id="sectionBar">
-        
-        
-        <a class="nav-item" href="/">首页</a>
-        
-        <a class="nav-item" href="/memos">闪念</a>
-        
-        <a class="nav-item" href="/archives">文章</a>
-        
-        <a class="nav-item" href="/tags">标签</a>
-        
-        <a class="nav-item" href="/links">友链</a>
-        
-        <a class="nav-item" href="https://divertingpan.github.io/post/about">关于</a>
-        
-        <a class="nav-item" href="https://divertingpan.github.io/post/billboard">留言板</a>
-        
-        
-      </nav>
-
-      
-      <div class="top-bar__right">
-        <button class="btn-icon btn-search search-btn" id="btnSearch" type="button" aria-label="搜索">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <button class="btn-icon theme-toggle theme-toggle-sun" id="themeToggleSun" type="button"
-          aria-label="切换到浅色模式">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 1C12.5523 1 13 1.44772 13 2V4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4V2C11 1.44772 11.4477 1 12 1Z"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 12C7 9.23858 9.23858 7 12 7C14.7614 7 17 9.23858 17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12ZM12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9Z"></path>
-            <path d="M13 20C13 19.4477 12.5523 19 12 19C11.4477 19 11 19.4477 11 20V22C11 22.5523 11.4477 23 12 23C12.5523 23 13 22.5523 13 22V20Z"></path>
-            <path d="M4.22282 4.22289C4.61335 3.83236 5.24651 3.83236 5.63704 4.22289L7.04704 5.63289C7.43756 6.02341 7.43756 6.65658 7.04704 7.0471C6.65651 7.43762 6.02335 7.43762 5.63283 7.0471L4.22282 5.6371C3.8323 5.24658 3.8323 4.61341 4.22282 4.22289Z"></path>
-            <path d="M18.367 16.9529C17.9765 16.5623 17.3433 16.5623 16.9528 16.9529C16.5623 17.3434 16.5623 17.9766 16.9528 18.3671L18.3628 19.7771C18.7533 20.1676 19.3865 20.1676 19.777 19.7771C20.1675 19.3866 20.1675 18.7534 19.777 18.3629L18.367 16.9529Z"></path>
-            <path d="M1 12C1 11.4477 1.44772 11 2 11H4C4.55228 11 5 11.4477 5 12C5 12.5523 4.55228 13 4 13H2C1.44772 13 1 12.5523 1 12Z"></path>
-            <path d="M20 11C19.4477 11 19 11.4477 19 12C19 12.5523 19.4477 13 20 13H22C22.5523 13 23 12.5523 23 12C23 11.4477 22.5523 11 22 11H20Z"></path>
-            <path d="M7.04704 16.9529C7.43756 17.3434 7.43756 17.9766 7.04704 18.3671L5.63704 19.7771C5.24651 20.1676 4.61335 20.1676 4.22282 19.7771C3.8323 19.3866 3.8323 18.7534 4.22283 18.3629L5.63283 16.9529C6.02335 16.5623 6.65651 16.5623 7.04704 16.9529Z"></path>
-            <path d="M19.777 5.6371C20.1675 5.24657 20.1675 4.61341 19.777 4.22289C19.3865 3.83236 18.7533 3.83236 18.3628 4.22289L16.9528 5.63289C16.5623 6.02341 16.5623 6.65658 16.9528 7.0471C17.3433 7.43762 17.9765 7.43762 18.367 7.0471L19.777 5.6371Z"></path>
-          </svg>
-        </button>
-        <button class="btn-icon theme-toggle theme-toggle-moon" id="themeToggleMoon" type="button"
-          aria-label="切换到深色模式">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 11.5955 21.7564 11.2309 21.3827 11.0761C21.009 10.9213 20.5789 11.0069 20.2929 11.2929C19.287 12.2988 17.9226 12.864 16.5 12.864C15.0774 12.864 13.713 12.2988 12.7071 11.2929C11.7012 10.287 11.136 8.92261 11.136 7.5C11.136 6.07739 11.7012 4.71304 12.7071 3.70711C12.9931 3.42111 13.0787 2.99099 12.9239 2.61732C12.7691 2.24364 12.4045 2 12 2ZM7.55544 5.34824C8.27036 4.87055 9.05353 4.51389 9.87357 4.28778C9.39271 5.27979 9.13604 6.37666 9.13604 7.5C9.13604 9.45304 9.91189 11.3261 11.2929 12.7071C12.6739 14.0881 14.547 14.864 16.5 14.864C17.6233 14.864 18.7202 14.6073 19.7122 14.1264C19.4861 14.9465 19.1295 15.7296 18.6518 16.4446C17.7727 17.7602 16.5233 18.7855 15.0615 19.391C13.5997 19.9965 11.9911 20.155 10.4393 19.8463C8.88743 19.5376 7.46197 18.7757 6.34315 17.6569C5.21447 16.538 4.4624 15.1126 4.15372 13.5607C3.84504 12.0089 4.00347 10.4003 4.60897 8.93853C5.21447 7.47672 6.23985 6.22729 7.55544 5.34824Z"></path>
-            <path d="M19 2C19.5523 2 20 2.44772 20 3V4H21C21.5523 4 22 4.44772 22 5C22 5.55228 21.5523 6 21 6H20V7C20 7.55228 19.5523 8 19 8C18.4477 8 18 7.55228 18 7V6H17C16.4477 6 16 5.55228 16 5C16 4.44772 16.4477 4 17 4H18V3C18 2.44772 18.4477 2 19 2Z"></path>
-          </svg>
-        </button>
-        <button class="btn-icon btn-nav-toggle mobile-only" id="btnNavToggle" type="button" aria-label="切换导航">
-          <div class="hamburger" id="hamburger">
-            <span class="hamburger__line hamburger__line--top"></span>
-            <span class="hamburger__line hamburger__line--bottom"></span>
-          </div>
-        </button>
-      </div>
-
+<body class="xxd-page page-home">
+  <a class="xxd-sr-only-focusable" href="#main">跳到正文</a>
+  <header class="site-top">
+  <button class="xxd-btn site-menu" data-variant="ghost" data-icon-only aria-label="打开目录" id="site-menu" aria-controls="site-nav" aria-expanded="false"><i data-xxd-icon="Menu" data-size="18"></i></button>
+  <a class="site-brand" href="/">
+    <img class="site-logo" src="/images/theme/favicon.ico" alt="" width="18" height="18">
+    <span class="site-brand__name">老潘家的潘老师</span>
+  </a>
+  <button class="site-search" id="site-search" type="button" aria-label="搜索文章"><i data-xxd-icon="Search" data-size="14"></i><span>搜索文章</span><kbd class="xxd-kbd" data-kbd-mod>⌘K</kbd></button>
+  <span class="site-top__spacer"></span>
+  <div class="site-appearance">
+    <div class="xxd-segmented" data-xxd-segmented data-name="theme" aria-label="外观" id="site-theme">
+      <button role="radio" data-value="light" aria-label="亮色" data-tooltip="亮色" data-tooltip-placement="bottom"><i data-xxd-icon="Sun" data-size="14"></i></button>
+      <button role="radio" data-value="dark" aria-label="暗色" data-tooltip="暗色" data-tooltip-placement="bottom"><i data-xxd-icon="Moon" data-size="14"></i></button>
+      <button role="radio" data-value="system" aria-label="跟随系统" data-tooltip="跟随系统" data-tooltip-placement="bottom"><i data-xxd-icon="Contrast" data-size="14"></i></button>
     </div>
+    
+    <a class="xxd-btn" data-size="sm" data-variant="ghost" data-icon-only href="https://github.com/divertingPan" target="_blank" rel="noopener" aria-label="GitHub" data-tooltip="GitHub" data-tooltip-placement="bottom-end"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg></a>
   </div>
 </header>
 
-
-<div class="header-spacer"></div>
-
-<script>
-(function(){
-  var btn = document.getElementById('btnNavToggle');
-  var nav = document.getElementById('sectionBar');
-  var hamburger = document.getElementById('hamburger');
-  if (btn && nav) {
-    btn.addEventListener('click', function(){
-      nav.classList.toggle('top-bar__nav--open');
-      if (hamburger) hamburger.classList.toggle('is-active');
-    });
-    nav.querySelectorAll('.nav-item').forEach(function(item){
-      item.addEventListener('click', function(){
-        nav.classList.remove('top-bar__nav--open');
-        if (hamburger) hamburger.classList.remove('is-active');
-      });
-    });
-  }
-
-  var root = document.documentElement;
-  var applyTheme = function(theme, persist){
-    if (theme === 'light') {
-      root.classList.add('theme-light');
-    } else {
-      root.classList.remove('theme-light');
-    }
-    if (persist) {
-      try { localStorage.setItem('flavor-theme', theme); } catch (e) {}
-    }
-  };
-  document.querySelectorAll('.theme-toggle').forEach(function(el){
-    el.addEventListener('click', function(){
-      applyTheme(root.classList.contains('theme-light') ? 'dark' : 'light', true);
-    });
-  });
-})();
-</script>
-
-  <main class="site-main" role="main">
+  <div class="site-body">
     
-
-
-
-<section class="hero-section">
-  <img class="hero-image" src="/images/theme/未标题-1.jpg" alt="" />
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    
-    
-    <p class="hero-subtitle">一个不务正业者的自述</p>
-    
-    
-    <a href="/post/about" class="hero-cta">
-      <span class="hero-cta__text meta-text">阅读全文</span>
-      <span class="hero-cta__icon">&rarr;</span>
-    </a>
-    
-  </div>
-</section>
-
-
-<div class="container">
+<nav class="site-nav" id="site-nav" aria-label="网站目录">
   
-  
-  <section class="section-popular">
-    <div class="section-header">
-      <h2 class="section-title">热门文章</h2>
-      <a href="/post" class="section-more meta-text">查看全部 &rarr;</a>
-    </div>
-    <div class="compact-grid">
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">菜单</h2>
+    <ul class="site-nav__menus">
       
-       <article class="post-card post-card--compact">
-  <a href="/post/master-phd-appli/" class="post-card__inner">
-    <div class="post-card__body">
-      <h3 class="post-card__title clamp-2">关于考研调剂/复试/面试的个人杂谈</h3>
-      <div class="post-card__meta meta-text">2026-11-16</div>
-    </div>
-    
-    <img class="post-card__thumb-square" src="/post-images/master-phd-appli.jpg" alt="关于考研调剂/复试/面试的个人杂谈" loading="lazy" />
-    
-  </a>
-</article>
-  
-       <article class="post-card post-card--compact">
-  <a href="/post/threebody_alien_voyage/" class="post-card__inner">
-    <div class="post-card__body">
-      <h3 class="post-card__title clamp-2">《三体人航天志第3卷·银河系篇》（第33版节选）</h3>
-      <div class="post-card__meta meta-text">2025-06-14</div>
-    </div>
-    
-    <img class="post-card__thumb-square" src="/post-images/threebody_alien_voyage.jpg" alt="《三体人航天志第3卷·银河系篇》（第33版节选）" loading="lazy" />
-    
-  </a>
-</article>
-  
-       <article class="post-card post-card--compact">
-  <a href="/post/win-mamba/" class="post-card__inner">
-    <div class="post-card__body">
-      <h3 class="post-card__title clamp-2">win10系统完美配置mamba-ssm全整合方案</h3>
-      <div class="post-card__meta meta-text">2025-04-18</div>
-    </div>
-    
-    <img class="post-card__thumb-square" src="/post-images/win-mamba.png" alt="win10系统完美配置mamba-ssm全整合方案" loading="lazy" />
-    
-  </a>
-</article>
-  
-       <article class="post-card post-card--compact">
-  <a href="/post/chatgpt_coding/" class="post-card__inner">
-    <div class="post-card__body">
-      <h3 class="post-card__title clamp-2">【5分钟实例】一个ChatGPT辅助编程全过程实录</h3>
-      <div class="post-card__meta meta-text">2023-03-02</div>
-    </div>
-    
-    <img class="post-card__thumb-square" src="/post-images/chatgpt_coding.webp" alt="【5分钟实例】一个ChatGPT辅助编程全过程实录" loading="lazy" />
-    
-  </a>
-</article>
-  
-       
-       
-       
-       
-       
-        </div>
+      <li>
+        <a href="/">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="House" data-size="16"></i></span>
+          <span class="site-nav__label">首页</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/memos">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="StickyNote" data-size="16"></i></span>
+          <span class="site-nav__label">闪念</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/archives">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Archive" data-size="16"></i></span>
+          <span class="site-nav__label">文章</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/tags">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Tags" data-size="16"></i></span>
+          <span class="site-nav__label">标签</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/links">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Link" data-size="16"></i></span>
+          <span class="site-nav__label">友链</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="https://divertingpan.github.io/post/about">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="UserRound" data-size="16"></i></span>
+          <span class="site-nav__label">关于</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="https://divertingpan.github.io/post/billboard">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Newspaper" data-size="16"></i></span>
+          <span class="site-nav__label">留言板</span>
+          
+        </a>
+        
+      </li>
+      
+    </ul>
   </section>
   
 
-  <div class="content-grid">
-    <div class="main-content">
+  
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
       
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">37</span></a></li>
       
-      <section class="section-latest">
-        <div class="section-header">
-          <h2 class="section-title">最新文章</h2>
-        </div>
-        <div class="post-list">
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/master-phd-appli/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">关于考研调剂/复试/面试的个人杂谈</h3>
-    </a>
-    <a href="/post/master-phd-appli/" class="post-card__excerpt clamp-2">
-      今天赛博考古，看到很久之前在朋友的视频下面留过一大段言，作为当时的个人经验分享。但是过去这么久，我也从刚读研到快要博士毕业。对于一些地方的见解可能会有一些变化。其中那些时效性强的部分（例如分数线、研招网操作等细节）可以选择性跳过。但是...
-    </a>
-    <div class="post-card__meta meta-text">
-      2026-11-16
+      <li><a href="/category/zuo-tu-yu-yi-shu/"><span class="site-nav__num">2</span><span class="site-nav__label">做图与艺术</span><span class="site-nav__tag">21</span></a></li>
       
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">3</span><span class="site-nav__label">随笔与杂谈</span><span class="site-nav__tag">13</span></a></li>
+      
+    </ul>
+  </section>
+  
+
+  
+  <details class="site-nav__group site-nav__tags" open>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">15</span></summary>
+    <div class="site-nav__tagscroll">
+      <ul>
+        
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">16</span></a></li>
+        
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
+        
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">14</span></a></li>
+        
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
+        
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">14</span></a></li>
+        
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">26</span></a></li>
+        
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">4</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
+        
+        <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/dian-zi-ying-jian/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">电子硬件</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/r-yu-yan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">R语言</span><span class="site-nav__tag">1</span></a></li>
+        
+      </ul>
     </div>
-  </div>
+  </details>
   
-  <a href="/post/master-phd-appli/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/master-phd-appli.jpg" alt="关于考研调剂/复试/面试的个人杂谈" loading="lazy" />
-  </a>
-  
-</article>
+</nav>
 
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/threebody_alien_voyage/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">《三体人航天志第3卷·银河系篇》（第33版节选）</h3>
-    </a>
-    <a href="/post/threebody_alien_voyage/" class="post-card__excerpt clamp-2">
-      前言：这一篇是之前摸鱼的时候开了个脑洞，然后借了一些刘慈欣的系列设定，搭了个舞台写了一点东西。里面也neta了一些其他成分。对于比较主要的设定元素，给没有看过刘慈欣系列的读者进行一些解释：
-
-三体人：出自《三体》系列，设定为通过鳞片一...
-    </a>
-    <div class="post-card__meta meta-text">
-      2025-06-14
+    
+<main id="main" class="site-main site-main--wide">
+  <div class="home">
+    
+    <header class="home__hero">
+      <h1>老潘家的潘老师</h1>
+      <p class="home__lead">CV方向小学二年级在读</p>
       
-    </div>
-  </div>
-  
-  <a href="/post/threebody_alien_voyage/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/threebody_alien_voyage.jpg" alt="《三体人航天志第3卷·银河系篇》（第33版节选）" loading="lazy" />
-  </a>
-  
-</article>
-
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/win-mamba/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">win10系统完美配置mamba-ssm全整合方案</h3>
-    </a>
-    <a href="/post/win-mamba/" class="post-card__excerpt clamp-2">
-      好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是bug，网上大量的垃圾...
-    </a>
-    <div class="post-card__meta meta-text">
-      2025-04-18
+      <div class="home__cta">
+        <a class="xxd-btn" data-variant="primary" href="/post/about/">关于老潘<i data-xxd-icon="ArrowRight" data-size="16"></i></a>
+        <a class="xxd-btn" href="/archives/">浏览归档</a>
+      </div>
       
-    </div>
-  </div>
-  
-  <a href="/post/win-mamba/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/win-mamba.png" alt="win10系统完美配置mamba-ssm全整合方案" loading="lazy" />
-  </a>
-  
-</article>
+    </header>
 
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/chatgpt_coding/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">【5分钟实例】一个ChatGPT辅助编程全过程实录</h3>
-    </a>
-    <a href="/post/chatgpt_coding/" class="post-card__excerpt clamp-2">
-      最近突然有一个需求，要将一个数据集做一下整理。涉及到一些不复杂但是需要去查代码的用法。突发奇想让ChatGPT帮我完成一部分。于是尝试了一下我提需求，ChatGPT写代码。整体体验还是及格的。如果后来没有掉线失忆的话甚至可能给他一个优...
-    </a>
-    <div class="post-card__meta meta-text">
-      2023-03-02
+    
+    
+    
+    
+    <section class="rec" aria-labelledby="h-rec">
+      <div class="sec-head">
+        <h2 id="h-rec">推荐阅读</h2>
+        <p class="sec-head__lead">挑几篇还值得再读一次的旧文。</p>
+      </div>
       
-    </div>
-  </div>
-  
-  <a href="/post/chatgpt_coding/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/chatgpt_coding.webp" alt="【5分钟实例】一个ChatGPT辅助编程全过程实录" loading="lazy" />
-  </a>
-  
-</article>
-
+      <ul class="rec-grid" style="--rec-cols: 4">
+        
+        
+        <li class="rec-card">
           
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/quiz_two_cv_tasks/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">两个图像处理问题的实例以及分析思路</h3>
-    </a>
-    <a href="/post/quiz_two_cv_tasks/" class="post-card__excerpt clamp-2">
-      这是老潘曾经做过的某个大学笔试题，代码尽可能干净简练并且能够快速解决问题，比较值得记录并且研究。尤其是第二题，在方法的设计上，对于结果的约束需要一些技巧才行，无脑用绝对误差很难行得通。
-这些题目没有标准答案和做法，这里只是抛砖引玉，欢...
-    </a>
-    <div class="post-card__meta meta-text">
-      2022-09-23
+          <div class="rec-card__pending" data-rec-link="post/line_scan_camera/" data-rec-title="【硬核摄影2.0】用线性CCD器件制作扫描相机">
+            <a class="rec-card__link" href="post/line_scan_camera/">
+              <span class="rec-card__cover"><span class="rec-card__ph" aria-hidden="true"><b>1</b></span></span>
+              <span class="rec-card__body">
+                <span class="rec-card__title">【硬核摄影2.0】用线性CCD器件制作扫描相机</span>
+                <span class="rec-card__desc" data-rec-desc></span>
+                <span class="rec-card__meta" data-rec-meta hidden></span>
+              </span>
+            </a>
+          </div>
+        </li>
+        
+        
+        
+        <li class="rec-card">
+          
+          <div class="rec-card__pending" data-rec-link="post/moving_detection/" data-rec-title="光流法应用——自适应检测视频火车速度">
+            <a class="rec-card__link" href="post/moving_detection/">
+              <span class="rec-card__cover"><span class="rec-card__ph" aria-hidden="true"><b>2</b></span></span>
+              <span class="rec-card__body">
+                <span class="rec-card__title">光流法应用——自适应检测视频火车速度</span>
+                <span class="rec-card__desc" data-rec-desc></span>
+                <span class="rec-card__meta" data-rec-meta hidden></span>
+              </span>
+            </a>
+          </div>
+        </li>
+        
+        
+        
+        <li class="rec-card">
+          
+          <div class="rec-card__pending" data-rec-link="post/train_scanning/" data-rec-title="【硬核摄影】给火车拍个全身照">
+            <a class="rec-card__link" href="post/train_scanning/">
+              <span class="rec-card__cover"><span class="rec-card__ph" aria-hidden="true"><b>3</b></span></span>
+              <span class="rec-card__body">
+                <span class="rec-card__title">【硬核摄影】给火车拍个全身照</span>
+                <span class="rec-card__desc" data-rec-desc></span>
+                <span class="rec-card__meta" data-rec-meta hidden></span>
+              </span>
+            </a>
+          </div>
+        </li>
+        
+        
+        
+        <li class="rec-card">
+          
+          <div class="rec-card__pending" data-rec-link="post/threebody_alien_voyage/" data-rec-title="《三体人航天志第3卷·银河系篇》（第33版节选）">
+            <a class="rec-card__link" href="post/threebody_alien_voyage/">
+              <span class="rec-card__cover"><span class="rec-card__ph" aria-hidden="true"><b>4</b></span></span>
+              <span class="rec-card__body">
+                <span class="rec-card__title">《三体人航天志第3卷·银河系篇》（第33版节选）</span>
+                <span class="rec-card__desc" data-rec-desc></span>
+                <span class="rec-card__meta" data-rec-meta hidden></span>
+              </span>
+            </a>
+          </div>
+        </li>
+        
+        
+      </ul>
       
-    </div>
-  </div>
-  
-  <a href="/post/quiz_two_cv_tasks/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/quiz_two_cv_tasks.png" alt="两个图像处理问题的实例以及分析思路" loading="lazy" />
-  </a>
-  
-</article>
+    </section>
+    
+    
 
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/understanding_diffusion_models/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">从统一的视角理解扩散模型</h3>
-    </a>
-    <a href="/post/understanding_diffusion_models/" class="post-card__excerpt clamp-2">
-      说在最前面：最近扩散模型突然很火，甚至出圈到了那些搞艺术搞绘画的圈子里去了。而且这类模型的表现确实是很惊人，不说那些打着open名义却不开源的公司，单说现在最多人用的stable diffusion，输出效果有目共睹。但是这些模型背后...
-    </a>
-    <div class="post-card__meta meta-text">
-      2022-09-02
+    <section class="latest" aria-labelledby="h-latest">
+      <div class="sec-head">
+        <h2 id="h-latest">最新文章</h2>
+        <p class="sec-head__lead">按发布时间倒序。置顶文章始终在最前。</p>
+      </div>
       
-    </div>
-  </div>
-  
-  <a href="/post/understanding_diffusion_models/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/understanding_diffusion_models.PNG" alt="从统一的视角理解扩散模型" loading="lazy" />
-  </a>
-  
-</article>
-
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/what_is_diffusion_model/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">什么是Diffusion模型？</h3>
-    </a>
-    <a href="/post/what_is_diffusion_model/" class="post-card__excerpt clamp-2">
-      作者：Ray Wang，原文：什么是Diffusion模型？
+      <ol class="roadmap">
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">1</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/master-phd-appli/">关于考研调剂/复试/面试的个人杂谈</a></span>
+            <span class="roadmap__sum">今天赛博考古，看到很久之前在朋友的视频下面留过一大段言，作为当时的个人经验分享。但是过去这么久，我也从刚读研到快要博士毕业。对于一些地方的...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2026-11-16T15:39:54+08:00">2026-11-16</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">2</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/threebody_alien_voyage/">《三体人航天志第3卷·银河系篇》（第33版节选）</a></span>
+            <span class="roadmap__sum">前言：这一篇是之前摸鱼的时候开了个脑洞，然后借了一些刘慈欣的系列设定，搭了个舞台写了一点东西。里面也neta了一些其他成分。对于比较主要的...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2025-06-14T22:22:42+08:00">2025-06-14</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">3</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/win-mamba/">win10系统完美配置mamba-ssm全整合方案</a></span>
+            <span class="roadmap__sum">好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配l...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2025-04-18T10:52:44+08:00">2025-04-18</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">4</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/chatgpt_coding/">【5分钟实例】一个ChatGPT辅助编程全过程实录</a></span>
+            <span class="roadmap__sum">最近突然有一个需求，要将一个数据集做一下整理。涉及到一些不复杂但是需要去查代码的用法。突发奇想让ChatGPT帮我完成一部分。于是尝试了一...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2023-03-02T18:30:40+08:00">2023-03-02</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">5</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/quiz_two_cv_tasks/">两个图像处理问题的实例以及分析思路</a></span>
+            <span class="roadmap__sum">这是老潘曾经做过的某个大学笔试题，代码尽可能干净简练并且能够快速解决问题，比较值得记录并且研究。尤其是第二题，在方法的设计上，对于结果的约...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2022-09-23T14:41:57+08:00">2022-09-23</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">6</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/understanding_diffusion_models/">从统一的视角理解扩散模型</a></span>
+            <span class="roadmap__sum">说在最前面：最近扩散模型突然很火，甚至出圈到了那些搞艺术搞绘画的圈子里去了。而且这类模型的表现确实是很惊人，不说那些打着open名义却不开...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2022-09-02T19:37:35+08:00">2022-09-02</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">7</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/what_is_diffusion_model/">什么是Diffusion模型？</a></span>
+            <span class="roadmap__sum">作者：Ray Wang，原文：什么是Diffusion模型？
 
 Diffusion过程
-扩散（Diffusion）在热力学中指细小颗粒从高密度区域扩散至低密度区域，在统计领域，扩散则指将复杂的分布转换为一个简单的分布的过程。Diffu...
-    </a>
-    <div class="post-card__meta meta-text">
-      2022-08-22
-      
-    </div>
-  </div>
-  
-  <a href="/post/what_is_diffusion_model/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/what_is_diffusion_model.jpg" alt="什么是Diffusion模型？" loading="lazy" />
-  </a>
-  
-</article>
-
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/CN_story_copyright_law/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例</h3>
-    </a>
-    <a href="/post/CN_story_copyright_law/" class="post-card__excerpt clamp-2">
-      （本文为外部转载收录，请以原作者观点与解释为准）
+扩散（Diffusion）在热力学中指细小颗粒从高...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2022-08-22T18:58:54+08:00">2022-08-22</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">8</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/CN_story_copyright_law/">【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例</a></span>
+            <span class="roadmap__sum">（本文为外部转载收录，请以原作者观点与解释为准）
 作者：卢九名，王恩慧
 前言
-“抄袭”、“剽窃”、“融梗”，谈及这些词语会使我们联想到当今一些瞒心昧己的作家，将原创作家多年的创作心血改头换面，拼凑成“自己的作品“以获取巨大的商业利益是...
-    </a>
-    <div class="post-card__meta meta-text">
-      2022-03-22
-      
-    </div>
-  </div>
-  
-  <a href="/post/CN_story_copyright_law/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/CN_story_copyright_law.jpg" alt="【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例" loading="lazy" />
-  </a>
-  
-</article>
+“抄袭”、“剽窃”、“融梗”，谈及这些词语会使我们联想到当今...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2022-03-22T20:12:40+08:00">2022-03-22</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">9</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/setup_vps_proxy/">利用动态VPS服务器建立自用专属proxy</a></span>
+            <span class="roadmap__sum">需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：
 
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/setup_vps_proxy/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">利用动态VPS服务器建立自用专属proxy</h3>
-    </a>
-    <a href="/post/setup_vps_proxy/" class="post-card__excerpt clamp-2">
-      需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：
-
-动态VPS支持拨号换ip
-普通的服务器用来挂爬虫
-
-（其实可以把爬虫也放在VPS上，但是一般VPS的...
-    </a>
-    <div class="post-card__meta meta-text">
-      2021-12-16
-      
-    </div>
-  </div>
-  
-  <a href="/post/setup_vps_proxy/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/setup_vps_proxy.jpg" alt="利用动态VPS服务器建立自用专属proxy" loading="lazy" />
-  </a>
-  
-</article>
-
-          
-          <article class="post-card post-card--list">
-  <div class="post-card__body">
-    <a href="/post/setup_webpage_server/" class="post-card__title-link">
-      <h3 class="post-card__title clamp-3">使用Ubuntu+apache设置带验证的http服务器</h3>
-    </a>
-    <a href="/post/setup_webpage_server/" class="post-card__excerpt clamp-2">
-      安装apache2
+动态...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2021-12-16T01:24:05+08:00">2021-12-16</time></span>
+        </li>
+        
+        <li>
+          <span class="roadmap__n" aria-hidden="true">10</span>
+          <span class="roadmap__main">
+            <span class="roadmap__title"><a href="/post/setup_webpage_server/">使用Ubuntu+apache设置带验证的http服务器</a></span>
+            <span class="roadmap__sum">安装apache2
 sudo apt-get update
 sudo apt-get install apache2
 
-apache2安装成功后，我们可以在/var/www/目录下看到一个html文件夹
-重启apache2
-sudo ...
-    </a>
-    <div class="post-card__meta meta-text">
-      2021-11-01
+apache2安装...</span>
+          </span>
+          <span class="roadmap__time"><time datetime="2021-11-01T16:02:52+08:00">2021-11-01</time></span>
+        </li>
+        
+      </ol>
       
-    </div>
-  </div>
+      
+
+<nav class="pager" aria-label="分页">
   
-  <a href="/post/setup_webpage_server/" class="post-card__thumb-link">
-    <img class="post-card__thumb" src="/post-images/setup_webpage_server.jpg" alt="使用Ubuntu+apache设置带验证的http服务器" loading="lazy" />
-  </a>
+  <span class="xxd-btn pager__btn" aria-disabled="true"><i data-xxd-icon="ArrowLeft" data-size="16"></i>上一页</span>
   
-</article>
+  <span class="pager__status">第 1 / 8 页</span>
+  
+  <a class="xxd-btn pager__btn" href="/page/2/" rel="next">下一页<i data-xxd-icon="ArrowRight" data-size="16"></i></a>
+  
+</nav>
 
-          
-        </div>
-      </section>
-      
 
-      
-      
-      <div class="view-more">
-        <a href="/post/page/2/" class="btn btn--secondary">查看更多文章 &rarr;</a>
-      </div>
-      
-    </div>
-
-    
-    
-    <aside class="sidebar">
-      <div class="sidebar__section sidebar__about">
-        
-        <img class="sidebar__avatar" src="/images/avatar.png" alt="老潘家的潘老师" />
-        
-        <h3 class="sidebar__title">老潘家的潘老师</h3>
-        
-        <p class="sidebar__desc">CV方向小学二年级在读</p>
-        
-        
-      </div>
-
-      
-      <div class="sidebar__section">
-        <h4 class="sidebar__section-title meta-text">标签</h4>
-        <div class="sidebar__tags">
-          
-          <a href="/tag/za-tan/" class="tag-pill">杂谈</a>
-          
-          <a href="/tag/anaconda/" class="tag-pill">Anaconda</a>
-          
-          <a href="/tag/pytorch/" class="tag-pill">pytorch</a>
-          
-          <a href="/tag/python/" class="tag-pill">python</a>
-          
-          <a href="/tag/huo-che/" class="tag-pill">火车</a>
-          
-          <a href="/tag/ji-suan-ji-shi-jue/" class="tag-pill">计算机视觉</a>
-          
-          <a href="/tag/yi-shu-she-ji/" class="tag-pill">艺术设计</a>
-          
-          <a href="/tag/sui-bi/" class="tag-pill">随笔</a>
-          
-          <a href="/tag/5-fen-zhong-shi-li/" class="tag-pill">5分钟实例</a>
-          
-          <a href="/tag/pa-chong/" class="tag-pill">爬虫</a>
-          
-          <a href="/tag/linux/" class="tag-pill">Linux</a>
-          
-          <a href="/tag/endnote/" class="tag-pill">endnote</a>
-          
-          <a href="/tag/matlab/" class="tag-pill">matlab</a>
-          
-          <a href="/tag/dian-zi-ying-jian/" class="tag-pill">电子硬件</a>
-          
-          <a href="/tag/r-yu-yan/" class="tag-pill">R语言</a>
-          
-        </div>
-      </div>
-      
-    </aside>
-    
+    </section>
   </div>
-</div>
-
-  </main>
-
-  <footer class="site-footer">
-  <div class="footer-inner">
-
-    
-    
-    <nav class="footer-nav" aria-label="页脚导航">
-      
-      <a class="footer-nav__link" href="/">首页</a>
-      
-      <a class="footer-nav__link" href="/memos">闪念</a>
-      
-      <a class="footer-nav__link" href="/archives">文章</a>
-      
-      <a class="footer-nav__link" href="/tags">标签</a>
-      
-      <a class="footer-nav__link" href="/links">友链</a>
-      
-      <a class="footer-nav__link" href="https://divertingpan.github.io/post/about">关于</a>
-      
-      <a class="footer-nav__link" href="https://divertingpan.github.io/post/billboard">留言板</a>
-      
-    </nav>
-    
-
-    
-    <div class="footer-social">
-      
-      <a class="footer-social__link" href="https://github.com/divertingPan" target="_blank" rel="noopener noreferrer"
-        aria-label="GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-        </svg>
-      </a>
-      
-      
-      
-      <a class="footer-social__link" href="/feed.xml" aria-label="RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6.18 15.64a2.18 2.18 0 110 4.36 2.18 2.18 0 010-4.36zM4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 004 7.27V4.44zm0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 004 12.93V10.1z"/>
-        </svg>
-      </a>
-    </div>
-
-    
-    <div class="footer-copyright">
-      <p>&copy; 2026 老潘家的潘老师. All rights reserved.</p>
-    </div>
-
-    
-    
-
-    
-    <div class="footer-powered">
-      <span>Powered by <a href="https://gridea.pro" target="_blank" rel="noopener noreferrer">Gridea Pro</a></span>
-    </div>
-
-  </div>
+  <div class="site-foot-wrap">
+<footer class="site-foot">
+  <p>© 2026 老潘家的潘老师 · 保留所有权利 · 由 <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a> 驱动</p>
 </footer>
-
-  
-  <div class="search-overlay" id="searchOverlay" style="display:none;">
-  <div class="search-modal">
-    <div class="search-header">
-      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="搜索文章..." autocomplete="off" />
-      <span class="search-kbd">&#8984;K</span>
-      <button class="search-close" id="searchClose" type="button" aria-label="关闭搜索">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
 </div>
 
-<script src="/scripts/search.js"></script>
-  
+</main>
 
+  </div>
+  <div class="site-nav-scrim" id="site-nav-scrim"></div>
   
+<script type="application/json" id="site-search-config">{"index": "/api/search.json", "placeholder": "搜文章标题、正文、标签……", "empty": "没找到，换个词试试", "loading": "正在加载索引…"}</script>
 
+  <script src="/scripts/site.js"></script>
   
-
   
-
-<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: flavor-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: 3x-ui v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>

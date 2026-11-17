@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-cn">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="/styles/main.min.css">
-
-
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-
-
-<style>:root { --heatmap-color: #39d353; }</style>
-
-
-
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem('flavor-theme');
-      var theme = saved || 'light';
-      if (theme === 'light') {
-        document.documentElement.classList.add('theme-light');
-      }
-    } catch (e) { }
-  })();
-</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Gridea Pro 1.3.0-beta.2">
-  <title>归档 | 老潘家的潘老师</title>
+  <title>归档 · 老潘家的潘老师</title>
+  <meta name="description" content="CV方向小学二年级在读">
+  <meta name="keywords" content="">
+  <meta property="og:site_name" content="老潘家的潘老师">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="老潘家的潘老师">
+  <meta property="og:description" content="CV方向小学二年级在读">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/images/theme/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="老潘家的潘老师" href="/feed.xml">
+  <link rel="alternate" type="application/atom+xml" title="老潘家的潘老师" href="/atom.xml">
+
+  
+  <style>@layer base, xxd, components, site;</style>
+  
+  <script src="/xxd/boot.js" data-key="gridea-3x-ui" data-default-theme="system" data-default-corners="square" data-default-accent="#0b7285"></script>
+  <link rel="stylesheet" href="/xxd/xxd.css">
+  <link rel="stylesheet" href="/styles/site.css">
+  <link rel="stylesheet" href="/styles/blog.css">
+  <link rel="stylesheet" href="/styles/comments.css">
+  <script src="/xxd/icons.js"></script>
+  <script src="/xxd/xxd.js"></script>
+  
+  
   
 <meta name="description" content="CV方向小学二年级在读">
 <meta name="keywords" content="老潘家的潘老师, 博客">
@@ -45,560 +46,808 @@
 <meta name="twitter:description" content="CV方向小学二年级在读">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-<body class="flavor-theme">
-
-  <header class="site-header" id="siteHeader">
-  <div class="header-inner">
-    <div class="top-bar">
-
-      
-      <div class="top-bar__left">
-        
-        <a href="https://divertingpan.github.io" class="site-avatar-link" aria-label="返回首页">
-          <img class="site-avatar" src="/images/avatar.png" alt="老潘家的潘老师" />
-        </a>
-        
-        <a href="https://divertingpan.github.io" class="site-name-link">老潘家的潘老师</a>
-      </div>
-
-      
-      <nav class="top-bar__nav" id="sectionBar">
-        
-        
-        <a class="nav-item" href="/">首页</a>
-        
-        <a class="nav-item" href="/memos">闪念</a>
-        
-        <a class="nav-item" href="/archives">文章</a>
-        
-        <a class="nav-item" href="/tags">标签</a>
-        
-        <a class="nav-item" href="/links">友链</a>
-        
-        <a class="nav-item" href="https://divertingpan.github.io/post/about">关于</a>
-        
-        <a class="nav-item" href="https://divertingpan.github.io/post/billboard">留言板</a>
-        
-        
-      </nav>
-
-      
-      <div class="top-bar__right">
-        <button class="btn-icon btn-search search-btn" id="btnSearch" type="button" aria-label="搜索">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <button class="btn-icon theme-toggle theme-toggle-sun" id="themeToggleSun" type="button"
-          aria-label="切换到浅色模式">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 1C12.5523 1 13 1.44772 13 2V4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4V2C11 1.44772 11.4477 1 12 1Z"></path>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 12C7 9.23858 9.23858 7 12 7C14.7614 7 17 9.23858 17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12ZM12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9Z"></path>
-            <path d="M13 20C13 19.4477 12.5523 19 12 19C11.4477 19 11 19.4477 11 20V22C11 22.5523 11.4477 23 12 23C12.5523 23 13 22.5523 13 22V20Z"></path>
-            <path d="M4.22282 4.22289C4.61335 3.83236 5.24651 3.83236 5.63704 4.22289L7.04704 5.63289C7.43756 6.02341 7.43756 6.65658 7.04704 7.0471C6.65651 7.43762 6.02335 7.43762 5.63283 7.0471L4.22282 5.6371C3.8323 5.24658 3.8323 4.61341 4.22282 4.22289Z"></path>
-            <path d="M18.367 16.9529C17.9765 16.5623 17.3433 16.5623 16.9528 16.9529C16.5623 17.3434 16.5623 17.9766 16.9528 18.3671L18.3628 19.7771C18.7533 20.1676 19.3865 20.1676 19.777 19.7771C20.1675 19.3866 20.1675 18.7534 19.777 18.3629L18.367 16.9529Z"></path>
-            <path d="M1 12C1 11.4477 1.44772 11 2 11H4C4.55228 11 5 11.4477 5 12C5 12.5523 4.55228 13 4 13H2C1.44772 13 1 12.5523 1 12Z"></path>
-            <path d="M20 11C19.4477 11 19 11.4477 19 12C19 12.5523 19.4477 13 20 13H22C22.5523 13 23 12.5523 23 12C23 11.4477 22.5523 11 22 11H20Z"></path>
-            <path d="M7.04704 16.9529C7.43756 17.3434 7.43756 17.9766 7.04704 18.3671L5.63704 19.7771C5.24651 20.1676 4.61335 20.1676 4.22282 19.7771C3.8323 19.3866 3.8323 18.7534 4.22283 18.3629L5.63283 16.9529C6.02335 16.5623 6.65651 16.5623 7.04704 16.9529Z"></path>
-            <path d="M19.777 5.6371C20.1675 5.24657 20.1675 4.61341 19.777 4.22289C19.3865 3.83236 18.7533 3.83236 18.3628 4.22289L16.9528 5.63289C16.5623 6.02341 16.5623 6.65658 16.9528 7.0471C17.3433 7.43762 17.9765 7.43762 18.367 7.0471L19.777 5.6371Z"></path>
-          </svg>
-        </button>
-        <button class="btn-icon theme-toggle theme-toggle-moon" id="themeToggleMoon" type="button"
-          aria-label="切换到深色模式">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C10.0222 2 8.08879 2.58649 6.4443 3.6853C4.79981 4.78412 3.51809 6.3459 2.76121 8.17317C2.00433 10.0004 1.8063 12.0111 2.19215 13.9509C2.578 15.8907 3.53041 17.6725 4.92894 19.0711C6.32746 20.4696 8.10929 21.422 10.0491 21.8079C11.9889 22.1937 13.9996 21.9957 15.8268 21.2388C17.6541 20.4819 19.2159 19.2002 20.3147 17.5557C21.4135 15.9112 22 13.9778 22 12C22 11.5955 21.7564 11.2309 21.3827 11.0761C21.009 10.9213 20.5789 11.0069 20.2929 11.2929C19.287 12.2988 17.9226 12.864 16.5 12.864C15.0774 12.864 13.713 12.2988 12.7071 11.2929C11.7012 10.287 11.136 8.92261 11.136 7.5C11.136 6.07739 11.7012 4.71304 12.7071 3.70711C12.9931 3.42111 13.0787 2.99099 12.9239 2.61732C12.7691 2.24364 12.4045 2 12 2ZM7.55544 5.34824C8.27036 4.87055 9.05353 4.51389 9.87357 4.28778C9.39271 5.27979 9.13604 6.37666 9.13604 7.5C9.13604 9.45304 9.91189 11.3261 11.2929 12.7071C12.6739 14.0881 14.547 14.864 16.5 14.864C17.6233 14.864 18.7202 14.6073 19.7122 14.1264C19.4861 14.9465 19.1295 15.7296 18.6518 16.4446C17.7727 17.7602 16.5233 18.7855 15.0615 19.391C13.5997 19.9965 11.9911 20.155 10.4393 19.8463C8.88743 19.5376 7.46197 18.7757 6.34315 17.6569C5.21447 16.538 4.4624 15.1126 4.15372 13.5607C3.84504 12.0089 4.00347 10.4003 4.60897 8.93853C5.21447 7.47672 6.23985 6.22729 7.55544 5.34824Z"></path>
-            <path d="M19 2C19.5523 2 20 2.44772 20 3V4H21C21.5523 4 22 4.44772 22 5C22 5.55228 21.5523 6 21 6H20V7C20 7.55228 19.5523 8 19 8C18.4477 8 18 7.55228 18 7V6H17C16.4477 6 16 5.55228 16 5C16 4.44772 16.4477 4 17 4H18V3C18 2.44772 18.4477 2 19 2Z"></path>
-          </svg>
-        </button>
-        <button class="btn-icon btn-nav-toggle mobile-only" id="btnNavToggle" type="button" aria-label="切换导航">
-          <div class="hamburger" id="hamburger">
-            <span class="hamburger__line hamburger__line--top"></span>
-            <span class="hamburger__line hamburger__line--bottom"></span>
-          </div>
-        </button>
-      </div>
-
+<body class="xxd-page page-archives">
+  <a class="xxd-sr-only-focusable" href="#main">跳到正文</a>
+  <header class="site-top">
+  <button class="xxd-btn site-menu" data-variant="ghost" data-icon-only aria-label="打开目录" id="site-menu" aria-controls="site-nav" aria-expanded="false"><i data-xxd-icon="Menu" data-size="18"></i></button>
+  <a class="site-brand" href="/">
+    <img class="site-logo" src="/images/theme/favicon.ico" alt="" width="18" height="18">
+    <span class="site-brand__name">老潘家的潘老师</span>
+  </a>
+  <button class="site-search" id="site-search" type="button" aria-label="搜索文章"><i data-xxd-icon="Search" data-size="14"></i><span>搜索文章</span><kbd class="xxd-kbd" data-kbd-mod>⌘K</kbd></button>
+  <span class="site-top__spacer"></span>
+  <div class="site-appearance">
+    <div class="xxd-segmented" data-xxd-segmented data-name="theme" aria-label="外观" id="site-theme">
+      <button role="radio" data-value="light" aria-label="亮色" data-tooltip="亮色" data-tooltip-placement="bottom"><i data-xxd-icon="Sun" data-size="14"></i></button>
+      <button role="radio" data-value="dark" aria-label="暗色" data-tooltip="暗色" data-tooltip-placement="bottom"><i data-xxd-icon="Moon" data-size="14"></i></button>
+      <button role="radio" data-value="system" aria-label="跟随系统" data-tooltip="跟随系统" data-tooltip-placement="bottom"><i data-xxd-icon="Contrast" data-size="14"></i></button>
     </div>
+    
+    <a class="xxd-btn" data-size="sm" data-variant="ghost" data-icon-only href="https://github.com/divertingPan" target="_blank" rel="noopener" aria-label="GitHub" data-tooltip="GitHub" data-tooltip-placement="bottom-end"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg></a>
   </div>
 </header>
 
-
-<div class="header-spacer"></div>
-
-<script>
-(function(){
-  var btn = document.getElementById('btnNavToggle');
-  var nav = document.getElementById('sectionBar');
-  var hamburger = document.getElementById('hamburger');
-  if (btn && nav) {
-    btn.addEventListener('click', function(){
-      nav.classList.toggle('top-bar__nav--open');
-      if (hamburger) hamburger.classList.toggle('is-active');
-    });
-    nav.querySelectorAll('.nav-item').forEach(function(item){
-      item.addEventListener('click', function(){
-        nav.classList.remove('top-bar__nav--open');
-        if (hamburger) hamburger.classList.remove('is-active');
-      });
-    });
-  }
-
-  var root = document.documentElement;
-  var applyTheme = function(theme, persist){
-    if (theme === 'light') {
-      root.classList.add('theme-light');
-    } else {
-      root.classList.remove('theme-light');
-    }
-    if (persist) {
-      try { localStorage.setItem('flavor-theme', theme); } catch (e) {}
-    }
-  };
-  document.querySelectorAll('.theme-toggle').forEach(function(el){
-    el.addEventListener('click', function(){
-      applyTheme(root.classList.contains('theme-light') ? 'dark' : 'light', true);
-    });
-  });
-})();
-</script>
-
-  <main class="site-main" role="main">
+  <div class="site-body">
     
-<div class="container">
-  <div class="page-header">
-    <h1 class="page-title">归档</h1>
-    
-    <p class="page-subtitle meta-text">共 50 篇文章</p>
-    
-  </div>
+<nav class="site-nav" id="site-nav" aria-label="网站目录">
+  
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">菜单</h2>
+    <ul class="site-nav__menus">
+      
+      <li>
+        <a href="/">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="House" data-size="16"></i></span>
+          <span class="site-nav__label">首页</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/memos">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="StickyNote" data-size="16"></i></span>
+          <span class="site-nav__label">闪念</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/archives">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Archive" data-size="16"></i></span>
+          <span class="site-nav__label">文章</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/tags">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Tags" data-size="16"></i></span>
+          <span class="site-nav__label">标签</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="/links">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Link" data-size="16"></i></span>
+          <span class="site-nav__label">友链</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="https://divertingpan.github.io/post/about">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="UserRound" data-size="16"></i></span>
+          <span class="site-nav__label">关于</span>
+          
+        </a>
+        
+      </li>
+      
+      <li>
+        <a href="https://divertingpan.github.io/post/billboard">
+          <span class="site-nav__icon" aria-hidden="true"><i data-xxd-icon="Newspaper" data-size="16"></i></span>
+          <span class="site-nav__label">留言板</span>
+          
+        </a>
+        
+      </li>
+      
+    </ul>
+  </section>
+  
 
   
-  <div class="archive-list">
-    
-    <h2 class="archive-year">2026</h2>
-    
-    <a href="/post/master-phd-appli/" class="archive-item">
-      <time class="archive-item__date" datetime="2026-11-16T15:39:54+08:00">2026-11-16</time>
-      <span class="archive-item__title">关于考研调剂/复试/面试的个人杂谈</span>
+  <section class="site-nav__group">
+    <h2 class="site-nav__title">分类</h2>
+    <ul class="site-nav__cats">
       
-    </a>
-    
-    
-    <h2 class="archive-year">2025</h2>
-    
-    <a href="/post/threebody_alien_voyage/" class="archive-item">
-      <time class="archive-item__date" datetime="2025-06-14T22:22:42+08:00">2025-06-14</time>
-      <span class="archive-item__title">《三体人航天志第3卷·银河系篇》（第33版节选）</span>
+      <li><a href="/category/default/"><span class="site-nav__num">1</span><span class="site-nav__label">编程与工程</span><span class="site-nav__tag">37</span></a></li>
       
-    </a>
-    
-    <a href="/post/win-mamba/" class="archive-item">
-      <time class="archive-item__date" datetime="2025-04-18T10:52:44+08:00">2025-04-18</time>
-      <span class="archive-item__title">win10系统完美配置mamba-ssm全整合方案</span>
+      <li><a href="/category/zuo-tu-yu-yi-shu/"><span class="site-nav__num">2</span><span class="site-nav__label">做图与艺术</span><span class="site-nav__tag">21</span></a></li>
       
-    </a>
-    
-    
-    <h2 class="archive-year">2023</h2>
-    
-    <a href="/post/chatgpt_coding/" class="archive-item">
-      <time class="archive-item__date" datetime="2023-03-02T18:30:40+08:00">2023-03-02</time>
-      <span class="archive-item__title">【5分钟实例】一个ChatGPT辅助编程全过程实录</span>
+      <li><a href="/category/sui-bi-za-tan/"><span class="site-nav__num">3</span><span class="site-nav__label">随笔与杂谈</span><span class="site-nav__tag">13</span></a></li>
       
-    </a>
+    </ul>
+  </section>
+  
+
+  
+  <details class="site-nav__group site-nav__tags" open>
+    <summary class="site-nav__title">标签<span class="site-nav__title-n">15</span></summary>
+    <div class="site-nav__tagscroll">
+      <ul>
+        
+        <li><a href="/tag/za-tan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">杂谈</span><span class="site-nav__tag">16</span></a></li>
+        
+        <li><a href="/tag/anaconda/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Anaconda</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/pytorch/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">pytorch</span><span class="site-nav__tag">11</span></a></li>
+        
+        <li><a href="/tag/python/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">python</span><span class="site-nav__tag">14</span></a></li>
+        
+        <li><a href="/tag/huo-che/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">火车</span><span class="site-nav__tag">5</span></a></li>
+        
+        <li><a href="/tag/ji-suan-ji-shi-jue/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">计算机视觉</span><span class="site-nav__tag">14</span></a></li>
+        
+        <li><a href="/tag/yi-shu-she-ji/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">艺术设计</span><span class="site-nav__tag">26</span></a></li>
+        
+        <li><a href="/tag/sui-bi/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">随笔</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/5-fen-zhong-shi-li/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">5分钟实例</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/pa-chong/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">爬虫</span><span class="site-nav__tag">4</span></a></li>
+        
+        <li><a href="/tag/linux/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">Linux</span><span class="site-nav__tag">5</span></a></li>
+        
+        <li><a href="/tag/endnote/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">endnote</span><span class="site-nav__tag">1</span></a></li>
+        
+        <li><a href="/tag/matlab/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">matlab</span><span class="site-nav__tag">2</span></a></li>
+        
+        <li><a href="/tag/dian-zi-ying-jian/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">电子硬件</span><span class="site-nav__tag">3</span></a></li>
+        
+        <li><a href="/tag/r-yu-yan/"><span class="site-nav__hash" aria-hidden="true">#</span><span class="site-nav__label">R语言</span><span class="site-nav__tag">1</span></a></li>
+        
+      </ul>
+    </div>
+  </details>
+  
+</nav>
+
     
-    
-    <h2 class="archive-year">2022</h2>
-    
-    <a href="/post/quiz_two_cv_tasks/" class="archive-item">
-      <time class="archive-item__date" datetime="2022-09-23T14:41:57+08:00">2022-09-23</time>
-      <span class="archive-item__title">两个图像处理问题的实例以及分析思路</span>
-      
-    </a>
-    
-    <a href="/post/understanding_diffusion_models/" class="archive-item">
-      <time class="archive-item__date" datetime="2022-09-02T19:37:35+08:00">2022-09-02</time>
-      <span class="archive-item__title">从统一的视角理解扩散模型</span>
-      
-    </a>
-    
-    <a href="/post/what_is_diffusion_model/" class="archive-item">
-      <time class="archive-item__date" datetime="2022-08-22T18:58:54+08:00">2022-08-22</time>
-      <span class="archive-item__title">什么是Diffusion模型？</span>
-      
-    </a>
-    
-    <a href="/post/CN_story_copyright_law/" class="archive-item">
-      <time class="archive-item__date" datetime="2022-03-22T20:12:40+08:00">2022-03-22</time>
-      <span class="archive-item__title">【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例</span>
-      
-    </a>
-    
-    
-    <h2 class="archive-year">2021</h2>
-    
-    <a href="/post/setup_vps_proxy/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-12-16T01:24:05+08:00">2021-12-16</time>
-      <span class="archive-item__title">利用动态VPS服务器建立自用专属proxy</span>
-      
-    </a>
-    
-    <a href="/post/setup_webpage_server/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-11-01T16:02:52+08:00">2021-11-01</time>
-      <span class="archive-item__title">使用Ubuntu+apache设置带验证的http服务器</span>
-      
-    </a>
-    
-    <a href="/post/line_scan_camera/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-08-06T14:06:42+08:00">2021-08-06</time>
-      <span class="archive-item__title">【硬核摄影2.0】用线性CCD器件制作扫描相机</span>
-      
-    </a>
-    
-    <a href="/post/paper_review_rebuttal/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-06-09T18:39:41+08:00">2021-06-09</time>
-      <span class="archive-item__title">SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧</span>
-      
-    </a>
-    
-    <a href="/post/how_to_learn_new_areas/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-05-17T23:08:39+08:00">2021-05-17</time>
-      <span class="archive-item__title">如何快速了解某个新领域、方向？</span>
-      
-    </a>
-    
-    <a href="/post/moving_detection/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-02-25T19:04:55+08:00">2021-02-25</time>
-      <span class="archive-item__title">光流法应用——自适应检测视频火车速度</span>
-      
-    </a>
-    
-    <a href="/post/train_scanning/" class="archive-item">
-      <time class="archive-item__date" datetime="2021-02-10T12:17:14+08:00">2021-02-10</time>
-      <span class="archive-item__title">【硬核摄影】给火车拍个全身照</span>
-      
-    </a>
-    
-    
-    <h2 class="archive-year">2020</h2>
-    
-    <a href="/post/postcards_cls/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-12-17T21:42:05+08:00">2020-12-17</time>
-      <span class="archive-item__title">一个使用pytorch的图片分类教程——以明信片分类为例</span>
-      
-    </a>
-    
-    <a href="/post/pytorch_bizarre_error_debug/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-12-09T15:59:07+08:00">2020-12-09</time>
-      <span class="archive-item__title">pytorch的奇怪报错</span>
-      
-    </a>
-    
-    <a href="/post/pytorch_speedup/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-12-05T20:03:26+08:00">2020-12-05</time>
-      <span class="archive-item__title">pytorch训练加速方案整理</span>
-      
-    </a>
-    
-    <a href="/post/linux_disk_mount/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-11-30T10:56:49+08:00">2020-11-30</time>
-      <span class="archive-item__title">Linux挂载硬盘/内存盘/网络硬盘方法</span>
-      
-    </a>
-    
-    <a href="/post/xshell_to_tensorboard/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-11-29T14:38:18+08:00">2020-11-29</time>
-      <span class="archive-item__title">使用xshell连接远程服务器的tensorboard</span>
-      
-    </a>
-    
-    <a href="/post/pandas_acrobat/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-11-17T22:01:00+08:00">2020-11-17</time>
-      <span class="archive-item__title">pandas的一些杂技（记）</span>
-      
-    </a>
-    
-    <a href="/post/python_acrobat/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-11-02T14:30:32+08:00">2020-11-02</time>
-      <span class="archive-item__title">python的一些杂技（记）</span>
-      
-    </a>
-    
-    <a href="/post/handwriting_en_recognition/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-10-30T18:28:03+08:00">2020-10-30</time>
-      <span class="archive-item__title">手写签名识别-数据预处理部分</span>
-      
-    </a>
-    
-    <a href="/post/python_scrapy_tips/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-10-20T13:01:04+08:00">2020-10-20</time>
-      <span class="archive-item__title">Scrapy爬虫时的一些细节</span>
-      
-    </a>
-    
-    <a href="/post/bypass_limited_network/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-10-18T16:31:31+08:00">2020-10-18</time>
-      <span class="archive-item__title">绕过需要认证的网络（校园网）直接联网的方法</span>
-      
-    </a>
-    
-    <a href="/post/pytorch_acrobat/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-10-17T11:25:39+08:00">2020-10-17</time>
-      <span class="archive-item__title">pytorch的一些杂技（记）</span>
-      
-    </a>
-    
-    <a href="/post/Endnote_tips/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-09-28T20:29:55+08:00">2020-09-28</time>
-      <span class="archive-item__title">Endnote的一些使用技巧</span>
-      
-    </a>
-    
-    <a href="/post/pytorch_lethal_traps/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-08-18T21:17:09+08:00">2020-08-18</time>
-      <span class="archive-item__title">【转载】pytorch里面的天坑</span>
-      
-    </a>
-    
-    <a href="/post/possibility_of_1_after_continuous_0/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-08-17T17:47:17+08:00">2020-08-17</time>
-      <span class="archive-item__title">抛掷100次硬币都是正面，下一次抛掷更可能是反面？</span>
-      
-    </a>
-    
-    <a href="/post/remove_duplicate/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-08-17T15:47:20+08:00">2020-08-17</time>
-      <span class="archive-item__title">【5分钟实例】去除大量图片中重复的图片</span>
-      
-    </a>
-    
-    <a href="/post/coin_classifier/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-07-12T19:11:37+08:00">2020-07-12</time>
-      <span class="archive-item__title">硬币系列三 | 硬币自动分类的一个论文复现</span>
-      
-    </a>
-    
-    <a href="/post/coin_detect/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-07-11T18:56:28+08:00">2020-07-11</time>
-      <span class="archive-item__title">硬币系列二 | 从照片中自动检测硬币</span>
-      
-    </a>
-    
-    <a href="/post/pick_resume/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-06-24T16:06:51+08:00">2020-06-24</time>
-      <span class="archive-item__title">【5分钟实例】按名字从大量简历中筛出需要的简历</span>
-      
-    </a>
-    
-    <a href="/post/coin_show/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-06-07T23:45:14+08:00">2020-06-07</time>
-      <span class="archive-item__title">【课间休息】各国硬币大赏</span>
-      
-    </a>
-    
-    <a href="/post/pytorch_autoencoder/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-04-29T18:19:42+08:00">2020-04-29</time>
-      <span class="archive-item__title">复习Pytorch的使用方法，在套路的基础上灵活应变</span>
-      
-    </a>
-    
-    <a href="/post/python_startup/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-03-04T17:08:57+08:00">2020-03-04</time>
-      <span class="archive-item__title">基础 | 如何方便正确快速配置python编程环境（Anaconda+Python）</span>
-      
-    </a>
-    
-    <a href="/post/cat_gan/" class="archive-item">
-      <time class="archive-item__date" datetime="2020-02-18T16:21:30+08:00">2020-02-18</time>
-      <span class="archive-item__title">再进阶 | 利用生成式对抗网络自动生成猫咪图片</span>
-      
-    </a>
-    
-    
-    <h2 class="archive-year">2019</h2>
-    
-    <a href="/post/cnn_classifier/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-09-28T15:52:59+08:00">2019-09-28</time>
-      <span class="archive-item__title">高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例</span>
-      
-    </a>
-    
-    <a href="/post/python_tieba/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-05-30T15:11:08+08:00">2019-05-30</time>
-      <span class="archive-item__title">进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例</span>
-      
-    </a>
-    
-    <a href="/post/ban_baidu_ads/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-05-29T23:58:19+08:00">2019-05-29</time>
-      <span class="archive-item__title">续前文 | 百度贴吧清贴事件、屏蔽广告的解决方案</span>
-      
-    </a>
-    
-    <a href="/post/how_to_use_google_efficiently/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-05-28T23:19:47+08:00">2019-05-28</time>
-      <span class="archive-item__title">教程 | 如何利用互联网高效检索信息——以百度搜索为例</span>
-      
-    </a>
-    
-    <a href="/post/unity3d_debug_recording/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-05-09T22:14:12+08:00">2019-05-09</time>
-      <span class="archive-item__title">记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法</span>
-      
-    </a>
-    
-    <a href="/post/raw_photography/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-04-16T20:47:21+08:00">2019-04-16</time>
-      <span class="archive-item__title">科普 | 老潘解说手机RAW拍照新姿势</span>
-      
-    </a>
-    
-    <a href="/post/remove_watermark/" class="archive-item">
-      <time class="archive-item__date" datetime="2019-01-01T20:56:48+08:00">2019-01-01</time>
-      <span class="archive-item__title">教程 | 使用Photoshop去除水印</span>
-      
-    </a>
-    
-    
-    <h2 class="archive-year">2018</h2>
-    
-    <a href="/post/auto_lottery/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-08-10T20:39:21+08:00">2018-08-10</time>
-      <span class="archive-item__title">猎奇 | Python+ADB实现自动点赞和抽奖检测</span>
-      
-    </a>
-    
-    <a href="/post/bayer_dither/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-06-29T18:52:10+08:00">2018-06-29</time>
-      <span class="archive-item__title">数字图像处理 | 图像二值化中的规则抖动算法</span>
-      
-    </a>
-    
-    <a href="/post/altium_pcb/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-04-14T18:29:01+08:00">2018-04-14</time>
-      <span class="archive-item__title">用Altium Designer制作PCB过程总结</span>
-      
-    </a>
-    
-    <a href="/post/r_map_data/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-02-13T17:01:09+08:00">2018-02-13</time>
-      <span class="archive-item__title">猎奇 | 记录如何用R绘制数据地图</span>
-      
-    </a>
-    
-    <a href="/post/broken_fridges/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-02-10T16:47:42+08:00">2018-02-10</time>
-      <span class="archive-item__title">猎奇 | 教你怎样修复坏冰箱</span>
-      
-    </a>
-    
-    <a href="/post/cubic_sea/" class="archive-item">
-      <time class="archive-item__date" datetime="2018-02-05T21:09:15+08:00">2018-02-05</time>
-      <span class="archive-item__title">干货 | 使用Photoshop做一块立体的海洋</span>
-      
-    </a>
-    
-    
+<main id="main" class="site-main">
+  <div class="xxd-prose page-head">
+    <h1>归档</h1>
+    <p>一共写了 71 篇，按年份排列。</p>
   </div>
   
-</div>
+  
+  <section class="archive-year" aria-labelledby="y-2026">
+    <h2 class="archive-year__title" id="y-2026">2026<span>1 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/master-phd-appli/" data-post-title="关于考研调剂/复试/面试的个人杂谈" data-post-date="2026-11-16" data-post-cover="/post-images/master-phd-appli.jpg" data-post-min="4" data-post-cat="随笔与杂谈" data-post-desc="今天赛博考古，看到很久之前在朋友的视频下面留过一大段言，作为当时的个人经验分享。但是过去这么久，我也从刚读研到快要博士毕业。对于一些地方的见解可能会有一些变化。其中那些时效性强的部分（例如分数线、研招网操作等细节）...">
+        <span class="roadmap__n">11-16</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/master-phd-appli/">关于考研调剂/复试/面试的个人杂谈</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2025">
+    <h2 class="archive-year__title" id="y-2025">2025<span>2 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/threebody_alien_voyage/" data-post-title="《三体人航天志第3卷·银河系篇》（第33版节选）" data-post-date="2025-06-14" data-post-cover="/post-images/threebody_alien_voyage.jpg" data-post-min="14" data-post-cat="随笔与杂谈" data-post-desc="前言：这一篇是之前摸鱼的时候开了个脑洞，然后借了一些刘慈欣的系列设定，搭了个舞台写了一点东西。里面也neta了一些其他成分。对于比较主要的设定元素，给没有看过刘慈欣系列的读者进行一些解释：
 
-  </main>
+三体人：出自《三体》系...">
+        <span class="roadmap__n">06-14</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/threebody_alien_voyage/">《三体人航天志第3卷·银河系篇》（第33版节选）</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #随笔</span>
+        </span>
+        <span class="roadmap__time">14 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/win-mamba/" data-post-title="win10系统完美配置mamba-ssm全整合方案" data-post-date="2025-04-18" data-post-cover="/post-images/win-mamba.png" data-post-min="7" data-post-cat="编程与工程" data-post-desc="好久没瞎写东西了，刚好最近遇到一个逆天需求：要在win10平台上配置可用的mamba-ssm环境。由于这个环境原版以及相关依赖都是仅适配linux的，即使是依赖conda环境直接拿来往windows系统上装也全是b...">
+        <span class="roadmap__n">04-18</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/win-mamba/">win10系统完美配置mamba-ssm全整合方案</a></span>
+          <span class="roadmap__sum">编程与工程 · #Anaconda #pytorch #python</span>
+        </span>
+        <span class="roadmap__time">7 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2023">
+    <h2 class="archive-year__title" id="y-2023">2023<span>1 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/chatgpt_coding/" data-post-title="【5分钟实例】一个ChatGPT辅助编程全过程实录" data-post-date="2023-03-02" data-post-cover="/post-images/chatgpt_coding.webp" data-post-min="36" data-post-cat="编程与工程" data-post-desc="最近突然有一个需求，要将一个数据集做一下整理。涉及到一些不复杂但是需要去查代码的用法。突发奇想让ChatGPT帮我完成一部分。于是尝试了一下我提需求，ChatGPT写代码。整体体验还是及格的。如果后来没有掉线失忆的...">
+        <span class="roadmap__n">03-02</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/chatgpt_coding/">【5分钟实例】一个ChatGPT辅助编程全过程实录</a></span>
+          <span class="roadmap__sum">编程与工程 · #5分钟实例</span>
+        </span>
+        <span class="roadmap__time">36 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2022">
+    <h2 class="archive-year__title" id="y-2022">2022<span>4 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/quiz_two_cv_tasks/" data-post-title="两个图像处理问题的实例以及分析思路" data-post-date="2022-09-23" data-post-cover="/post-images/quiz_two_cv_tasks.png" data-post-min="4" data-post-cat="编程与工程" data-post-desc="这是老潘曾经做过的某个大学笔试题，代码尽可能干净简练并且能够快速解决问题，比较值得记录并且研究。尤其是第二题，在方法的设计上，对于结果的约束需要一些技巧才行，无脑用绝对误差很难行得通。
+这些题目没有标准答案和做法，...">
+        <span class="roadmap__n">09-23</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/quiz_two_cv_tasks/">两个图像处理问题的实例以及分析思路</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #计算机视觉 #杂谈</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/understanding_diffusion_models/" data-post-title="从统一的视角理解扩散模型" data-post-date="2022-09-02" data-post-cover="/post-images/understanding_diffusion_models.PNG" data-post-min="66" data-post-cat="编程与工程" data-post-desc="说在最前面：最近扩散模型突然很火，甚至出圈到了那些搞艺术搞绘画的圈子里去了。而且这类模型的表现确实是很惊人，不说那些打着open名义却不开源的公司，单说现在最多人用的stable diffusion，输出效果有目共...">
+        <span class="roadmap__n">09-02</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/understanding_diffusion_models/">从统一的视角理解扩散模型</a></span>
+          <span class="roadmap__sum">编程与工程 · #杂谈 #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">66 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/what_is_diffusion_model/" data-post-title="什么是Diffusion模型？" data-post-date="2022-08-22" data-post-cover="/post-images/what_is_diffusion_model.jpg" data-post-min="35" data-post-cat="编程与工程" data-post-desc="作者：Ray Wang，原文：什么是Diffusion模型？
 
-  <footer class="site-footer">
-  <div class="footer-inner">
+Diffusion过程
+扩散（Diffusion）在热力学中指细小颗粒从高密度区域扩散至低密度区域，在统计领域，扩散则指将复杂的分布转换为一个简单的分...">
+        <span class="roadmap__n">08-22</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/what_is_diffusion_model/">什么是Diffusion模型？</a></span>
+          <span class="roadmap__sum">编程与工程 · #杂谈 #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">35 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/CN_story_copyright_law/" data-post-title="【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例" data-post-date="2022-03-22" data-post-cover="/post-images/CN_story_copyright_law.jpg" data-post-min="14" data-post-cat="随笔与杂谈" data-post-desc="（本文为外部转载收录，请以原作者观点与解释为准）
+作者：卢九名，王恩慧
+前言
+“抄袭”、“剽窃”、“融梗”，谈及这些词语会使我们联想到当今一些瞒心昧己的作家，将原创作家多年的创作心血改头换面，拼凑成“自己的作品“以...">
+        <span class="roadmap__n">03-22</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/CN_story_copyright_law/">【中国故事】“太子”与“狸猫”之争——琼瑶诉于正著作权侵权案例</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">14 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2021">
+    <h2 class="archive-year__title" id="y-2021">2021<span>7 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/setup_vps_proxy/" data-post-title="利用动态VPS服务器建立自用专属proxy" data-post-date="2021-12-16" data-post-cover="/post-images/setup_vps_proxy.jpg" data-post-min="23" data-post-cat="编程与工程" data-post-desc="需求：爬虫需要时不时换ip，但是又不需要那么频繁的切换，所以决定自己用一个动态服务器做自己的代理ip。这时需要准备至少两个服务器：
 
-    
-    
-    <nav class="footer-nav" aria-label="页脚导航">
-      
-      <a class="footer-nav__link" href="/">首页</a>
-      
-      <a class="footer-nav__link" href="/memos">闪念</a>
-      
-      <a class="footer-nav__link" href="/archives">文章</a>
-      
-      <a class="footer-nav__link" href="/tags">标签</a>
-      
-      <a class="footer-nav__link" href="/links">友链</a>
-      
-      <a class="footer-nav__link" href="https://divertingpan.github.io/post/about">关于</a>
-      
-      <a class="footer-nav__link" href="https://divertingpan.github.io/post/billboard">留言板</a>
-      
-    </nav>
-    
+动态VPS支持拨号换ip
+普通的服务器用来挂爬虫
 
-    
-    <div class="footer-social">
+（其实可以把爬虫也放在VPS...">
+        <span class="roadmap__n">12-16</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/setup_vps_proxy/">利用动态VPS服务器建立自用专属proxy</a></span>
+          <span class="roadmap__sum">编程与工程 · #爬虫 #python #Linux</span>
+        </span>
+        <span class="roadmap__time">23 分钟</span>
+      </li>
       
-      <a class="footer-social__link" href="https://github.com/divertingPan" target="_blank" rel="noopener noreferrer"
-        aria-label="GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-        </svg>
-      </a>
+      <li data-post-link="/post/setup_webpage_server/" data-post-title="使用Ubuntu+apache设置带验证的http服务器" data-post-date="2021-11-01" data-post-cover="/post-images/setup_webpage_server.jpg" data-post-min="2" data-post-cat="编程与工程" data-post-desc="安装apache2
+sudo apt-get update
+sudo apt-get install apache2
+
+apache2安装成功后，我们可以在/var/www/目录下看到一个html文件夹
+重启apa...">
+        <span class="roadmap__n">11-01</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/setup_webpage_server/">使用Ubuntu+apache设置带验证的http服务器</a></span>
+          <span class="roadmap__sum">编程与工程 · #Linux</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
       
+      <li data-post-link="/post/line_scan_camera/" data-post-title="【硬核摄影2.0】用线性CCD器件制作扫描相机" data-post-date="2021-08-06" data-post-cover="/post-images/line_scan_camera.jpg" data-post-min="21" data-post-cat="编程与工程" data-post-desc="本文参考资料：
+[1] (Strongly Recommend!) Fundamentals and Experiments of Line Scan Camera: http://www.elm-chan.org...">
+        <span class="roadmap__n">08-06</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/line_scan_camera/">【硬核摄影2.0】用线性CCD器件制作扫描相机</a></span>
+          <span class="roadmap__sum">编程与工程 · #火车 #电子硬件 #艺术设计</span>
+        </span>
+        <span class="roadmap__time">21 分钟</span>
+      </li>
       
+      <li data-post-link="/post/paper_review_rebuttal/" data-post-title="SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧" data-post-date="2021-06-09" data-post-cover="/post-images/paper_review_rebuttal.jpg" data-post-min="6" data-post-cat="随笔与杂谈" data-post-desc="ref: SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧
+一篇稿子从酝酿到成型历经艰辛，投出去之后又是漫长的等待，好容易收到编辑的回信，得到的往往又是审稿人不留情面的一顿狂批。这时候，如何有策略有技巧的...">
+        <span class="roadmap__n">06-09</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/paper_review_rebuttal/">SCI录用的最后一步——答复审稿人的策略和答复信的写作技巧</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">6 分钟</span>
+      </li>
       
-      <a class="footer-social__link" href="/feed.xml" aria-label="RSS">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6.18 15.64a2.18 2.18 0 110 4.36 2.18 2.18 0 010-4.36zM4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 004 7.27V4.44zm0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 004 12.93V10.1z"/>
-        </svg>
-      </a>
-    </div>
+      <li data-post-link="/post/how_to_learn_new_areas/" data-post-title="如何快速了解某个新领域、方向？" data-post-date="2021-05-17" data-post-cover="/post-images/how_to_learn_new_areas.jpg" data-post-min="1" data-post-cat="随笔与杂谈" data-post-desc="1，谷歌学术/百度学术/arxiv，关键词搜索较新的论文，例如“image translation adversarial ”，选择日期较新的任意一篇，对口方向即可；
+2，看该论文related work介绍，相关...">
+        <span class="roadmap__n">05-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/how_to_learn_new_areas/">如何快速了解某个新领域、方向？</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">1 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/moving_detection/" data-post-title="光流法应用——自适应检测视频火车速度" data-post-date="2021-02-25" data-post-cover="/post-images/moving_detection.png" data-post-min="11" data-post-cat="编程与工程" data-post-desc="本文参考资料：
+[1] OpenCV-Python Tutorials » Video Analysis » Optical Flow
+[2] Good Features to Track
+[3] Pyramida...">
+        <span class="roadmap__n">02-25</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/moving_detection/">光流法应用——自适应检测视频火车速度</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #计算机视觉 #艺术设计 #火车</span>
+        </span>
+        <span class="roadmap__time">11 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/train_scanning/" data-post-title="【硬核摄影】给火车拍个全身照" data-post-date="2021-02-10" data-post-cover="/post-images/train_scanning.png" data-post-min="19" data-post-cat="编程与工程" data-post-desc="GitHub项目地址：https://github.com/divertingPan/video_scanner
+（硬件版本项目地址：https://github.com/divertingPan/Line_Sca...">
+        <span class="roadmap__n">02-10</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/train_scanning/">【硬核摄影】给火车拍个全身照</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #艺术设计 #火车</span>
+        </span>
+        <span class="roadmap__time">19 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2020">
+    <h2 class="archive-year__title" id="y-2020">2020<span>22 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/postcards_cls/" data-post-title="一个使用pytorch的图片分类教程——以明信片分类为例" data-post-date="2020-12-17" data-post-cover="/post-images/postcards_cls.jpg" data-post-min="47" data-post-cat="编程与工程" data-post-desc="本项目全部源代码地址：https://github.com/divertingPan/postcard_cls
+前言
+之前和师兄聊的时候随口说了一句，实验室应该留一点祖传的代码，这个“祖传”并不是贬义的那个含义，主...">
+        <span class="roadmap__n">12-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/postcards_cls/">一个使用pytorch的图片分类教程——以明信片分类为例</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #python #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">47 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pytorch_bizarre_error_debug/" data-post-title="pytorch的奇怪报错" data-post-date="2020-12-09" data-post-cover="/post-images/pytorch_bizarre_error_debug.jpg" data-post-min="5" data-post-cat="编程与工程" data-post-desc="pytorch也有CUDA版本对应的问题
+搞flyai的时候，由于用pip安装依赖，不像conda可以自动配置cudatoolkit，如果pytorch版本和服务器自己的CUDA版本不同则调用gpu失败，模型只会用...">
+        <span class="roadmap__n">12-09</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pytorch_bizarre_error_debug/">pytorch的奇怪报错</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch</span>
+        </span>
+        <span class="roadmap__time">5 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pytorch_speedup/" data-post-title="pytorch训练加速方案整理" data-post-date="2020-12-05" data-post-cover="/post-images/pytorch_speedup.jpg" data-post-min="2" data-post-cat="编程与工程" data-post-desc="1. 把数据放内存里，降低 io 延迟。
+使用：
+sudo mount tmpfs /path/to/your/data -t tmpfs -o size=30G
 
-    
-    <div class="footer-copyright">
-      <p>&copy; 2026 老潘家的潘老师. All rights reserved.</p>
-    </div>
+然后把数据放挂载的目录下，即可。
+使用时发现应...">
+        <span class="roadmap__n">12-05</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pytorch_speedup/">pytorch训练加速方案整理</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/linux_disk_mount/" data-post-title="Linux挂载硬盘/内存盘/网络硬盘方法" data-post-date="2020-11-30" data-post-cover="/post-images/linux_disk_mount.jpg" data-post-min="2" data-post-cat="编程与工程" data-post-desc="挂载普通硬盘
 
-    
-    
+找到准备存内容的硬盘
 
-    
-    <div class="footer-powered">
-      <span>Powered by <a href="https://gridea.pro" target="_blank" rel="noopener noreferrer">Gridea Pro</a></span>
-    </div>
+sudo fdisk -lu
 
-  </div>
+
+设备的UUID可以通过以下指令查看
+sudo blkid
+
+
+准备将D盘挂载到disk目录上面
+
+cd / 
+mkdir disk
+...">
+        <span class="roadmap__n">11-30</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/linux_disk_mount/">Linux挂载硬盘/内存盘/网络硬盘方法</a></span>
+          <span class="roadmap__sum">编程与工程 · #Linux</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/xshell_to_tensorboard/" data-post-title="使用xshell连接远程服务器的tensorboard" data-post-date="2020-11-29" data-post-cover="/post-images/xshell_to_tensorboard.png" data-post-min="1" data-post-cat="编程与工程" data-post-desc="在会话上右键-属性，在‘SSH-隧道’下面新建这样一条规则【网上有些用的本地端口也是6006，我试了半天发现我只有用其他端口才能连上，可能是本地的系统6006端口被占了或者其他问题】
+设置好之后访问本地的http:...">
+        <span class="roadmap__n">11-29</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/xshell_to_tensorboard/">使用xshell连接远程服务器的tensorboard</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #Linux</span>
+        </span>
+        <span class="roadmap__time">1 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pandas_acrobat/" data-post-title="pandas的一些杂技（记）" data-post-date="2020-11-17" data-post-cover="/post-images/pandas_acrobat.jpg" data-post-min="5" data-post-cat="编程与工程" data-post-desc="HTML页面table存储成本地csv
+非常简单，不需要爬虫，直接用pandas即可以搞定
+&amp;quot;&amp;quot;&amp;quot;
+reference: 如果单个表格，直接存
+https://www.jiansh...">
+        <span class="roadmap__n">11-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pandas_acrobat/">pandas的一些杂技（记）</a></span>
+          <span class="roadmap__sum">编程与工程 · #python</span>
+        </span>
+        <span class="roadmap__time">5 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/python_acrobat/" data-post-title="python的一些杂技（记）" data-post-date="2020-11-02" data-post-cover="/post-images/python_acrobat.jpg" data-post-min="6" data-post-cat="编程与工程" data-post-desc="python的工作路径关系
+使用pycharm或者spyder的时候，当前目录os.getcwd()都是脚本所在的目录。而sys.path模块搜索目录不同，pycharm会默认将脚本所在目录以及项目的目录加入，而s...">
+        <span class="roadmap__n">11-02</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/python_acrobat/">python的一些杂技（记）</a></span>
+          <span class="roadmap__sum">编程与工程 · #python</span>
+        </span>
+        <span class="roadmap__time">6 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/handwriting_en_recognition/" data-post-title="手写签名识别-数据预处理部分" data-post-date="2020-10-30" data-post-cover="/post-images/handwriting_en_recognition.jpg" data-post-min="14" data-post-cat="编程与工程" data-post-desc="这个东西早就做了，但是做完了之后一直没有仔细优化深入考虑。最近看到flyAI网上的top5发了自己思路的讲解，看了一圈下来其实没有特别亮眼的点。加上我本身连前10都没进，所以我就不班门弄斧了，只写一下在数据预处理上...">
+        <span class="roadmap__n">10-30</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/handwriting_en_recognition/">手写签名识别-数据预处理部分</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">14 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/python_scrapy_tips/" data-post-title="Scrapy爬虫时的一些细节" data-post-date="2020-10-20" data-post-cover="/post-images/python_scrapy_tips.jpg" data-post-min="6" data-post-cat="编程与工程" data-post-desc="一些bug
+配置scrapy的时候，如果发现爬取图片时，日志里返回链接正常但就是没有图片保存下来的话，使用
+pip install pillow
+
+安装一下PIL模块再尝试。
+之前在本地的conda环境下，如果缺...">
+        <span class="roadmap__n">10-20</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/python_scrapy_tips/">Scrapy爬虫时的一些细节</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #爬虫</span>
+        </span>
+        <span class="roadmap__time">6 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/bypass_limited_network/" data-post-title="绕过需要认证的网络（校园网）直接联网的方法" data-post-date="2020-10-18" data-post-cover="/post-images/bypass_limited_network.jpg" data-post-min="2" data-post-cat="编程与工程" data-post-desc="目前（2020.10.18）测试可用的办法是这个链接里面的方法：http://note.cfyqy.com/posts/390158a6.html
+为了防和谐，以及蹚坑经历记录，我将他精简一下
+工作环境：Ubunt...">
+        <span class="roadmap__n">10-18</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/bypass_limited_network/">绕过需要认证的网络（校园网）直接联网的方法</a></span>
+          <span class="roadmap__sum">编程与工程 · #Linux</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pytorch_acrobat/" data-post-title="pytorch的一些杂技（记）" data-post-date="2020-10-17" data-post-cover="/post-images/pytorch_acrobat.jpg" data-post-min="11" data-post-cat="编程与工程" data-post-desc="1. pytorch加载预训练权重
+1.1 加载一部分权重
+实际上有两种思路加载预训练权重。
+先说第一种：预训练权重不带最后一层fc，或者要加载的权重和自己的网络之间要取一个交集，这种就用以下方法
+# ref: h...">
+        <span class="roadmap__n">10-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pytorch_acrobat/">pytorch的一些杂技（记）</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch</span>
+        </span>
+        <span class="roadmap__time">11 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/Endnote_tips/" data-post-title="Endnote的一些使用技巧" data-post-date="2020-09-28" data-post-cover="/post-images/Endnote_tips.jpg" data-post-min="1" data-post-cat="随笔与杂谈" data-post-desc="EndNote导入特定参考文献格式
+最近碰到一个问题，想投一个杂志，但endnote中所列的杂志是以前的版本，参考文献格式不对，于是经过一番努力，终于成功更新了该杂志的文献格式。现发此贴，以供碰到类似问题的虫友参考...">
+        <span class="roadmap__n">09-28</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/Endnote_tips/">Endnote的一些使用技巧</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #endnote</span>
+        </span>
+        <span class="roadmap__time">1 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pytorch_lethal_traps/" data-post-title="【转载】pytorch里面的天坑" data-post-date="2020-08-18" data-post-cover="/post-images/pytorch_lethal_traps.jpg" data-post-min="8" data-post-cat="编程与工程" data-post-desc="2021年11月13日，补充一个深坑，这个坑引发的bug导致我查了一整天
+Dataset里面的随机值
+※※※ 涉及到需要给每批次数据加随机值时，需要着重关注此点：
+据说在新版本pytorch已经解决这个问题，我没有...">
+        <span class="roadmap__n">08-18</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pytorch_lethal_traps/">【转载】pytorch里面的天坑</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch</span>
+        </span>
+        <span class="roadmap__time">8 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/possibility_of_1_after_continuous_0/" data-post-title="抛掷100次硬币都是正面，下一次抛掷更可能是反面？" data-post-date="2020-08-17" data-post-cover="/post-images/possibility_of_1_after_continuous_0.jpg" data-post-min="1" data-post-cat="随笔与杂谈" data-post-desc="我曾经也陷入过这个硬币正反面的问题的坑里过，但是昨天自己突然想通了。以抛硬币为例，前100次都是正面，看似下一次抛硬币应该更可能出反面了，因为全正的概率很低，而（1-全正）的概率很高。我的思维问题恰巧出在这个地方。...">
+        <span class="roadmap__n">08-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/possibility_of_1_after_continuous_0/">抛掷100次硬币都是正面，下一次抛掷更可能是反面？</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">1 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/remove_duplicate/" data-post-title="【5分钟实例】去除大量图片中重复的图片" data-post-date="2020-08-17" data-post-cover="/post-images/remove_duplicate.jpg" data-post-min="4" data-post-cat="编程与工程" data-post-desc="需求假设
+你的老板给你上万张候选人的证件照，但是由于某些原因，一部分人的照片有不止一张（重复了），让你把重复出现的照片删掉，下班之前整理好发给他。你一看表距离下班只剩5分钟了，加班是不可能加班的。
+
+这时候你灵光一...">
+        <span class="roadmap__n">08-17</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/remove_duplicate/">【5分钟实例】去除大量图片中重复的图片</a></span>
+          <span class="roadmap__sum">编程与工程 · #5分钟实例 #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/coin_classifier/" data-post-title="硬币系列三 | 硬币自动分类的一个论文复现" data-post-date="2020-07-12" data-post-cover="/post-images/coin_classifier.jpg" data-post-min="15" data-post-cat="编程与工程" data-post-desc="MATLAB代码地址：https://github.com/divertingPan/coin_machine/tree/master/RFR_GM
+书接上回，经过自动检测和裁剪之后，已经有很多切割整齐的硬币照片了...">
+        <span class="roadmap__n">07-12</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/coin_classifier/">硬币系列三 | 硬币自动分类的一个论文复现</a></span>
+          <span class="roadmap__sum">编程与工程 · #计算机视觉 #matlab</span>
+        </span>
+        <span class="roadmap__time">15 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/coin_detect/" data-post-title="硬币系列二 | 从照片中自动检测硬币" data-post-date="2020-07-11" data-post-cover="/post-images/coin_detect.png" data-post-min="10" data-post-cat="编程与工程" data-post-desc="最近搞了一些稀奇硬币，老潘把他们都用手机拍了下来。但是由于手机镜头焦距所限，并不能让硬币充满整个画面。所以很自然的想法就是，把硬币从图片中裁剪出来。一个正常人的做法是，把需要拍摄特写的物品放在纯净颜色的背景上，这种...">
+        <span class="roadmap__n">07-11</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/coin_detect/">硬币系列二 | 从照片中自动检测硬币</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #计算机视觉 #爬虫</span>
+        </span>
+        <span class="roadmap__time">10 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pick_resume/" data-post-title="【5分钟实例】按名字从大量简历中筛出需要的简历" data-post-date="2020-06-24" data-post-cover="/post-images/pick_resume.jpg" data-post-min="3" data-post-cat="编程与工程" data-post-desc="水一篇。开个新坑，本系列重点打造能够在5分钟内完成的又简单又实用的实例。今天以办公场景比较常见的一个需求为例。具体场景如下。
+需求假设
+你的老板给你上万份候选人交的简历，又给了你一个Excel表格，让你把表格里的人...">
+        <span class="roadmap__n">06-24</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pick_resume/">【5分钟实例】按名字从大量简历中筛出需要的简历</a></span>
+          <span class="roadmap__sum">编程与工程 · #5分钟实例 #python</span>
+        </span>
+        <span class="roadmap__time">3 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/coin_show/" data-post-title="【课间休息】各国硬币大赏" data-post-date="2020-06-07" data-post-cover="/post-images/coin_show.jpg" data-post-min="5" data-post-cat="随笔与杂谈" data-post-desc="硬币信息的来源是https://zh-cn.ucoin.net/">
+        <span class="roadmap__n">06-07</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/coin_show/">【课间休息】各国硬币大赏</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">5 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/pytorch_autoencoder/" data-post-title="复习Pytorch的使用方法，在套路的基础上灵活应变" data-post-date="2020-04-29" data-post-cover="/post-images/pytorch_autoencoder.png" data-post-min="22" data-post-cat="编程与工程" data-post-desc="本节的大部分代码参考了：莫烦python
+这次只是一个学习记录，并不指望最后做个什么玩意儿出来。因为一直都是拿模板来改，这次想空手从网络结构到写成代码再到训练的过程完整走一遍。先试一个简单的案例，再尝试一步步深化。...">
+        <span class="roadmap__n">04-29</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/pytorch_autoencoder/">复习Pytorch的使用方法，在套路的基础上灵活应变</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">22 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/python_startup/" data-post-title="基础 | 如何方便正确快速配置python编程环境（Anaconda+Python）" data-post-date="2020-03-04" data-post-cover="/post-images/python_startup.png" data-post-min="8" data-post-cat="编程与工程" data-post-desc="由于涉及到复制粘贴操作，建议大家使用电脑端阅读此教程。
+鉴于很多同学都是刚接触python，起手式都不清楚，所以今天返璞归真一次。老潘给一个最简单的安装与卸载方法，秒杀网上那些看了会头大的教程，手把手招式分解。
+废...">
+        <span class="roadmap__n">03-04</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/python_startup/">基础 | 如何方便正确快速配置python编程环境（Anaconda+Python）</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #Anaconda</span>
+        </span>
+        <span class="roadmap__time">8 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/cat_gan/" data-post-title="再进阶 | 利用生成式对抗网络自动生成猫咪图片" data-post-date="2020-02-18" data-post-cover="/post-images/cat_gan.jpg" data-post-min="25" data-post-cat="编程与工程" data-post-desc="文中所有用到的代码在github中
+本次项目运行环境为Python3.6.8 + PyTorch1.1.0
+书接上回，我们已经可以通过爬虫海量获取想要的图片，也可以通过神经网络对图片筛选分类了。拿到这么多图片之后，...">
+        <span class="roadmap__n">02-18</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/cat_gan/">再进阶 | 利用生成式对抗网络自动生成猫咪图片</a></span>
+          <span class="roadmap__sum">编程与工程 · #pytorch #计算机视觉</span>
+        </span>
+        <span class="roadmap__time">25 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2019">
+    <h2 class="archive-year__title" id="y-2019">2019<span>7 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/cnn_classifier/" data-post-title="高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例" data-post-date="2019-09-28" data-post-cover="/post-images/cnn_classifier.png" data-post-min="21" data-post-cat="编程与工程" data-post-desc="本来这一篇应该在两个月之前就写完的，但是众所周知在家=生产力0这样一条定律限制了老潘。所以在大量粉丝取关之际，赶紧把这篇推送搞上来，诚挚为已经取关的同学没法看完本系列作而深感遗憾。
+本篇继承“高效获取互联网资源”这...">
+        <span class="roadmap__n">09-28</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/cnn_classifier/">高阶 | 使用神经网络对网络资源自动分类——以校花贴吧图片为例</a></span>
+          <span class="roadmap__sum">编程与工程 · #计算机视觉 #python</span>
+        </span>
+        <span class="roadmap__time">21 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/python_tieba/" data-post-title="进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例" data-post-date="2019-05-30" data-post-cover="/post-images/python_tieba.png" data-post-min="24" data-post-cat="编程与工程" data-post-desc="这算是系列作了吗？反正今天主要内容仍旧是围绕利用互联网获取信息。这次内容是讲解Python的起家功能：爬虫，用百度贴吧的众多图片贴来入门爬虫思想和测试爬虫效果（怎么和百度干上了？）
+至于为什么叫爬虫不叫爬狗爬猫，这...">
+        <span class="roadmap__n">05-30</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/python_tieba/">进阶 | 利用Python开挂式获取网络资源——以搜集贴吧图片为例</a></span>
+          <span class="roadmap__sum">编程与工程 · #python #爬虫</span>
+        </span>
+        <span class="roadmap__time">24 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/ban_baidu_ads/" data-post-title="续前文 | 百度贴吧清贴事件、屏蔽广告的解决方案" data-post-date="2019-05-29" data-post-cover="/post-images/ban_baidu_ads.jpg" data-post-min="2" data-post-cat="随笔与杂谈" data-post-desc="之前那篇关于用百度的推文着重讲如何检索信息，而且面向初级用户。现在补充一些和百度老狗有关的东西，并不局限于信息检索。
+一、关于贴吧清2017年以前帖子的解决方案。
+2019年5月13日，百度贴吧发了这么个公告：
+
+...">
+        <span class="roadmap__n">05-29</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/ban_baidu_ads/">续前文 | 百度贴吧清贴事件、屏蔽广告的解决方案</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/how_to_use_google_efficiently/" data-post-title="教程 | 如何利用互联网高效检索信息——以百度搜索为例" data-post-date="2019-05-28" data-post-cover="/post-images/how_to_use_google_efficiently.png" data-post-min="7" data-post-cat="随笔与杂谈" data-post-desc="潘老师一度以为在简历里写“会熟练使用百度解决问题”是一个笑话。近期潘老师和身边的同学陆续提交毕业论文，这时候大家对写论文或者论文格式甚至Word怎么使用都充满了疑问，也是这时候潘老师才发现，原来高效使用百度确实是一...">
+        <span class="roadmap__n">05-28</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/how_to_use_google_efficiently/">教程 | 如何利用互联网高效检索信息——以百度搜索为例</a></span>
+          <span class="roadmap__sum">随笔与杂谈 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">7 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/unity3d_debug_recording/" data-post-title="记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法" data-post-date="2019-05-09" data-post-cover="/post-images/unity3d_debug_recording.png" data-post-min="7" data-post-cat="编程与工程" data-post-desc="首先声明：为了保持严谨的求学态度，各位程序员面对bug时还是尽量搞懂问题的根源，否则后期这个bug可能会造成很大的影响（其实很多情况下也不会再造成什么影响）。
+第二条声明：这篇记录只是写了一个解决问题的路子，里面具...">
+        <span class="roadmap__n">05-09</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/unity3d_debug_recording/">记录 | 一个Debug经历&amp;&amp;一个跳出双层循环的方法</a></span>
+          <span class="roadmap__sum">编程与工程 · #杂谈</span>
+        </span>
+        <span class="roadmap__time">7 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/raw_photography/" data-post-title="科普 | 老潘解说手机RAW拍照新姿势" data-post-date="2019-04-16" data-post-cover="/post-images/raw_photography.png" data-post-min="4" data-post-cat="做图与艺术" data-post-desc="多年失踪人口回归，感觉再不写点什么，不仅粉丝们会取关，搞不好老马帮我销号了都说不准。今天潘老师来水一贴，写一个关于摄影RAW格式的贴，常年玩单反的老司机应该已经熟练掌握了该知识点所以你们可以下课了，剩下的同学，上课...">
+        <span class="roadmap__n">04-16</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/raw_photography/">科普 | 老潘解说手机RAW拍照新姿势</a></span>
+          <span class="roadmap__sum">做图与艺术 · #计算机视觉 #艺术设计</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/remove_watermark/" data-post-title="教程 | 使用Photoshop去除水印" data-post-date="2019-01-01" data-post-cover="/post-images/remove_watermark.webp" data-post-min="2" data-post-cat="做图与艺术" data-post-desc="潘老师很久都没有发推送了，深切感受到了自己语文水平以及粉丝数量的急剧下滑。新年实在是没什么可自我总结的，所以就水一篇关于去除水印的推送。今天的文章操作简单，经济实惠，是逢年过节走亲访友之馈赠佳品，不容错过！
+一、杂...">
+        <span class="roadmap__n">01-01</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/remove_watermark/">教程 | 使用Photoshop去除水印</a></span>
+          <span class="roadmap__sum">做图与艺术 · #艺术设计</span>
+        </span>
+        <span class="roadmap__time">2 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  <section class="archive-year" aria-labelledby="y-2018">
+    <h2 class="archive-year__title" id="y-2018">2018<span>6 篇</span></h2>
+    <ol class="roadmap roadmap--dated">
+      
+      <li data-post-link="/post/auto_lottery/" data-post-title="猎奇 | Python+ADB实现自动点赞和抽奖检测" data-post-date="2018-08-10" data-post-cover="/post-images/auto_lottery.png" data-post-min="9" data-post-cat="编程与工程" data-post-desc="为什么要做这个呢？
+在各类直播平台，都有对主播点赞的功能，有一些直播平台（例如淘宝直播）的点赞按钮是可以无限点击的（为什么要双击666，明明可以无限击）。在淘宝直播中，主播看到自己收获很多赞之后，有概率放一些粉丝福...">
+        <span class="roadmap__n">08-10</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/auto_lottery/">猎奇 | Python+ADB实现自动点赞和抽奖检测</a></span>
+          <span class="roadmap__sum">编程与工程 · #python</span>
+        </span>
+        <span class="roadmap__time">9 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/bayer_dither/" data-post-title="数字图像处理 | 图像二值化中的规则抖动算法" data-post-date="2018-06-29" data-post-cover="/post-images/bayer_dither.png" data-post-min="9" data-post-cat="编程与工程" data-post-desc="前言
+在只有黑色墨水的印刷机上只能搞出黑白的图形，那么问题就来了，印刷机里并没有灰色的墨，图片里的灰色阴影是怎么弄出来的？
+印刷机处理灰色的方式，是通过控制区域内小墨点的密度来实现的。很好理解，如果不印任何黑点，这...">
+        <span class="roadmap__n">06-29</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/bayer_dither/">数字图像处理 | 图像二值化中的规则抖动算法</a></span>
+          <span class="roadmap__sum">编程与工程 · #matlab #艺术设计</span>
+        </span>
+        <span class="roadmap__time">9 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/altium_pcb/" data-post-title="用Altium Designer制作PCB过程总结" data-post-date="2018-04-14" data-post-cover="/post-images/altium_pcb.png" data-post-min="9" data-post-cat="编程与工程" data-post-desc="潘老师很久没有更新了，最近在考虑往这里放一些学习笔记之类的东西。潘老师不打算写高数英语这种需要大量练习的东西，打算写一些可以用很短时间学会的软件或者什么技能，以备不时之需。主要的思路就是，把学到的东西，通过一个案例...">
+        <span class="roadmap__n">04-14</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/altium_pcb/">用Altium Designer制作PCB过程总结</a></span>
+          <span class="roadmap__sum">编程与工程 · #电子硬件</span>
+        </span>
+        <span class="roadmap__time">9 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/r_map_data/" data-post-title="猎奇 | 记录如何用R绘制数据地图" data-post-date="2018-02-13" data-post-cover="/post-images/r_map_data.png" data-post-min="5" data-post-cat="编程与工程" data-post-desc="前几天有小伙伴说他最近在做数据可视化的东西，然后话题讨论到如何在地图上做可视化。说到数据处理，很自然的会让我们程序猿想到用R来做，于是潘老师就顺便复习了一下R的基本知识，并且把这一次做数据地图的过程记录一下。
+
+前...">
+        <span class="roadmap__n">02-13</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/r_map_data/">猎奇 | 记录如何用R绘制数据地图</a></span>
+          <span class="roadmap__sum">编程与工程 · #R语言</span>
+        </span>
+        <span class="roadmap__time">5 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/broken_fridges/" data-post-title="猎奇 | 教你怎样修复坏冰箱" data-post-date="2018-02-10" data-post-cover="/post-images/broken_fridges.jpg" data-post-min="4" data-post-cat="编程与工程" data-post-desc="先放结论，再写分析过程：
+
+如果你家冰箱不转了，到冰箱后面找到启动器，拔下来，测量一下两脚之间的阻值，如果不是通路状态，就换一个新的试试。
+
+昨天清早，潘老师家的电冰箱待机之后，经过一整天的耐心等待，他都没有再启动...">
+        <span class="roadmap__n">02-10</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/broken_fridges/">猎奇 | 教你怎样修复坏冰箱</a></span>
+          <span class="roadmap__sum">编程与工程 · #电子硬件</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+      <li data-post-link="/post/cubic_sea/" data-post-title="干货 | 使用Photoshop做一块立体的海洋" data-post-date="2018-02-05" data-post-cover="/post-images/cubic_sea.png" data-post-min="4" data-post-cat="做图与艺术" data-post-desc="潘老师最近记性特别差，这篇推送写完放在这边，结果好几天之后才想起来还没有发布，这记性真是没救了。
+这种风格的图片早已屡见不鲜，但是具体是怎样实现的，很多人都没有思路尽管潘老师一开始也没什么思路，在分析了网上一些制作...">
+        <span class="roadmap__n">02-05</span>
+        <span>
+          <span class="roadmap__title"><a href="/post/cubic_sea/">干货 | 使用Photoshop做一块立体的海洋</a></span>
+          <span class="roadmap__sum">做图与艺术 · #艺术设计</span>
+        </span>
+        <span class="roadmap__time">4 分钟</span>
+      </li>
+      
+    </ol>
+  </section>
+  
+  
+  
+
+<nav class="pager" aria-label="分页">
+  
+  <span class="xxd-btn pager__btn" aria-disabled="true"><i data-xxd-icon="ArrowLeft" data-size="16"></i>上一页</span>
+  
+  <span class="pager__status">第 1 / 2 页</span>
+  
+  <a class="xxd-btn pager__btn" href="/archives/page/2/" rel="next">下一页<i data-xxd-icon="ArrowRight" data-size="16"></i></a>
+  
+</nav>
+
+
+  <div class="site-foot-wrap">
+<footer class="site-foot">
+  <p>© 2026 老潘家的潘老师 · 保留所有权利 · 由 <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a> 驱动</p>
 </footer>
-
-  
-  <div class="search-overlay" id="searchOverlay" style="display:none;">
-  <div class="search-modal">
-    <div class="search-header">
-      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="搜索文章..." autocomplete="off" />
-      <span class="search-kbd">&#8984;K</span>
-      <button class="search-close" id="searchClose" type="button" aria-label="关闭搜索">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
 </div>
 
-<script src="/scripts/search.js"></script>
+</main>
+<aside class="site-toc" aria-label="本页目录">
   
-
+  <h2 class="site-toc__title">目录</h2>
+  <ul><li><a href="#y-2026">2026<span class="site-toc__n">1</span></a></li><li><a href="#y-2025">2025<span class="site-toc__n">2</span></a></li><li><a href="#y-2023">2023<span class="site-toc__n">1</span></a></li><li><a href="#y-2022">2022<span class="site-toc__n">4</span></a></li><li><a href="#y-2021">2021<span class="site-toc__n">7</span></a></li><li><a href="#y-2020">2020<span class="site-toc__n">22</span></a></li><li><a href="#y-2019">2019<span class="site-toc__n">7</span></a></li><li><a href="#y-2018">2018<span class="site-toc__n">6</span></a></li></ul>
   
+</aside>
 
+  </div>
+  <div class="site-nav-scrim" id="site-nav-scrim"></div>
   
+<script type="application/json" id="site-search-config">{"index": "/api/search.json", "placeholder": "搜文章标题、正文、标签……", "empty": "没找到，换个词试试", "loading": "正在加载索引…"}</script>
 
+  <script src="/scripts/site.js"></script>
   
-
-<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: flavor-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  
+<script>console.log("\n%c ✦ Gridea Pro v1.3.0-beta.2 %c · Theme: 3x-ui v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>
